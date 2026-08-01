@@ -287,7 +287,7 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-left">
             <h1 className="hero-title reveal-up" style={{ '--delay': '0.05s' }}>
-              Welcome to <span className="hero-highlight">Unisole Skill AI Labs lms</span>
+              Welcome to <span className="hero-highlight">Unisole Skill AI Labs</span>
             </h1>
 
             <span className="hero-eyebrow reveal-up" style={{ '--delay': '0.12s' }}>
