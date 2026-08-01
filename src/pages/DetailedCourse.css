@@ -1,0 +1,669 @@
+/* ==========================================
+   COURSE DETAIL — HEADER
+========================================== */
+.dc-header {
+  padding: 48px 32px 0;
+  border-bottom: 1px solid var(--border-strong);
+}
+
+.dc-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  gap: 56px;
+  padding-bottom: 48px;
+}
+
+/* ---------- LEFT ---------- */
+.dc-header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.dc-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dc-breadcrumb-sep {
+  color: var(--muted);
+}
+
+.dc-title {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  max-width: 640px;
+}
+
+.dc-subtitle {
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--muted);
+  max-width: 600px;
+}
+
+.dc-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.dc-badge {
+  background: var(--bg2);
+  border: 1px solid var(--border-strong);
+  color: var(--white);
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+.dc-meta {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.dc-instructor-name {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.dc-stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.dc-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #f0b429;
+  font-weight: 700;
+}
+
+.dc-rating-count {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.dc-dot {
+  color: var(--border-strong);
+}
+
+/* ---------- RIGHT: ENROLL CARD ---------- */
+.dc-header-right {
+  position: relative;
+}
+
+.dc-enroll-card {
+  position: sticky;
+  top: 24px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+}
+
+.dc-preview-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+
+.dc-preview-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.dc-enroll-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dc-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.dc-price {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.dc-old-price {
+  font-size: 15px;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.dc-enroll-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 13px 24px;
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s var(--ease-spring);
+}
+
+.dc-enroll-btn:hover {
+  background: #1a1a1a;
+  transform: translateY(-1px);
+}
+
+.dc-includes-plain {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dc-includes-plain li {
+  font-size: 14.5px;
+  color: var(--muted);
+  padding-left: 18px;
+  position: relative;
+}
+
+.dc-includes-plain li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ==========================================
+   COURSE DETAIL — BODY
+========================================== */
+.dc-body {
+  padding: 48px 32px 96px;
+}
+
+.dc-body-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dc-main {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.dc-card {
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 28px;
+}
+
+.dc-card-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 18px;
+}
+
+/* ---------- WHAT YOU'LL LEARN ---------- */
+.dc-learn-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 24px;
+}
+
+.dc-learn-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.dc-learn-item svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+  color: var(--accent);
+}
+
+/* ---------- COURSE CONTENT ---------- */
+.dc-content-meta {
+  font-size: 13.5px;
+  color: var(--muted);
+  margin-bottom: 16px;
+}
+
+.dc-sections {
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.dc-section + .dc-section {
+  border-top: 1px solid var(--border-strong);
+}
+
+.dc-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg2);
+  border: none;
+  color: var(--white);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s;
+}
+
+
+
+.dc-chevron {
+  flex-shrink: 0;
+  transition: transform 0.25s var(--ease-out);
+  color: var(--muted);
+}
+
+.dc-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.dc-section-title {
+  flex-grow: 1;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14.5px;
+  color: var(--white);
+}
+
+.dc-section-header:hover {
+  background: #232323;
+}
+
+.dc-section-header:hover .dc-chevron {
+  color: #ffffff;
+}
+
+.dc-section-header:hover .dc-section-title,
+.dc-section-header:hover .dc-section-count {
+  color: #ffffff;
+}
+
+.dc-section-count {
+  font-size: 12.5px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.dc-lecture-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+
+
+.dc-lecture {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  font-size: 13.5px;
+  color: var(--muted);
+  transition: background 0.2s;
+  cursor: pointer;
+}
+
+.dc-lecture:hover {
+  background: var(--bg2);
+}
+
+.dc-lecture:hover .dc-lecture-name {
+  color: var(--white);
+}
+
+.dc-lecture:hover svg {
+  color: var(--white);
+}
+
+.dc-lecture + .dc-lecture {
+  border-top: 1px solid var(--border-strong);
+}
+
+.dc-lecture svg {
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: color 0.2s;
+}
+
+.dc-lecture-name {
+  flex-grow: 1;
+  color: var(--white);
+}
+
+.dc-lecture-preview {
+  font-family: var(--font-display);
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.dc-lecture-duration {
+  white-space: nowrap;
+  min-width: 44px;
+  text-align: right;
+}
+
+/* ---------- REQUIREMENTS / PLAIN LIST ---------- */
+.dc-plain-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dc-plain-list li {
+  position: relative;
+  padding-left: 20px;
+  font-size: 14.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.dc-plain-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* ---------- DESCRIPTION ---------- */
+.dc-description {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.dc-description p {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ---------- MATERIALS ---------- */
+.dc-materials-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dc-material-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14.5px;
+  color: var(--white);
+  padding: 10px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  transition: all 0.2s;
+}
+
+.dc-material-link:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+
+.dc-material-link svg {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+/* ---------- TAGS / SUBTITLES ---------- */
+
+
+
+
+/* ---------- TAGS / SUBTITLES ---------- */
+.dc-header-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--muted);
+}
+
+.dc-tag-label {
+  font-weight: 600;
+  color: var(--white);
+}
+
+
+
+
+/* ==========================================
+   ENTRANCE ANIMATION (reuses home.css keyframe
+   name/behaviour so both pages feel consistent)
+========================================== */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: revealUp 0.6s var(--ease-out) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes revealUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+@media (max-width: 960px) {
+  .dc-header-inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding-bottom: 32px;
+  }
+
+  .dc-enroll-card {
+    position: static;
+  }
+
+  .dc-learn-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .dc-header {
+    padding: 32px 20px 0;
+  }
+
+  .dc-body {
+    padding: 32px 20px 64px;
+  }
+
+  .dc-title {
+    font-size: 26px;
+  }
+
+  .dc-card {
+    padding: 20px;
+  }
+}
+
+.dc-wishlist-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  border: none;
+  border-radius: 50%;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.dc-wishlist-btn:hover {
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.dc-wishlist-btn.is-active {
+  background: rgba(0, 0, 0, 0.55);
+  color: #fff7f9;
+}
+
+.dc-wishlist-btn.is-active svg {
+  animation: heartPop 0.3s ease;
+}
+
+@keyframes heartPop {
+  0% { transform: scale(0.8); }
+  40% { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+
+.dc-cart-btn {
+  width: 100%;
+  padding: 13px 24px;
+  background: transparent;
+  color: var(--white);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.dc-cart-btn:hover {
+  border-color: var(--accent);
+  background: var(--bg2);
+}
+
+/* ---------- LOADING / ERROR STATE ---------- */
+/* ---------- LOADING / ERROR STATE ---------- */
+.dc-status-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.dc-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex: 1;
+  padding: 100px 24px;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.dc-status p:first-child {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.dc-status p:last-child {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+}
+
+@media (max-width: 400px) {
+  .dc-header {
+    padding: 24px 16px 0;
+  }
+
+  .dc-body {
+    padding: 24px 16px 48px;
+  }
+
+  .dc-title {
+    font-size: 22px;
+  }
+
+  .dc-subtitle {
+    font-size: 14px;
+  }
+
+  .dc-enroll-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .dc-section-title {
+    font-size: 16px;
+  }
+}

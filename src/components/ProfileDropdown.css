@@ -1,0 +1,75 @@
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 220px;
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+  overflow: hidden;
+  z-index: 300;
+  animation: profileDrop 0.2s var(--ease-out);
+}
+
+@keyframes profileDrop {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.profile-list {
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+
+.profile-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: none;
+  border: none;
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--white);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profile-item svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.profile-item:hover {
+  background: var(--bg2);
+}
+
+.profile-divider {
+  height: 1px;
+  margin: 6px 4px;
+  background: var(--border);
+}
+
+.profile-logout {
+  color: #ff5c5c;
+}
+
+.profile-logout svg {
+  color: #ff5c5c;
+}
+
+@media (max-width: 500px) {
+  .profile-dropdown {
+    position: fixed;
+    top: var(--nav-h);
+    right: 8px;
+    left: auto;
+    width: 200px;
+  }
+}

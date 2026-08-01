@@ -1,0 +1,93 @@
+/* ==========================================
+   BASE RESET & TOKENS
+========================================== */
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+}
+
+:root {
+  --bg: #ffffff;
+  --bg2: #f5f5f5;
+  --white: #1a1a1a;
+  --muted: #666666;
+  --border: rgba(0,0,0,0.08);
+  --border-strong: rgba(0,0,0,0.12);
+  --accent: #2b2b2b;
+  --accent-glow: rgba(43,43,43,0.35);
+  --error: #ef4444;
+  --success: #10b981;
+  --radius-sm: 12px;
+  --radius-md: 24px;
+  --radius-lg: 48px;
+  --nav-h: 72px;
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  --font-serif: "Instrument Serif", Georgia, serif;
+  --ease-spring: cubic-bezier(0.32, 1.2, 0.6, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html { 
+  scroll-behavior: smooth; 
+  -webkit-font-smoothing: antialiased; 
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+img { 
+  display: block; 
+  max-width: 100%; 
+}
+
+a { 
+  text-decoration: none; 
+  color: inherit; 
+}
+
+strong { 
+  font-weight: 600; 
+}
+
+
+
+/* ==========================================
+   SCROLLBAR
+========================================== */
+::-webkit-scrollbar { 
+  width: 8px; 
+}
+
+::-webkit-scrollbar-track { 
+  background: var(--bg); 
+}
+
+::-webkit-scrollbar-thumb { 
+  background: #ccc; 
+  border-radius: 4px; 
+}
+
+::-webkit-scrollbar-thumb:hover { 
+  background: #999; 
+}
+
+
+/* ==========================================
+   UTILITY CLASSES
+========================================== */
+.hidden {
+  display: none !important;
+}
+
+.text-center {
+  text-align: center;
+}
+
