@@ -37,7 +37,7 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>© 2026 Unisole Skill AI Labs. All rights reserved.</span>
+        <span>© 2026 UnisoleAI. All rights reserved.</span>
         <div className="footer-legal">
           <Link to="/">Privacy</Link>
           <Link to="/">Terms</Link>

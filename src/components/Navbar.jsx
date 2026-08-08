@@ -27,11 +27,12 @@ export default function Navbar() {
         <div className="nav-left">
           <Link to="/" className="nav-logo" onClick={() => { if (location.pathname === '/') window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
         
-            <span>Unisole Skill AI Labs</span>
+            <span>UnisoleAI</span>
           </Link>
         </div>
 
         <div className={`nav-links ${menuOpen ? 'open' : ''}`}>
+          <Link to="/programs">Programs</Link>
           <Link to="/courses">Courses</Link>
           <Link to="/events">Events</Link>
           {loggedIn ? (

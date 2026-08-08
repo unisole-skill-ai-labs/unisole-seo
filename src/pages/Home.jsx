@@ -287,7 +287,7 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-left">
             <h1 className="hero-title reveal-up" style={{ '--delay': '0.05s' }}>
-              Welcome to <span className="hero-highlight">Unisole Skill AI Labs</span>
+              Welcome to <span className="hero-highlight">UnisoleAI</span>
             </h1>
 
             <span className="hero-eyebrow reveal-up" style={{ '--delay': '0.12s' }}>
@@ -316,7 +316,7 @@ export default function Home() {
             <div className="hero-visual">
               <img
                 src="https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png"
-                alt="Student learning with Unisole Skill AI Labs"
+                alt="Student learning with UnisoleAI"
                 className="hero-visual-img"
               />
             </div>
@@ -346,7 +346,7 @@ export default function Home() {
 
           <div className="about-institute-body">
             <p className="about-institute-text">
-              Unisole Skill AI Labs started as a side project between two final-year
+              UnisoleAI started as a side project between two final-year
               engineering students, Ajay Mokta and Dishant Gupta. We kept running
               into the same problem: a lot of people wanted to learn AI and data
               science, but most courses either dragged on too long or skipped the
@@ -470,7 +470,7 @@ export default function Home() {
               Empowering generations to become <span className="hero-highlight">geniuses</span>
             </h1>
             <p className="about-hero-subtitle reveal-up" style={{ '--delay': '0.2s' }}>
-              Unisole Skill AI Labs helps generations become tech-savvy through accessible,
+              UnisoleAI helps generations become tech-savvy through accessible,
               step-by-step courses in AI, Data Science, and Machine Learning.
             </p>
             <button className="about-hero-cta reveal-up" style={{ '--delay': '0.28s' }} onClick={() => (isAuthenticated() ? openQueryForm() : navigate('/register'))}>
@@ -499,15 +499,15 @@ export default function Home() {
         <div className="about-team-grid">
           {[
             { name: 'Ajay Mokta', role: 'Founder & CEO', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408578/images_jjared.jpg', bio: 'B.Tech in Physics & Photonics Science from NIT Hamirpur. Leads the vision of making AI education accessible to every student, having trained 2,000+ learners and mentored 5,000+ students across 50+ institutions in Himachal Pradesh.' },
-            { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg', bio: 'Academic Head at Unisole Skill AI Labs. An IIT Patna graduate and Engineer at Tech Mahindra, he leads curriculum development, technical mentoring and AI Education initiatives with strong industry and academic expertise.' },
-            { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg', bio: 'AI & Technology Lead at Unisole Skill AI Labs. An IIT Delhi M.Tech graduate, AI System Development and the integration of advanced technologies across our education programs.' },
-            { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg', bio: "Girish is Lead Advisor – Research & Innovation at UNISOLE Skill AI Labs, guiding AI strategy, software engineering, and product innovation. He mentors student researchers and technical teams, bridging academia and industry to build scalable AI solutions—supporting UNISOLE's mission of solving real-world problems through education, research, and innovation."},
-            { name: 'Dishant Gupta', role: 'Lead Reseacher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg', bio: 'Lead Researcher at Unisole Skill AI Labs and former engineer at Baker Hughes. He leads AI research, profuct innovation and applied machine learning initiatives to develop impactful and scalable AI Solutions.'},
+            { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg', bio: "Girish is Lead Advisor – Research & Innovation at UnisoleAI, guiding AI strategy, software engineering, and product innovation. He mentors student researchers and technical teams, bridging academia and industry to build scalable AI solutions—supporting UnisoleAI's mission of solving real-world problems through education, research, and innovation."},
             { name: 'Ajay Sharma', role: 'Project Coordinator & Social Media Advisor', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0003.jpg_sfvzmm.jpg', bio: 'Manages project execution and stakeholder coordination, while strengthening our digital presence and showcasing the impact of AI-driven learning across Himachal Pradesh.' },
             { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg', bio: 'Researches latent reasoning in Small Language Models, focusing on Group Relative Policy Optimization to enhance reasoning and generalisation under limited compute.' },
             { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg', bio: 'Final-year student at St. Bede\u2019s College, Shimla. Coordinates the AI & Computational Thinking Pilot Project across government schools, from training sessions to impact reporting.' },
             { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg', bio: 'Anshu Roy is a software developer currently studying at NIT Hamirpur. He enjoys building efficient, scalable applications and is always exploring new technologies to grow as a developer.' },
             { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg', bio: 'Divyank leads engineering at Unisole, helping the team ship great products together. Passionate about computers and technology, he believes the best work happens through collaboration and curiosity.' },
+            { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg', bio: 'Academic Head at UnisoleAI. An IIT Patna graduate and Engineer at Tech Mahindra, he leads curriculum development, technical mentoring and AI Education initiatives with strong industry and academic expertise.' },
+            { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg', bio: 'AI & Technology Lead at UnisoleAI. An IIT Delhi M.Tech graduate, AI System Development and the integration of advanced technologies across our education programs.' },
+            { name: 'Dishant Gupta', role: 'Lead Reseacher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg', bio: 'Lead Researcher at UnisoleAI and former engineer at Baker Hughes. He leads AI research, profuct innovation and applied machine learning initiatives to develop impactful and scalable AI Solutions.'},
           ].map((member, i) => (
             <div className="about-team-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={member.name}>
               <div className="about-team-img-wrap">
@@ -526,7 +526,7 @@ export default function Home() {
         <section className="mentor-promo">
         <div className="mentor-promo-card">
             <div className="mentor-promo-left">
-            <span className="mentor-promo-brand">Unisole Skill AI Labs</span>
+            <span className="mentor-promo-brand">UnisoleAI</span>
 
             <h2 className="mentor-promo-title">
                 Get in touch with us

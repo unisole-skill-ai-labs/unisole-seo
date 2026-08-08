@@ -11,6 +11,7 @@ import DetailedCourse from './pages/DetailedCourse';
 import OrdersPage from './pages/OrdersPage';
 import LectureWatch from "./pages/LectureWatch";
 import EventsPage from './pages/EventsPage';
+import ProgramsPage from './pages/ProgramsPage';
 import ProfilePage from './pages/ProfilePage';
 import './App.css';
 
@@ -28,6 +29,7 @@ export default function App() {
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/learn/:courseId/:lectureId" element={<LectureWatch />} />
           <Route path="/events" element={<EventsPage />} />
+          <Route path="/programs" element={<ProgramsPage />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </main>
