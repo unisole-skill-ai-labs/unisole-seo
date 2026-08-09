@@ -36,28 +36,6 @@ export async function getCurrentUser() {
   return data?.user || null;
 }
 
-/**
- * Records a payment transaction row. Called from the Razorpay
- * payment-link success redirect (see PaymentSuccess page).
- */
-export async function saveTransaction({ user, email, amount, plan, paymentId, paymentLinkId, status }) {
-  const { data, error } = await supabase
-    .from('transactions')
-    .insert([{
-      user_id: user?.id || null,
-      email: email || user?.email || null,
-      amount: amount ? Number(amount) : null,
-      currency: 'INR',
-      plan: plan || 'unisoleai-subscription',
-      razorpay_payment_id: paymentId || null,
-      razorpay_payment_link_id: paymentLinkId || null,
-      status: status || 'completed',
-    }])
-    .select();
-
-  return { data, error };
-}
-
 /** Fetch the current user's transactions (newest first). */
 export async function getMyTransactions() {
   const user = await getCurrentUser();
@@ -70,26 +48,6 @@ export async function getMyTransactions() {
     .order('created_at', { ascending: false });
 
   return { data: data || [], error };
-}
-
-/** Activate / extend a subscription for the current user. */
-export async function setActiveSubscription({ user, email, plan, expiresInDays = 30 }) {
-  const now = new Date();
-  const expiresAt = new Date(now.getTime() + expiresInDays * 24 * 60 * 60 * 1000).toISOString();
-
-  const { data, error } = await supabase
-    .from('subscriptions')
-    .upsert({
-      user_id: user?.id || null,
-      email: email || user?.email || null,
-      plan: plan || 'unisoleai-subscription',
-      status: 'active',
-      started_at: now.toISOString(),
-      expires_at: expiresAt,
-    }, { onConflict: 'user_id' })
-    .select();
-
-  return { data, error };
 }
 
 /** Fetch the current user's active subscription (if any). */

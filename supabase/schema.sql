@@ -67,10 +67,8 @@ alter table public.transactions enable row level security;
 create policy "transactions_select_own" on public.transactions
   for select using (auth.uid() = user_id);
 
--- Frontend-only compromise: anon inserts so the payment-success
--- page can record a row. Replace with an Edge Function in production.
-create policy "transactions_insert_anon" on public.transactions
-  for insert with check (true);
+-- Transactions are inserted by the razorpay-webhook Edge Function using the
+-- service-role key, which bypasses RLS. No anon/authenticated insert policy.
 
 -- ============================================================
 -- 3. SUBSCRIPTIONS
@@ -93,12 +91,9 @@ alter table public.subscriptions enable row level security;
 create policy "subscriptions_select_own" on public.subscriptions
   for select using (auth.uid() = user_id);
 
--- Frontend-only compromise: anon upsert/insert for payment-success page.
-create policy "subscriptions_insert_anon" on public.subscriptions
-  for insert with check (true);
-
-create policy "subscriptions_update_anon" on public.subscriptions
-  for update using (auth.uid() = user_id);
+-- Subscriptions are created/updated by the razorpay-webhook Edge Function
+-- using the service-role key, which bypasses RLS. No anon/authenticated
+-- insert or update policies, so users cannot modify their own subscription.
 
 -- ============================================================
 -- 4. INDEXES
