@@ -1,97 +1,31 @@
-import { useEffect, useRef, useState } from 'react';
-import { loginWithGoogle } from '../utils/auth';
-
-const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
-const GSI_SRC = 'https://accounts.google.com/gsi/client';
-
-let gsiPromise = null;
-
-function ensureGsiScript() {
-  if (window.google?.accounts?.id) return Promise.resolve();
-  if (!gsiPromise) {
-    gsiPromise = new Promise((resolve, reject) => {
-      const existing = document.getElementById('gsi-client');
-      if (existing) {
-        existing.addEventListener('load', () => resolve());
-        existing.addEventListener('error', () => reject(new Error('Failed to load Google Identity Services')));
-        return;
-      }
-      const script = document.createElement('script');
-      script.id = 'gsi-client';
-      script.src = GSI_SRC;
-      script.async = true;
-      script.onload = () => resolve();
-      script.onerror = () => reject(new Error('Failed to load Google Identity Services'));
-      document.head.appendChild(script);
-    });
-  }
-  return gsiPromise;
-}
+import { useState } from 'react';
+import { supabase } from '../utils/supabase';
 
 export default function GoogleSignIn() {
-  const buttonRef = useRef(null);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (!CLIENT_ID) return;
-    let cancelled = false;
-    let ro = null;
-    let lastWidth = 0;
-
-    const handleCredential = (response) => {
-      loginWithGoogle(response.credential);
-      window.dispatchEvent(new Event('authChange'));
-      window.location.href = '/';
-    };
-
-    const render = () => {
-      const el = buttonRef.current;
-      if (!el || !window.google?.accounts?.id) return;
-      window.google.accounts.id.initialize({ client_id: CLIENT_ID, callback: handleCredential });
-      el.innerHTML = '';
-      window.google.accounts.id.renderButton(el, {
-        type: 'standard',
-        theme: 'outline',
-        size: 'large',
-        text: 'continue_with',
-        width: el.offsetWidth || 320,
-      });
-    };
-
-    const onResize = () => {
-      const el = buttonRef.current;
-      if (!el) return;
-      const width = el.offsetWidth;
-      if (width !== lastWidth) {
-        lastWidth = width;
-        render();
-      }
-    };
-
-    ensureGsiScript()
-      .then(() => {
-        if (cancelled || !buttonRef.current) return;
-        lastWidth = buttonRef.current.offsetWidth;
-        render();
-        ro = new ResizeObserver(onResize);
-        ro.observe(buttonRef.current);
-      })
-      .catch(() => {
-        if (!cancelled) setError(true);
-      });
-
-    return () => {
-      cancelled = true;
-      if (ro) ro.disconnect();
-    };
-  }, []);
-
-  if (!CLIENT_ID) return null;
+  const handleSignIn = async () => {
+    const { error: signInError } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: window.location.origin,
+      },
+    });
+    if (signInError) setError(true);
+  };
 
   return (
     <div className="google-signin">
-      <div ref={buttonRef} className="google-btn-wrap"></div>
-      {error && <p className="google-error">Google sign-in failed to load. Please check your connection.</p>}
+      <button type="button" className="gsi-button" onClick={handleSignIn}>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M21.35 11.1H12v3.4h5.32c-.4 2.09-1.87 3.87-3.82 4.63v3.05h4.4c3.42-3.15 5.45-7.79 5.45-11.08z" fill="#4285F4" />
+          <path d="M12 22c3.6 0 6.62-1.2 8.83-3.24l-4.4-3.05c-1.22.82-2.78 1.3-4.43 1.3-3.4 0-6.28-2.3-7.31-5.39H.6v3.13A12 12 0 0012 22z" fill="#34A853" />
+          <path d="M4.69 13.62a7.4 7.4 0 010-3.24V7.25H.6a12 12 0 000 9.5l4.09-3.13z" fill="#FBBC05" />
+          <path d="M12 4.75c1.96 0 3.71.68 5.1 2l3.7-3.7A12 12 0 000 7.25l4.09 3.13C5.72 7.05 8.6 4.75 12 4.75z" fill="#EA4335" />
+        </svg>
+        Continue with Google
+      </button>
+      {error && <p className="google-error">Google sign-in failed. Please try again.</p>}
     </div>
   );
 }
