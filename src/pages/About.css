@@ -236,8 +236,15 @@
 .about-team-body {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   padding: 20px;
+}
+
+.about-team-name-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .about-team-name {
@@ -247,17 +254,22 @@
   color: var(--white);
 }
 
+.about-team-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  background: var(--bg2);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
 .about-team-role {
   font-size: 12.5px;
   font-weight: 600;
   color: var(--accent);
-  margin-bottom: 8px;
-}
-
-.about-team-bio {
-  font-size: 13px;
-  line-height: 1.6;
-  color: var(--muted);
 }
 
 .about-cta {

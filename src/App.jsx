@@ -13,6 +13,7 @@ import EventsPage from './pages/EventsPage';
 import ProgramsPage from './pages/ProgramsPage';
 import PaymentSuccess from './pages/PaymentSuccess';
 import ProfilePage from './pages/ProfilePage';
+import QueryPage from './pages/QueryPage';
 import { initAuthListener } from './utils/supabase';
 import './App.css';
 
@@ -35,6 +36,7 @@ export default function App() {
           <Route path="/learn/:courseId/:lectureId" element={<LectureWatch />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/programs" element={<ProgramsPage />} />
+          <Route path="/query" element={<QueryPage />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/profile" element={<ProfilePage />} />
         </Routes>

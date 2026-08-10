@@ -63,11 +63,15 @@ export default function ProfilePage() {
                 {transactions.map((tx) => (
                   <li className="profile-tx-item" key={tx.id}>
                     <div>
-                      <span className="profile-tx-plan">{tx.plan}</span>
+                      <span className="profile-tx-plan">
+                        {tx.customer_name || 'Unknown'} · {tx.plan}
+                      </span>
                       <span className="profile-tx-date">{formatDate(tx.created_at)}</span>
                     </div>
                     <span className="profile-tx-amount">
-                      {tx.currency} {Number(tx.amount || 0).toLocaleString('en-IN')}
+                      {tx.amount != null
+                        ? `₹${Number(tx.amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+                        : '—'}
                     </span>
                   </li>
                 ))}
