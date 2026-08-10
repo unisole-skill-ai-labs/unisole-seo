@@ -20,10 +20,8 @@ const arrowSvg = (
 
 const pathways = [
   { num: '01', title: 'Industrial Training & Internship Program', target: '#industrial-internship' },
-  { num: '02', title: 'NEP Value Added Program', target: '#value-added-nep' },
-  { num: '03', title: 'NEP Skill Enhancement Program', target: '#skill-enhancement-nep' },
-  { num: '04', title: 'Faculty AI Training Program', target: '#faculty-training' },
-  { num: '05', title: 'AI Workshops for Everyone', target: '#ai-workshop' },
+  { num: '02', title: 'Faculty AI Training Program', target: '#faculty-training' },
+  { num: '03', title: 'AI Workshops for Everyone', target: '#ai-workshop' },
 ];
 
 const programs = [
@@ -77,94 +75,7 @@ const programs = [
       { type: 'callout', heading: 'For Colleges', text: 'Partner colleges can provide students with a structured pathway from classroom learning → practical skills → projects → internship → career opportunities.' },
     ],
     cta: 'Enroll Your College',
-  },
-  {
-    id: 'value-added-nep',
-    eyebrow: 'NEP Compliance',
-    title: 'NEP Value Added Program',
-    tagline: 'Bring emerging technology learning into the college experience.',
-    description:
-      'The UNISOLE Value Added Program provides students with structured learning opportunities in Artificial Intelligence and emerging technologies alongside their regular degree programs. The objective is to expose students to technologies and skills that complement their academic discipline and prepare them for a rapidly changing employment landscape.',
-    points: [
-      'Aligned with NEP 2020 guidelines',
-      'Credit-based, industry-aligned courses',
-      'Flexible duration to fit your semester',
-      'Certificates recognized across institutions',
-    ],
-    sections: [
-      { type: 'heading', text: 'Program Areas' },
-      { type: 'text', text: 'Depending on institutional requirements, students can explore:' },
-      { type: 'checklist', items: [
-        'Artificial Intelligence',
-        'Generative AI',
-        'Data Science',
-        'Machine Learning',
-        'Prompt Engineering',
-        'AI Applications',
-        'Digital Transformation',
-        'Emerging Technologies',
-        'AI for Research',
-        'Responsible & Ethical AI',
-        'Multidisciplinary Learning',
-      ] },
-      { type: 'heading', text: 'Multidisciplinary Learning' },
-      { type: 'text', text: 'AI is not restricted to Computer Science. Students from Physics, Mathematics, Commerce, Management, Arts, Life Sciences, Engineering, and Computer Applications can explore how AI applies to their respective domains. For example:' },
-      { type: 'domains', items: [
-        { subject: 'Physics + AI', example: 'Scientific Computing & Physics-Informed AI' },
-        { subject: 'Commerce + AI', example: 'Business Analytics & Intelligent Automation' },
-        { subject: 'Agriculture + AI', example: 'Precision Agriculture' },
-        { subject: 'Education + AI', example: 'AI-Assisted Learning' },
-      ] },
-      { type: 'callout', heading: 'Institutional Value', text: 'The program can support colleges in developing structured value-added learning opportunities, multidisciplinary exposure, experiential learning, and technology awareness.' },
-    ],
-    cta: 'Enquire About NEP Value Added Program',
-  },
-  {
-    id: 'skill-enhancement-nep',
-    eyebrow: 'NEP Compliance',
-    title: 'NEP Skill Enhancement Program',
-    tagline: 'Develop skills that students can apply beyond the classroom.',
-    description:
-      'The UNISOLE Skill Enhancement Program focuses on developing practical and employability-oriented capabilities in Artificial Intelligence and emerging technologies. Rather than focusing exclusively on theoretical concepts, students learn through hands-on activities, assignments, projects, and practical problem-solving.',
-    points: [
-      'Practical, project-first learning approach',
-      'Employability-focused skill building',
-      'Structured learning paths with mentors',
-      'Performance-based certifications',
-    ],
-    sections: [
-      { type: 'heading', text: 'Skill Areas' },
-      { type: 'text', text: 'Students can develop skills in:' },
-      { type: 'checklist', items: [
-        'Python Programming',
-        'Data Analysis',
-        'Machine Learning',
-        'Generative AI',
-        'Prompt Engineering',
-        'AI Tools',
-        'Data Visualization',
-        'Computer Vision',
-        'NLP',
-        'AI Automation',
-        'Project Development',
-        'Technical Communication',
-      ] },
-      { type: 'heading', text: 'Learning Model' },
-      { type: 'flow', steps: ['Learn', 'Practice', 'Build', 'Present', 'Evaluate'] },
-      { type: 'text', text: 'Students are encouraged to apply what they learn to real-world problems and develop demonstrable skills.' },
-      { type: 'heading', text: 'Career Readiness' },
-      { type: 'text', text: 'The program can help students build the foundation required for:' },
-      { type: 'checklist', items: [
-        'Internships',
-        'Industry projects',
-        'Higher education',
-        'Research',
-        'Entrepreneurship',
-        'AI-related careers',
-      ] },
-      { type: 'callout', heading: 'For Colleges', text: 'The Skill Enhancement Program provides an organized mechanism for exposing students to emerging technology skills while complementing their existing academic curriculum.' },
-    ],
-    cta: 'Enquire About Skill Enhancement Program',
+    action: 'subscription',
   },
   {
     id: 'faculty-training',
@@ -269,22 +180,6 @@ const programs = [
       { type: 'text', text: 'Students, faculty, researchers, administrative staff, and college leadership. No prior AI knowledge is required for introductory workshops.' },
     ],
     cta: 'Request an AI Workshop',
-  },
-  {
-    id: 'buy-subscription',
-    eyebrow: 'For Learners',
-    title: 'Buy / Subscription',
-    tagline: 'Unlock full access to all courses and programs.',
-    description:
-      'Subscribe to UnisoleAI for unlimited access to our courses, workshops, live sessions, and learning resources. Choose a plan that fits your goals and start learning at your own pace.',
-    points: [
-      'Full access to all courses and content',
-      'Live sessions and workshops included',
-      'Progress tracking and certificates',
-      'Cancel or upgrade anytime',
-    ],
-    cta: 'Get Subscription',
-    action: 'subscription',
   },
 ];
 
@@ -391,7 +286,7 @@ export default function ProgramsPage() {
           <p className="programs-subtitle">
             Instead of limiting AI education to a short workshop, UNISOLE works
             with colleges across multiple dimensions — student training,
-            internships, NEP-aligned skill programs, faculty development,
+            internships, skill programs, faculty development,
             research, innovation, and AI awareness.
           </p>
           <p className="programs-subtitle">

@@ -74,6 +74,13 @@
   color: #ffffff;
 }
 
+.footer-col span {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  width: fit-content;
+  cursor: default;
+}
+
 .footer-bottom {
   max-width: 1100px;
   margin: 40px auto 0;

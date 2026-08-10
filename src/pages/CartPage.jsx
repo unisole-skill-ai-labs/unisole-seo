@@ -198,14 +198,6 @@ export default function CartPage() {
                           {course.title}
                         </a>
                         <p className="cart-item-instructor">By {course.instructor}</p>
-                        <div className="cart-item-meta">
-                          <span className="cart-item-rating">
-                            ★ {(course.rating?.average ?? 0).toFixed(1)}
-                          </span>
-                          <span className="cart-item-ratings-count">
-                            ({(course.rating?.count ?? 0).toLocaleString('en-IN')} ratings)
-                          </span>
-                        </div>
                         <p className="cart-item-submeta">
                           {formatMinutes(course.totalDuration)} • {course.totalLectures} lectures • {course.level}
                         </p>

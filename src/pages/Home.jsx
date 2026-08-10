@@ -15,8 +15,6 @@ const courses = [
     img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476504/Gemini_Generated_Image_a0vw7ma0vw7ma0v1w_tkzbpn.png',
     title: 'From Notebook to Production: Real AI Engineering',
     instructor: 'Ajay Mokta',
-    rating: '4.7',
-    ratingsCount: '4,823 ratings',
     price: '₹59,000.00',
     oldPrice: '₹49,000.00',
   },
@@ -26,8 +24,6 @@ const courses = [
     img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476507/Gemini_Generated_Image_nwyi73nwy1i73nwyi_afrilq.png',
     title: 'Complete Python Programming - From Basics to Object-Oriented Concepts',
     instructor: 'Ajay Mokta',
-    rating: '4.6',
-    ratingsCount: '4,516 ratings',
     price: '₹3,000.00',
     oldPrice: '4,999.00',
   },
@@ -37,8 +33,6 @@ const courses = [
     img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476500/Gemini_Generated_Image_oh2zrxxo1hzrxxohzr_kocadb.png',
     title: 'Tableau Ultimate Course',
     instructor: 'Ajay Mokta',
-    rating: '4.7',
-    ratingsCount: '3,642 ratings',
     price: '₹1,719.00',
     oldPrice: '₹12,000.00',
   },
@@ -48,8 +42,6 @@ const courses = [
     img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476502/hey_g2223emini_create_a_thumbn_1_drjlnz.png',
     title: 'Full Stack Data Science Pro',
     instructor: 'Ajay Mokta',
-    rating: '4.5',
-    ratingsCount: '3,207 ratings',
     price: '₹59,999.00',
     oldPrice: '₹70,000.00',
   },
@@ -59,8 +51,6 @@ const courses = [
     img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785479019/Gemini_Generated_Image_mvv06hgmvv0hgmvv0_kmqbgv.png',
     title: 'Anyone Can Sketch',
     instructor: 'Lucky Garg',
-    rating: '4.6',
-    ratingsCount: '2,849 ratings',
     price: '₹1,499.00',
     oldPrice: '₹2,999.00',
   },
@@ -332,27 +322,16 @@ export default function Home() {
 
           <div className="about-institute-body">
             <p className="about-institute-text">
-              UnisoleAI started as a side project between two final-year
-              engineering students, Ajay Mokta and Dishant Gupta. We kept running
-              into the same problem: a lot of people wanted to learn AI and data
-              science, but most courses either dragged on too long or skipped the
-              part where you actually build something.
+              UNISOLE AI is the Artificial Intelligence education, research, and innovation vertical of UNISOLE Skill AI Labs, focused on building AI-ready students, educators, and institutions.
             </p>
             <p className="about-institute-text">
-              So we built what we wished existed: mentor-led courses in AI, data
-              science, and machine learning, taught through live sessions and
-              projects you can actually put in a portfolio, not just a certificate
-              you forget about a week later.
+              We deliver industry-oriented AI education, industrial training, internships, faculty development, research mentorship, and AI implementation programs for schools, colleges, universities, government institutions, and aspiring AI professionals.
             </p>
             <p className="about-institute-text">
-              Outside the classroom, our team is also working on a research
-              project of our own: an AI-powered hail prediction and anti-hail net
-              deployment system, built to help apple growers in Himachal Pradesh
-              protect their crops from increasingly unpredictable weather.
+              Our approach combines learning, hands-on projects, research, and real-world implementation to prepare the next generation for an AI-driven world.
             </p>
             <p className="about-institute-text">
-              Everything we do comes back to one idea. Technology should be
-              something students actually get to use, not just read about.
+              Learn. Build. Research. Innovate.
             </p>
           </div>
         </div>
@@ -411,10 +390,6 @@ export default function Home() {
                 <div className="courses-card-body">
                   <h3 className="courses-card-title">{course.title}</h3>
                   <p className="courses-card-instructor">{course.instructor}</p>
-                  <div className="courses-card-meta">
-                    <span className="courses-rating">★ {course.rating}</span>
-                    <span className="courses-ratings-count">{course.ratingsCount}</span>
-                  </div>
                   <div className="courses-card-footer">
                     <div className="courses-card-price">
                       <span className="courses-price">{course.price}</span>

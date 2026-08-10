@@ -5,13 +5,6 @@ import Footer from '../components/Footer';
 import coursesData from '../data/courses';
 import './CoursesPage.css';
 
-const RATING_OPTIONS = [
-  { value: 'all', label: 'All Ratings' },
-  { value: '4.5', label: '4.5 & up' },
-  { value: '4.0', label: '4.0 & up' },
-  { value: '3.5', label: '3.5 & up' },
-];
-
 const LEVEL_OPTIONS = [
   { value: 'all', label: 'All Levels' },
   { value: 'Beginner', label: 'Beginner' },
@@ -21,7 +14,6 @@ const LEVEL_OPTIONS = [
 ];
 
 const SORT_OPTIONS = [
-  { value: 'rating', label: 'Highest Rated' },
   { value: 'price-low', label: 'Price: Low to High' },
   { value: 'price-high', label: 'Price: High to Low' },
 ];
@@ -106,7 +98,6 @@ export default function CoursesPage() {
 
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(searchParams.get('search') || '');
-  const [ratingFilter, setRatingFilter] = useState('all');
   const [levelFilter, setLevelFilter] = useState('all');
   const [sortBy, setSortBy] = useState('relevant');
   const [page, setPage] = useState(1);
@@ -123,7 +114,7 @@ export default function CoursesPage() {
   }, [searchParams]);
 
   const hasActiveFilters =
-    search.trim() !== '' || ratingFilter !== 'all' || levelFilter !== 'all';
+    search.trim() !== '' || levelFilter !== 'all';
 
   const filteredCourses = useMemo(() => {
     let list = courses.filter((c) => {
@@ -132,30 +123,26 @@ export default function CoursesPage() {
         !q ||
         c.title?.toLowerCase().includes(q) ||
         c.instructor?.toLowerCase().includes(q);
-      const matchesRating = ratingFilter === 'all' || (c.rating?.average ?? 0) >= parseFloat(ratingFilter);
       const matchesLevel = levelFilter === 'all' || c.level === levelFilter;
-      return matchesSearch && matchesRating && matchesLevel;
+      return matchesSearch && matchesLevel;
     });
 
-    if (sortBy === 'rating') {
-      list = [...list].sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
-    } else if (sortBy === 'price-low') {
+    if (sortBy === 'price-low') {
       list = [...list].sort((a, b) => getDisplayPrice(a) - getDisplayPrice(b));
     } else if (sortBy === 'price-high') {
       list = [...list].sort((a, b) => getDisplayPrice(b) - getDisplayPrice(a));
     }
 
     return list;
-  }, [courses, search, ratingFilter, levelFilter, sortBy]);
+  }, [courses, search, levelFilter, sortBy]);
 
-  useEffect(() => setPage(1), [search, ratingFilter, levelFilter, sortBy]);
+  useEffect(() => setPage(1), [search, levelFilter, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(filteredCourses.length / PAGE_SIZE));
   const paginatedCourses = filteredCourses.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const clearFilters = () => {
     setSearch('');
-    setRatingFilter('all');
     setLevelFilter('all');
   };
 
@@ -216,7 +203,6 @@ export default function CoursesPage() {
               <span>{hasActiveFilters ? 'Clear filters' : 'All filters'}</span>
             </button>
 
-            <FilterDropdown label="Ratings" options={RATING_OPTIONS} value={ratingFilter} onChange={setRatingFilter} />
             <FilterDropdown label="Level" options={LEVEL_OPTIONS} value={levelFilter} onChange={setLevelFilter} />
           </div>
 
@@ -256,14 +242,9 @@ export default function CoursesPage() {
                     <h3 className="courses-card-title">{course.title}</h3>
                     <p className="courses-card-instructor">
                       {course.instructor}
-                      {course.enrollmentCount > 0 ? ` • ${course.enrollmentCount.toLocaleString('en-IN')} Students` : ''}
                     </p>
                     <div className="courses-card-meta">
                       {badge && <span className="courses-badge">{badge}</span>}
-                      <span className="courses-rating">★ {(course.rating?.average ?? 0).toFixed(1)}</span>
-                      <span className="courses-ratings-count">
-                        ({(course.rating?.count ?? 0).toLocaleString('en-IN')})
-                      </span>
                     </div>
                     <div className="courses-card-footer">
                       <div className="courses-card-price">

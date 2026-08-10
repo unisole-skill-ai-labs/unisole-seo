@@ -13,10 +13,10 @@ export default function Footer() {
       <div className="footer-grid">
         <div className="footer-col">
           <h4>Our Services</h4>
-          <Link to="/query">AI Education Programs</Link>
-          <Link to="/query">Teacher Training</Link>
-          <Link to="/query">University Programs</Link>
-          <Link to="/query">Research & Innovation</Link>
+          <span>AI Education Programs</span>
+          <span>Teacher Training</span>
+          <span>University Programs</span>
+          <span>Research & Innovation</span>
         </div>
 
         <div className="footer-col">

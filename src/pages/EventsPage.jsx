@@ -37,7 +37,7 @@ export default function EventsPage() {
 
       <section className="events-page">
         <div className="events-page-header">
-          <h1 className="events-page-title">Upcoming Events</h1>
+          <h1 className="events-page-title">Events</h1>
           <p className="events-page-subtitle">
             {loading
               ? 'Loading events...'
