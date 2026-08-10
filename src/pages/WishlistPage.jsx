@@ -161,12 +161,6 @@ export default function WishlistPage() {
                     <div className="courses-card-body">
                       <h3 className="courses-card-title">{course.title}</h3>
                       <p className="courses-card-instructor">{course.instructor}</p>
-                      <div className="courses-card-meta">
-                        <span className="courses-rating">★ {(course.rating?.average ?? 0).toFixed(1)}</span>
-                        <span className="courses-ratings-count">
-                          ({(course.rating?.count ?? 0).toLocaleString('en-IN')})
-                        </span>
-                      </div>
                       <div className="courses-card-footer">
                         <div className="courses-card-price">
                           <span className="courses-price">

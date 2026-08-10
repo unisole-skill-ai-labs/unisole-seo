@@ -13,14 +13,6 @@ function getToken() {
   return localStorage.getItem('token');
 }
 
-function formatMinutes(totalSeconds) {
-  const totalMinutes = Math.round(totalSeconds / 60);
-  const hours = Math.floor(totalMinutes / 60);
-  const minutes = totalMinutes % 60;
-  if (hours === 0) return `${minutes}min`;
-  return `${hours}hr ${minutes}min`;
-}
-
 function formatLectureDuration(seconds) {
   if (!seconds) return '';
   const minutes = Math.floor(seconds / 60);
@@ -176,7 +168,6 @@ if (error || !course) {
             </p>
 
             <div className="dc-badges reveal-up" style={{ '--delay': '0.2s' }}>
-              <span className="dc-badge">Bestseller</span>
               <span className="dc-badge">{course.level}</span>
             </div>
 
@@ -187,32 +178,15 @@ if (error || !course) {
             </div>
 
             <div className="dc-stats reveal-up" style={{ '--delay': '0.3s' }}>
-              <span className="dc-rating">
-                ★ {course.rating?.average ?? 0}
-                <span className="dc-rating-count">
-                  ({(course.rating?.count ?? 0).toLocaleString('en-IN')} ratings)
-                </span>
-              </span>
-              <span className="dc-dot">•</span>
-              <span>{(course.enrollmentCount ?? 0).toLocaleString('en-IN')} students</span>
-              <span className="dc-dot">•</span>
               <span>{course.language}</span>
             </div>
 
-            {(course.subtitles?.length > 0 || course.tags?.length > 0) && (
+            {course.tags?.length > 0 && (
               <div className="dc-header-tags reveal-up" style={{ '--delay': '0.35s' }}>
-                {course.subtitles?.length > 0 && (
-                  <span className="dc-tag-group">
-                    <span className="dc-tag-label">Subtitles:</span>{' '}
-                    {course.subtitles.join(', ')}
-                  </span>
-                )}
-                {course.tags?.length > 0 && (
-                  <span className="dc-tag-group">
-                    <span className="dc-tag-label">Tags:</span>{' '}
-                    {course.tags.join(', ')}
-                  </span>
-                )}
+                <span className="dc-tag-group">
+                  <span className="dc-tag-label">Tags:</span>{' '}
+                  {course.tags.join(', ')}
+                </span>
               </div>
             )}
           </div>
@@ -295,35 +269,11 @@ if (error || !course) {
               </div>
             )}
 
-            {course.materials?.length > 0 && (
-              <div className="dc-card reveal-up" style={{ '--delay': '0.25s' }}>
-                <h2 className="dc-card-title">Materials</h2>
-                <ul className="dc-materials-list">
-                  {course.materials.map((material, i) => (
-                    <li key={i}>
-                      <a href={material.url} className="dc-material-link">
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <path
-                            d="M8 2v8m0 0l-3-3m3 3l3-3M3 12.5h10"
-                            stroke="currentColor"
-                            strokeWidth="1.4"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        {material.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
             <div className="dc-card reveal-up" style={{ '--delay': '0.1s' }}>
               <h2 className="dc-card-title">Course content</h2>
               <p className="dc-content-meta">
                 {course.sections.length} section{course.sections.length !== 1 && 's'} •{' '}
-                {course.totalLectures} lectures • {formatMinutes(course.totalDuration)} total length
+                {course.totalLectures} lectures
               </p>
 
               <div className="dc-sections">
