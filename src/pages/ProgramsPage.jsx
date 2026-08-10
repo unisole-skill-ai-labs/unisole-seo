@@ -1,9 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProgramsPage.css';
 
-const ENROLL_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe3H0Yv2hwFvFGppiOwZ_dt9zUNI2hk52Z0gaU0J0VFoAB81Q/viewform?usp=dialog';
 const SUBSCRIPTION_PAYMENT_LINK = import.meta.env.VITE_SUBSCRIPTION_PAYMENT_LINK;
 
 const checkSvg = (
@@ -288,10 +288,6 @@ const programs = [
   },
 ];
 
-const openEnrollForm = () => {
-  window.open(ENROLL_FORM_URL, '_blank', 'noopener,noreferrer');
-};
-
 const openSubscriptionPayment = () => {
   window.open(SUBSCRIPTION_PAYMENT_LINK, '_blank', 'noopener,noreferrer');
 };
@@ -362,9 +358,18 @@ function ProgramSection({ section }) {
 
 export default function ProgramsPage() {
   const [expanded, setExpanded] = useState(null);
+  const navigate = useNavigate();
 
   const toggle = (id) => {
     setExpanded((current) => (current === id ? null : id));
+  };
+
+  const handleProgramCta = (program) => {
+    if (program.action === 'subscription') {
+      openSubscriptionPayment();
+    } else {
+      navigate('/query', { state: { expertise: program.title } });
+    }
   };
 
   return (
@@ -450,7 +455,7 @@ export default function ProgramsPage() {
 
                       <button
                         className="program-card-btn"
-                        onClick={() => (program.action === 'subscription' ? openSubscriptionPayment() : openEnrollForm())}
+                        onClick={() => handleProgramCta(program)}
                       >
                         {program.cta}
                         {arrowSvg}

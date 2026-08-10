@@ -8,12 +8,6 @@ import './About.css';
 import { offerCards } from '../data/offerContent';
 import { isAuthenticated } from '../utils/auth';
 
-const QUERY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe3H0Yv2hwFvFGppiOwZ_dt9zUNI2hk52Z0gaU0J0VFoAB81Q/viewform?usp=dialog';
-
-const openQueryForm = () => {
-  window.open(QUERY_FORM_URL, '_blank', 'noopener,noreferrer');
-};
-
 const courses = [
   {
     id: 1,
@@ -219,14 +213,6 @@ function OfferCarousel() {
               </div>
             </div>
             <div className="offer-modal-body" dangerouslySetInnerHTML={{ __html: modalCard.fullContent || '' }} />
-            <div className="modal-footer-cta">
-              <button className="modal-cta-btn" onClick={openQueryForm}>
-                Get Started
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
-            </div>
           </div>
         </div>
       )}
@@ -300,7 +286,7 @@ export default function Home() {
             </p>
 
             <div className="hero-actions reveal-up" style={{ '--delay': '0.26s' }}>
-              <button className="btn-hero-primary" onClick={() => (isAuthenticated() ? openQueryForm() : navigate('/register'))}>
+              <button className="btn-hero-primary" onClick={() => (isAuthenticated() ? navigate('/query') : navigate('/register'))}>
                 Get Started
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M6 9h8M12 5l4 4m-4 4l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -498,26 +484,36 @@ export default function Home() {
 
         <div className="about-team-grid">
           {[
-            { name: 'Ajay Mokta', role: 'Founder & CEO', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408578/images_jjared.jpg', bio: 'B.Tech in Physics & Photonics Science from NIT Hamirpur. Leads the vision of making AI education accessible to every student, having trained 2,000+ learners and mentored 5,000+ students across 50+ institutions in Himachal Pradesh.' },
-            { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg', bio: "Girish is Lead Advisor – Research & Innovation at UnisoleAI, guiding AI strategy, software engineering, and product innovation. He mentors student researchers and technical teams, bridging academia and industry to build scalable AI solutions—supporting UnisoleAI's mission of solving real-world problems through education, research, and innovation."},
-            { name: 'Ajay Sharma', role: 'Project Coordinator & Social Media Advisor', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0003.jpg_sfvzmm.jpg', bio: 'Manages project execution and stakeholder coordination, while strengthening our digital presence and showcasing the impact of AI-driven learning across Himachal Pradesh.' },
-            { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg', bio: 'Researches latent reasoning in Small Language Models, focusing on Group Relative Policy Optimization to enhance reasoning and generalisation under limited compute.' },
-            { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg', bio: 'Final-year student at St. Bede\u2019s College, Shimla. Coordinates the AI & Computational Thinking Pilot Project across government schools, from training sessions to impact reporting.' },
-            { name: 'Rahul Chauhan', role: 'Implementation Associate', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786260818/rahul_x7n0ag.jpg', bio: 'Rahul is an Implementation Associate at UnisoleAI, responsible for ensuring the smooth execution of our AI initiatives and projects.' },
-            { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg', bio: 'Anshu Roy is a software developer currently studying at NIT Hamirpur. He enjoys building efficient, scalable applications and is always exploring new technologies to grow as a developer.' },
-            { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg', bio: 'Divyank leads engineering at Unisole, helping the team ship great products together. Passionate about computers and technology, he believes the best work happens through collaboration and curiosity.' },
-            { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg', bio: 'Academic Head at UnisoleAI. An IIT Patna graduate and Engineer at Tech Mahindra, he leads curriculum development, technical mentoring and AI Education initiatives with strong industry and academic expertise.' },
-            { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg', bio: 'AI & Technology Lead at UnisoleAI. An IIT Delhi M.Tech graduate, AI System Development and the integration of advanced technologies across our education programs.' },
-            { name: 'Dishant Gupta', role: 'Lead Reseacher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg', bio: 'Lead Researcher at UnisoleAI and former engineer at Baker Hughes. He leads AI research, profuct innovation and applied machine learning initiatives to develop impactful and scalable AI Solutions.'},
+            { name: 'Ajay Mokta', role: 'Founder & CEO', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408578/images_jjared.jpg' },
+            { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg' },
+            { name: 'Ajay Sharma', role: 'Project Coordinator & Social Media Advisor', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786345745/ajay_y6qmkw.png' },
+            { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg' },
+            { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg' },
+            { name: 'Rahul Chauhan', role: 'Implementation Associate', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786260818/rahul_x7n0ag.jpg' },
+            { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg' },
+            { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg' },
+            { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg' },
+            { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg' },
+            { name: 'Dishant Gupta', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg' },
           ].map((member, i) => (
             <div className="about-team-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={member.name}>
               <div className="about-team-img-wrap">
                 <img src={member.img} alt={member.name} className="about-team-img" />
               </div>
               <div className="about-team-body">
-                <h3 className="about-team-name">{member.name}</h3>
+                <div className="about-team-name-row">
+                  <h3 className="about-team-name">{member.name}</h3>
+                  {['Girish Gaurav Sharma', 'Peeyush', 'Anshu Roy', 'Kushal', 'Aditya Kaudhal'].includes(member.name) && (
+                    <span className="about-team-tag">
+                      {['Girish Gaurav Sharma', 'Peeyush', 'Anshu Roy'].includes(member.name)
+                        ? 'NIT Hamirpur'
+                        : member.name === 'Kushal'
+                          ? 'IIT Patna'
+                          : 'IIT Delhi'}
+                    </span>
+                  )}
+                </div>
                 <span className="about-team-role">{member.role}</span>
-                <p className="about-team-bio">{member.bio}</p>
               </div>
             </div>
           ))}
@@ -539,9 +535,9 @@ export default function Home() {
                 <li>Connect with our team for queries, support, or consultations.</li>
             </ul>
 
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLSe3H0Yv2hwFvFGppiOwZ_dt9zUNI2hk52Z0gaU0J0VFoAB81Q/viewform?usp=dialog" target="_blank" rel="noopener noreferrer" className="mentor-promo-btn">
+            <Link to="/query" className="mentor-promo-btn">
                 Get in Touch
-            </a>
+            </Link>
 
             </div>
 

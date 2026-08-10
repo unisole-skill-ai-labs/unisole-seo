@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { supabase } from '../utils/supabase';
 import './QueryPage.css';
 
 export default function QueryPage() {
@@ -10,12 +11,14 @@ export default function QueryPage() {
 
   const [form, setForm] = useState({ name: '', email: '', phone: '', message: '' });
   const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: '' });
+    setSubmitError('');
   };
 
   const validate = () => {
@@ -29,17 +32,31 @@ export default function QueryPage() {
     return newErrors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const newErrors = validate();
     setErrors(newErrors);
     if (Object.keys(newErrors).length > 0) return;
 
     setLoading(true);
-    setTimeout(() => {
+    setSubmitError('');
+    try {
+      const { error } = await supabase.from('queries').insert([
+        {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          message: form.message,
+          expertise: expertise || null,
+        },
+      ]);
+      if (error) throw new Error(error.message || 'Something went wrong. Please try again.');
       setSuccess(true);
+    } catch (err) {
+      setSubmitError(err.message || 'Something went wrong. Please try again.');
+    } finally {
       setLoading(false);
-    }, 600);
+    }
   };
 
   return (
@@ -144,8 +161,8 @@ export default function QueryPage() {
                   {errors.message && <span className="error-message show">{errors.message}</span>}
                 </div>
 
-                {errors.message && errors.message !== 'Query submitted successfully' && (
-                  <span className="error-message show" style={{ marginBottom: 12 }}>{errors.message}</span>
+                {submitError && (
+                  <span className="error-message show" style={{ marginBottom: 12 }}>{submitError}</span>
                 )}
 
                 <button type="submit" className="btn-login reveal-up" style={{ '--delay': '0.3s' }} disabled={loading}>

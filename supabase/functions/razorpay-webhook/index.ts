@@ -33,10 +33,15 @@ Deno.serve(async (req) => {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('id')
+    .select('id, full_name')
     .eq('email', email)
     .maybeSingle();
   const userId = profile?.id || null;
+  const customerName =
+    profile?.full_name ||
+    paymentLink?.customer?.name ||
+    payment?.notes?.name ||
+    (email ? email.split('@')[0] : null);
 
   const { data: existing } = await supabase
     .from('transactions')
@@ -47,12 +52,12 @@ Deno.serve(async (req) => {
   if (!existing) {
     const { error: txError } = await supabase.from('transactions').insert({
       user_id: userId,
+      customer_name: customerName,
       email,
       amount,
       currency: payment?.currency || 'INR',
       plan,
       razorpay_payment_id: paymentId,
-      razorpay_payment_link_id: paymentLink?.id,
       status: 'completed',
     });
     if (txError) {

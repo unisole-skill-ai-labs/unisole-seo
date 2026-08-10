@@ -51,12 +51,12 @@ create trigger on_auth_user_created
 create table if not exists public.transactions (
   id uuid default gen_random_uuid() primary key,
   user_id uuid references auth.users(id) on delete set null,
+  customer_name text,
   email text,
   amount numeric,
   currency text default 'INR',
   plan text,
   razorpay_payment_id text,
-  razorpay_payment_link_id text,
   status text default 'completed',
   created_at timestamptz default now()
 );
@@ -96,8 +96,38 @@ create policy "subscriptions_select_own" on public.subscriptions
 -- insert or update policies, so users cannot modify their own subscription.
 
 -- ============================================================
--- 4. INDEXES
+-- 4. QUERIES
+-- Contact / query form submissions from the /query page.
+-- ============================================================
+create table if not exists public.queries (
+  id uuid default gen_random_uuid() primary key,
+  name text not null,
+  email text not null,
+  phone text not null,
+  message text not null,
+  expertise text,
+  status text default 'new', -- new | contacted | closed
+  user_id uuid references auth.users(id) on delete set null,
+  created_at timestamptz default now()
+);
+
+alter table public.queries enable row level security;
+
+-- Anyone (including logged-out visitors) can submit a query.
+create policy "queries_insert_anon" on public.queries
+  for insert with check (true);
+
+-- Logged-in users can read their own submissions.
+create policy "queries_select_own" on public.queries
+  for select using (auth.uid() = user_id);
+
+-- Updates (e.g. marking a query as "contacted") are done by admins using
+-- the service-role key, which bypasses RLS. No anon/authenticated update policy.
+
+-- ============================================================
+-- 5. INDEXES
 -- ============================================================
 create index if not exists transactions_user_idx on public.transactions (user_id);
 create index if not exists transactions_created_at_idx on public.transactions (created_at desc);
 create index if not exists subscriptions_user_idx on public.subscriptions (user_id);
+create index if not exists queries_created_at_idx on public.queries (created_at desc);

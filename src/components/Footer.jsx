@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
 import './Footer.css';
 
-const QUERY_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSe3H0Yv2hwFvFGppiOwZ_dt9zUNI2hk52Z0gaU0J0VFoAB81Q/viewform?usp=dialog';
-
 export default function Footer() {
   return (
     <footer className="site-footer">
@@ -15,17 +13,17 @@ export default function Footer() {
       <div className="footer-grid">
         <div className="footer-col">
           <h4>Our Services</h4>
-          <a href={QUERY_FORM_URL} target="_blank" rel="noopener noreferrer">AI Education Programs</a>
-          <a href={QUERY_FORM_URL} target="_blank" rel="noopener noreferrer">Teacher Training</a>
-          <a href={QUERY_FORM_URL} target="_blank" rel="noopener noreferrer">University Programs</a>
-          <a href={QUERY_FORM_URL} target="_blank" rel="noopener noreferrer">Research & Innovation</a>
+          <Link to="/query">AI Education Programs</Link>
+          <Link to="/query">Teacher Training</Link>
+          <Link to="/query">University Programs</Link>
+          <Link to="/query">Research & Innovation</Link>
         </div>
 
         <div className="footer-col">
           <h4>Quick Links</h4>
           <Link to="/courses">Courses</Link>
           <Link to="/events">Events</Link>
-          <a href={QUERY_FORM_URL} target="_blank" rel="noopener noreferrer">Get in Touch</a>
+          <Link to="/query">Get in Touch</Link>
         </div>
 
         <div className="footer-col">
