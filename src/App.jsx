@@ -1,11 +1,9 @@
-import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Home from './pages/Home';
 import CoursesPage from './pages/CoursesPage';
-
 import DetailedCourse from './pages/DetailedCourse';
 import OrdersPage from './pages/OrdersPage';
 import LectureWatch from "./pages/LectureWatch";
@@ -14,14 +12,9 @@ import ProgramsPage from './pages/ProgramsPage';
 import PaymentSuccess from './pages/PaymentSuccess';
 import ProfilePage from './pages/ProfilePage';
 import QueryPage from './pages/QueryPage';
-import { initAuthListener } from './utils/supabase';
 import './App.css';
 
 export default function App() {
-  useEffect(() => {
-    initAuthListener();
-  }, []);
-
   return (
     <>
       <ScrollToTop />

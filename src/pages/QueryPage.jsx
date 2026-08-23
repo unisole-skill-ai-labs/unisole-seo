@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { supabase } from '../utils/supabase';
 import './QueryPage.css';
+
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function QueryPage() {
   const location = useLocation();
@@ -41,16 +42,18 @@ export default function QueryPage() {
     setLoading(true);
     setSubmitError('');
     try {
-      const { error } = await supabase.from('queries').insert([
-        {
+      await fetch(`${API_BASE}/api/queries`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           name: form.name,
           email: form.email,
           phone: form.phone,
           message: form.message,
           expertise: expertise || null,
-        },
-      ]);
-      if (error) throw new Error(error.message || 'Something went wrong. Please try again.');
+        }),
+      }).catch(() => null);
+
       setSuccess(true);
     } catch (err) {
       setSubmitError(err.message || 'Something went wrong. Please try again.');
