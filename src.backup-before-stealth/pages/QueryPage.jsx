@@ -2,9 +2,8 @@ import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { API_BASE_URL as API_BASE } from '../config/api';
 import './QueryPage.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 export default function QueryPage() {
   const location = useLocation();

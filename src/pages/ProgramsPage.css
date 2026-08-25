@@ -813,80 +813,57 @@
 
 /* ---------- THE COMMON JOURNEY ---------- */
 .journey-section {
-  padding: 64px 0;
+  padding: 56px 0;
   border-top: 1px solid #e2e8f0;
 }
 
-.journey-track-container {
-  overflow-x: auto;
-  padding: 20px 0 30px;
-  margin-bottom: 24px;
-  -webkit-overflow-scrolling: touch;
+.journey-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 16px;
 }
 
-.journey-track {
-  display: flex;
-  align-items: flex-start;
-  min-width: 900px;
-  justify-content: space-between;
-  position: relative;
-}
-
-.journey-node {
+.journey-step-box {
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
+  gap: 6px;
   position: relative;
-  gap: 10px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
 }
 
-.node-marker {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: #ffffff;
-  border: 2.5px solid #4f46e5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 14px rgba(79, 70, 229, 0.2);
-  z-index: 2;
+.journey-step-box:hover {
+  border-color: #6366f1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.08);
 }
 
-.node-num {
-  font-size: 13.5px;
-  font-weight: 900;
+.journey-step-box .step-num {
+  font-size: 11px;
+  font-weight: 800;
   color: #4f46e5;
+  background: #eef2ff;
+  padding: 3px 8px;
+  border-radius: 6px;
+  width: fit-content;
 }
 
-.node-label {
-  font-size: 12.5px;
+.journey-step-box h4 {
+  font-size: 15px;
   font-weight: 700;
-  color: #1e293b;
+  color: #0f172a;
+  margin: 4px 0 0;
+}
+
+.journey-step-box p {
+  font-size: 12.5px;
+  color: #64748b;
+  margin: 0;
   line-height: 1.4;
-  max-width: 105px;
-}
-
-.node-connector {
-  position: absolute;
-  top: 20px;
-  left: 50%;
-  width: 100%;
-  height: 2px;
-  background: linear-gradient(90deg, #4f46e5 0%, #c7d2fe 100%);
-  z-index: 1;
-}
-
-.journey-clarification-card {
-  background: #f8fafc;
-  border: 1.5px solid #cbd5e1;
-  border-radius: 12px;
-  padding: 18px 22px;
-  display: flex;
-  gap: 14px;
-  align-items: flex-start;
 }
 
 .clarification-icon {

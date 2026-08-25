@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { getUserName, getUserEmail, getUserPhone, getToken, logout } from '../utils/auth';
+import { getUserName, getUserEmail, getUserPhone, getToken, logout, isAuthenticated, setAuthSession } from '../utils/auth';
+import { API_BASE_URL as API_BASE } from '../config/api';
 import './ProfilePage.css';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 
 function formatDate(iso) {
   if (!iso) return '—';
@@ -13,11 +12,20 @@ function formatDate(iso) {
 }
 
 export default function ProfilePage() {
-  const name = getUserName();
-  const email = getUserEmail();
-  const phone = getUserPhone();
+  const navigate = useNavigate();
+  const isAuth = isAuthenticated();
+  const [userName, setUserName] = useState(getUserName());
+  const [userEmail, setUserEmail] = useState(getUserEmail());
+  const [userPhone, setUserPhone] = useState(getUserPhone());
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Authentication Protection
+  useEffect(() => {
+    if (!isAuthenticated()) {
+      navigate('/login', { replace: true, state: { from: '/profile' } });
+    }
+  }, [navigate]);
 
   useEffect(() => {
     async function fetchUserData() {
@@ -28,12 +36,27 @@ export default function ProfilePage() {
       }
 
       try {
-        const res = await fetch(`${API_BASE}/api/orders`, {
+        // Fetch current user details
+        const meRes = await fetch(`${API_BASE}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (res.ok) {
-          const data = await res.json();
-          setOrders(Array.isArray(data) ? data : data.orders || []);
+        if (meRes.ok) {
+          const userData = await meRes.json();
+          if (userData) {
+            setAuthSession({ token, user: userData });
+            setUserName(userData.name || (userData.phone ? `+91 ${userData.phone}` : 'Active Member'));
+            setUserEmail(userData.email || '');
+            setUserPhone(userData.phone || '');
+          }
+        }
+
+        // Fetch user orders
+        const ordersRes = await fetch(`${API_BASE}/api/orders`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (ordersRes.ok) {
+          const ordersData = await ordersRes.json();
+          setOrders(Array.isArray(ordersData) ? ordersData : ordersData.orders || []);
         }
       } catch {
         // graceful fallback
@@ -41,8 +64,18 @@ export default function ProfilePage() {
         setLoading(false);
       }
     }
-    fetchUserData();
-  }, []);
+
+    if (isAuth) {
+      fetchUserData();
+    }
+  }, [isAuth]);
+
+  if (!isAuth) {
+    return null;
+  }
+
+  const displayName = userName && userName !== 'User' ? userName : (userPhone ? `+91 ${userPhone}` : 'Active Member');
+  const avatarLetter = (displayName.replace('+91', '').trim().charAt(0) || 'U').toUpperCase();
 
   return (
     <>
@@ -51,27 +84,23 @@ export default function ProfilePage() {
         <div className="profile-card">
           <div className="profile-avatar-wrap">
             <div className="profile-avatar">
-              {name.charAt(0).toUpperCase()}
+              {avatarLetter}
             </div>
           </div>
-          <h1 className="profile-name">{name}</h1>
-          {phone && <p className="profile-email" style={{ fontWeight: 600, color: 'var(--white)' }}>📱 +91 {phone}</p>}
-          {email && <p className="profile-email">{email}</p>}
+          <h1 className="profile-name">{displayName}</h1>
+          {userPhone && <p className="profile-email" style={{ fontWeight: 600, color: 'var(--white)' }}>📱 +91 {userPhone}</p>}
+          {userEmail && <p className="profile-email">{userEmail}</p>}
 
           <div className="profile-section">
-            <h2 className="profile-section-title">My Learning Account</h2>
+            <h2 className="profile-section-title">My Account</h2>
             <p className="profile-sub-active">
-              Active Unisole Student Profile
+              Active Member Profile
             </p>
           </div>
 
-          <div className="profile-section">
-            <h2 className="profile-section-title">Recent Orders & Enrollments</h2>
-            {loading ? (
-              <p className="profile-empty">Loading...</p>
-            ) : orders.length === 0 ? (
-              <p className="profile-empty">No orders or enrollments yet.</p>
-            ) : (
+          {orders.length > 0 && (
+            <div className="profile-section">
+              <h2 className="profile-section-title">Recent Orders</h2>
               <ul className="profile-tx-list">
                 {orders.map((order, idx) => (
                   <li className="profile-tx-item" key={order.id || idx}>
@@ -84,13 +113,13 @@ export default function ProfilePage() {
                     <span className="profile-tx-amount">
                       {order.amount != null
                         ? `₹${Number(order.amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                        : 'Enrolled'}
+                        : '—'}
                     </span>
                   </li>
                 ))}
               </ul>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="profile-actions">
             <Link to="/" className="profile-btn profile-btn-primary">Back to Home</Link>

@@ -1,17 +1,12 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import './App.css';
 
 // Route Code-Splitting for Optimal Page Load Performance
 const Home = lazy(() => import('./pages/Home'));
-const CoursesPage = lazy(() => import('./pages/CoursesPage'));
-const DetailedCourse = lazy(() => import('./pages/DetailedCourse'));
 const ProgramsPage = lazy(() => import('./pages/ProgramsPage'));
 const EventsPage = lazy(() => import('./pages/EventsPage'));
-const OrdersPage = lazy(() => import('./pages/OrdersPage'));
-const LectureWatch = lazy(() => import('./pages/LectureWatch'));
-const QueryPage = lazy(() => import('./pages/QueryPage'));
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Login = lazy(() => import('./pages/Login'));
@@ -47,15 +42,16 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
-            <Route path="/courses" element={<CoursesPage />} />
-            <Route path="/courses/:slug" element={<DetailedCourse />} />
-            <Route path="/orders" element={<OrdersPage />} />
-            <Route path="/learn/:courseId/:lectureId" element={<LectureWatch />} />
-            <Route path="/events" element={<EventsPage />} />
             <Route path="/programs" element={<ProgramsPage />} />
-            <Route path="/query" element={<QueryPage />} />
+            <Route path="/events" element={<EventsPage />} />
+            <Route path="/query" element={<Navigate to="/programs" replace />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
+            <Route path="/payment/success" element={<PaymentSuccess />} />
+            <Route path="/thank-you" element={<PaymentSuccess />} />
+            <Route path="/order-success" element={<PaymentSuccess />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/courses" element={<Navigate to="/programs" replace />} />
+            <Route path="/courses/*" element={<Navigate to="/programs" replace />} />
           </Routes>
         </Suspense>
       </main>

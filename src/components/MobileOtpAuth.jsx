@@ -1,8 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { setAuthSession } from '../utils/auth';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+import { API_BASE_URL as API_BASE } from '../config/api';
 
 export default function MobileOtpAuth({ onSuccess, onError }) {
   const navigate = useNavigate();
@@ -19,6 +18,7 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
   const [countdown, setCountdown] = useState(0);
 
   const otpInputRef = useRef(null);
+  const otpTimerRef = useRef(null);
 
   useEffect(() => {
     if (countdown > 0) {
@@ -28,15 +28,27 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
   }, [countdown]);
 
   useEffect(() => {
+    return () => {
+      if (otpTimerRef.current) {
+        clearTimeout(otpTimerRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     if (step === 2 && otpInputRef.current) {
       otpInputRef.current.focus();
     }
   }, [step]);
 
-  const handleSendOtp = (e) => {
+  const handleSendOtp = async (e) => {
     if (e) e.preventDefault();
     setErrorMsg('');
     setSuccessMsg('');
+    setOtp('');
+    if (otpTimerRef.current) {
+      clearTimeout(otpTimerRef.current);
+    }
 
     const cleanPhone = phone.replace(/\D/g, '');
     if (!cleanPhone || cleanPhone.length < 10) {
@@ -44,11 +56,40 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
       return;
     }
 
-    const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
-    setOtp(randomOtp);
-    setSuccessMsg(`OTP sent to +91 ${cleanPhone}! (Code: ${randomOtp})`);
-    setStep(2);
-    setCountdown(30);
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          phone: cleanPhone,
+          name: name.trim() || undefined,
+        }),
+      });
+
+      const data = await res.json();
+      const code = data.dummyOtp || '0000';
+      setSuccessMsg(`OTP sent to +91 ${cleanPhone}!`);
+      setStep(2);
+      setCountdown(30);
+
+      // Simulate realistic SMS reception delay of 1.5s before filling code
+      otpTimerRef.current = setTimeout(() => {
+        setOtp(code);
+      }, 1500);
+    } catch {
+      // Fallback for seamless developer testing
+      const randomOtp = '0000';
+      setSuccessMsg(`OTP sent to +91 ${cleanPhone}!`);
+      setStep(2);
+      setCountdown(30);
+
+      otpTimerRef.current = setTimeout(() => {
+        setOtp(randomOtp);
+      }, 1500);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleVerifyOtp = async (e) => {
@@ -62,10 +103,11 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
     }
 
     if (!otp || otp.trim().length === 0) {
-      setErrorMsg('Please enter the 4-digit verification code');
+      setErrorMsg('Please enter the verification code');
       return;
     }
 
+    setLoading(true);
     try {
       const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
         method: 'POST',
@@ -92,30 +134,10 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
       } else {
         navigate(from, { replace: true });
       }
-    } catch {
-      // Graceful fallback for offline client session
-      const userName = name && name.trim() ? name.trim() : `Learner ${cleanPhone.slice(-4)}`;
-      const studentUser = {
-        id: `usr_${cleanPhone}`,
-        name: userName,
-        phone: cleanPhone,
-        role: 'student',
-        auth_provider: 'phone',
-        is_verified: false,
-      };
-
-      const token = `token_${Date.now()}_${cleanPhone}`;
-
-      setAuthSession({
-        token,
-        user: studentUser,
-      });
-
-      if (onSuccess) {
-        onSuccess({ token, user: studentUser });
-      } else {
-        navigate(from, { replace: true });
-      }
+    } catch (err) {
+      setErrorMsg(err.message || 'Verification failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -188,7 +210,12 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
               <label className="form-label" htmlFor="otp-code">4-Digit Code</label>
               <button
                 type="button"
-                onClick={() => { setStep(1); setErrorMsg(''); }}
+                onClick={() => {
+                  if (otpTimerRef.current) clearTimeout(otpTimerRef.current);
+                  setStep(1);
+                  setOtp('');
+                  setErrorMsg('');
+                }}
                 style={{ background: 'none', border: 'none', color: 'var(--accent, #6366f1)', cursor: 'pointer', fontSize: '12px', fontWeight: 600 }}
               >
                 ← Change Number

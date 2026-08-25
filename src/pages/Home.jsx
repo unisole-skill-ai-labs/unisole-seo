@@ -1,104 +1,62 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import './CoursesPage.css';
 import './Home.css';
 import './About.css';
 import { offerCards } from '../data/offerContent';
-import { isAuthenticated } from '../utils/auth';
 import { getOptimizedImageUrl } from '../utils/image';
 
-const courses = [
-  {
-    id: 1,
-    slug: 'from-notebook-to-production',
-    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476504/Gemini_Generated_Image_a0vw7ma0vw7ma0v1w_tkzbpn.png', { width: 480 }),
-    title: 'From Notebook to Production: Real AI Engineering',
-    instructor: 'Ajay Mokta',
-    price: '₹59,000.00',
-    oldPrice: '₹49,000.00',
-  },
-  {
-    id: 2,
-    slug: 'complete-python',
-    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476507/Gemini_Generated_Image_nwyi73nwy1i73nwyi_afrilq.png', { width: 480 }),
-    title: 'Complete Python Programming - From Basics to Object-Oriented Concepts',
-    instructor: 'Ajay Mokta',
-    price: '₹3,000.00',
-    oldPrice: '4,999.00',
-  },
-  {
-    id: 3,
-    slug: 'tableau-ultimate-course',
-    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476500/Gemini_Generated_Image_oh2zrxxo1hzrxxohzr_kocadb.png', { width: 480 }),
-    title: 'Tableau Ultimate Course',
-    instructor: 'Ajay Mokta',
-    price: '₹1,719.00',
-    oldPrice: '₹12,000.00',
-  },
-  {
-    id: 4,
-    slug: 'full-stack-data-science-pro',
-    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476502/hey_g2223emini_create_a_thumbn_1_drjlnz.png', { width: 480 }),
-    title: 'Full Stack Data Science Pro',
-    instructor: 'Ajay Mokta',
-    price: '₹59,999.00',
-    oldPrice: '₹70,000.00',
-  },
-  {
-    id: 5,
-    slug: 'anyone-can-sketech',
-    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785479019/Gemini_Generated_Image_mvv06hgmvv0hgmvv0_kmqbgv.png', { width: 480 }),
-    title: 'Anyone Can Sketch',
-    instructor: 'Lucky Garg',
-    price: '₹1,499.00',
-    oldPrice: '₹2,999.00',
-  },
+const expertiseTags = [
+  '01 · Academic Pathways',
+  '02 · School AI Labs',
+  '03 · Faculty Development',
+  '04 · Higher Education',
+  '05 · Applied AI Research',
+  '06 · Live Internships',
+  '07 · Public Partnerships',
+  '08 · Venture Incubation',
 ];
 
 function OfferCarousel() {
-  const initialActiveIndex = Math.min(offerCards.length - 1, Math.floor(offerCards.length / 2));
-  const [activeIndex, setActiveIndex] = useState(initialActiveIndex);
+  const [activeIndex, setActiveIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalCard, setModalCard] = useState(null);
-  const [xOffset, setXOffset] = useState(0);
-  const [slideW, setSlideW] = useState(0);
-  const timerRef = useRef(null);
+  const [cardWidth, setCardWidth] = useState(360);
+  const [gap, setGap] = useState(20);
   const viewportRef = useRef(null);
   const touchStartX = useRef(0);
   const touchDeltaX = useRef(0);
   const len = offerCards.length;
-  const slideGap = 24;
 
-  useEffect(() => {
-    const calc = () => {
-      const vp = viewportRef.current;
-      if (!vp) return;
-      const isSmall = window.innerWidth <= 640;
-      const cardGap = slideGap;
-      const viewportWidth = vp.offsetWidth;
-      const mobilePadding = 16;
-      const sw = isSmall ? Math.max(viewportWidth - 2 * mobilePadding, 280) : (viewportWidth - 2 * cardGap) / 3;
-      setSlideW(sw);
-      setXOffset((viewportWidth - sw) / 2 - activeIndex * (sw + cardGap));
-    };
-    calc();
-    window.addEventListener('resize', calc);
-    return () => window.removeEventListener('resize', calc);
-  }, [activeIndex]);
+  const updateDimensions = () => {
+    const vp = viewportRef.current;
+    if (!vp) return;
+    const isMobile = window.innerWidth <= 600;
+    const isTablet = window.innerWidth <= 960;
+    const g = isMobile ? 12 : 20;
+    setGap(g);
 
-  const startTimer = () => {
-    clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setActiveIndex((i) => (i + 1) % len);
-    }, 3500);
+    const visibleCards = isMobile ? 1.15 : isTablet ? 2 : 3;
+    const totalGap = (Math.floor(visibleCards) - 1) * g;
+    const w = (vp.offsetWidth - totalGap) / visibleCards;
+    setCardWidth(w);
   };
 
   useEffect(() => {
-    startTimer();
-    return () => clearInterval(timerRef.current);
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
   }, []);
+
+  // Automatic slide interval (every 3.2 seconds)
+  useEffect(() => {
+    if (isModalOpen) return;
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % len);
+    }, 3200);
+    return () => clearInterval(timer);
+  }, [len, isModalOpen]);
 
   // Lock body scroll when modal is open
   useEffect(() => {
@@ -112,25 +70,17 @@ function OfferCarousel() {
     };
   }, [isModalOpen]);
 
-  const goNext = () => {
-    setActiveIndex((i) => (i + 1) % len);
-    startTimer();
+  const handleNext = () => {
+    setActiveIndex((prev) => (prev + 1) % len);
   };
 
-  const goPrev = () => {
-    setActiveIndex((i) => (i - 1 + len) % len);
-    startTimer();
-  };
-
-  const goTo = (i) => {
-    setActiveIndex(i);
-    startTimer();
+  const handlePrev = () => {
+    setActiveIndex((prev) => (prev - 1 + len) % len);
   };
 
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchDeltaX.current = 0;
-    clearInterval(timerRef.current);
   };
 
   const handleTouchMove = (e) => {
@@ -139,92 +89,138 @@ function OfferCarousel() {
 
   const handleTouchEnd = () => {
     if (touchDeltaX.current > 40) {
-      goPrev();
+      handlePrev();
     } else if (touchDeltaX.current < -40) {
-      goNext();
-    } else {
-      startTimer();
+      handleNext();
     }
   };
 
   const openModal = (card) => {
     setModalCard(card);
     setIsModalOpen(true);
-    clearInterval(timerRef.current);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
     setModalCard(null);
-    startTimer();
   };
 
+  const xOffset = activeIndex * (cardWidth + gap);
+
   return (
-    <div className="offer-carousel" style={slideW ? { '--slide-w': `${slideW}px` } : undefined}>
+    <div className="offer-carousel-wrapper">
+      <div className="offer-header-row">
+        <div className="offer-header-left">
+          <span className="about-eyebrow reveal-up" style={{ '--delay': '0.05s' }}>Domains & Capabilities</span>
+          <h2 className="offer-title reveal-up" style={{ '--delay': '0.1s' }}>Our Expertise</h2>
+          <p className="offer-subtitle reveal-up" style={{ '--delay': '0.15s' }}>
+            Empower yourself with essential, unconventional knowledge through industry-aligned AI programs.
+          </p>
+        </div>
+
+        <div className="offer-controls reveal-up" style={{ '--delay': '0.2s' }}>
+          <div className="offer-counter">
+            <span className="offer-counter-current">{String(activeIndex + 1).padStart(2, '0')}</span>
+            <span className="offer-counter-sep">/</span>
+            <span className="offer-counter-total">{String(len).padStart(2, '0')}</span>
+          </div>
+          <button
+            className="offer-nav-btn"
+            onClick={handlePrev}
+            type="button"
+            aria-label="Previous slide"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            className="offer-nav-btn"
+            onClick={handleNext}
+            type="button"
+            aria-label="Next slide"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 18l6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
       <div
-        className="offer-carousel-viewport"
+        className="offer-carousel-viewport reveal-up"
+        style={{ '--delay': '0.25s' }}
         ref={viewportRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
         <div
-          className="offer-carousel-track"
-          style={{ transform: `translateX(${xOffset}px)` }}
+          className="offer-track"
+          style={{
+            transform: `translateX(-${xOffset}px)`,
+            gap: `${gap}px`,
+          }}
         >
           {offerCards.map((card, i) => {
-            const isCenter = i === activeIndex;
+            const isActive = i === activeIndex;
             return (
-              <button
+              <div
                 key={card.id}
-                className={`offer-slide ${isCenter ? 'offer-slide--center' : 'offer-slide--side'}`}
-                onClick={() => (isCenter ? openModal(card) : goTo(i))}
-                type="button"
+                className={`offer-card ${isActive ? 'offer-card--active' : ''}`}
+                style={{ width: `${cardWidth}px`, flex: `0 0 ${cardWidth}px` }}
+                onClick={() => openModal(card)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => e.key === 'Enter' && openModal(card)}
               >
-                <div className="offer-slide-img-wrap">
+                <div className="offer-card-img-wrap">
                   <img
-                    src={getOptimizedImageUrl(card.img, { width: 600 })}
+                    src={getOptimizedImageUrl(card.img, { width: 700 })}
                     alt={card.title}
-                    className="offer-slide-img"
-                    width="600"
-                    height="360"
+                    className="offer-card-img"
+                    width="700"
+                    height="440"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
-                <div className="offer-slide-overlay" />
-                <div className="offer-slide-content">
-                  <h3 className="offer-slide-title">{card.title}</h3>
-                  <span className={`offer-slide-cta ${isCenter ? 'cta-visible' : ''}`}>
-                    Learn more
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                      <path d="M3 7h8M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                <div className="offer-card-overlay" />
+
+                <div className="offer-card-top">
+                  <span className="offer-card-badge">{expertiseTags[i] || `0${i + 1}`}</span>
+                  <span className="offer-card-expand" aria-hidden="true">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                      <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
                     </svg>
                   </span>
                 </div>
-              </button>
+
+                <div className="offer-card-content">
+                  <h3 className="offer-card-title">{card.title}</h3>
+                  <p className="offer-card-desc">{card.desc}</p>
+                  <div className="offer-card-footer">
+                    <span className="offer-card-cta">
+                      Explore Details
+                      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                        <path d="M3 7h8M8 3.5L11.5 7 8 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </span>
+                  </div>
+                </div>
+              </div>
             );
           })}
         </div>
       </div>
-
-      <button className="offer-arrow offer-arrow--left" onClick={goPrev} type="button" aria-label="Previous">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M11 4l-5 5 5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      <button className="offer-arrow offer-arrow--right" onClick={goNext} type="button" aria-label="Next">
-        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-          <path d="M7 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
 
       <div className="offer-dots">
         {offerCards.map((_, i) => (
           <button
             key={i}
             className={`offer-dot ${i === activeIndex ? 'offer-dot--active' : ''}`}
-            onClick={() => goTo(i)}
+            onClick={() => setActiveIndex(i)}
             aria-label={`Go to slide ${i + 1}`}
             type="button"
           />
@@ -242,11 +238,11 @@ function OfferCarousel() {
             <div className="offer-modal-top">
               <div className="offer-modal-top-img-wrap">
                 <img
-                  src={getOptimizedImageUrl(modalCard.img, { width: 800 })}
+                  src={getOptimizedImageUrl(modalCard.img, { width: 900 })}
                   alt={modalCard.title}
                   className="offer-modal-top-img"
-                  width="800"
-                  height="260"
+                  width="900"
+                  height="300"
                   loading="lazy"
                   decoding="async"
                 />
@@ -265,64 +261,68 @@ function OfferCarousel() {
   );
 }
 
+const teamMembers = [
+  { name: 'Ajay Mokta', role: 'Founder & CEO', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408578/images_jjared.jpg' },
+  { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg', tag: 'NIT Hamirpur' },
+  { name: 'Ajay Sharma', role: 'Project Coordinator & Social Media Advisor', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786345745/ajay_y6qmkw.png' },
+  { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg', tag: 'NIT Hamirpur' },
+  { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg' },
+  { name: 'Rahul Chauhan', role: 'Implementation Associate', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786260818/rahul_x7n0ag.jpg' },
+  { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg', tag: 'NIT Hamirpur' },
+  { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg' },
+  { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg', tag: 'IIT Patna' },
+  { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg', tag: 'IIT Delhi' },
+  { name: 'Dishant Gupta', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg' },
+];
+
+function TeamSection() {
+  return (
+    <section className="about-team">
+      <div className="about-team-container">
+        <div className="about-team-header">
+          <span className="about-eyebrow reveal-up" style={{ '--delay': '0.05s' }}>The People</span>
+          <h2 className="about-team-title reveal-up" style={{ '--delay': '0.1s' }}>Meet the Team</h2>
+          <p className="about-team-subtitle reveal-up" style={{ '--delay': '0.15s' }}>
+            A small team building AI education infrastructure for students across Himachal Pradesh and beyond.
+          </p>
+        </div>
+
+        <div className="about-team-grid">
+          {teamMembers.map((member, i) => (
+            <div
+              className="about-team-card reveal-up"
+              style={{ '--delay': `${0.03 + (i % 6) * 0.03}s` }}
+              key={member.name}
+            >
+              <div className="about-team-img-wrap">
+                <img
+                  src={getOptimizedImageUrl(member.img, { width: 300 })}
+                  alt={member.name}
+                  className="about-team-img"
+                  width="300"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+              <div className="about-team-body">
+                <div className="about-team-name-row">
+                  <h3 className="about-team-name">{member.name}</h3>
+                  {member.tag && (
+                    <span className="about-team-tag">{member.tag}</span>
+                  )}
+                </div>
+                <span className="about-team-role">{member.role}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
-  const navigate = useNavigate();
-
-  const [slideIndex, setSlideIndex] = useState(0);
-  const [vw, setVw] = useState(window.innerWidth);
-  const [cardStep, setCardStep] = useState(0);
-  const coursesTrackRef = useRef(null);
-  const firstCourseCardRef = useRef(null);
-  const coursesTouchStartX = useRef(0);
-  const coursesTouchDeltaX = useRef(0);
-
-  useEffect(() => {
-    const onResize = () => setVw(window.innerWidth);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
-
-  const visibleCount = vw < 640 ? 1 : vw < 1024 ? 2 : 4;
-  const maxIndex = Math.max(0, courses.length - visibleCount);
-
-  useEffect(() => {
-    const measure = () => {
-      const card = firstCourseCardRef.current;
-      const track = coursesTrackRef.current;
-      if (!card || !track) return;
-      const trackStyle = window.getComputedStyle(track);
-      const gap = parseFloat(trackStyle.columnGap || trackStyle.gap) || 0;
-      setCardStep(card.getBoundingClientRect().width + gap);
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    return () => window.removeEventListener('resize', measure);
-  }, [vw]);
-
-  useEffect(() => {
-    setSlideIndex((i) => Math.min(i, maxIndex));
-  }, [maxIndex]);
-
-  const goPrev = () => setSlideIndex((i) => Math.max(0, i - 1));
-  const goNext = () => setSlideIndex((i) => Math.min(maxIndex, i + 1));
-
-  const handleCoursesTouchStart = (e) => {
-    coursesTouchStartX.current = e.touches[0].clientX;
-    coursesTouchDeltaX.current = 0;
-  };
-
-  const handleCoursesTouchMove = (e) => {
-    coursesTouchDeltaX.current = e.touches[0].clientX - coursesTouchStartX.current;
-  };
-
-  const handleCoursesTouchEnd = () => {
-    if (coursesTouchDeltaX.current > 40) {
-      goPrev();
-    } else if (coursesTouchDeltaX.current < -40) {
-      goNext();
-    }
-  };
-
   return (
     <>
       <Navbar />
@@ -330,7 +330,7 @@ export default function Home() {
         <div className="hero-inner">
           <div className="hero-left">
             <h1 className="hero-title reveal-up" style={{ '--delay': '0.05s' }}>
-              Welcome to <span className="hero-highlight">UnisoleAI</span>
+              Welcome to <span className="hero-highlight">Unisole Skill AI Labs</span>
             </h1>
 
             <span className="hero-eyebrow reveal-up" style={{ '--delay': '0.12s' }}>
@@ -342,14 +342,11 @@ export default function Home() {
             </p>
 
             <div className="hero-actions reveal-up" style={{ '--delay': '0.26s' }}>
-              <button className="btn-hero-primary" onClick={() => (isAuthenticated() ? navigate('/query') : navigate('/register'))}>
-                Get Started
+              <Link to="/programs" className="btn-hero-primary">
+                Explore Programs
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
                   <path d="M6 9h8M12 5l4 4m-4 4l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </button>
-              <Link to="/courses" className="btn-hero-secondary">
-                Explore Courses
               </Link>
             </div>
           </div>
@@ -358,7 +355,7 @@ export default function Home() {
             <div className="hero-visual">
               <img
                 src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 600 })}
-                alt="Student learning with UnisoleAI"
+                alt="Student learning with Unisole Skill AI Labs"
                 className="hero-visual-img"
                 width="600"
                 height="600"
@@ -374,7 +371,7 @@ export default function Home() {
       {/* ---------- STATS ---------- */}
       <section className="about-stats">
         <div className="about-stats-grid">
-          {[{ value: '5+', label: 'Courses' }, { value: '5000+', label: 'Active Students' }, { value: '25+', label: 'Partner Institutions' }, { value: '2+', label: 'Years Building' }].map((s, i) => (
+          {[{ value: '4', label: 'Academic Pathways' }, { value: '5000+', label: 'Active Students' }, { value: '25+', label: 'Partner Institutions' }, { value: '2+', label: 'Years Building' }].map((s, i) => (
             <div className="about-stat-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={s.label}>
               <span className="about-stat-value">{s.value}</span>
               <span className="about-stat-label">{s.label}</span>
@@ -393,7 +390,7 @@ export default function Home() {
 
           <div className="about-institute-body">
             <p className="about-institute-text">
-              UNISOLE AI is the Artificial Intelligence education, research, and innovation vertical of UNISOLE Skill AI Labs, focused on building AI-ready students, educators, and institutions.
+              Unisole Skill AI Labs is focused on building AI-ready students, educators, and institutions through world-class Artificial Intelligence education, research, and innovation.
             </p>
             <p className="about-institute-text">
               We deliver industry-oriented AI education, industrial training, internships, faculty development, research mentorship, and AI implementation programs for schools, colleges, universities, government institutions, and aspiring AI professionals.
@@ -408,202 +405,14 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ---------- EXPERTISE ---------- */}
       <section className="offer">
-        <div className="offer-header">
-          <h2 className="offer-title reveal-up" style={{ '--delay': '0.05s' }}>
-            Our Expertise
-          </h2>
-          <p className="offer-subtitle reveal-up" style={{ '--delay': '0.1s' }}>
-            Empower yourself with essential, unconventional knowledge
-          </p>
-        </div>
-
         <OfferCarousel />
       </section>
 
-      <section className="courses">
-        <div className="courses-header">
-          <h2 className="courses-title reveal-up" style={{ '--delay': '0.05s' }}>
-            Trending Courses
-          </h2>
-        </div>
-
-        <div className="courses-carousel">
-          <button
-            className="courses-nav courses-nav-left"
-            onClick={goPrev}
-            disabled={slideIndex === 0}
-            aria-label="Previous courses"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M11 4l-5 5 5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-
-          <div
-            className="courses-viewport"
-            onTouchStart={handleCoursesTouchStart}
-            onTouchMove={handleCoursesTouchMove}
-            onTouchEnd={handleCoursesTouchEnd}
-          >
-            <div
-              className="courses-track"
-              ref={coursesTrackRef}
-              style={{
-                transform: `translateX(-${slideIndex * cardStep}px)`,
-              }}
-            >
-              {courses.map((course, courseIdx) => (
-                <Link
-                  to={`/courses/${course.slug}`}
-                  className="course-card courses-card"
-                  key={course.id}
-                  ref={courseIdx === 0 ? firstCourseCardRef : null}
-                >
-                  <div className="courses-card-img-wrap">
-                    <img
-                      src={course.img}
-                      alt={course.title}
-                      className="courses-card-img"
-                      width="360"
-                      height="200"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <div className="courses-card-body">
-                    <h3 className="courses-card-title">{course.title}</h3>
-                    <p className="courses-card-instructor">{course.instructor}</p>
-                    <div className="courses-card-footer">
-                      <div className="courses-card-price">
-                        <span className="courses-price">{course.price}</span>
-                        <span className="courses-old-price">{course.oldPrice}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          <button
-            className="courses-nav courses-nav-right"
-            onClick={goNext}
-            disabled={slideIndex === maxIndex}
-            aria-label="Next courses"
-          >
-            <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <path d="M7 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Courses Pagination Dots */}
-        <div className="courses-dots">
-          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
-            <button
-              key={i}
-              className={`courses-dot ${i === slideIndex ? 'courses-dot--active' : ''}`}
-              onClick={() => setSlideIndex(i)}
-              aria-label={`Go to slide ${i + 1}`}
-              type="button"
-            />
-          ))}
-        </div>
-      </section>
-
       {/* ---------- TEAM ---------- */}
-      <section className="about-team">
-        <div className="about-team-header">
-          <span className="about-eyebrow">The People</span>
-          <h2 className="about-team-title">Meet the Team</h2>
-          <p className="about-team-subtitle">
-            A small team building AI education infrastructure for students across
-            Himachal Pradesh and beyond.
-          </p>
-        </div>
+      <TeamSection />
 
-        <div className="about-team-grid">
-          {[
-            { name: 'Ajay Mokta', role: 'Founder & CEO', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408578/images_jjared.jpg' },
-            { name: 'Girish Gaurav Sharma', role: 'Lead Advisor – Research & Innovation', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg' },
-            { name: 'Ajay Sharma', role: 'Project Coordinator & Social Media Advisor', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786345745/ajay_y6qmkw.png' },
-            { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg' },
-            { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg' },
-            { name: 'Rahul Chauhan', role: 'Implementation Associate', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786260818/rahul_x7n0ag.jpg' },
-            { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg' },
-            { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg' },
-            { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg' },
-            { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg' },
-            { name: 'Dishant Gupta', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408916/IMG-20260310-WA0059.jpg_s6q25v.jpg' },
-          ].map((member, i) => (
-            <div className="about-team-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={member.name}>
-              <div className="about-team-img-wrap">
-                <img
-                  src={getOptimizedImageUrl(member.img, { width: 240 })}
-                  alt={member.name}
-                  className="about-team-img"
-                  width="240"
-                  height="240"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
-              <div className="about-team-body">
-                <div className="about-team-name-row">
-                  <h3 className="about-team-name">{member.name}</h3>
-                  {['Girish Gaurav Sharma', 'Peeyush', 'Anshu Roy', 'Kushal', 'Aditya Kaudhal'].includes(member.name) && (
-                    <span className="about-team-tag">
-                      {['Girish Gaurav Sharma', 'Peeyush', 'Anshu Roy'].includes(member.name)
-                        ? 'NIT Hamirpur'
-                        : member.name === 'Kushal'
-                          ? 'IIT Patna'
-                          : 'IIT Delhi'}
-                    </span>
-                  )}
-                </div>
-                <span className="about-team-role">{member.role}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="mentor-promo">
-        <div className="mentor-promo-card">
-          <div className="mentor-promo-left">
-            <span className="mentor-promo-brand">UnisoleAI</span>
-
-            <h2 className="mentor-promo-title">
-              Get in touch with us
-            </h2>
-
-            <ul className="mentor-promo-list">
-              <li>Reach out for project collaborations and partnerships.</li>
-              <li>Contact us for AI solutions, workshops, and training.</li>
-              <li>Connect with our team for queries, support, or consultations.</li>
-            </ul>
-
-            <Link to="/query" className="mentor-promo-btn">
-              Get in Touch
-            </Link>
-          </div>
-
-          <div className="mentor-promo-right">
-            <div className="mentor-promo-image-wrap">
-              <img
-                src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 400 })}
-                alt="Mentor session"
-                className="mentor-promo-image"
-                width="320"
-                height="320"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
 
       <section className="testimonials">
         <h2 className="testimonials-title reveal-up" style={{ '--delay': '0.05s' }}>

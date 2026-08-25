@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './ProgramsPage.css';
@@ -7,24 +6,23 @@ import './ProgramsPage.css';
 const SUBSCRIPTION_PAYMENT_LINK = import.meta.env.VITE_SUBSCRIPTION_PAYMENT_LINK;
 
 const checkSvg = (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
     <path d="M20 6L9 17l-5-5" />
   </svg>
 );
 
 const arrowSvg = (
-  <svg width="16" height="16" viewBox="0 0 18 18" fill="none">
+  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
     <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const syllabusSvg = (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
     <polyline points="14 2 14 8 20 8" />
     <line x1="16" y1="13" x2="8" y2="13" />
     <line x1="16" y1="17" x2="8" y2="17" />
-    <polyline points="10 9 9 9 8 9" />
   </svg>
 );
 
@@ -40,130 +38,61 @@ const GROUPS_DATA = [
     badge: 'GROUP 1',
     icon: '💻',
     title: 'Computer Science & IT',
-    target: 'BCA • MCA • B.Sc. CS/IT • PGDCA • B.Tech CSE/IT • Related disciplines',
-    tagline: 'Production AI engineering, full stack web systems, and high-impact AI product creation.',
+    target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
+    tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
     pathways: [
       {
         id: 'cs-p1',
         eyebrow: 'PATHWAY 1',
         title: 'Machine Learning Engineering in Production',
         duration: '3 Months',
-        level: 'Intermediate (Basic Python exposure recommended)',
+        level: 'Intermediate',
         enrollLink: 'https://rzp.io/rzp/6rUVhV4',
         syllabusLink: '',
-        description: 'End-to-end ML engineering covering foundational data pipelines, deep learning, production APIs, MLOps containerization, and Generative AI/RAG architectures.',
+        description: 'End-to-end ML engineering: data pipelines, deep learning, FastAPI model serving, Docker MLOps, and Generative AI/RAG architectures.',
         modules: [
           {
             num: '01',
             title: 'Python for AI Engineering',
-            topics: [
-              'Python programming fundamentals',
-              'Functions, modules and packages',
-              'Object-oriented programming (OOP)',
-              'Exception handling & testing',
-              'File and structured data handling',
-              'Virtual environments & package management',
-              'Writing reusable, modular code',
-              'Git/GitHub version control workflow',
-            ],
-            practical: 'Build a modular Python application and publish it with CI checks on GitHub.',
+            topics: ['Python fundamentals, OOP & modular architecture', 'Virtual environments, unit testing & Git workflows', 'Handling structured data & packages'],
+            practical: 'Build modular Python app with CI checks on GitHub.',
           },
           {
             num: '02',
-            title: 'Data Engineering Foundations',
-            topics: [
-              'Structured vs unstructured data (CSV, JSON, Parquet)',
-              'NumPy & Pandas for data manipulation',
-              'Data cleaning, schema validation & EDA',
-              'SQL fundamentals & relational database design',
-              'OLTP vs OLAP architecture',
-              'ETL vs ELT pipelines',
-              'Batch vs streaming data processing',
-              'DuckDB for high-speed analytical queries',
-              'Apache Kafka event streaming fundamentals',
-            ],
-            pipeline: ['Data Source', 'ETL Pipeline', 'Parquet Storage', 'DuckDB Engine', 'Analytics / ML Models'],
+            title: 'Data Engineering & Pipelines',
+            topics: ['NumPy, Pandas & exploratory data analysis', 'SQL relational databases & DuckDB analytics', 'ETL pipelines & Kafka streaming fundamentals'],
+            pipeline: ['Data Source', 'ETL Pipeline', 'Parquet Storage', 'DuckDB Engine', 'ML Models'],
           },
           {
             num: '03',
-            title: 'Machine Learning',
-            topics: [
-              'Complete ML lifecycle & workflow',
-              'Supervised learning: Regression & Classification',
-              'Unsupervised learning & Clustering',
-              'Advanced feature engineering & selection',
-              'Train / validation / test data splitting',
-              'K-Fold Cross-validation techniques',
-              'Model evaluation: Accuracy, Precision, Recall, F1-Score',
-              'Confusion matrix & ROC-AUC analysis',
-              'Systematic model selection & hyperparameter tuning',
-            ],
+            title: 'Machine Learning Fundamentals',
+            topics: ['Supervised & unsupervised learning algorithms', 'Feature engineering, validation & K-fold CV', 'Model evaluation metrics, ROC-AUC & tuning'],
           },
           {
             num: '04',
-            title: 'Deep Learning & Modern AI',
-            topics: [
-              'Neural network architectures & mathematical intuition',
-              'Forward & backpropagation optimization',
-              'Convolutional Neural Networks (CNNs)',
-              'Sequence models & Recurrent architectures',
-              'Transfer learning & modern pre-trained models',
-              'Model fine-tuning principles',
-              'Introduction to Transformer architectures',
-              'Vector embeddings & representation learning',
-              'LLM foundational concepts',
-            ],
+            title: 'Deep Learning & Transformers',
+            topics: ['Neural network architectures & optimization', 'CNNs for computer vision & sequence models', 'Transfer learning, embeddings & LLM foundations'],
           },
           {
             num: '05',
-            title: 'Building AI Applications',
-            topics: [
-              'Model inference & latency optimization',
-              'High-performance REST APIs with FastAPI',
-              'Request/response validation with Pydantic',
-              'Connecting ML models to production web applications',
-              'Authentication & API key management',
-              'Robust error handling & logging',
-            ],
+            title: 'Building AI APIs with FastAPI',
+            topics: ['High-performance REST APIs with FastAPI & Pydantic', 'Model inference, latency optimization & auth', 'Connecting ML backends to web applications'],
           },
           {
             num: '06',
-            title: 'MLOps & Deployment',
-            topics: [
-              'Model serialization & registry',
-              'Experiment tracking & versioning',
-              'Docker & containerization for reproducible inference',
-              'CI/CD automated deployment pipelines',
-              'Cloud deployment concepts (AWS/GCP/Vercel/Docker)',
-              'Model monitoring, data drift & concept drift',
-              'Automated retraining pipelines',
-            ],
+            title: 'MLOps, Docker & Cloud Deployment',
+            topics: ['Docker containerization for model inference', 'CI/CD automated deployment pipelines', 'Model monitoring, data drift & automated retraining'],
           },
           {
             num: '07',
             title: 'Generative AI & RAG Systems',
-            topics: [
-              'LLM architecture & prompting strategies',
-              'Advanced Prompt Engineering & Few-Shot techniques',
-              'Vector databases (Pinecone / Chroma / pgvector)',
-              'Retrieval-Augmented Generation (RAG) architecture',
-              'Document ingestion, chunking & semantic retrieval',
-              'LLM response generation & guardrails',
-              'AI evaluation frameworks & Agent fundamentals',
-            ],
+            topics: ['LLM architecture, prompting & guardrails', 'Vector databases (Pinecone / Chroma / pgvector)', 'Retrieval-Augmented Generation (RAG) pipelines'],
           },
         ],
         capstone: {
           title: 'End-to-End Production AI System',
-          flow: ['Data Ingestion', 'ETL & Feature Store', 'ML / AI Model', 'FastAPI Backend', 'Client Application', 'Docker Container', 'Cloud Deployment'],
-          outputs: [
-            'Production GitHub repository with clean documentation',
-            'Trained ML / AI model with evaluation benchmarks',
-            'Deployed FastAPI REST API with live swagger documentation',
-            'Working user-facing interface',
-            'Technical architecture report & live demo presentation',
-            'Resume project entry with quantifiable metrics',
-          ],
+          flow: ['Data Ingestion', 'Feature Store', 'ML / AI Model', 'FastAPI Backend', 'Docker & Cloud'],
+          outputs: ['Production GitHub repo with clean docs', 'Deployed live FastAPI REST API', 'Trained model benchmark report'],
         },
       },
       {
@@ -174,196 +103,103 @@ const GROUPS_DATA = [
         level: 'Beginner to Intermediate',
         enrollLink: 'https://rzp.io/rzp/K9E9OOw',
         syllabusLink: '',
-        description: 'Modern full-stack engineering combining React, Node.js, Express, MongoDB, and integrated AI features like intelligent document Q&A, LLM assistants, and smart dashboards.',
+        description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
         modules: [
           {
             num: '01',
-            title: 'Web Foundations',
-            topics: [
-              'Semantic HTML5 & modern accessibility standards',
-              'Modern CSS, Flexbox, CSS Grid & Responsive design',
-              'Modern JavaScript (ES6+), DOM manipulation & events',
-              'Asynchronous JS, Promises & Async/Await',
-              'Fetch API & RESTful data consumption',
-            ],
+            title: 'Web Foundations & JavaScript',
+            topics: ['HTML5, modern CSS, Flexbox & CSS Grid', 'Modern JavaScript (ES6+), DOM & Async/Await', 'Fetch API & consuming RESTful APIs'],
           },
           {
             num: '02',
-            title: 'Modern Frontend with React',
-            topics: [
-              'React core architecture & JSX',
-              'Components, props & state management',
-              'React Hooks (useState, useEffect, useMemo, custom hooks)',
-              'Form handling, validation & user feedback',
-              'Client-side routing with React Router',
-              'Vite build system & clean project structure',
-            ],
+            title: 'Frontend with React & Vite',
+            topics: ['Component architecture, JSX & custom hooks', 'State management, forms & validation', 'Client-side routing with React Router'],
           },
           {
             num: '03',
-            title: 'Backend Development with Node.js & Express',
-            topics: [
-              'Node.js runtime & event-driven architecture',
-              'Express.js server creation & routing',
-              'REST API design principles',
-              'Middleware pipelines (logging, CORS, rate-limiting)',
-              'Authentication (JWT, bcrypt) & Role-based Authorization',
-              'Validation & centralized error handling',
-            ],
+            title: 'Backend with Node.js & Express',
+            topics: ['REST API design & Express server setup', 'JWT authentication & role-based access', 'Centralized error handling & middleware'],
           },
           {
             num: '04',
-            title: 'Databases & Data Modeling',
-            topics: [
-              'Database paradigms & schema design',
-              'MongoDB & Mongoose ODM',
-              'CRUD operations & indexing strategies',
-              'Aggregation pipelines & complex queries',
-              'Connecting backend services with database pools',
-            ],
+            title: 'Databases with MongoDB & Mongoose',
+            topics: ['Schema modeling, CRUD & indexing', 'Aggregation pipelines for analytics', 'Database connection pooling & security'],
           },
           {
             num: '05',
-            title: 'Software Engineering Best Practices',
-            topics: [
-              'Git & GitHub collaboration, branching & PRs',
-              'Clean code organization & environment configurations',
-              'Debugging workflows & browser devtools',
-              'Unit & integration testing fundamentals',
-            ],
+            title: 'DevOps, CI/CD & Deployment',
+            topics: ['Git collaboration & PR review workflows', 'Docker containerization fundamentals', 'Cloud deployment to Vercel/Render/AWS'],
           },
           {
             num: '06',
-            title: 'Production Deployment & DevOps',
-            topics: [
-              'Optimized production bundle builds',
-              'Cloud hosting & environment variables',
-              'Docker containerization fundamentals',
-              'CI/CD concepts & basic uptime monitoring',
-            ],
-          },
-          {
-            num: '07',
             title: 'AI-Powered Web Applications',
-            topics: [
-              'Connecting LLM APIs (OpenAI, Gemini, Anthropic)',
-              'Embedding intelligent AI features into web apps',
-              'RAG-based web applications & document Q&A',
-              'Interactive AI assistants & chatbots',
-              'AI-powered analytics dashboards',
-            ],
+            topics: ['Connecting LLM APIs (OpenAI, Gemini)', 'RAG-based document Q&A features', 'Intelligent AI chat assistants & dashboards'],
           },
         ],
         capstone: {
           title: 'Full-Stack Intelligent Web Application',
-          flow: ['Frontend UI', 'Express Backend', 'REST API', 'Database', 'AI Integration', 'Cloud Deployment'],
-          outputs: [
-            'Complete full stack web application with authentication',
-            'Integrated LLM / AI capability solving a real user problem',
-            'Live hosted URL on Vercel / Render / Cloud',
-            'GitHub repository with comprehensive README',
-          ],
+          flow: ['React UI', 'Express Backend', 'MongoDB', 'AI Integration', 'Cloud Deployment'],
+          outputs: ['Live full-stack app with authentication', 'Integrated LLM features', 'Clean GitHub documentation'],
         },
       },
       {
         id: 'cs-p3',
         eyebrow: 'PATHWAY 3',
         title: 'Complete Machine Learning + Full Stack',
-        duration: '6 Months (Integrated Mastery)',
-        level: 'Comprehensive Dual Track (Beginner to Production)',
+        duration: '6 Months',
+        level: 'Dual-Track Mastery',
         enrollLink: 'https://rzp.io/rzp/34ZzWCiC',
         syllabusLink: '',
-        description: 'Unified mastery curriculum merging advanced Machine Learning, Deep Learning, and MLOps pipelines with full-stack React, Node.js backend systems, and production AI web applications.',
+        description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
         modules: [
           {
             num: '01',
-            title: 'Python for AI & Modern Engineering',
-            topics: [
-              'Python programming fundamentals & OOP',
-              'Modular software design & unit testing',
-              'Virtual environments & package workflows',
-              'Git/GitHub collaborative version control',
-            ],
-            practical: 'Build and deploy a modular Python core engine with CI/CD checks.',
+            title: 'Python for AI & Clean Engineering',
+            topics: ['Python fundamentals, OOP & testing', 'Data structures & modular architecture', 'Git version control workflows'],
           },
           {
             num: '02',
-            title: 'Data Engineering & Scalable Pipelines',
-            topics: [
-              'NumPy & Pandas for large dataset manipulation',
-              'Data cleaning, schema validation & EDA',
-              'SQL relational design & DuckDB analytics',
-              'ETL/ELT pipeline architectures & Kafka streaming',
-            ],
+            title: 'Data Engineering & Scalable Storage',
+            topics: ['NumPy, Pandas & SQL databases', 'ETL pipelines & DuckDB analytics', 'Kafka streaming concepts'],
           },
           {
             num: '03',
             title: 'Machine Learning & Deep Learning',
-            topics: [
-              'Supervised, unsupervised & ensemble methods',
-              'Neural networks, CNNs, Transformers & Embeddings',
-              'Model evaluation metrics & hyperparameter tuning',
-              'Transfer learning & LLM foundational concepts',
-            ],
+            topics: ['Supervised & unsupervised models', 'Neural networks, CNNs & Transformers', 'Model optimization & metrics'],
           },
           {
             num: '04',
-            title: 'Full-Stack Frontend & UI Engineering',
-            topics: [
-              'Modern JavaScript (ES6+) & asynchronous programming',
-              'React component architecture & custom hooks',
-              'Responsive design, state management & routing',
-              'Production bundle optimization & Vite workflows',
-            ],
+            title: 'Frontend UI with React & Vite',
+            topics: ['React hooks, state & routing', 'Responsive UI & form workflows', 'Production bundle optimization'],
           },
           {
             num: '05',
-            title: 'Backend Systems & Database Architecture',
-            topics: [
-              'Node.js & Express server architecture',
-              'RESTful API design & security middleware',
-              'MongoDB/Mongoose data modeling & indexing',
-              'JWT authentication & role-based access control',
-            ],
+            title: 'Backend Systems & MongoDB',
+            topics: ['Node.js/Express REST APIs', 'MongoDB data modeling & indexing', 'JWT authentication & security'],
           },
           {
             num: '06',
-            title: 'Generative AI, RAG & LLM Agents',
-            topics: [
-              'Vector databases (Pinecone / Chroma / pgvector)',
-              'Retrieval-Augmented Generation (RAG) pipelines',
-              'Prompt engineering & semantic retrieval systems',
-              'AI evaluation frameworks & Autonomous Agents',
-            ],
+            title: 'Generative AI & RAG Systems',
+            topics: ['Vector databases & embeddings', 'Semantic search & RAG pipelines', 'AI evaluation & Agent workflows'],
           },
           {
             num: '07',
-            title: 'MLOps, Cloud Deployment & Production APIs',
-            topics: [
-              'FastAPI high-performance model serving',
-              'Docker containerization & multi-container architecture',
-              'CI/CD automated deployment to Cloud (AWS/Vercel/Render)',
-              'Live monitoring, drift detection & automated retraining',
-            ],
+            title: 'MLOps, FastAPI & Cloud Serving',
+            topics: ['FastAPI model serving endpoints', 'Docker containerization & CI/CD', 'Cloud deployment & drift monitoring'],
           },
         ],
         capstone: {
           title: 'Full-Stack Production AI Platform',
-          flow: ['Data Pipelines', 'ML Model Training', 'FastAPI/Express Backend', 'React UI', 'RAG Integration', 'Cloud Deployment'],
-          outputs: [
-            'End-to-end production AI web application',
-            'Full stack GitHub repository with clean documentation & CI/CD',
-            'Deployed live REST API with interactive Swagger docs',
-            'Dual certification credential (ML Engineering + Full Stack Web)',
-          ],
+          flow: ['Data Pipeline', 'ML Model', 'FastAPI Backend', 'React UI', 'Cloud Deployment'],
+          outputs: ['End-to-end production AI app', 'Dual certification credential', 'Live API with Swagger docs'],
         },
       },
       {
         id: 'cs-common',
-        eyebrow: 'WEEKEND IMMERSION TRACK',
+        eyebrow: 'WEEKEND TRACK',
         title: 'AI Entrepreneurship & Innovation',
-        duration: 'Weekend Track (Saturday + Sunday)',
-        level: 'All CS & IT Students',
+        duration: 'Weekend Track',
+        level: 'All Students',
         enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
         syllabusLink: '',
         description: 'Structured incubator track teaching students how to convert AI technical capability into validated commercial products and startups.',
@@ -371,23 +207,23 @@ const GROUPS_DATA = [
           {
             num: '01',
             title: 'Problem & Market Discovery',
-            topics: ['Design thinking principles', 'Identifying real user pain points', 'Customer discovery interviews', 'Competitor matrix & TAM/SAM analysis'],
+            topics: ['Design thinking & identifying pain points', 'Customer discovery interviews', 'Competitor matrix & market sizing'],
           },
           {
             num: '02',
-            title: 'AI Opportunity & MVP Building',
-            topics: ['Where AI creates 10x value vs automation', 'Human + AI workflow design', 'Rapid prototyping with low-code & AI tools', 'Validating MVP with initial users'],
+            title: 'AI Opportunity & Rapid MVP',
+            topics: ['Where AI creates 10x value vs automation', 'Rapid prototyping with low-code & AI tools', 'Validating MVP with early users'],
           },
           {
             num: '03',
             title: 'Business Model & Pitching',
-            topics: ['Value proposition & revenue models', 'Business Model Canvas (BMC)', 'Go-To-Market & initial customer acquisition', 'High-impact investor pitch deck creation'],
+            topics: ['Business Model Canvas (BMC) & revenue models', 'Go-To-Market strategies', 'High-impact 10-slide investor pitch deck'],
           },
         ],
         capstone: {
           title: 'Startup Validation & Pitch Deck',
-          flow: ['Problem Statement', 'Validated Concept', 'Functional MVP', 'Business Model Canvas', 'Final Pitch'],
-          outputs: ['Working MVP prototype', 'Validated Business Model Canvas', 'Polished 10-slide investor pitch deck'],
+          flow: ['Problem Statement', 'Functional MVP', 'Business Model', 'Final Pitch'],
+          outputs: ['Working MVP prototype', 'Validated Business Model Canvas', '10-slide investor pitch deck'],
         },
       },
     ],
@@ -397,7 +233,7 @@ const GROUPS_DATA = [
     badge: 'GROUP 2',
     icon: '🔬',
     title: 'Science & Mathematics',
-    target: 'Physics • Mathematics • Chemistry • Biology • Applied Science • Other science disciplines',
+    target: 'Physics • Mathematics • Chemistry • Biology • Applied Science',
     tagline: 'Scientific computing, physics-informed neural networks, and computational research.',
     pathways: [
       {
@@ -405,96 +241,46 @@ const GROUPS_DATA = [
         eyebrow: 'PATHWAY 1',
         title: 'Scientific Machine Learning & AI for Science',
         duration: '3 Months',
-        level: 'Undergraduate / Postgraduate Science Students',
+        level: 'Undergraduate / Postgraduate',
         enrollLink: 'https://rzp.io/rzp/uyG6gkvw',
         syllabusLink: '',
-        description: 'Combines rigorous mathematical principles with modern scientific computing, differential equations, and Physics-Informed Neural Networks (PINNs) to solve empirical scientific problems.',
+        description: 'Combines mathematical principles with modern scientific computing, differential equations, and Physics-Informed Neural Networks (PINNs).',
         modules: [
           {
             num: '01',
             title: 'Mathematical Foundations for AI',
-            topics: [
-              'Linear algebra: Vectors, matrices, eigenvalues & eigenvectors',
-              'Calculus: Derivatives, gradients, Jacobians & optimization',
-              'Probability theory & statistical distributions',
-              'Hypothesis testing & scientific statistical inference',
-            ],
+            topics: ['Linear algebra & matrix decompositions', 'Multivariable calculus & optimization', 'Probability & statistical hypothesis testing'],
           },
           {
             num: '02',
             title: 'Scientific Computing in Python',
-            topics: [
-              'Python for scientific research & analysis',
-              'NumPy & SciPy for vectorized numerical computing',
-              'Pandas for experimental and tabular dataset handling',
-              'Matplotlib, Seaborn & publication-quality scientific visualization',
-              'Jupyter notebooks & reproducible computational research',
-              'Numerical integration & solving differential equations (ODEs)',
-            ],
+            topics: ['NumPy & SciPy numerical computing', 'Publication-quality data visualization', 'Solving differential equations (ODEs)'],
           },
           {
             num: '03',
-            title: 'Machine Learning for Scientists',
-            topics: [
-              'ML workflow tailored to scientific empirical data',
-              'Regression models for physical parameter estimation',
-              'Classification & clustering on experimental data',
-              'Feature engineering from raw sensor/lab signals',
-              'Model validation against physical constraints',
-            ],
+            title: 'ML for Empirical & Lab Data',
+            topics: ['ML workflows for experimental data', 'Regression for physical parameter estimation', 'Signal feature extraction & validation'],
           },
           {
             num: '04',
             title: 'Deep Learning & Scientific Models',
-            topics: [
-              'Neural network architectures & loss optimization',
-              'CNNs for scientific imaging (microscopy, spectroscopy, astronomy)',
-              'Sequence modeling for time-series lab data',
-              'Transfer learning on scientific foundation models',
-              'Model interpretability & explainability in science',
-            ],
+            topics: ['Neural network architectures & loss functions', 'CNNs for scientific imaging & spectroscopy', 'Model interpretability in science'],
           },
           {
             num: '05',
-            title: 'Scientific Machine Learning (SciML)',
-            topics: [
-              'Data-driven vs physics-based modeling paradigms',
-              'Hybrid scientific modeling approaches',
-              'Integrating differential equations with neural networks',
-              'Neural operators for complex physical systems',
-              'Accelerated computational prediction for physical simulations',
-            ],
+            title: 'Physics-Informed AI (PINNs)',
+            topics: ['Embedding physical laws into loss functions', 'Boundary & initial condition constraints', 'Validating models against physical laws'],
           },
           {
             num: '06',
-            title: 'Physics-Informed AI (PINNs)',
-            topics: [
-              'Embedding physical conservation laws into loss functions',
-              'Boundary conditions & initial condition constraints',
-              'Physics-Informed Neural Networks (PINN) architecture & workflow',
-              'Validating ML models against fundamental physical laws',
-            ],
-          },
-          {
-            num: '07',
-            title: 'Research Computing & Publication Workflows',
-            topics: [
-              'Scientific problem formulation & literature review',
-              'Benchmark dataset creation & curation',
-              'Reproducible research protocols & Git/GitHub for scientists',
-              'Technical paper formatting, data visualization & presentation',
-            ],
+            title: 'Research Computing & Publication',
+            topics: ['Reproducible research workflows & GitHub', 'Benchmark dataset curation', 'Technical paper formatting & presentation'],
           },
         ],
         capstone: {
-          title: 'Computational Science & SciML Research Project',
-          flow: ['Scientific Hypothesis', 'Lab / Sensor Dataset', 'SciML / PINN Model', 'Simulation Benchmark', 'Research Report'],
-          outputs: [
-            'Research-style computational project & Jupyter notebook',
-            'Physics-informed or data-driven simulation model',
-            'GitHub repository with reproducible scientific environment',
-            'Formatted technical research report & findings presentation',
-          ],
+          title: 'Computational Science & SciML Project',
+          flow: ['Scientific Hypothesis', 'Lab Dataset', 'SciML / PINN Model', 'Research Report'],
+          outputs: ['Jupyter research notebook', 'PINN simulation model', 'Formatted technical research paper'],
         },
       },
       {
@@ -505,33 +291,28 @@ const GROUPS_DATA = [
         level: 'Mathematics & Statistics Majors',
         enrollLink: 'https://rzp.io/rzp/ik3ig71K',
         syllabusLink: '',
-        description: 'Positioned as the rigorous mathematics-oriented pathway focusing on mathematical proofs, optimization theory, statistical learning, and computational algorithms behind modern AI.',
+        description: 'Rigorous mathematics-oriented pathway focusing on mathematical proofs, optimization theory, statistical learning, and computational algorithms.',
         modules: [
           {
             num: '01',
             title: 'Mathematics Behind Modern AI',
-            topics: ['Vector spaces, inner products & projections', 'Matrix decompositions (SVD, PCA)', 'Multivariable calculus & gradient fields'],
+            topics: ['Vector spaces & matrix decompositions (SVD, PCA)', 'Multivariable calculus & gradient fields', 'Statistical inference & Bayesian theory'],
           },
           {
             num: '02',
             title: 'Optimization Theory & Algorithms',
-            topics: ['Convex optimization & duality', 'Gradient Descent, Momentum, Adam', 'Stochastic optimization & convergence rates'],
+            topics: ['Convex optimization & gradient descent', 'Stochastic optimization & momentum', 'Convergence analysis'],
           },
           {
             num: '03',
-            title: 'Probability, Statistics & Information Theory',
-            topics: ['Bayesian inference & maximum likelihood (MLE)', 'Random variables & stochastic processes', 'Entropy, KL divergence & information metrics'],
-          },
-          {
-            num: '04',
-            title: 'Numerical Computing & Algorithmic AI',
-            topics: ['Numerical linear algebra', 'Monte Carlo simulations', 'Optimization-driven neural network training'],
+            title: 'Algorithmic AI & Simulation',
+            topics: ['Numerical linear algebra', 'Monte Carlo simulations', 'Optimization-driven network training'],
           },
         ],
         capstone: {
-          title: 'Mathematical Problem Solving via Computational AI',
-          flow: ['Math Formulation', 'Algorithm Design', 'Computational Implementation', 'Theoretical Analysis', 'Final Report'],
-          outputs: ['Algorithm implementation notebook', 'Theoretical analysis report', 'GitHub repo & presentation'],
+          title: 'Mathematical Problem Solving via AI',
+          flow: ['Math Formulation', 'Algorithm Design', 'Computational Implementation', 'Final Report'],
+          outputs: ['Algorithm notebook', 'Theoretical analysis report', 'GitHub repository'],
         },
       },
     ],
@@ -541,109 +322,50 @@ const GROUPS_DATA = [
     badge: 'GROUP 3',
     icon: '📊',
     title: 'Commerce, BBA & Management',
-    target: 'B.Com • BBA • BBM • M.Com • MBA/Management • Economics • Finance-related disciplines',
-    tagline: 'Business analytics, SQL, modern data engineering, FinTech systems, and AI-driven decision making.',
+    target: 'B.Com • BBA • M.Com • MBA • Economics • Finance',
+    tagline: 'Business analytics, SQL, modern data engineering, FinTech systems, and AI-driven decisions.',
     pathways: [
       {
         id: 'mgmt-p1',
         eyebrow: 'PATHWAY 1',
         title: 'Business Analytics & Data Engineering',
         duration: '3 Months',
-        level: 'Undergraduate / Postgraduate Commerce & Management',
+        level: 'Undergraduate / Postgraduate',
         enrollLink: 'https://rzp.io/rzp/X2wGPMm',
         syllabusLink: '',
-        description: 'Equips business students with high-demand analytical tools — advanced Excel, SQL, modern data engineering (ETL, Parquet, DuckDB, Kafka), Power BI visualization, and Generative AI for automated business intelligence.',
+        description: 'Equips business students with advanced Excel, SQL, modern data engineering (ETL, Parquet, DuckDB), Power BI, and Generative AI.',
         modules: [
           {
             num: '01',
-            title: 'Business Data Foundations',
-            topics: [
-              'Types of business data (transactional, operational, customer, financial)',
-              'Internal vs external data sources',
-              'Structured vs unstructured business data',
-              'Data quality assessment, validation & cleaning principles',
-            ],
+            title: 'Business Data & Advanced Excel',
+            topics: ['Transactional & operational business data', 'Dynamic array formulas & XLOOKUP', 'Power Pivot & interactive dashboard design'],
           },
           {
             num: '02',
-            title: 'Advanced Excel for Business Intelligence',
-            topics: [
-              'Advanced lookup functions (XLOOKUP, INDEX/MATCH)',
-              'Dynamic array formulas & conditional logic',
-              'Multi-table Pivot Tables & Power Pivot basics',
-              'Financial modeling calculations & scenario analysis',
-              'Interactive executive dashboard design in Excel',
-            ],
+            title: 'SQL for Business Analytics',
+            topics: ['Relational schemas & multi-table JOINs', 'Aggregations, GROUP BY & window functions', 'Queries for churn, revenue, and customer KPIs'],
           },
           {
             num: '03',
-            title: 'SQL for Business Analytics',
-            topics: [
-              'Relational databases & business data schemas',
-              'Data retrieval with SELECT, WHERE, ORDER BY',
-              'Aggregations with GROUP BY & HAVING clauses',
-              'Multi-table relational JOINs (INNER, LEFT, FULL)',
-              'Subqueries, CTEs & window functions for business KPIs',
-              'Writing real-world queries for churn, revenue, and retention',
-            ],
+            title: 'Data Engineering for Analysts',
+            topics: ['ETL pipelines & star schema design', 'Columnar Parquet & fast DuckDB queries', 'Event streaming fundamentals with Kafka'],
+            pipeline: ['ERP/CRM Data', 'ETL Pipeline', 'Parquet Storage', 'DuckDB Engine', 'Power BI Dashboard'],
           },
           {
             num: '04',
-            title: 'Data Engineering for Business Analysts',
-            topics: [
-              'OLTP (transactional) vs OLAP (analytical) databases',
-              'Data warehousing concepts & star schemas',
-              'ETL (Extract-Transform-Load) vs ELT data pipelines',
-              'Batch vs real-time streaming data processing',
-              'Columnar Parquet storage for high-efficiency reporting',
-              'DuckDB for embedded, lightning-fast analytical queries',
-              'Apache Kafka event streaming fundamentals for business events',
-            ],
-            pipeline: ['ERP/CRM Data', 'ETL Transformation', 'Parquet Lake', 'DuckDB Engine', 'Power BI / Dashboard'],
+            title: 'BI Dashboards & Data Storytelling',
+            topics: ['Power BI / Tableau visual hierarchy', 'Interactive filters & KPI scorecards', 'Executive data presentations'],
           },
           {
             num: '05',
-            title: 'Core Business Analytics Methodologies',
-            topics: [
-              'Descriptive analytics (What happened?)',
-              'Diagnostic analytics (Why did it happen?)',
-              'Predictive analytics (What is likely to happen?)',
-              'Prescriptive analytics (What action should we take?)',
-              'KPI design & metrics architecture',
-              'Sales, marketing, operations, and customer analytics',
-            ],
-          },
-          {
-            num: '06',
-            title: 'Data Visualization & BI Dashboards',
-            topics: [
-              'Data storytelling & visual hierarchy principles',
-              'Power BI / Tableau fundamentals & dashboard architecture',
-              'Interactive filters, drill-throughs & KPI scorecards',
-              'Presenting actionable insights to executive leadership',
-            ],
-          },
-          {
-            num: '07',
-            title: 'Generative AI & Automation for Business',
-            topics: [
-              'Generative AI & Prompt Engineering for analysts',
-              'AI-assisted data analysis & automated synthesis',
-              'Automating market research & competitive intelligence',
-              'Document parsing & contract analysis with LLMs',
-              'AI-driven executive decision support systems',
-            ],
+            title: 'Generative AI for Business',
+            topics: ['Prompt engineering for analysts', 'Automated document & market synthesis', 'AI-driven executive decision support'],
           },
         ],
         capstone: {
-          title: 'Retail / Enterprise Business Intelligence System',
-          flow: ['Raw Sales Data', 'ETL Data Pipeline', 'SQL Data Warehouse', 'Business Analytics Model', 'Interactive BI Dashboard', 'Actionable Recommendations'],
-          outputs: [
-            'Automated ETL pipeline processing business data into Parquet/DuckDB',
-            'Comprehensive SQL script repository answering key management queries',
-            'Interactive Power BI / Tableau dashboard with drill-down analytics',
-            'Executive slide deck with data-backed business strategy recommendations',
-          ],
+          title: 'Enterprise Business Intelligence System',
+          flow: ['Raw Sales Data', 'ETL Pipeline', 'SQL Warehouse', 'Power BI Dashboard', 'Executive Deck'],
+          outputs: ['Automated ETL pipeline in DuckDB', 'Interactive Power BI dashboard', 'Executive strategy slide deck'],
         },
       },
       {
@@ -651,107 +373,68 @@ const GROUPS_DATA = [
         eyebrow: 'PATHWAY 2',
         title: 'AI in Finance & FinTech Systems',
         duration: '3 Months',
-        level: 'Finance, Banking & Economics Students',
+        level: 'Finance & Banking Students',
         enrollLink: 'https://rzp.io/rzp/Z4l1xd30',
         syllabusLink: '',
-        description: 'Explores the modern financial technology landscape, payment gateways, risk analytics, AI credit scoring, fraud detection algorithms, and responsible governance in automated finance.',
+        description: 'Explores digital banking, financial modeling, credit risk scoring, fraud detection algorithms, and responsible AI in finance.',
         modules: [
           {
             num: '01',
-            title: 'Financial Technology Landscape',
-            topics: [
-              'Evolution of digital banking, UPI & global payment rails',
-              'Neobanks, digital lending & alternate credit underwriting',
-              'InsurTech, RegTech & WealthTech ecosystems',
-            ],
+            title: 'FinTech Landscape & Payment Rails',
+            topics: ['Digital banking, UPI & payment gateways', 'Digital lending & automated underwriting', 'InsurTech & RegTech ecosystems'],
           },
           {
             num: '02',
-            title: 'Financial Data & Ratio Analysis',
-            topics: [
-              'Analyzing balance sheets, P&L statements & cash flow tables',
-              'High-frequency market & transactional dataset handling',
-              'Core financial KPIs (EBITDA, Net Margin, Liquidity, Debt/Equity)',
-            ],
+            title: 'Financial Analytics & Forecasting',
+            topics: ['P&L, balance sheet & cash flow metrics', 'Revenue modeling & variance analysis', 'Time-series forecasting for budgets'],
           },
           {
             num: '03',
-            title: 'Financial Analytics & Forecasting',
-            topics: [
-              'Revenue modeling & cash flow forecasting',
-              'Variance analysis & financial trend identification',
-              'Time-series forecasting for budget planning',
-            ],
+            title: 'AI Credit Scoring & Fraud Detection',
+            topics: ['ML models for default & risk prediction', 'Real-time transaction fraud detection', 'Customer lifetime value & churn models'],
           },
           {
             num: '04',
-            title: 'AI in Finance & Risk Intelligence',
-            topics: [
-              'Machine Learning models for credit scoring & default prediction',
-              'Real-time transaction fraud detection algorithms',
-              'Customer churn prediction & customer lifetime value (CLV)',
-              'Algorithmic decision support in portfolio risk management',
-            ],
-          },
-          {
-            num: '05',
-            title: 'FinTech Systems & Open Banking',
-            topics: [
-              'Payment processing architectures & gateway integration',
-              'Digital lending workflows & automated approval engines',
-              'Open Banking APIs & financial data pipelines',
-            ],
-          },
-          {
-            num: '06',
-            title: 'Responsible AI & Governance in Finance',
-            topics: [
-              'Algorithmic bias & fair lending compliance',
-              'Model explainability (SHAP, LIME) for regulatory scrutiny',
-              'Financial data privacy & model risk management',
-            ],
+            title: 'Responsible AI & Compliance',
+            topics: ['Model explainability (SHAP/LIME)', 'Fair lending compliance & bias reduction', 'Financial data privacy governance'],
           },
         ],
         capstone: {
-          title: 'AI-Assisted Financial Risk & Fraud Analytics System',
-          flow: ['Financial Data', 'Feature Engineering', 'Risk Model', 'Executive Dashboard', 'Strategy Report'],
-          outputs: [
-            'Trained credit risk / fraud detection predictive model',
-            'Interactive executive risk dashboard',
-            'Business proposal & regulatory compliance review',
-          ],
+          title: 'Financial Risk & Fraud Analytics System',
+          flow: ['Financial Data', 'Feature Engineering', 'Risk ML Model', 'Executive Dashboard'],
+          outputs: ['Trained credit risk ML model', 'Interactive risk dashboard', 'Compliance & business report'],
         },
       },
       {
         id: 'mgmt-common',
-        eyebrow: 'WEEKEND IMMERSION TRACK',
+        eyebrow: 'WEEKEND TRACK',
         title: 'AI Entrepreneurship & Business Innovation',
-        duration: 'Weekend Track (Saturday + Sunday)',
-        level: 'All Commerce & Management Students',
+        duration: 'Weekend Track',
+        level: 'All Commerce & Management',
         enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
         syllabusLink: '',
-        description: 'Learn how to conceptualize and launch AI-enabled business services — from FinTech startups and AI accounting tools to SME analytics platforms and local business automation.',
+        description: 'Learn how to launch AI-enabled business services, SaaS tools, SME automation platforms, and investor pitch decks.',
         modules: [
           {
             num: '01',
-            title: 'Commercial AI Opportunity Discovery',
-            topics: ['FinTech startup opportunities', 'AI marketing & customer intelligence tools', 'SME analytics platforms & automated accounting assistants', 'Local business automation workflows'],
+            title: 'Commercial AI Discovery',
+            topics: ['FinTech & SME automation opportunities', 'AI marketing & analytics tools', 'Local business automated workflows'],
           },
           {
             num: '02',
             title: 'Business Model & Unit Economics',
-            topics: ['SaaS pricing models & customer acquisition cost (CAC)', 'Unit economics & lifetime value (LTV)', 'Designing the Business Model Canvas'],
+            topics: ['SaaS pricing models & CAC/LTV metrics', 'Business Model Canvas design', 'Go-to-market strategies'],
           },
           {
             num: '03',
-            title: 'MVP & Investor Pitch Deck',
-            topics: ['No-code MVP prototyping', 'Validating commercial willingness to pay', 'Pitching before corporate clients and investors'],
+            title: 'MVP Prototyping & Pitching',
+            topics: ['No-code MVP prototyping', 'Validating willingness to pay', '10-slide investor pitch deck'],
           },
         ],
         capstone: {
           title: 'Commercial AI Venture Plan & Pitch',
-          flow: ['Market Opportunity', 'Product Architecture', 'Unit Economics', 'Validated MVP', 'Investor Deck'],
-          outputs: ['Complete business plan with financial projections', 'Working prototype / wireframe', '10-slide investor pitch deck'],
+          flow: ['Market Need', 'Product Concept', 'Unit Economics', 'Investor Pitch'],
+          outputs: ['Validated Business Model Canvas', 'Working prototype wireframe', '10-slide investor deck'],
         },
       },
     ],
@@ -761,189 +444,89 @@ const GROUPS_DATA = [
     badge: 'GROUP 4',
     icon: '🎨',
     title: 'BA, Humanities & Other Disciplines',
-    target: 'BA (English, History, Sociology, Political Science, Economics, Journalism) • Fine Arts • Education • Law • All Other Disciplines',
-    tagline: 'AI-Enabled Professional Program — transforming non-technical students into high-productivity, AI-fluent leaders.',
+    target: 'BA • Fine Arts • Education • Law • All Non-Tech Majors',
+    tagline: 'AI-Enabled Professional Program — transforming students into high-productivity, AI-fluent leaders.',
     pathways: [
       {
         id: 'arts-p1',
         eyebrow: 'AI-ENABLED PROFESSIONAL PROGRAM',
         title: 'Applied AI for Humanities, Research & Careers',
         duration: '3 Months',
-        level: 'All Students (No Prior Technical Background Needed)',
+        level: 'All Students (No Coding Required)',
         enrollLink: 'https://rzp.io/rzp/qjdUioKf',
         syllabusLink: '',
-        description: 'Positioned as an elite, high-value professional acceleration program. Equips students with advanced prompt engineering, AI research methods, automated content creation, personal branding, and career mastery.',
+        description: 'Elite professional program: prompt engineering, AI research methods, automated content, executive communication, and career mastery.',
         modules: [
           {
             num: '01',
-            title: 'AI Literacy & Foundational Understanding',
-            topics: [
-              'What AI is and how Large Language Models actually work',
-              'Generative AI capabilities vs limitations & hallucinations',
-              'Ethical AI, academic integrity, bias & data privacy',
-              'Developing an AI-collaborative professional mindset',
-            ],
+            title: 'AI Literacy & Foundations',
+            topics: ['How LLMs work & practical limitations', 'Ethical AI, academic integrity & privacy', 'AI-collaborative professional mindset'],
           },
           {
             num: '02',
             title: 'Mastering Prompt Engineering',
-            topics: [
-              'Anatomy of a high-impact prompt (Context, Role, Constraints, Output Format)',
-              'Few-shot prompting, chain-of-thought & step-by-step reasoning',
-              'Iterative refinement & prompt optimization techniques',
-              'Evaluating and benchmark testing AI responses',
-            ],
+            topics: ['Context, role & constraint formulation', 'Chain-of-thought & step-by-step reasoning', 'Iterative prompt optimization & testing'],
           },
           {
             num: '03',
-            title: 'AI for In-Depth Academic & Market Research',
-            topics: [
-              'Formulating sharp research questions with AI assistance',
-              'Information discovery, literature exploration & thematic mapping',
-              'Synthesizing and summarizing complex 50+ page documents in seconds',
-              'Comparative analysis, data interpretation & citation verification',
-              'Rigorous fact-checking & hallucination elimination protocols',
-            ],
+            title: 'AI for Research & Synthesis',
+            topics: ['Synthesizing 50+ page documents quickly', 'Literature exploration & comparative analysis', 'Fact-checking & citation verification'],
           },
           {
             num: '04',
-            title: 'AI for Professional Productivity & Workflows',
-            topics: [
-              'Executive writing: Reports, proposals, formal communication & memos',
-              'Rapid presentation drafting & slide outline generation',
-              'Automating daily administrative & documentation workflows',
-              'Creating personalized AI assistants for specific repetitive tasks',
-            ],
+            title: 'Productivity & Executive Writing',
+            topics: ['Drafting reports, proposals & memos', 'Slide outlines & presentation workflows', 'Custom AI productivity assistants'],
           },
           {
             num: '05',
-            title: 'AI for Creative Content & Strategic Communication',
-            topics: [
-              'Content strategy, storytelling & audience engagement',
-              'Visual ideation & multimodal AI generation (image, audio, diagram)',
-              'Professional journalism, digital media & communication workflows',
-              'Editing, tone calibration & audience-specific tailoring',
-            ],
-          },
-          {
-            num: '06',
-            title: 'Career Acceleration & Personal Branding',
-            topics: [
-              'AI-optimized resume creation & ATS keyword alignment',
-              'LinkedIn profile transformation & thought leadership posting',
-              'Interactive AI mock interview prep & personalized feedback',
-              'Job market research, company analysis & career roadmap design',
-            ],
-          },
-          {
-            num: '07',
-            title: 'Entrepreneurship & Innovation for Creatives',
-            topics: [
-              'Problem discovery in society, media, education & community',
-              'Creative business ideation powered by AI tools',
-              'Rapid MVP prototyping without writing a line of code',
-              'Pitch deck creation & presenting creative ventures',
-            ],
+            title: 'Career Acceleration & Branding',
+            topics: ['AI-optimized resume & ATS alignment', 'LinkedIn transformation & personal branding', 'AI mock interview preparation'],
           },
         ],
         capstone: {
           title: 'AI-Enabled Professional Portfolio',
-          flow: ['Research / Problem Statement', 'AI-Assisted Analysis', 'Strategic Content / Workflow', 'Professional Resume & Profile', 'Final Presentation'],
-          outputs: [
-            'In-depth AI-assisted research paper or market analysis report',
-            'Custom AI productivity workflow / automated system',
-            'Professional portfolio website or documentation dossier',
-            'AI-optimized resume, active LinkedIn profile & career strategy plan',
-            'Validated entrepreneurship concept & pitch presentation',
-          ],
+          flow: ['Research Statement', 'AI Analysis', 'Executive Content', 'Portfolio & Resume'],
+          outputs: ['In-depth AI research paper', 'Optimized resume & LinkedIn profile', 'Custom AI workflow dossier'],
         },
       },
     ],
   },
 ];
 
-const COMMON_LAYER = [
+const PROGRAM_HIGHLIGHTS = [
   {
-    module: 'Module A',
-    title: 'Professional Digital Profile',
-    icon: '🌐',
-    desc: 'Every student builds a polished professional presence — professional email etiquette, high-impact LinkedIn profile, ATS-aligned resume, project documentation, and digital portfolio.',
+    icon: '🛠️',
+    title: 'Production-Grade Coding & Labs',
+    desc: 'Hands-on practice using real developer tools, Python, React, SQL, DuckDB, and Docker.',
   },
   {
-    module: 'Module B',
-    title: 'GitHub & Concrete Evidence',
-    icon: '📁',
-    desc: 'For technical streams: Git, GitHub repo architecture, clean READMEs, and version control. For non-tech streams: Digital portfolio, interactive BI reports, research dossiers, and slide decks.',
+    icon: '🏆',
+    title: 'Evidence-Based Capstones',
+    desc: 'Every student builds and defends a real-world project to create a verifiable GitHub portfolio.',
   },
   {
-    module: 'Module C',
-    title: 'Interview Mastery & Communication',
     icon: '🎯',
-    desc: 'Resume walkthroughs, "Tell me about yourself" storytelling, technical project explanations, behavioral frameworks (STAR), AI-driven mock interviews, and personalized mentor feedback.',
+    title: 'Practitioner Mentorship',
+    desc: 'Direct guidance from active AI engineers, researchers, and industry specialists.',
   },
   {
-    module: 'Module D',
-    title: 'Industry Interaction & Networking',
-    icon: '🤝',
-    desc: 'Weekly industry expert masterclasses, corporate hiring case studies, understanding recruiter filters, networking etiquette, and cold outreach strategies to professionals.',
-  },
-  {
-    module: 'Module E',
-    title: 'Project Defence & Evaluation',
-    icon: '🛡️',
-    desc: 'Every student defends their project before a panel: What problem was solved? Why this approach? What was built? What are the limitations? What would you improve? Making the program 100% evidence-based.',
-  },
-];
-
-const CAPSTONE_STEPS = [
-  { num: '1', title: 'PROBLEM', desc: 'Identify a real-world, industry or academic problem.' },
-  { num: '2', title: 'RESEARCH', desc: 'Study the domain, existing literature & current solutions.' },
-  { num: '3', title: 'DATA / INFO', desc: 'Collect, clean & structure required data and parameters.' },
-  { num: '4', title: 'BUILD', desc: 'Develop the appropriate technical, analytical, or research solution.' },
-  { num: '5', title: 'VALIDATE', desc: 'Test accuracy, benchmark performance & interpret results.' },
-  { num: '6', title: 'DOCUMENT', desc: 'Prepare repository, technical report, portfolio & slides.' },
-  { num: '7', title: 'DEFEND', desc: 'Present and defend the project live before industry evaluators.' },
-];
-
-const EVIDENCE_MATRIX = [
-  {
-    stream: 'CS & IT',
-    icon: '💻',
-    deliverables: ['Production GitHub Repository', 'Full Stack / ML Software Project', 'Deployed REST API / Cloud Application', 'Technical Architecture Documentation', 'Industry-Ready Technical Resume'],
-  },
-  {
-    stream: 'Science & Math',
-    icon: '🔬',
-    deliverables: ['Scientific / Computational SciML Project', 'Reproducible Jupyter Research Notebook', 'PINN / Physical Simulation Model', 'Publication-Ready Technical Report', 'Scientific Findings Presentation'],
-  },
-  {
-    stream: 'Commerce & Management',
-    icon: '📊',
-    deliverables: ['Enterprise Business Intelligence System', 'SQL Data Engineering Repository', 'Interactive Power BI / Tableau Dashboard', 'Financial / Risk Analytics Model', 'Executive Strategy Recommendations Deck'],
-  },
-  {
-    stream: 'BA & Humanities',
-    icon: '🎨',
-    deliverables: ['AI-Enabled Professional Portfolio Dossier', 'In-Depth Research / Market Analysis Paper', 'Custom AI Workflow Automation System', 'Optimized LinkedIn & Professional Brand', 'Creative Venture Business Pitch'],
+    icon: '🚀',
+    title: 'Career & Profile Acceleration',
+    desc: 'ATS-optimized resumes, interview preparation, LinkedIn optimization, and hiring network access.',
   },
 ];
 
 const JOURNEY_STEPS = [
-  'College Degree',
-  'Domain Knowledge',
-  'AI / Tech Skills',
-  'Hands-on Practice',
-  'Real-World Project',
-  'Digital Portfolio',
-  'Rigorous Assessment',
-  'Talent Pool',
-  'Industry / Internship Opportunities',
+  { num: '01', title: 'Degree Foundation', desc: 'Core academic coursework' },
+  { num: '02', title: 'Applied AI Skills', desc: 'Modern tools & workflows' },
+  { num: '03', title: 'Hands-on Labs', desc: 'Production coding & pipelines' },
+  { num: '04', title: 'Capstone Project', desc: 'Real-world problem solving' },
+  { num: '05', title: 'Career Ready', desc: 'Portfolio, GitHub & interviews' },
 ];
 
 export default function ProgramsPage() {
   const [activeGroup, setActiveGroup] = useState('group-1');
   const [expandedPathway, setExpandedPathway] = useState('cs-p1');
-  const navigate = useNavigate();
 
   const currentGroupData = GROUPS_DATA.find((g) => g.id === activeGroup) || GROUPS_DATA[0];
 
@@ -951,7 +534,7 @@ export default function ProgramsPage() {
     if (pathway.enrollLink) {
       window.open(pathway.enrollLink, '_blank', 'noopener,noreferrer');
     } else {
-      navigate('/query', { state: { expertise: `Campus AI Program: ${pathway.title}` } });
+      window.open('tel:+918219691201', '_self');
     }
   };
 
@@ -959,15 +542,7 @@ export default function ProgramsPage() {
     if (pathway.syllabusLink && pathway.syllabusLink !== '#') {
       window.open(pathway.syllabusLink, '_blank', 'noopener,noreferrer');
     } else {
-      navigate('/query', { state: { expertise: `Syllabus Request: ${pathway.title}` } });
-    }
-  };
-
-  const handleSubscriptionClick = () => {
-    if (SUBSCRIPTION_PAYMENT_LINK) {
-      window.open(SUBSCRIPTION_PAYMENT_LINK, '_blank', 'noopener,noreferrer');
-    } else {
-      navigate('/query', { state: { expertise: 'Institutional Subscription' } });
+      window.open(`mailto:unisole.empower@gmail.com?subject=${encodeURIComponent(`Syllabus Request: ${pathway.title}`)}`, '_blank');
     }
   };
 
@@ -979,13 +554,13 @@ export default function ProgramsPage() {
         {/* ================= HERO HEADER ================= */}
         <header className="programs-hero">
           <div className="programs-hero-badge">
-            <span>⚡ UNISOLE AI CAMPUS PROGRAM</span>
+            <span>⚡ UNISOLE SKILL AI LABS CAMPUS PROGRAM</span>
           </div>
           <h1 className="programs-hero-title">
             Industry-Ready Curriculum — 4 Student Pathways
           </h1>
           <p className="programs-hero-subtitle">
-            A comprehensive, evidence-based AI education framework tailored specifically across four core academic disciplines. Transforming college students from classroom learners into industry-ready practitioners through practical skills, production code, research computing, business intelligence, and real-world capstone projects.
+            Practical, industry-aligned AI education frameworks designed across 4 core academic streams.
           </p>
 
           {/* Quick Group Switcher Pills */}
@@ -1019,7 +594,7 @@ export default function ProgramsPage() {
           <div className="group-header-card">
             <div className="group-header-top">
               <span className="group-header-badge">{currentGroupData.badge}</span>
-              <span className="group-header-target">🎯 <strong>Target Students:</strong> {currentGroupData.target}</span>
+              <span className="group-header-target">🎯 <strong>Target:</strong> {currentGroupData.target}</span>
             </div>
             <h2 className="group-header-title">{currentGroupData.title}</h2>
             <p className="group-header-tagline">{currentGroupData.tagline}</p>
@@ -1061,7 +636,7 @@ export default function ProgramsPage() {
                   {isOpen && (
                     <div className="pathway-details-body">
                       {/* Modules Grid */}
-                      <h4 className="section-subheading">📚 Structured Curriculum Modules</h4>
+                      <h4 className="section-subheading">📚 Core Curriculum Modules</h4>
                       <div className="modules-grid">
                         {pathway.modules.map((mod) => (
                           <div key={mod.num} className="module-item-card">
@@ -1079,17 +654,17 @@ export default function ProgramsPage() {
                             </ul>
                             {mod.practical && (
                               <div className="module-practical-box">
-                                <span className="practical-label">💡 Hands-on Practical:</span>
+                                <span className="practical-label">💡 Hands-on:</span>
                                 <span className="practical-text">{mod.practical}</span>
                               </div>
                             )}
                             {mod.pipeline && (
                               <div className="module-pipeline-box">
-                                <span className="pipeline-label">⚡ Data Pipeline:</span>
+                                <span className="pipeline-label">⚡ Pipeline:</span>
                                 <div className="pipeline-steps">
                                   {mod.pipeline.map((step, sIdx) => (
                                     <span key={sIdx} className="pipeline-step-badge">
-                                      {step} {sIdx < mod.pipeline.length - 1 ? '↓' : ''}
+                                      {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
                                     </span>
                                   ))}
                                 </div>
@@ -1103,13 +678,13 @@ export default function ProgramsPage() {
                       {pathway.capstone && (
                         <div className="capstone-highlight-card">
                           <div className="capstone-header">
-                            <span className="capstone-badge">🏆 MANDATORY CAPSTONE PROJECT</span>
+                            <span className="capstone-badge">🏆 CAPSTONE PROJECT</span>
                             <h4 className="capstone-title">{pathway.capstone.title}</h4>
                           </div>
 
                           {pathway.capstone.flow && (
                             <div className="capstone-flow-container">
-                              <span className="flow-title">Architectural Lifecycle:</span>
+                              <span className="flow-title">Architecture:</span>
                               <div className="capstone-flow-steps">
                                 {pathway.capstone.flow.map((st, i) => (
                                   <div key={st} className="flow-chip">
@@ -1124,7 +699,7 @@ export default function ProgramsPage() {
 
                           {pathway.capstone.outputs && (
                             <div className="capstone-outputs-box">
-                              <span className="outputs-label">Student Tangible Outputs & Deliverables:</span>
+                              <span className="outputs-label">Deliverables:</span>
                               <div className="outputs-grid">
                                 {pathway.capstone.outputs.map((out, oIdx) => (
                                   <div key={oIdx} className="output-item">
@@ -1154,7 +729,7 @@ export default function ProgramsPage() {
                           onClick={() => handleSyllabusClick(pathway)}
                         >
                           {syllabusSvg}
-                          <span>Syllabus</span>
+                          <span>Request Syllabus</span>
                         </button>
                       </div>
                     </div>
@@ -1165,141 +740,47 @@ export default function ProgramsPage() {
           </div>
         </section>
 
-        {/* ================= COMMON INDUSTRY-READINESS LAYER ================= */}
+        {/* ================= PROGRAM HIGHLIGHTS ================= */}
         <section className="common-layer-section">
           <div className="section-header-center">
-            <span className="section-badge">MANDATORY ACROSS ALL 4 GROUPS</span>
-            <h2 className="section-title">Common Industry-Readiness Layer</h2>
+            <span className="section-badge">WHAT WE DELIVER</span>
+            <h2 className="section-title">Why Unisole Programs</h2>
             <p className="section-subtitle">
-              We do not treat career preparation as an optional add-on. Every student across all disciplines completes this foundational industry layer to guarantee professional competence.
+              Every pathway is designed to turn classroom theory into verifiable, industry-ready capability.
             </p>
           </div>
 
           <div className="common-layer-grid">
-            {COMMON_LAYER.map((layer) => (
-              <div key={layer.module} className="common-layer-card">
+            {PROGRAM_HIGHLIGHTS.map((item) => (
+              <div key={item.title} className="common-layer-card">
                 <div className="common-layer-top">
-                  <span className="layer-icon">{layer.icon}</span>
-                  <span className="layer-module-tag">{layer.module}</span>
+                  <span className="layer-icon">{item.icon}</span>
                 </div>
-                <h3 className="layer-card-title">{layer.title}</h3>
-                <p className="layer-card-desc">{layer.desc}</p>
+                <h3 className="layer-card-title">{item.title}</h3>
+                <p className="layer-card-desc">{item.desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ================= 7-STEP CAPSTONE FRAMEWORK ================= */}
-        <section className="capstone-framework-section">
-          <div className="section-header-center">
-            <span className="section-badge">RIGOROUS EXECUTION MODEL</span>
-            <h2 className="section-title">Common Final Capstone Framework</h2>
-            <p className="section-subtitle">
-              Every student project follows a standardized 7-step engineering, research, or business problem-solving methodology.
-            </p>
-          </div>
-
-          <div className="capstone-steps-flow">
-            {CAPSTONE_STEPS.map((cs) => (
-              <div key={cs.num} className="capstone-step-card">
-                <div className="step-num-bubble">{cs.num}</div>
-                <h3 className="step-card-title">{cs.title}</h3>
-                <p className="step-card-desc">{cs.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ================= WHAT A STUDENT HAS AT THE END ================= */}
-        <section className="evidence-matrix-section">
-          <div className="section-header-center">
-            <span className="section-badge">NO EMPTY PROMISES — PROVEN EVIDENCE</span>
-            <h2 className="section-title">What a Student Has at the End</h2>
-            <p className="section-subtitle">
-              We don&apos;t make superficial placement promises. We build undeniable, evidence-backed portfolios that prove real-world capability to top employers and research institutions.
-            </p>
-          </div>
-
-          <div className="evidence-grid">
-            {EVIDENCE_MATRIX.map((em) => (
-              <div key={em.stream} className="evidence-card">
-                <div className="evidence-header">
-                  <span className="evidence-icon">{em.icon}</span>
-                  <h3 className="evidence-stream">{em.stream}</h3>
-                </div>
-                <ul className="evidence-list">
-                  {em.deliverables.map((d, dIdx) => (
-                    <li key={dIdx}>
-                      {checkSvg}
-                      <span>{d}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* ================= THE COMMON JOURNEY (CENTRAL VISUAL) ================= */}
+        {/* ================= THE STUDENT JOURNEY ================= */}
         <section className="journey-section">
           <div className="section-header-center">
-            <span className="section-badge">THE STUDENT LIFECYCLE</span>
-            <h2 className="section-title">The Common Campus AI Journey</h2>
+            <span className="section-badge">LIFECYCLE</span>
+            <h2 className="section-title">The Student Journey</h2>
             <p className="section-subtitle">
-              From foundational degree coursework to industry opportunities — how UNISOLE transforms students through structured, progressive milestones.
+              A structured progression from foundational concepts to an employer-ready portfolio.
             </p>
           </div>
 
-          <div className="journey-track-container">
-            <div className="journey-track">
-              {JOURNEY_STEPS.map((step, idx) => (
-                <div key={step} className="journey-node">
-                  <div className="node-marker">
-                    <span className="node-num">{idx + 1}</span>
-                  </div>
-                  <span className="node-label">{step}</span>
-                  {idx < JOURNEY_STEPS.length - 1 && <div className="node-connector" />}
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="journey-clarification-card">
-            <div className="clarification-icon">ℹ️</div>
-            <div className="clarification-content">
-              <h4>Important Program Distinction</h4>
-              <p>
-                Training, hands-on lab work, and project evaluations are integral, guaranteed components for every enrolled student. Internships, advanced industry deployments, hackathons, and research mentorship engagements are performance- and availability-based and subject to applicable selection procedures.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= INSTITUTIONAL CTA ================= */}
-        <section className="programs-cta-banner">
-          <div className="cta-banner-content">
-            <span className="cta-eyebrow">PARTNER WITH UNISOLE</span>
-            <h2 className="cta-title">Ready to Make Your Campus AI-Ready?</h2>
-            <p className="cta-desc">
-              Bring the 4-Pathways AI Campus Program to your college or university. Connect with our academic partnerships team for a customized implementation plan and syllabus walkthrough.
-            </p>
-            <div className="cta-buttons-row">
-              <button
-                type="button"
-                className="cta-primary-btn"
-                onClick={() => navigate('/query', { state: { expertise: 'Campus AI Program Implementation' } })}
-              >
-                <span>Partner Your College</span>
-                {arrowSvg}
-              </button>
-              <button
-                type="button"
-                className="cta-secondary-btn"
-                onClick={handleSubscriptionClick}
-              >
-                <span>Explore Institutional Pricing</span>
-              </button>
-            </div>
+          <div className="journey-steps-grid">
+            {JOURNEY_STEPS.map((s) => (
+              <div key={s.num} className="journey-step-box">
+                <span className="step-num">{s.num}</span>
+                <h4>{s.title}</h4>
+                <p>{s.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
       </main>

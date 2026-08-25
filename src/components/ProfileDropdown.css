@@ -1,26 +1,28 @@
 .profile-dropdown {
   position: absolute;
-  top: calc(100% + 12px);
+  top: calc(100% + 10px);
   right: 0;
-  width: 220px;
-  background: var(--bg);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.35);
+  width: 200px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
   overflow: hidden;
-  z-index: 300;
-  animation: profileDrop 0.2s var(--ease-out);
+  z-index: 1001;
+  animation: profileDrop 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes profileDrop {
-  from { opacity: 0; transform: translateY(-6px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .profile-list {
   display: flex;
   flex-direction: column;
-  padding: 8px;
+  padding: 6px;
+  margin: 0;
+  list-style: none;
 }
 
 .profile-item {
@@ -32,44 +34,46 @@
   border-radius: 10px;
   background: none;
   border: none;
-  font-family: var(--font-body);
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--white);
+  font-family: var(--font-display, 'Plus Jakarta Sans', sans-serif);
+  font-size: 14px;
+  font-weight: 600;
+  color: #1e293b;
   text-align: left;
   cursor: pointer;
-  transition: background 0.15s;
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .profile-item svg {
   flex-shrink: 0;
-  color: var(--muted);
+  color: #64748b;
+  transition: color 0.15s ease;
 }
 
 .profile-item:hover {
-  background: var(--bg2);
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.profile-item:hover svg {
+  color: #4f46e5;
 }
 
 .profile-divider {
   height: 1px;
-  margin: 6px 4px;
-  background: var(--border);
+  margin: 4px 6px;
+  background: #f1f5f9;
 }
 
 .profile-logout {
-  color: #ff5c5c;
+  color: #dc2626 !important;
 }
 
 .profile-logout svg {
-  color: #ff5c5c;
+  color: #dc2626 !important;
 }
 
-@media (max-width: 500px) {
-  .profile-dropdown {
-    position: fixed;
-    top: var(--nav-h);
-    right: 8px;
-    left: auto;
-    width: 200px;
-  }
+.profile-logout:hover {
+  background: #fef2f2 !important;
+  color: #b91c1c !important;
 }

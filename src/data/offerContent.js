@@ -2,7 +2,7 @@ export const cardModalHtml = `
   <span class="modal-eyebrow">Program Overview</span>
   <h2 class="modal-main-title">Future-Ready AI Education Designed for Every Learner</h2>
 
-  <p>At UnisoleAI, we deliver industry-aligned Artificial Intelligence programs that equip students with the knowledge, practical skills, and real-world experience needed to thrive in the AI-driven economy.</p>
+  <p>At Unisole Skill AI Labs, we deliver industry-aligned Artificial Intelligence programs that equip students with the knowledge, practical skills, and real-world experience needed to thrive in the AI-driven economy.</p>
 
   <p>Our curriculum is designed for school students, undergraduate students, aspiring AI professionals, educators, and institutions, combining strong theoretical foundations with hands-on project development.</p>
 
@@ -170,7 +170,7 @@ export const aiSchoolsHtml = `
   <span class="modal-eyebrow">School Programs</span>
   <h2 class="modal-main-title">Building AI-Ready Schools for the Future</h2>
 
-  <p>Artificial Intelligence is transforming the way we learn, work, and solve problems. At UnisoleAI, we partner with schools to build sustainable AI ecosystems that prepare students and educators for the opportunities of tomorrow.</p>
+  <p>Artificial Intelligence is transforming the way we learn, work, and solve problems. At Unisole Skill AI Labs, we partner with schools to build sustainable AI ecosystems that prepare students and educators for the opportunities of tomorrow.</p>
 
   <p>Our programs go beyond introductory workshops. We work closely with schools to integrate Artificial Intelligence through structured learning, teacher empowerment, innovation-driven activities, and project-based education.</p>
 
@@ -282,7 +282,7 @@ export const aiSchoolsHtml = `
     </div>
   </div>
 
-  <h3 class="modal-section-heading">Why Partner with UnisoleAI?</h3>
+  <h3 class="modal-section-heading">Why Partner with Unisole Skill AI Labs?</h3>
 
   <ul class="modal-checklist">
     <li>Structured AI implementation for schools</li>
@@ -308,7 +308,7 @@ export const teacherTrainingHtml = `
 
   <p>Teachers are the driving force behind every successful educational transformation. As Artificial Intelligence reshapes the future of education, educators need the knowledge, confidence, and practical skills to integrate AI effectively into their classrooms.</p>
 
-  <p>At UnisoleAI, we offer comprehensive Teacher Training and Capacity Building Programs designed to help educators understand Artificial Intelligence, enhance classroom teaching, improve productivity, and prepare students for the future.</p>
+  <p>At Unisole Skill AI Labs, we offer comprehensive Teacher Training and Capacity Building Programs designed to help educators understand Artificial Intelligence, enhance classroom teaching, improve productivity, and prepare students for the future.</p>
 
   <p>Our programs focus not only on learning AI tools but also on using them responsibly, ethically, and meaningfully to improve teaching and learning outcomes.</p>
 
@@ -408,7 +408,7 @@ export const universityHtml = `
 
   <p>The rapid advancement of Artificial Intelligence is transforming every industry, creating a growing demand for graduates who possess not only theoretical knowledge but also practical skills and real-world problem-solving abilities.</p>
 
-  <p>At UnisoleAI, we collaborate with universities and colleges to bridge the gap between academic education and industry expectations. Our programs are designed to equip students with technical expertise, research experience, innovation skills, and professional competencies required to excel in higher education, research, entrepreneurship, and the global workforce.</p>
+  <p>At Unisole Skill AI Labs, we collaborate with universities and colleges to bridge the gap between academic education and industry expectations. Our programs are designed to equip students with technical expertise, research experience, innovation skills, and professional competencies required to excel in higher education, research, entrepreneurship, and the global workforce.</p>
 
   <h3 class="modal-section-heading">Our Programs</h3>
 
@@ -485,7 +485,7 @@ export const universityHtml = `
     </div>
   </div>
 
-  <h3 class="modal-section-heading">Why Partner with UnisoleAI?</h3>
+  <h3 class="modal-section-heading">Why Partner with Unisole Skill AI Labs?</h3>
 
   <ul class="modal-checklist">
     <li>Industry-aligned, future-focused AI curriculum</li>
@@ -506,7 +506,7 @@ export const researchHtml = `
   <span class="modal-eyebrow">Research &amp; Innovation</span>
   <h2 class="modal-main-title">Advancing Artificial Intelligence Through Research, Innovation, and Real-World Impact</h2>
 
-  <p>At UnisoleAI, we believe that Artificial Intelligence should do more than automate tasks — it should solve meaningful real-world problems. Our research initiatives focus on developing innovative AI solutions that address challenges in education, agriculture, climate, healthcare, and other sectors that directly impact society.</p>
+  <p>At Unisole Skill AI Labs, we believe that Artificial Intelligence should do more than automate tasks — it should solve meaningful real-world problems. Our research initiatives focus on developing innovative AI solutions that address challenges in education, agriculture, climate, healthcare, and other sectors that directly impact society.</p>
 
   <p>We collaborate with students, researchers, academic institutions, industry partners, and government organizations to transform ideas into practical AI applications, research publications, prototypes, and scalable technologies.</p>
 
@@ -558,9 +558,9 @@ export const researchHtml = `
 
   <h3 class="modal-section-heading">Collaborative Research &amp; Innovation</h3>
 
-  <p>UnisoleAI actively partners with educational institutions, researchers, industry leaders, startups, and government organizations to undertake interdisciplinary research. We support Joint Research Projects, Undergraduate &amp; Postgraduate Research, Faculty Collaboration, Industry-Sponsored Projects, AI Product Development, Patent Support, Research Publications, Innovation Challenges, and Technology Transfer.</p>
+  <p>Unisole Skill AI Labs actively partners with educational institutions, researchers, industry leaders, startups, and government organizations to undertake interdisciplinary research. We support Joint Research Projects, Undergraduate &amp; Postgraduate Research, Faculty Collaboration, Industry-Sponsored Projects, AI Product Development, Patent Support, Research Publications, Innovation Challenges, and Technology Transfer.</p>
 
-  <h3 class="modal-section-heading">Why Research at UnisoleAI?</h3>
+  <h3 class="modal-section-heading">Why Research at Unisole Skill AI Labs?</h3>
 
   <ul class="modal-checklist">
     <li>Interdisciplinary research combining AI, science, and engineering</li>
@@ -573,14 +573,14 @@ export const researchHtml = `
 
   <h3 class="modal-section-heading">Our Vision</h3>
 
-  <p>At UnisoleAI, research is driven by purpose. We aspire to build an ecosystem where curiosity leads to discovery, innovation creates impact, and Artificial Intelligence addresses some of society's most pressing challenges. By combining education, scientific research, and technological innovation, we aim to contribute to a future where AI improves lives, empowers communities, and accelerates sustainable development.</p>
+  <p>At Unisole Skill AI Labs, research is driven by purpose. We aspire to build an ecosystem where curiosity leads to discovery, innovation creates impact, and Artificial Intelligence addresses some of society's most pressing challenges. By combining education, scientific research, and technological innovation, we aim to contribute to a future where AI improves lives, empowers communities, and accelerates sustainable development.</p>
 `;
 
 export const industryHtml = `
   <span class="modal-eyebrow">Industry Experience</span>
   <h2 class="modal-main-title">Transforming Learning into Real-World Experience</h2>
 
-  <p>At UnisoleAI, we believe that true learning happens when knowledge is applied to solve real-world challenges. Our Industry Projects and Internship Programs provide students with opportunities to work on live AI projects, collaborate with experienced mentors, and develop solutions that create meaningful impact.</p>
+  <p>At Unisole Skill AI Labs, we believe that true learning happens when knowledge is applied to solve real-world challenges. Our Industry Projects and Internship Programs provide students with opportunities to work on live AI projects, collaborate with experienced mentors, and develop solutions that create meaningful impact.</p>
 
   <p>Through structured mentorship and hands-on experience, students gain the technical, professional, and collaborative skills required to excel in research, higher education, startups, and industry.</p>
 
@@ -630,7 +630,7 @@ export const industryHtml = `
     </div>
   </div>
 
-  <h3 class="modal-section-heading">Why Choose UnisoleAI Industry Programs?</h3>
+  <h3 class="modal-section-heading">Why Choose Unisole Skill AI Labs Industry Programs?</h3>
 
   <ul class="modal-checklist">
     <li>Work on real-world AI projects with practical applications</li>
@@ -644,16 +644,16 @@ export const industryHtml = `
 
   <h3 class="modal-section-heading">Our Vision</h3>
 
-  <p>We envision a future where every student graduates with more than theoretical knowledge — they graduate with the experience, confidence, and portfolio needed to innovate, lead, and create impact. At UnisoleAI, internships are not just about gaining experience; they are about developing future AI professionals, researchers, entrepreneurs, and innovators who are ready to solve real-world challenges and shape the future of technology.</p>
+  <p>We envision a future where every student graduates with more than theoretical knowledge — they graduate with the experience, confidence, and portfolio needed to innovate, lead, and create impact. At Unisole Skill AI Labs, internships are not just about gaining experience; they are about developing future AI professionals, researchers, entrepreneurs, and innovators who are ready to solve real-world challenges and shape the future of technology.</p>
 `;
 
 export const governmentHtml = `
   <span class="modal-eyebrow">Institutional Partnerships</span>
   <h2 class="modal-main-title">Partnering with Governments and Institutions to Build an AI-Ready Future</h2>
 
-  <p>At UnisoleAI, we believe that large-scale educational transformation is possible only through meaningful collaboration. We work closely with government departments, educational institutions, universities, schools, research organizations, and professional bodies to design and implement sustainable Artificial Intelligence initiatives.</p>
+  <p>At Unisole Skill AI Labs, we believe that large-scale educational transformation is possible only through meaningful collaboration. We work closely with government departments, educational institutions, universities, schools, research organizations, and professional bodies to design and implement sustainable Artificial Intelligence initiatives.</p>
 
-  <p>As the Implementation Partner for the Government of Himachal Pradesh for the Artificial Intelligence &amp; Computational Thinking Pilot Project, and through academic collaborations with organizations such as the Indian Association of Physics Teachers (IAPT), UnisoleAI has demonstrated its ability to successfully execute AI education initiatives at the institutional level.</p>
+  <p>As the Implementation Partner for the Government of Himachal Pradesh for the Artificial Intelligence &amp; Computational Thinking Pilot Project, and through academic collaborations with organizations such as the Indian Association of Physics Teachers (IAPT), Unisole Skill AI Labs has demonstrated its ability to successfully execute AI education initiatives at the institutional level.</p>
 
   <h3 class="modal-section-heading">Our Services &amp; Collaborations</h3>
 
@@ -691,11 +691,11 @@ export const governmentHtml = `
     <div class="modal-topic modal-topic--wide">
       <div class="modal-topic-icon">🤝</div>
       <h4 class="modal-topic-title">Institutional Collaboration &amp; Strategic Partnerships</h4>
-      <p>UnisoleAI actively collaborates with Government Departments, Schools, Universities, Research Institutions, Professional Associations, Industry Partners, Startup Ecosystems, and Innovation Centers to design impactful programs that advance AI education, research, and workforce development.</p>
+      <p>Unisole Skill AI Labs actively collaborates with Government Departments, Schools, Universities, Research Institutions, Professional Associations, Industry Partners, Startup Ecosystems, and Innovation Centers to design impactful programs that advance AI education, research, and workforce development.</p>
     </div>
   </div>
 
-  <h3 class="modal-section-heading">Why Partner with UnisoleAI?</h3>
+  <h3 class="modal-section-heading">Why Partner with Unisole Skill AI Labs?</h3>
 
   <ul class="modal-checklist">
     <li>Proven experience implementing AI initiatives in educational institutions</li>
@@ -709,7 +709,7 @@ export const governmentHtml = `
 
   <h3 class="modal-section-heading">Our Vision</h3>
 
-  <p>We envision a future where every educational institution is empowered to harness the potential of Artificial Intelligence. Through strategic partnerships, collaborative innovation, and a commitment to excellence, UnisoleAI aims to build an AI-ready education ecosystem that nurtures skilled learners, empowered educators, and future leaders.</p>
+  <p>We envision a future where every educational institution is empowered to harness the potential of Artificial Intelligence. Through strategic partnerships, collaborative innovation, and a commitment to excellence, Unisole Skill AI Labs aims to build an AI-ready education ecosystem that nurtures skilled learners, empowered educators, and future leaders.</p>
 
   <h3 class="modal-section-heading">Looking Ahead</h3>
 
@@ -720,9 +720,9 @@ export const startupHtml = `
   <span class="modal-eyebrow">Startup Support</span>
   <h2 class="modal-main-title">Transforming Ideas into AI-Powered Innovations</h2>
 
-  <p>Innovation begins with curiosity, but impactful innovation requires the right guidance, technical expertise, and ecosystem. At UnisoleAI, we support students, researchers, aspiring entrepreneurs, and early-stage startups in transforming innovative ideas into practical AI solutions, research projects, and scalable technology products.</p>
+  <p>Innovation begins with curiosity, but impactful innovation requires the right guidance, technical expertise, and ecosystem. At Unisole Skill AI Labs, we support students, researchers, aspiring entrepreneurs, and early-stage startups in transforming innovative ideas into practical AI solutions, research projects, and scalable technology products.</p>
 
-  <p>Whether you are developing your first AI prototype or building a technology startup, UnisoleAI provides the knowledge, mentorship, and collaborative environment needed to accelerate your journey.</p>
+  <p>Whether you are developing your first AI prototype or building a technology startup, Unisole Skill AI Labs provides the knowledge, mentorship, and collaborative environment needed to accelerate your journey.</p>
 
   <h3 class="modal-section-heading">Our Support Programs</h3>
 
@@ -764,7 +764,7 @@ export const startupHtml = `
     </div>
   </div>
 
-  <h3 class="modal-section-heading">Why Build Your Startup with UnisoleAI?</h3>
+  <h3 class="modal-section-heading">Why Build Your Startup with Unisole Skill AI Labs?</h3>
 
   <ul class="modal-checklist">
     <li>Guidance from experienced AI researchers and engineers</li>
@@ -778,7 +778,7 @@ export const startupHtml = `
 
   <h3 class="modal-section-heading">Our Vision</h3>
 
-  <p>At UnisoleAI, we believe that today's students and researchers are tomorrow's innovators. By combining education, research, technology, and entrepreneurship, we aim to create an ecosystem where innovative ideas become impactful AI solutions, successful startups, and technologies that solve real-world challenges.</p>
+  <p>At Unisole Skill AI Labs, we believe that today's students and researchers are tomorrow's innovators. By combining education, research, technology, and entrepreneurship, we aim to create an ecosystem where innovative ideas become impactful AI solutions, successful startups, and technologies that solve real-world challenges.</p>
 `;
 
 export const offerCards = [
