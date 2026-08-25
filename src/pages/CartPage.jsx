@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import coursesData from '../data/courses';
 import { buyCourses } from '../utils/payment';
+import { getOptimizedImageUrl } from '../utils/image';
 import '../pages/CoursesPage.css';
 import './CartPage.css';
 
@@ -190,7 +191,15 @@ export default function CartPage() {
                   return (
                     <div className="cart-item" key={course._id}>
                       <a href={`/courses/${course.slug}`} className="cart-item-img-wrap">
-                        <img src={course.thumbnail} alt={course.title} className="cart-item-img" />
+                        <img
+                          src={getOptimizedImageUrl(course.thumbnail, { width: 240 })}
+                          alt={course.title}
+                          className="cart-item-img"
+                          width="120"
+                          height="75"
+                          loading="lazy"
+                          decoding="async"
+                        />
                       </a>
 
                       <div className="cart-item-info">

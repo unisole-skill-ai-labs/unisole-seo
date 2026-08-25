@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import eventsData from '../data/events';
+import { getOptimizedImageUrl } from '../utils/image';
 import './EventsPage.css';
 
 function formatDate(dateStr) {
@@ -74,7 +75,15 @@ export default function EventsPage() {
 
                 {event.banner && (
                   <div className="event-banner-wrap">
-                    <img src={event.banner} alt={event.title} className="event-banner-img" />
+                    <img
+                      src={getOptimizedImageUrl(event.banner, { width: 500 })}
+                      alt={event.title}
+                      className="event-banner-img"
+                      width="360"
+                      height="200"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                 )}
 

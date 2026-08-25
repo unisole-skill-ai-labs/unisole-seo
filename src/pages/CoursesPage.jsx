@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import coursesData from '../data/courses';
+import { getOptimizedImageUrl } from '../utils/image';
 import './CoursesPage.css';
 
 const LEVEL_OPTIONS = [
@@ -236,7 +237,15 @@ export default function CoursesPage() {
               return (
                 <a href={`/courses/${course.slug}`} className="courses-card" key={course._id}>
                   <div className="courses-card-img-wrap">
-                    <img src={course.thumbnail} alt={course.title} className="courses-card-img" />
+                    <img
+                      src={getOptimizedImageUrl(course.thumbnail, { width: 480 })}
+                      alt={course.title}
+                      className="courses-card-img"
+                      width="360"
+                      height="200"
+                      loading="lazy"
+                      decoding="async"
+                    />
                   </div>
                   <div className="courses-card-body">
                     <h3 className="courses-card-title">{course.title}</h3>

@@ -1,19 +1,17 @@
 /* ==========================================
-   NAVIGATION
+   NAVIGATION — MOBILE-OPTIMIZED & SMOOTH
 ========================================== */
 .nav-wrap {
   position: sticky;
   top: 0;
   left: 0;
-  z-index: 100;
+  z-index: 1000;
   width: 100%;
-  opacity: 0;
-  animation: navDrop 0.4s var(--ease-out) 0.1s forwards;
-}
-
-@keyframes navDrop {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-strong, rgba(0, 0, 0, 0.08));
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav {
@@ -21,12 +19,14 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  padding: 14px 32px;
-  background: var(--bg);
-  border: none;
-  border-bottom: 1px solid var(--border-strong);
-  border-radius: 0;
-  box-shadow: none;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 14px 28px;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
 }
 
 .nav-logo {
@@ -34,101 +34,83 @@
   align-items: center;
   gap: 10px;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 18px;
-  color: var(--white);
-  transition: opacity 0.2s;
+  font-weight: 800;
+  font-size: 20px;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
 .nav-logo:hover {
-  opacity: 0.7;
+  opacity: 0.8;
+  transform: scale(0.99);
 }
 
-.nav-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 15px;
-  object-fit: cover;
+.nav-logo:active {
+  transform: scale(0.97);
 }
 
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
 }
 
 .nav-links a {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 14px;
-  color: var(--white);
-  transition: opacity 0.2s;
+  font-size: 14.5px;
+  color: #334155;
+  padding: 6px 10px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  position: relative;
 }
 
-.nav-links a:hover { 
-  opacity: 0.7; 
+.nav-links a:hover {
+  color: #0f172a;
+  background: rgba(0, 0, 0, 0.04);
 }
 
-/* ---------- ICON BUTTONS ---------- */
+.nav-links a.active-nav-link {
+  color: #4f46e5;
+  background: #eef2ff;
+  font-weight: 700;
+}
+
+/* ---------- ICONS & PROFILE ---------- */
 .nav-icons {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   margin-left: 4px;
-}
-
-.nav-icon-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  color: var(--white);
-  transition: background 0.2s, opacity 0.2s;
 }
 
 .nav-icon-wrap {
   position: relative;
 }
 
-.nav-icon-btn:hover {
-  background: var(--bg2);
-  opacity: 1;
-}
-
-.nav-icon-badge {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  min-width: 15px;
-  height: 15px;
-  padding: 0 3px;
-  border-radius: 8px;
-  background: var(--accent);
-  color: #ffffff;
-  font-family: var(--font-display);
-  font-size: 10px;
-  font-weight: 700;
-  line-height: 15px;
-  text-align: center;
-}
-
 .nav-profile-btn {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  margin-left: 4px;
   border: 2px solid transparent;
-  transition: border-color 0.2s;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-profile-btn:hover {
-  border-color: var(--accent);
+  border-color: #4f46e5;
+  transform: scale(1.05);
+}
+
+.nav-profile-btn:active {
+  transform: scale(0.95);
 }
 
 .nav-profile-letter {
@@ -140,143 +122,235 @@
   justify-content: center;
   font-family: var(--font-display);
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
-  color: var(--white);
-  background: linear-gradient(135deg, var(--accent), #7c3aed);
-}
-
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  justify-content: center;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.nav-hamburger span {
-  display: block;
-  width: 22px;
-  height: 2px;
-  background: var(--white);
-  border-radius: 2px;
-  transition: transform 0.3s, opacity 0.3s;
-}
-
-.nav-hamburger.open span:nth-child(1) { 
-  transform: translateY(7px) rotate(45deg); 
-}
-
-.nav-hamburger.open span:nth-child(2) { 
-  opacity: 0; 
-}
-
-.nav-hamburger.open span:nth-child(3) { 
-  transform: translateY(-7px) rotate(-45deg); 
-}
-
-/* Responsive */
-@media (max-width: 860px) {
-  .nav-links { 
-    display: none; 
-  }
-
-  .nav-links.open {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    position: fixed;
-    top: 80px;
-    left: 16px;
-    right: 16px;
-    background: rgba(255,255,255,0.97);
-    backdrop-filter: blur(16px);
-    border: 0.5px solid var(--border-strong);
-    border-radius: 24px;
-    padding: 24px;
-    gap: 20px;
-    z-index: 200;
-  }
-
-  .nav-links.open a {
-    color: #1a1a1a;
-  }
-
-  .nav-icons {
-    width: 100%;
-    justify-content: flex-start;
-    margin-left: 0;
-    border-top: 1px solid var(--border-strong);
-    padding-top: 16px;
-  }
-
-  .nav-icon-btn,
-  .nav-profile-btn {
-    color: #1a1a1a;
-  }
-
-  
-  
-  .nav-hamburger { 
-    display: flex; 
-  }
-}
-
-@media (max-width: 500px) {
-  .nav-links { 
-    gap: 16px; 
-  }
-}
-
-@media (max-width: 400px) {
-  .nav-logo span {
-    font-size: 15px;
-  }
-
-  .nav-right {
-    gap: 8px;
-  }
-}
-
-.nav-links a.nav-btn-signup {   /* delete */
   color: #ffffff;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  box-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
 }
 
-
+/* ---------- AUTH BUTTONS ---------- */
 .nav-auth-buttons {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-left: 4px;
+  gap: 10px;
+  margin-left: 8px;
 }
 
 .nav-btn-login {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 14px;
-  color: var(--white);
-  padding: 8px 4px;
-  transition: opacity 0.2s;
+  font-size: 14.5px;
+  color: #1e293b !important;
+  padding: 8px 14px !important;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .nav-btn-login:hover {
-  opacity: 0.7;
+  background: rgba(0, 0, 0, 0.05) !important;
 }
 
 .nav-btn-signup {
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 14px;
-  color: #ffffff;
-  background: var(--accent);
-  padding: 10px 20px;
-  border-radius: var(--radius-sm);
-  transition: opacity 0.2s;
+  color: #ffffff !important;
+  background: #0f172a !important;
+  padding: 9px 18px !important;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: all 0.2s ease;
 }
 
 .nav-btn-signup:hover {
-  opacity: 0.85;
+  background: #334155 !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+}
+
+.nav-btn-signup:active {
+  transform: scale(0.97);
+}
+
+/* ---------- HAMBURGER BUTTON ---------- */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-strong, rgba(0, 0, 0, 0.08));
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s ease, transform 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.nav-hamburger:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.nav-hamburger:active {
+  transform: scale(0.92);
+}
+
+.nav-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #0f172a;
+  border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.32, 1.2, 0.6, 1), opacity 0.2s ease, width 0.2s ease;
+}
+
+.nav-hamburger.open span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+
+.nav-hamburger.open span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ---------- BACKDROP OVERLAY ---------- */
+.nav-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 998;
+  animation: backdropFadeIn 0.25s ease forwards;
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ==========================================
+   MOBILE RESPONSIVE NAVIGATION
+========================================== */
+@media (max-width: 860px) {
+  .nav {
+    padding: 12px 18px;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  /* Full-width Floating Frosted Glass Dropdown Card */
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    position: fixed;
+    top: 68px;
+    left: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 18px 16px;
+    gap: 8px;
+    z-index: 999;
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+    animation: navMenuSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    max-height: calc(100vh - 84px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @keyframes navMenuSlideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-14px) scale(0.98);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  .nav-links.open a {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    padding: 14px 16px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-links.open a:active {
+    background: #f1f5f9;
+    transform: scale(0.99);
+  }
+
+  .nav-links.open a.active-nav-link {
+    background: #eef2ff;
+    color: #4f46e5;
+    font-weight: 700;
+  }
+
+  .nav-icons {
+    width: 100%;
+    margin: 6px 0 0;
+    padding: 12px 6px 0;
+    border-top: 1px solid #f1f5f9;
+    justify-content: flex-start;
+  }
+
+  .nav-auth-buttons {
+    width: 100%;
+    margin: 8px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .nav-btn-login,
+  .nav-btn-signup {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+    padding: 14px 16px !important;
+    font-size: 15px !important;
+    border-radius: 12px !important;
+  }
+
+  .nav-btn-login {
+    background: #f8fafc !important;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav {
+    padding: 10px 14px;
+  }
+
+  .nav-logo {
+    font-size: 18px;
+  }
 }

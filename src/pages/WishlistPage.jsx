@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import coursesData from '../data/courses';
+import { getOptimizedImageUrl } from '../utils/image';
 import '../pages/CoursesPage.css';
 import './WishlistPage.css';
 
@@ -156,7 +157,15 @@ export default function WishlistPage() {
 
                   <a href={`/courses/${course.slug}`} className="wishlist-card-link">
                     <div className="courses-card-img-wrap">
-                      <img src={course.thumbnail} alt={course.title} className="courses-card-img" />
+                      <img
+                        src={getOptimizedImageUrl(course.thumbnail, { width: 480 })}
+                        alt={course.title}
+                        className="courses-card-img"
+                        width="360"
+                        height="200"
+                        loading="lazy"
+                        decoding="async"
+                      />
                     </div>
                     <div className="courses-card-body">
                       <h3 className="courses-card-title">{course.title}</h3>

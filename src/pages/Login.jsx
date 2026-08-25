@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import GoogleSignIn from '../components/GoogleSignIn';
+import MobileOtpAuth from '../components/MobileOtpAuth';
 import './Login.css';
 
 export default function Login() {
@@ -12,12 +12,12 @@ export default function Login() {
         <div className="login-container">
           <div className="login-header">
             <h1 className="login-title">Welcome Back</h1>
-            <p className="login-subtitle">Sign in to your account</p>
+            <p className="login-subtitle">Sign in with your mobile number</p>
           </div>
 
-          <GoogleSignIn />
+          <MobileOtpAuth />
 
-          <p className="signup-link">
+          <p className="signup-link" style={{ marginTop: '20px' }}>
             Don't have an account? <Link to="/register">Create one</Link>
           </p>
         </div>
@@ -27,3 +27,4 @@ export default function Login() {
     </>
   );
 }
+

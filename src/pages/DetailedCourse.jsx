@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import coursesData from '../data/courses';
 import { buyCourses } from '../utils/payment';
+import { getOptimizedImageUrl } from '../utils/image';
 import './DetailedCourse.css';
 import './CoursesPage.css';
 
@@ -197,15 +198,19 @@ if (error || !course) {
                 {course.previewVideo ? (
                   <video
                     className="dc-preview-media"
-                    poster={course.thumbnail}
+                    poster={getOptimizedImageUrl(course.thumbnail, { width: 720 })}
                     controls
                     src={course.previewVideo}
                   />
                 ) : (
                   <img
                     className="dc-preview-media"
-                    src={course.thumbnail}
+                    src={getOptimizedImageUrl(course.thumbnail, { width: 720 })}
                     alt={course.title}
+                    width="440"
+                    height="240"
+                    loading="lazy"
+                    decoding="async"
                   />
                 )}
               </div>

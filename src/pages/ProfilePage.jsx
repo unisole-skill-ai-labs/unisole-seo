@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { getUserName, getUserEmail, getToken, logout } from '../utils/auth';
+import { getUserName, getUserEmail, getUserPhone, getToken, logout } from '../utils/auth';
 import './ProfilePage.css';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3000';
@@ -15,6 +15,7 @@ function formatDate(iso) {
 export default function ProfilePage() {
   const name = getUserName();
   const email = getUserEmail();
+  const phone = getUserPhone();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -54,7 +55,8 @@ export default function ProfilePage() {
             </div>
           </div>
           <h1 className="profile-name">{name}</h1>
-          <p className="profile-email">{email}</p>
+          {phone && <p className="profile-email" style={{ fontWeight: 600, color: 'var(--white)' }}>📱 +91 {phone}</p>}
+          {email && <p className="profile-email">{email}</p>}
 
           <div className="profile-section">
             <h2 className="profile-section-title">My Learning Account</h2>

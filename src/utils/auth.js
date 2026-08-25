@@ -15,14 +15,24 @@ export function getUser() {
   }
 }
 
-export function getUserName() {
+export function getUserPhone() {
   const user = getUser();
-  return user?.name || localStorage.getItem('userName') || (getUserEmail() ? getUserEmail().split('@')[0] : 'User');
+  return user?.phone || localStorage.getItem('userPhone') || '';
 }
 
 export function getUserEmail() {
   const user = getUser();
   return user?.email || localStorage.getItem('userEmail') || '';
+}
+
+export function getUserName() {
+  const user = getUser();
+  return (
+    user?.name ||
+    localStorage.getItem('userName') ||
+    (getUserPhone() ? `+91 ${getUserPhone()}` : '') ||
+    (getUserEmail() ? getUserEmail().split('@')[0] : 'User')
+  );
 }
 
 export function setAuthSession({ token, user }) {
@@ -31,6 +41,7 @@ export function setAuthSession({ token, user }) {
     localStorage.setItem('user', JSON.stringify(user));
     if (user.name) localStorage.setItem('userName', user.name);
     if (user.email) localStorage.setItem('userEmail', user.email);
+    if (user.phone) localStorage.setItem('userPhone', user.phone);
   }
   window.dispatchEvent(new Event('authChange'));
 }
@@ -40,5 +51,6 @@ export function logout() {
   localStorage.removeItem('user');
   localStorage.removeItem('userName');
   localStorage.removeItem('userEmail');
+  localStorage.removeItem('userPhone');
   window.dispatchEvent(new Event('authChange'));
 }

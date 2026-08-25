@@ -7,12 +7,13 @@ import './Home.css';
 import './About.css';
 import { offerCards } from '../data/offerContent';
 import { isAuthenticated } from '../utils/auth';
+import { getOptimizedImageUrl } from '../utils/image';
 
 const courses = [
   {
     id: 1,
     slug: 'from-notebook-to-production',
-    img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476504/Gemini_Generated_Image_a0vw7ma0vw7ma0v1w_tkzbpn.png',
+    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476504/Gemini_Generated_Image_a0vw7ma0vw7ma0v1w_tkzbpn.png', { width: 480 }),
     title: 'From Notebook to Production: Real AI Engineering',
     instructor: 'Ajay Mokta',
     price: '₹59,000.00',
@@ -21,7 +22,7 @@ const courses = [
   {
     id: 2,
     slug: 'complete-python',
-    img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476507/Gemini_Generated_Image_nwyi73nwy1i73nwyi_afrilq.png',
+    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476507/Gemini_Generated_Image_nwyi73nwy1i73nwyi_afrilq.png', { width: 480 }),
     title: 'Complete Python Programming - From Basics to Object-Oriented Concepts',
     instructor: 'Ajay Mokta',
     price: '₹3,000.00',
@@ -30,7 +31,7 @@ const courses = [
   {
     id: 3,
     slug: 'tableau-ultimate-course',
-    img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476500/Gemini_Generated_Image_oh2zrxxo1hzrxxohzr_kocadb.png',
+    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476500/Gemini_Generated_Image_oh2zrxxo1hzrxxohzr_kocadb.png', { width: 480 }),
     title: 'Tableau Ultimate Course',
     instructor: 'Ajay Mokta',
     price: '₹1,719.00',
@@ -39,7 +40,7 @@ const courses = [
   {
     id: 4,
     slug: 'full-stack-data-science-pro',
-    img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785476502/hey_g2223emini_create_a_thumbn_1_drjlnz.png',
+    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785476502/hey_g2223emini_create_a_thumbn_1_drjlnz.png', { width: 480 }),
     title: 'Full Stack Data Science Pro',
     instructor: 'Ajay Mokta',
     price: '₹59,999.00',
@@ -48,7 +49,7 @@ const courses = [
   {
     id: 5,
     slug: 'anyone-can-sketech',
-    img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785479019/Gemini_Generated_Image_mvv06hgmvv0hgmvv0_kmqbgv.png',
+    img: getOptimizedImageUrl('https://res.cloudinary.com/hehmsemf/image/upload/v1785479019/Gemini_Generated_Image_mvv06hgmvv0hgmvv0_kmqbgv.png', { width: 480 }),
     title: 'Anyone Can Sketch',
     instructor: 'Lucky Garg',
     price: '₹1,499.00',
@@ -65,6 +66,8 @@ function OfferCarousel() {
   const [slideW, setSlideW] = useState(0);
   const timerRef = useRef(null);
   const viewportRef = useRef(null);
+  const touchStartX = useRef(0);
+  const touchDeltaX = useRef(0);
   const len = offerCards.length;
   const slideGap = 24;
 
@@ -97,6 +100,18 @@ function OfferCarousel() {
     return () => clearInterval(timerRef.current);
   }, []);
 
+  // Lock body scroll when modal is open
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isModalOpen]);
+
   const goNext = () => {
     setActiveIndex((i) => (i + 1) % len);
     startTimer();
@@ -112,6 +127,26 @@ function OfferCarousel() {
     startTimer();
   };
 
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchDeltaX.current = 0;
+    clearInterval(timerRef.current);
+  };
+
+  const handleTouchMove = (e) => {
+    touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchDeltaX.current > 40) {
+      goPrev();
+    } else if (touchDeltaX.current < -40) {
+      goNext();
+    } else {
+      startTimer();
+    }
+  };
+
   const openModal = (card) => {
     setModalCard(card);
     setIsModalOpen(true);
@@ -124,11 +159,15 @@ function OfferCarousel() {
     startTimer();
   };
 
-  
-
   return (
     <div className="offer-carousel" style={slideW ? { '--slide-w': `${slideW}px` } : undefined}>
-      <div className="offer-carousel-viewport" ref={viewportRef}>
+      <div
+        className="offer-carousel-viewport"
+        ref={viewportRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
         <div
           className="offer-carousel-track"
           style={{ transform: `translateX(${xOffset}px)` }}
@@ -143,7 +182,15 @@ function OfferCarousel() {
                 type="button"
               >
                 <div className="offer-slide-img-wrap">
-                  <img src={card.img} alt={card.title} className="offer-slide-img" />
+                  <img
+                    src={getOptimizedImageUrl(card.img, { width: 600 })}
+                    alt={card.title}
+                    className="offer-slide-img"
+                    width="600"
+                    height="360"
+                    loading="lazy"
+                    decoding="async"
+                  />
                 </div>
                 <div className="offer-slide-overlay" />
                 <div className="offer-slide-content">
@@ -194,7 +241,15 @@ function OfferCarousel() {
             </button>
             <div className="offer-modal-top">
               <div className="offer-modal-top-img-wrap">
-                <img src={modalCard.img} alt={modalCard.title} className="offer-modal-top-img" />
+                <img
+                  src={getOptimizedImageUrl(modalCard.img, { width: 800 })}
+                  alt={modalCard.title}
+                  className="offer-modal-top-img"
+                  width="800"
+                  height="260"
+                  loading="lazy"
+                  decoding="async"
+                />
                 <div className="offer-modal-top-overlay" />
               </div>
               <div className="offer-modal-top-content">
@@ -213,48 +268,60 @@ function OfferCarousel() {
 export default function Home() {
   const navigate = useNavigate();
 
-    const [slideIndex, setSlideIndex] = useState(0);
-    const [vw, setVw] = useState(window.innerWidth);
-    const [cardStep, setCardStep] = useState(0);
-    const coursesTrackRef = useRef(null);
-    const firstCourseCardRef = useRef(null);
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [vw, setVw] = useState(window.innerWidth);
+  const [cardStep, setCardStep] = useState(0);
+  const coursesTrackRef = useRef(null);
+  const firstCourseCardRef = useRef(null);
+  const coursesTouchStartX = useRef(0);
+  const coursesTouchDeltaX = useRef(0);
 
-    useEffect(() => {
-      const onResize = () => setVw(window.innerWidth);
-      window.addEventListener('resize', onResize);
-      return () => window.removeEventListener('resize', onResize);
-    }, []);
+  useEffect(() => {
+    const onResize = () => setVw(window.innerWidth);
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
 
-    const visibleCount = vw < 640 ? 1 : vw < 1024 ? 2 : 4;
-    const maxIndex = Math.max(0, courses.length - visibleCount);
+  const visibleCount = vw < 640 ? 1 : vw < 1024 ? 2 : 4;
+  const maxIndex = Math.max(0, courses.length - visibleCount);
 
-    // Measure the real rendered width of a single card (+ the track's gap)
-    // instead of guessing with percentage/px math. This is what guarantees
-    // that on small screens exactly ONE card moves per slide, no matter
-    // what width the CSS media queries end up giving the card.
-    useEffect(() => {
-      const measure = () => {
-        const card = firstCourseCardRef.current;
-        const track = coursesTrackRef.current;
-        if (!card || !track) return;
-        const trackStyle = window.getComputedStyle(track);
-        const gap = parseFloat(trackStyle.columnGap || trackStyle.gap) || 0;
-        setCardStep(card.getBoundingClientRect().width + gap);
-      };
-      measure();
-      window.addEventListener('resize', measure);
-      return () => window.removeEventListener('resize', measure);
-    }, [vw]);
+  useEffect(() => {
+    const measure = () => {
+      const card = firstCourseCardRef.current;
+      const track = coursesTrackRef.current;
+      if (!card || !track) return;
+      const trackStyle = window.getComputedStyle(track);
+      const gap = parseFloat(trackStyle.columnGap || trackStyle.gap) || 0;
+      setCardStep(card.getBoundingClientRect().width + gap);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+  }, [vw]);
 
-    // If the viewport grows/shrinks and visibleCount changes, keep the
-    // current slideIndex within the new valid range instead of getting
-    // stuck past the last card.
-    useEffect(() => {
-      setSlideIndex((i) => Math.min(i, maxIndex));
-    }, [maxIndex]);
+  useEffect(() => {
+    setSlideIndex((i) => Math.min(i, maxIndex));
+  }, [maxIndex]);
 
-    const goPrev = () => setSlideIndex((i) => Math.max(0, i - 1));
-    const goNext = () => setSlideIndex((i) => Math.min(maxIndex, i + 1));
+  const goPrev = () => setSlideIndex((i) => Math.max(0, i - 1));
+  const goNext = () => setSlideIndex((i) => Math.min(maxIndex, i + 1));
+
+  const handleCoursesTouchStart = (e) => {
+    coursesTouchStartX.current = e.touches[0].clientX;
+    coursesTouchDeltaX.current = 0;
+  };
+
+  const handleCoursesTouchMove = (e) => {
+    coursesTouchDeltaX.current = e.touches[0].clientX - coursesTouchStartX.current;
+  };
+
+  const handleCoursesTouchEnd = () => {
+    if (coursesTouchDeltaX.current > 40) {
+      goPrev();
+    } else if (coursesTouchDeltaX.current < -40) {
+      goNext();
+    }
+  };
 
   return (
     <>
@@ -268,11 +335,10 @@ export default function Home() {
 
             <span className="hero-eyebrow reveal-up" style={{ '--delay': '0.12s' }}>
               Building India's Next Generation of AI Innovators
-
             </span>
 
             <p className="hero-subtitle reveal-up" style={{ '--delay': '0.18s' }}>
-             Empowering Schools, Universities, Teachers, and Organizations with world-class Artificial Intelligence education, research, and real-world AI solutions.
+              Empowering Schools, Universities, Teachers, and Organizations with world-class Artificial Intelligence education, research, and real-world AI solutions.
             </p>
 
             <div className="hero-actions reveal-up" style={{ '--delay': '0.26s' }}>
@@ -291,9 +357,14 @@ export default function Home() {
           <div className="hero-right reveal-up" style={{ '--delay': '0.15s' }}>
             <div className="hero-visual">
               <img
-                src="https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png"
+                src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 600 })}
                 alt="Student learning with UnisoleAI"
                 className="hero-visual-img"
+                width="600"
+                height="600"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
             </div>
           </div>
@@ -339,18 +410,18 @@ export default function Home() {
 
       <section className="offer">
         <div className="offer-header">
-            <h2 className="offer-title reveal-up" style={{ '--delay': '0.05s' }}>
+          <h2 className="offer-title reveal-up" style={{ '--delay': '0.05s' }}>
             Our Expertise
-            </h2>
-            <p className="offer-subtitle reveal-up" style={{ '--delay': '0.1s' }}>
+          </h2>
+          <p className="offer-subtitle reveal-up" style={{ '--delay': '0.1s' }}>
             Empower yourself with essential, unconventional knowledge
-            </p>
+          </p>
         </div>
 
         <OfferCarousel />
-        </section>
+      </section>
 
-        <section className="courses">
+      <section className="courses">
         <div className="courses-header">
           <h2 className="courses-title reveal-up" style={{ '--delay': '0.05s' }}>
             Trending Courses
@@ -369,7 +440,12 @@ export default function Home() {
             </svg>
           </button>
 
-          <div className="courses-viewport">
+          <div
+            className="courses-viewport"
+            onTouchStart={handleCoursesTouchStart}
+            onTouchMove={handleCoursesTouchMove}
+            onTouchEnd={handleCoursesTouchEnd}
+          >
             <div
               className="courses-track"
               ref={coursesTrackRef}
@@ -378,27 +454,35 @@ export default function Home() {
               }}
             >
               {courses.map((course, courseIdx) => (
-            <Link
-              to={`/courses/${course.slug}`}
-              className="course-card courses-card"
-              key={course.id}
-              ref={courseIdx === 0 ? firstCourseCardRef : null}
-            >
-                <div className="courses-card-img-wrap">
-                  <img src={course.img} alt={course.title} className="courses-card-img" />
-                </div>
-                <div className="courses-card-body">
-                  <h3 className="courses-card-title">{course.title}</h3>
-                  <p className="courses-card-instructor">{course.instructor}</p>
-                  <div className="courses-card-footer">
-                    <div className="courses-card-price">
-                      <span className="courses-price">{course.price}</span>
-                      <span className="courses-old-price">{course.oldPrice}</span>
+                <Link
+                  to={`/courses/${course.slug}`}
+                  className="course-card courses-card"
+                  key={course.id}
+                  ref={courseIdx === 0 ? firstCourseCardRef : null}
+                >
+                  <div className="courses-card-img-wrap">
+                    <img
+                      src={course.img}
+                      alt={course.title}
+                      className="courses-card-img"
+                      width="360"
+                      height="200"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div className="courses-card-body">
+                    <h3 className="courses-card-title">{course.title}</h3>
+                    <p className="courses-card-instructor">{course.instructor}</p>
+                    <div className="courses-card-footer">
+                      <div className="courses-card-price">
+                        <span className="courses-price">{course.price}</span>
+                        <span className="courses-old-price">{course.oldPrice}</span>
+                      </div>
                     </div>
-                </div>
-              </div>
-            </Link>
-            ))}
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
 
@@ -413,38 +497,20 @@ export default function Home() {
             </svg>
           </button>
         </div>
-      </section>
-      {/* ---------- OUR STORY ---------- */}
-      {/* <section className="about-hero">
-        <div className="about-hero-inner">
-          <div className="about-hero-visual reveal-up" style={{ '--delay': '0.05s' }}>
-            <img
-              src="https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png"
-              alt="Unisole"
-              className="about-hero-logo"
+
+        {/* Mobile Courses Pagination Dots */}
+        <div className="courses-dots">
+          {Array.from({ length: maxIndex + 1 }).map((_, i) => (
+            <button
+              key={i}
+              className={`courses-dot ${i === slideIndex ? 'courses-dot--active' : ''}`}
+              onClick={() => setSlideIndex(i)}
+              aria-label={`Go to slide ${i + 1}`}
+              type="button"
             />
-          </div>
-
-          <div className="about-hero-text">
-            <span className="about-eyebrow reveal-up" style={{ '--delay': '0.1s' }}>Our Story</span>
-            <h1 className="about-hero-title reveal-up" style={{ '--delay': '0.15s' }}>
-              Empowering generations to become <span className="hero-highlight">geniuses</span>
-            </h1>
-            <p className="about-hero-subtitle reveal-up" style={{ '--delay': '0.2s' }}>
-              UnisoleAI helps generations become tech-savvy through accessible,
-              step-by-step courses in AI, Data Science, and Machine Learning.
-            </p>
-            <button className="about-hero-cta reveal-up" style={{ '--delay': '0.28s' }} onClick={() => (isAuthenticated() ? openQueryForm() : navigate('/register'))}>
-              Start Your Journey With Us
-              <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <path d="M6 9h8M12 5l4 4m-4 4l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          </div>
+          ))}
         </div>
-      </section> */}
-
-      
+      </section>
 
       {/* ---------- TEAM ---------- */}
       <section className="about-team">
@@ -473,7 +539,15 @@ export default function Home() {
           ].map((member, i) => (
             <div className="about-team-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={member.name}>
               <div className="about-team-img-wrap">
-                <img src={member.img} alt={member.name} className="about-team-img" />
+                <img
+                  src={getOptimizedImageUrl(member.img, { width: 240 })}
+                  alt={member.name}
+                  className="about-team-img"
+                  width="240"
+                  height="240"
+                  loading="lazy"
+                  decoding="async"
+                />
               </div>
               <div className="about-team-body">
                 <div className="about-team-name-row">
@@ -495,41 +569,44 @@ export default function Home() {
         </div>
       </section>
 
-        <section className="mentor-promo">
+      <section className="mentor-promo">
         <div className="mentor-promo-card">
-            <div className="mentor-promo-left">
+          <div className="mentor-promo-left">
             <span className="mentor-promo-brand">UnisoleAI</span>
 
             <h2 className="mentor-promo-title">
-                Get in touch with us
+              Get in touch with us
             </h2>
 
             <ul className="mentor-promo-list">
-                <li>Reach out for project collaborations and partnerships.</li>
-                <li>Contact us for AI solutions, workshops, and training.</li>
-                <li>Connect with our team for queries, support, or consultations.</li>
+              <li>Reach out for project collaborations and partnerships.</li>
+              <li>Contact us for AI solutions, workshops, and training.</li>
+              <li>Connect with our team for queries, support, or consultations.</li>
             </ul>
 
             <Link to="/query" className="mentor-promo-btn">
-                Get in Touch
+              Get in Touch
             </Link>
+          </div>
 
-            </div>
-
-            <div className="mentor-promo-right">
+          <div className="mentor-promo-right">
             <div className="mentor-promo-image-wrap">
-                <img
-                src="https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png"
+              <img
+                src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 400 })}
                 alt="Mentor session"
                 className="mentor-promo-image"
-                />
+                width="320"
+                height="320"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
-            </div>
+          </div>
         </div>
-        </section>
+      </section>
 
-        <section className="testimonials">
-            <h2 className="testimonials-title reveal-up" style={{ '--delay': '0.05s' }}>
+      <section className="testimonials">
+        <h2 className="testimonials-title reveal-up" style={{ '--delay': '0.05s' }}>
                 Join others transforming their lives through learning
             </h2>
 

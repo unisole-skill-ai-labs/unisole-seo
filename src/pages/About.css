@@ -357,34 +357,48 @@
 
 @media (max-width: 640px) {
   .about-hero {
-    padding: 40px 20px 32px;
+    padding: 36px 18px 28px;
   }
   .about-hero-title {
-    font-size: 30px;
+    font-size: 28px;
   }
   .about-stats,
   .about-institute,
   .about-team {
-    padding: 48px 20px;
+    padding: 40px 18px;
   }
-  .about-stats-grid,
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .about-stat-card {
+    padding: 20px 12px;
+    border-radius: 16px;
+  }
+  .about-stat-value {
+    font-size: 28px;
+  }
+  .about-stat-label {
+    font-size: 12.5px;
+  }
   .about-team-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
   }
   .about-cta {
-    padding: 48px 20px 64px;
+    padding: 40px 18px 56px;
   }
   .about-cta-card {
-    padding: 40px 24px;
+    padding: 36px 20px;
   }
   .about-cta-title {
-    font-size: 24px;
+    font-size: 22px;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 480px) {
   .about-hero {
-    padding: 32px 16px 24px;
+    padding: 28px 14px 20px;
   }
 
   .about-hero-title {
@@ -398,14 +412,27 @@
   .about-stats,
   .about-institute,
   .about-team {
-    padding: 32px 16px;
+    padding: 32px 14px;
+  }
+
+  .about-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+
+  .about-stat-value {
+    font-size: 24px;
   }
 
   .about-institute-title {
-    font-size: 20px;
+    font-size: 22px;
   }
 
   .about-team-title {
     font-size: 22px;
+  }
+
+  .about-team-grid {
+    grid-template-columns: 1fr;
   }
 }

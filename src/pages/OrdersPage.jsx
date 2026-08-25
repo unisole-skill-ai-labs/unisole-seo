@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { getOptimizedImageUrl } from '../utils/image';
 import '../pages/CoursesPage.css';
 import './OrdersPage.css';
 
@@ -135,9 +136,13 @@ export default function OrdersPage() {
                     <div className="order-row" key={item.course?._id ?? i}>
                         <a href={`/courses/${item.course?.slug}`} className="order-row-img-wrap">
                         <img
-                            src={item.course?.thumbnail}
-                            alt={item.course?.title}
-                            className="order-row-img"
+                          src={getOptimizedImageUrl(item.course?.thumbnail, { width: 160 })}
+                          alt={item.course?.title}
+                          className="order-row-img"
+                          width="80"
+                          height="50"
+                          loading="lazy"
+                          decoding="async"
                         />
                         </a>
 
