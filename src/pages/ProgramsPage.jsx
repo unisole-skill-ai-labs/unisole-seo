@@ -48,7 +48,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Intermediate',
         enrollLink: 'https://rzp.io/rzp/6rUVhV4',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1RggQ-b98tL1plZ9xzqjP0pOe1Q53lDGT/view?usp=sharing',
         description: 'End-to-end ML engineering: data pipelines, deep learning, FastAPI model serving, Docker MLOps, and Generative AI/RAG architectures.',
         modules: [
           {
@@ -102,7 +102,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Beginner to Intermediate',
         enrollLink: 'https://rzp.io/rzp/K9E9OOw',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1lUpD7d9XAnHJDCfV7Pa37bAkq76iMJFW/view?usp=sharing',
         description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
         modules: [
           {
@@ -149,7 +149,7 @@ const GROUPS_DATA = [
         duration: '6 Months',
         level: 'Dual-Track Mastery',
         enrollLink: 'https://rzp.io/rzp/34ZzWCiC',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1QNo7KKUR0Ogo49cNuZDJMVtvra_lw02x/view?usp=sharing',
         description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
         modules: [
           {
@@ -201,7 +201,7 @@ const GROUPS_DATA = [
         duration: 'Weekend Track',
         level: 'All Students',
         enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1TikAdxgJXkIkT6OapYtBoe2-U6KOCino/view?usp=sharing',
         description: 'Structured incubator track teaching students how to convert AI technical capability into validated commercial products and startups.',
         modules: [
           {
@@ -243,7 +243,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Undergraduate / Postgraduate',
         enrollLink: 'https://rzp.io/rzp/uyG6gkvw',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1qdVw0O-BfmiL0v3qzDWcAjkkwmAk9FLO/view?usp=sharing',
         description: 'Combines mathematical principles with modern scientific computing, differential equations, and Physics-Informed Neural Networks (PINNs).',
         modules: [
           {
@@ -290,7 +290,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Mathematics & Statistics Majors',
         enrollLink: 'https://rzp.io/rzp/ik3ig71K',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1CeMGDt3LuYpdTaB2tLl6vW-A4JUeAP8z/view?usp=sharing',
         description: 'Rigorous mathematics-oriented pathway focusing on mathematical proofs, optimization theory, statistical learning, and computational algorithms.',
         modules: [
           {
@@ -332,7 +332,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Undergraduate / Postgraduate',
         enrollLink: 'https://rzp.io/rzp/X2wGPMm',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/15RpNVt-OxkNNvfmS7k_rSgwlswKtVmOB/view?usp=sharing',
         description: 'Equips business students with advanced Excel, SQL, modern data engineering (ETL, Parquet, DuckDB), Power BI, and Generative AI.',
         modules: [
           {
@@ -375,7 +375,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Finance & Banking Students',
         enrollLink: 'https://rzp.io/rzp/Z4l1xd30',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1iNFZKMFAaxNdLqBPk1n3dHZtAPn0Et6i/view?usp=sharing',
         description: 'Explores digital banking, financial modeling, credit risk scoring, fraud detection algorithms, and responsible AI in finance.',
         modules: [
           {
@@ -412,7 +412,7 @@ const GROUPS_DATA = [
         duration: 'Weekend Track',
         level: 'All Commerce & Management',
         enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1Y7FqJBSwl94ZJyBpFItEKbCVWbNJDixx/view?usp=sharing',
         description: 'Learn how to launch AI-enabled business services, SaaS tools, SME automation platforms, and investor pitch decks.',
         modules: [
           {
@@ -454,7 +454,7 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'All Students (No Coding Required)',
         enrollLink: 'https://rzp.io/rzp/qjdUioKf',
-        syllabusLink: '',
+        syllabusLink: 'https://drive.google.com/file/d/1ySAQ3ZarHXPq7SbqGbXX5e_sm86DK1Sa/view?usp=sharing',
         description: 'Elite professional program: prompt engineering, AI research methods, automated content, executive communication, and career mastery.',
         modules: [
           {
@@ -729,7 +729,7 @@ export default function ProgramsPage() {
                           onClick={() => handleSyllabusClick(pathway)}
                         >
                           {syllabusSvg}
-                          <span>Request Syllabus</span>
+                          <span>{pathway.syllabusLink ? 'View Syllabus' : 'Request Syllabus'}</span>
                         </button>
                       </div>
                     </div>
