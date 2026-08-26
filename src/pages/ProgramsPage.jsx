@@ -406,6 +406,59 @@ const GROUPS_DATA = [
         },
       },
       {
+        id: 'mgmt-p3',
+        eyebrow: 'PATHWAY 3',
+        title: 'Complete Business AI Pathway',
+        duration: '6 Months',
+        level: 'Dual-Track Mastery',
+        enrollLink: 'https://rzp.io/rzp/KUuWTEk6',
+        syllabusLink: 'https://drive.google.com/file/d/19dGBR7uKNksbOGdoeLfQJaczxi2Cl6rr/view?usp=sharing',
+        description: 'Comprehensive dual-track program merging Business Analytics, SQL & modern Data Engineering with FinTech AI, credit scoring, fraud risk intelligence, and executive BI dashboards.',
+        modules: [
+          {
+            num: '01',
+            title: 'Business Data & Advanced Excel',
+            topics: ['Transactional & operational business data', 'Dynamic array formulas & XLOOKUP', 'Power Pivot & interactive dashboard design'],
+          },
+          {
+            num: '02',
+            title: 'SQL for Business Analytics',
+            topics: ['Relational schemas & multi-table JOINs', 'Aggregations, GROUP BY & window functions', 'Queries for churn, revenue, and customer KPIs'],
+          },
+          {
+            num: '03',
+            title: 'Data Engineering for Analysts',
+            topics: ['ETL pipelines & star schema design', 'Columnar Parquet & fast DuckDB queries', 'Event streaming fundamentals with Kafka'],
+            pipeline: ['ERP/CRM Data', 'ETL Pipeline', 'Parquet Storage', 'DuckDB Engine', 'Power BI Dashboard'],
+          },
+          {
+            num: '04',
+            title: 'FinTech Landscape & Payment Rails',
+            topics: ['Digital banking, UPI & payment gateways', 'Digital lending & automated underwriting', 'InsurTech & RegTech ecosystems'],
+          },
+          {
+            num: '05',
+            title: 'AI Credit Scoring & Fraud Intelligence',
+            topics: ['ML models for default & risk prediction', 'Real-time transaction fraud detection', 'Customer lifetime value & churn models'],
+          },
+          {
+            num: '06',
+            title: 'BI Dashboards & Executive Storytelling',
+            topics: ['Power BI / Tableau visual hierarchy', 'Interactive filters & KPI scorecards', 'Executive data presentations'],
+          },
+          {
+            num: '07',
+            title: 'Generative AI & Enterprise Automation',
+            topics: ['Prompt engineering for analysts', 'Automated market synthesis & document parsing', 'AI-driven executive decision support'],
+          },
+        ],
+        capstone: {
+          title: 'Enterprise Business & FinTech AI Platform',
+          flow: ['Data Ingestion', 'ETL Pipeline', 'Risk ML Model', 'Power BI Dashboard', 'Executive Strategy'],
+          outputs: ['Automated DuckDB/Parquet data pipeline', 'Trained financial risk ML model', 'Dual certification credential', 'Executive strategy slide deck'],
+        },
+      },
+      {
         id: 'mgmt-common',
         eyebrow: 'WEEKEND TRACK',
         title: 'AI Entrepreneurship & Business Innovation',
