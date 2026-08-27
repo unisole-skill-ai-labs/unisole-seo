@@ -1,6 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
+import AuthGuard from './components/AuthGuard';
 import './App.css';
 
 // Route Code-Splitting for Optimal Page Load Performance
@@ -11,6 +12,8 @@ const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
+const BlogsPage = lazy(() => import('./pages/BlogsPage'));
+const AiPlaygroundPage = lazy(() => import('./pages/AiPlaygroundPage'));
 
 function PageLoader() {
   return (
@@ -44,12 +47,26 @@ export default function App() {
             <Route path="/" element={<Home />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="/events" element={<EventsPage />} />
+            <Route path="/blogs" element={
+              <AuthGuard>
+                <BlogsPage />
+              </AuthGuard>
+            } />
+            <Route path="/playground" element={
+              <AuthGuard>
+                <AiPlaygroundPage />
+              </AuthGuard>
+            } />
             <Route path="/query" element={<Navigate to="/programs" replace />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/payment/success" element={<PaymentSuccess />} />
             <Route path="/thank-you" element={<PaymentSuccess />} />
             <Route path="/order-success" element={<PaymentSuccess />} />
-            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile" element={
+              <AuthGuard>
+                <ProfilePage />
+              </AuthGuard>
+            } />
             <Route path="/courses" element={<Navigate to="/programs" replace />} />
             <Route path="/courses/*" element={<Navigate to="/programs" replace />} />
           </Routes>

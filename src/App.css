@@ -16,8 +16,8 @@
   --border: rgba(0, 0, 0, 0.08);
   --border-strong: rgba(0, 0, 0, 0.12);
   --accent: #0f172a;
-  --accent-primary: #4f46e5;
-  --accent-glow: rgba(79, 70, 229, 0.25);
+  --accent-primary: #334155;
+  --accent-glow: rgba(51, 65, 85, 0.25);
   --error: #ef4444;
   --success: #10b981;
   --radius-sm: 12px;
