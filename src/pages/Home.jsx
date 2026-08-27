@@ -114,7 +114,7 @@ function OfferCarousel() {
           <span className="about-eyebrow reveal-up" style={{ '--delay': '0.05s' }}>Domains & Capabilities</span>
           <h2 className="offer-title reveal-up" style={{ '--delay': '0.1s' }}>Our Expertise</h2>
           <p className="offer-subtitle reveal-up" style={{ '--delay': '0.15s' }}>
-            Empower yourself with essential, unconventional knowledge through industry-aligned AI programs.
+            Empower yourself with essential, unconventional knowledge through industry-aligned AI programs and tech.
           </p>
         </div>
 
