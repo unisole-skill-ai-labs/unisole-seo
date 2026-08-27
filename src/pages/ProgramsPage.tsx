@@ -1,42 +1,33 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import './ProgramsPage.css';
+import { 
+  Laptop, 
+  Microscope, 
+  BarChart3, 
+  Palette, 
+  Clock, 
+  BookOpen, 
+  TrendingUp, 
+  ChevronDown, 
+  Check, 
+  Download, 
+  ExternalLink,
+  Award,
+  Target,
+  Rocket,
+  Wrench,
+  Trophy,
+  ArrowRight
+} from 'lucide-react';
 
 const SUBSCRIPTION_PAYMENT_LINK = import.meta.env.VITE_SUBSCRIPTION_PAYMENT_LINK;
-
-const checkSvg = (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M20 6L9 17l-5-5" />
-  </svg>
-);
-
-const arrowSvg = (
-  <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
-    <path d="M4 9h10M9 4l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-const syllabusSvg = (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-    <polyline points="14 2 14 8 20 8" />
-    <line x1="16" y1="13" x2="8" y2="13" />
-    <line x1="16" y1="17" x2="8" y2="17" />
-  </svg>
-);
-
-const chevronDownSvg = (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M6 9l6 6 6-6" />
-  </svg>
-);
 
 const GROUPS_DATA = [
   {
     id: 'group-1',
     badge: 'GROUP 1',
-    icon: '💻',
+    icon: Laptop,
     title: 'Computer Science & IT',
     target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
     tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
@@ -231,7 +222,7 @@ const GROUPS_DATA = [
   {
     id: 'group-2',
     badge: 'GROUP 2',
-    icon: '🔬',
+    icon: Microscope,
     title: 'Science & Mathematics',
     target: 'Physics • Mathematics • Chemistry • Biology • Applied Science',
     tagline: 'Scientific computing, physics-informed neural networks, and computational research.',
@@ -320,7 +311,7 @@ const GROUPS_DATA = [
   {
     id: 'group-3',
     badge: 'GROUP 3',
-    icon: '📊',
+    icon: BarChart3,
     title: 'Commerce, BBA & Management',
     target: 'B.Com • BBA • M.Com • MBA • Economics • Finance',
     tagline: 'Business analytics, SQL, modern data engineering, FinTech systems, and AI-driven decisions.',
@@ -495,7 +486,7 @@ const GROUPS_DATA = [
   {
     id: 'group-4',
     badge: 'GROUP 4',
-    icon: '🎨',
+    icon: Palette,
     title: 'BA, Humanities & Other Disciplines',
     target: 'BA • Fine Arts • Education • Law • All Non-Tech Majors',
     tagline: 'AI-Enabled Professional Program — transforming students into high-productivity, AI-fluent leaders.',
@@ -548,22 +539,22 @@ const GROUPS_DATA = [
 
 const PROGRAM_HIGHLIGHTS = [
   {
-    icon: '🛠️',
+    icon: Wrench,
     title: 'Production-Grade Coding & Labs',
     desc: 'Hands-on practice using real developer tools, Python, React, SQL, DuckDB, and Docker.',
   },
   {
-    icon: '🏆',
+    icon: Trophy,
     title: 'Evidence-Based Capstones',
     desc: 'Every student builds and defends a real-world project to create a verifiable GitHub portfolio.',
   },
   {
-    icon: '🎯',
+    icon: Target,
     title: 'Practitioner Mentorship',
     desc: 'Direct guidance from active AI engineers, researchers, and industry specialists.',
   },
   {
-    icon: '🚀',
+    icon: Rocket,
     title: 'Career & Profile Acceleration',
     desc: 'ATS-optimized resumes, interview preparation, LinkedIn optimization, and hiring network access.',
   },
@@ -583,7 +574,7 @@ export default function ProgramsPage() {
 
   const currentGroupData = GROUPS_DATA.find((g) => g.id === activeGroup) || GROUPS_DATA[0];
 
-  const handleEnrollClick = (pathway) => {
+  const handleEnrollClick = (pathway: any) => {
     if (pathway.enrollLink) {
       window.open(pathway.enrollLink, '_blank', 'noopener,noreferrer');
     } else {
@@ -591,7 +582,7 @@ export default function ProgramsPage() {
     }
   };
 
-  const handleSyllabusClick = (pathway) => {
+  const handleSyllabusClick = (pathway: any) => {
     if (pathway.syllabusLink && pathway.syllabusLink !== '#') {
       window.open(pathway.syllabusLink, '_blank', 'noopener,noreferrer');
     } else {
@@ -600,42 +591,51 @@ export default function ProgramsPage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
       <Navbar />
 
-      <main className="programs-page">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 space-y-16">
+        
         {/* ================= HERO HEADER ================= */}
-        <header className="programs-hero">
-          <div className="programs-hero-badge">
-            <span>⚡ UNISOLE SKILL AI LABS CAMPUS PROGRAM</span>
-          </div>
-          <h1 className="programs-hero-title">
-            Industry-Ready Curriculum — 4 Student Pathways
+        <header className="text-center max-w-3xl mx-auto space-y-6">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/30 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 uppercase tracking-wider">
+            ⚡ Campus Programs
+          </span>
+          
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-none text-slate-900 dark:text-white">
+            Industry-Ready Curriculum — <br />
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-500">
+              4 Student Pathways
+            </span>
           </h1>
-          <p className="programs-hero-subtitle">
+          
+          <p className="text-sm sm:text-base text-slate-650 dark:text-slate-405 leading-relaxed">
             Practical, industry-aligned AI education frameworks designed across 4 core academic streams.
           </p>
 
-          {/* Quick Group Switcher Pills */}
-          <div className="group-switcher-tabs" role="tablist">
+          {/* Quick Group Switcher Tab Bar */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-6" role="tablist">
             {GROUPS_DATA.map((g) => {
               const isActive = activeGroup === g.id;
+              const IconComp = g.icon;
               return (
                 <button
                   key={g.id}
                   role="tab"
                   aria-selected={isActive}
-                  className={`group-tab-btn ${isActive ? 'active' : ''}`}
+                  className={`flex flex-col items-center p-4 border rounded-2xl transition-all duration-300 text-center ${
+                    isActive 
+                      ? 'border-indigo-500 bg-white dark:bg-slate-900 shadow-md ring-2 ring-indigo-500/10' 
+                      : 'border-slate-200 bg-white/40 dark:border-slate-800 dark:bg-slate-900/30 hover:border-slate-300 hover:bg-white dark:hover:bg-slate-900/50'
+                  }`}
                   onClick={() => {
                     setActiveGroup(g.id);
                     setExpandedPathway(g.pathways[0].id);
                   }}
                 >
-                  <span className="group-tab-icon">{g.icon}</span>
-                  <div className="group-tab-text">
-                    <span className="group-tab-badge">{g.badge}</span>
-                    <span className="group-tab-title">{g.title}</span>
-                  </div>
+                  <IconComp className={`w-5 h-5 mb-2 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'}`} />
+                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">{g.badge}</span>
+                  <span className="text-xs font-extrabold text-slate-900 dark:text-white mt-1.5 leading-tight">{g.title.split(' & ')[0]}</span>
                 </button>
               );
             })}
@@ -643,107 +643,145 @@ export default function ProgramsPage() {
         </header>
 
         {/* ================= ACTIVE GROUP SECTION ================= */}
-        <section className="active-group-panel" id="group-content">
-          <div className="group-header-card">
-            <div className="group-header-top">
-              <span className="group-header-badge">{currentGroupData.badge}</span>
-              <span className="group-header-target">🎯 <strong>Target:</strong> {currentGroupData.target}</span>
+        <section className="space-y-6" id="group-content">
+          
+          {/* Main Info Card for selected group */}
+          <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-xl border border-indigo-900/40">
+            <div className="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 space-y-4">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="px-2.5 py-1 text-[10px] font-bold bg-white/10 backdrop-blur-md rounded-md tracking-wider border border-white/10">
+                  {currentGroupData.badge}
+                </span>
+                <span className="text-xs text-indigo-200">
+                  <strong>Target Learners:</strong> {currentGroupData.target}
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-black">{currentGroupData.title}</h2>
+              <p className="text-sm text-indigo-100 max-w-2xl leading-relaxed">{currentGroupData.tagline}</p>
             </div>
-            <h2 className="group-header-title">{currentGroupData.title}</h2>
-            <p className="group-header-tagline">{currentGroupData.tagline}</p>
           </div>
 
-          {/* Pathways Accordion / Cards for Current Group */}
-          <div className="pathways-list">
+          {/* Accordion List */}
+          <div className="space-y-4">
             {currentGroupData.pathways.map((pathway) => {
               const isOpen = expandedPathway === pathway.id;
               return (
                 <article
                   key={pathway.id}
-                  className={`pathway-card ${isOpen ? 'pathway-card--open' : ''}`}
+                  className={`bg-white dark:bg-slate-900 border rounded-2xl overflow-hidden transition-all duration-300 ${
+                    isOpen 
+                      ? 'border-indigo-200 dark:border-indigo-900/50 shadow-md' 
+                      : 'border-slate-200/80 dark:border-slate-800/80 hover:border-slate-350 dark:hover:border-slate-700'
+                  }`}
                   id={pathway.id}
                 >
                   <header
-                    className="pathway-card-header"
-                    onClick={() => setExpandedPathway(isOpen ? null : pathway.id)}
+                    className="p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
+                    onClick={() => setExpandedPathway(isOpen ? '' : pathway.id)}
                     tabIndex={0}
                     role="button"
                     aria-expanded={isOpen}
                   >
-                    <div className="pathway-header-meta">
-                      <span className="pathway-eyebrow">{pathway.eyebrow}</span>
-                      {pathway.duration && <span className="pathway-duration-pill">⏱️ {pathway.duration}</span>}
-                      {pathway.level && <span className="pathway-level-pill">📊 {pathway.level}</span>}
-                    </div>
-
-                    <div className="pathway-title-row">
-                      <h3 className="pathway-title">{pathway.title}</h3>
-                      <div className={`pathway-chevron ${isOpen ? 'open' : ''}`}>
-                        {chevronDownSvg}
+                    <div className="space-y-2 flex-grow">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{pathway.eyebrow}</span>
+                        {pathway.duration && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+                            <Clock className="w-3 h-3 text-slate-400" />
+                            {pathway.duration}
+                          </span>
+                        )}
+                        {pathway.level && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+                            <TrendingUp className="w-3 h-3 text-slate-400" />
+                            {pathway.level}
+                          </span>
+                        )}
                       </div>
+                      <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">{pathway.title}</h3>
+                      <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-4xl">{pathway.description}</p>
                     </div>
-
-                    <p className="pathway-description">{pathway.description}</p>
+                    
+                    <div className={`p-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-transform duration-300 self-start md:self-auto ${isOpen ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white' : ''}`}>
+                      <ChevronDown className="w-4 h-4" />
+                    </div>
                   </header>
 
                   {isOpen && (
-                    <div className="pathway-details-body">
-                      {/* Modules Grid */}
-                      <h4 className="section-subheading">📚 Core Curriculum Modules</h4>
-                      <div className="modules-grid">
-                        {pathway.modules.map((mod) => (
-                          <div key={mod.num} className="module-item-card">
-                            <div className="module-item-header">
-                              <span className="module-item-num">{mod.num}</span>
-                              <h5 className="module-item-title">{mod.title}</h5>
-                            </div>
-                            <ul className="module-topics-list">
-                              {mod.topics.map((t, idx) => (
-                                <li key={idx}>
-                                  {checkSvg}
-                                  <span>{t}</span>
-                                </li>
-                              ))}
-                            </ul>
-                            {mod.practical && (
-                              <div className="module-practical-box">
-                                <span className="practical-label">💡 Hands-on:</span>
-                                <span className="practical-text">{mod.practical}</span>
+                    <div className="px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 space-y-6">
+                      
+                      {/* Curriculum Modules grid */}
+                      <div className="space-y-4">
+                        <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                          <BookOpen className="w-4 h-4 text-indigo-500" />
+                          Core Curriculum Modules
+                        </h4>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                          {pathway.modules.map((mod) => (
+                            <div key={mod.num} className="border border-slate-200/60 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/20 rounded-xl p-5 space-y-3">
+                              <div className="flex items-center gap-3">
+                                <span className="text-xs font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-950/50 dark:text-indigo-400 w-6 h-6 rounded-lg flex items-center justify-center border border-indigo-100/50 dark:border-indigo-900/30">
+                                  {mod.num}
+                                </span>
+                                <h5 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{mod.title}</h5>
                               </div>
-                            )}
-                            {mod.pipeline && (
-                              <div className="module-pipeline-box">
-                                <span className="pipeline-label">⚡ Pipeline:</span>
-                                <div className="pipeline-steps">
-                                  {mod.pipeline.map((step, sIdx) => (
-                                    <span key={sIdx} className="pipeline-step-badge">
-                                      {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
-                                    </span>
-                                  ))}
+                              
+                              <ul className="space-y-1.5 text-xs text-slate-650 dark:text-slate-400 pl-1">
+                                {mod.topics.map((t, idx) => (
+                                  <li key={idx} className="flex items-start gap-2">
+                                    <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
+                                    <span>{t}</span>
+                                  </li>
+                                ))}
+                              </ul>
+
+                              {mod.practical && (
+                                <div className="mt-3 pt-2.5 border-t border-slate-150 dark:border-slate-800/60 text-xs">
+                                  <span className="font-bold text-slate-700 dark:text-slate-350 block">Hands-on Lab:</span>
+                                  <span className="text-slate-500 dark:text-slate-400 mt-0.5 block italic">{mod.practical}</span>
                                 </div>
-                              </div>
-                            )}
-                          </div>
-                        ))}
+                              )}
+
+                              {mod.pipeline && (
+                                <div className="mt-3 pt-2.5 border-t border-slate-150 dark:border-slate-800/60 text-xs">
+                                  <span className="font-bold text-slate-700 dark:text-slate-350 block">Pipeline Blueprint:</span>
+                                  <div className="flex flex-wrap items-center gap-1 mt-1">
+                                    {mod.pipeline.map((step, sIdx) => (
+                                      <span key={sIdx} className="px-1.5 py-0.5 text-[9px] font-semibold bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded border border-slate-300/20">
+                                        {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
                       </div>
 
-                      {/* Capstone Box */}
+                      {/* Capstone System */}
                       {pathway.capstone && (
-                        <div className="capstone-highlight-card">
-                          <div className="capstone-header">
-                            <span className="capstone-badge">🏆 CAPSTONE PROJECT</span>
-                            <h4 className="capstone-title">{pathway.capstone.title}</h4>
+                        <div className="border border-indigo-100 dark:border-indigo-900/40 bg-indigo-50/20 dark:bg-indigo-950/10 rounded-2xl p-6 space-y-4">
+                          <div className="flex items-center justify-between border-b border-indigo-100/50 dark:border-indigo-900/20 pb-3">
+                            <span className="px-2 py-0.5 text-[9px] font-bold bg-indigo-600 text-white rounded uppercase tracking-wider">
+                              Capstone Project
+                            </span>
+                            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">{pathway.capstone.title}</h4>
                           </div>
 
                           {pathway.capstone.flow && (
-                            <div className="capstone-flow-container">
-                              <span className="flow-title">Architecture:</span>
-                              <div className="capstone-flow-steps">
+                            <div className="space-y-2">
+                              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">System Flow:</span>
+                              <div className="flex flex-wrap items-center gap-2">
                                 {pathway.capstone.flow.map((st, i) => (
-                                  <div key={st} className="flow-chip">
-                                    <span className="flow-chip-num">{i + 1}</span>
-                                    <span className="flow-chip-label">{st}</span>
-                                    {i < pathway.capstone.flow.length - 1 && <span className="flow-chip-arrow">→</span>}
+                                  <div key={st} className="flex items-center gap-2 text-xs">
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold text-[10px]">
+                                      {i + 1}
+                                    </span>
+                                    <span className="font-semibold text-slate-700 dark:text-slate-300">{st}</span>
+                                    {i < pathway.capstone.flow.length - 1 && <span className="text-slate-400 dark:text-slate-600">&rarr;</span>}
                                   </div>
                                 ))}
                               </div>
@@ -751,12 +789,12 @@ export default function ProgramsPage() {
                           )}
 
                           {pathway.capstone.outputs && (
-                            <div className="capstone-outputs-box">
-                              <span className="outputs-label">Deliverables:</span>
-                              <div className="outputs-grid">
+                            <div className="space-y-2 pt-2">
+                              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Project Deliverables:</span>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                 {pathway.capstone.outputs.map((out, oIdx) => (
-                                  <div key={oIdx} className="output-item">
-                                    {checkSvg}
+                                  <div key={oIdx} className="flex items-center gap-2 text-xs text-slate-650 dark:text-slate-350">
+                                    <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
                                     <span>{out}</span>
                                   </div>
                                 ))}
@@ -766,79 +804,98 @@ export default function ProgramsPage() {
                         </div>
                       )}
 
-                      {/* CTA inside pathway */}
-                      <div className="pathway-actions-row">
+                      {/* Action buttons inside Pathway */}
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800/40 flex flex-wrap items-center gap-3">
                         <button
                           type="button"
-                          className="btn-enroll-primary"
+                          className="inline-flex items-center justify-center font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-750 text-white shadow-md shadow-indigo-500/10 transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[40px]"
                           onClick={() => handleEnrollClick(pathway)}
                         >
-                          <span>Enroll</span>
-                          {arrowSvg}
+                          Enroll Pathway
+                          <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                         <button
                           type="button"
-                          className="btn-enroll-secondary"
+                          className="inline-flex items-center justify-center font-bold px-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 bg-white dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[40px]"
                           onClick={() => handleSyllabusClick(pathway)}
                         >
-                          {syllabusSvg}
-                          <span>{pathway.syllabusLink ? 'View Syllabus' : 'Request Syllabus'}</span>
+                          <Download className="w-3.5 h-3.5" />
+                          {pathway.syllabusLink ? 'Download Syllabus' : 'Request Syllabus'}
                         </button>
                       </div>
+
                     </div>
                   )}
                 </article>
               );
             })}
           </div>
+
         </section>
 
         {/* ================= PROGRAM HIGHLIGHTS ================= */}
-        <section className="common-layer-section">
-          <div className="section-header-center">
-            <span className="section-badge">WHAT WE DELIVER</span>
-            <h2 className="section-title">Why Unisole Programs</h2>
-            <p className="section-subtitle">
+        <section className="border-t border-slate-200/60 dark:border-slate-800/80 pt-16 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">What We Deliver</span>
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Why Unisole Programs</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               Every pathway is designed to turn classroom theory into verifiable, industry-ready capability.
             </p>
           </div>
 
-          <div className="common-layer-grid">
-            {PROGRAM_HIGHLIGHTS.map((item) => (
-              <div key={item.title} className="common-layer-card">
-                <div className="common-layer-top">
-                  <span className="layer-icon">{item.icon}</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {PROGRAM_HIGHLIGHTS.map((item) => {
+              const IconComp = item.icon;
+              return (
+                <div key={item.title} className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-6 space-y-4 hover:shadow-md transition-shadow">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100/50 dark:border-indigo-900/30">
+                    <IconComp className="w-5 h-5" />
+                  </div>
+                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                  <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
-                <h3 className="layer-card-title">{item.title}</h3>
-                <p className="layer-card-desc">{item.desc}</p>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
 
         {/* ================= THE STUDENT JOURNEY ================= */}
-        <section className="journey-section">
-          <div className="section-header-center">
-            <span className="section-badge">LIFECYCLE</span>
-            <h2 className="section-title">The Student Journey</h2>
-            <p className="section-subtitle">
+        <section className="border-t border-slate-200/60 dark:border-slate-800/80 pt-16 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Lifecycle</span>
+            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">The Student Journey</h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400">
               A structured progression from foundational concepts to an employer-ready portfolio.
             </p>
           </div>
 
-          <div className="journey-steps-grid">
-            {JOURNEY_STEPS.map((s) => (
-              <div key={s.num} className="journey-step-box">
-                <span className="step-num">{s.num}</span>
-                <h4>{s.title}</h4>
-                <p>{s.desc}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-6">
+            {JOURNEY_STEPS.map((s, idx) => (
+              <div key={s.num} className="relative border border-slate-200/60 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/20 rounded-2xl p-6 space-y-4">
+                <span className="text-2xl font-black text-indigo-100 dark:text-slate-800 block">
+                  {s.num}
+                </span>
+                <h4 className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
+                  {s.title}
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {s.desc}
+                </p>
+                
+                {/* Visual arrow connector on larger screens */}
+                {idx < 4 && (
+                  <div className="hidden sm:block absolute top-1/2 -right-3.5 -translate-y-1/2 z-10 text-slate-300 dark:text-slate-800 font-bold text-lg select-none">
+                    &rarr;
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </section>
+
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }
