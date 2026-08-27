@@ -1,11 +1,14 @@
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useState, useRef, useEffect } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import './Home.css';
 import './About.css';
 import { offerCards } from '../data/offerContent';
 import { getOptimizedImageUrl } from '../utils/image';
+
+const withDelay = (delay: string | number): React.CSSProperties =>
+  ({ '--delay': typeof delay === 'number' ? `${delay}s` : delay } as React.CSSProperties);
 
 const expertiseTags = [
   '01 · Academic Pathways',
@@ -21,10 +24,10 @@ const expertiseTags = [
 function OfferCarousel() {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalCard, setModalCard] = useState(null);
+  const [modalCard, setModalCard] = useState<any>(null);
   const [cardWidth, setCardWidth] = useState(360);
   const [gap, setGap] = useState(20);
-  const viewportRef = useRef(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchDeltaX = useRef(0);
   const len = offerCards.length;
@@ -78,12 +81,12 @@ function OfferCarousel() {
     setActiveIndex((prev) => (prev - 1 + len) % len);
   };
 
-  const handleTouchStart = (e) => {
+  const handleTouchStart = (e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchDeltaX.current = 0;
   };
 
-  const handleTouchMove = (e) => {
+  const handleTouchMove = (e: React.TouchEvent) => {
     touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
   };
 
@@ -95,7 +98,7 @@ function OfferCarousel() {
     }
   };
 
-  const openModal = (card) => {
+  const openModal = (card: any) => {
     setModalCard(card);
     setIsModalOpen(true);
   };
@@ -111,14 +114,14 @@ function OfferCarousel() {
     <div className="offer-carousel-wrapper">
       <div className="offer-header-row">
         <div className="offer-header-left">
-          <span className="about-eyebrow reveal-up" style={{ '--delay': '0.05s' }}>Domains & Capabilities</span>
-          <h2 className="offer-title reveal-up" style={{ '--delay': '0.1s' }}>Our Expertise</h2>
-          <p className="offer-subtitle reveal-up" style={{ '--delay': '0.15s' }}>
+          <span className="about-eyebrow reveal-up" style={withDelay('0.05s')}>Domains & Capabilities</span>
+          <h2 className="offer-title reveal-up" style={withDelay('0.1s')}>Our Expertise</h2>
+          <p className="offer-subtitle reveal-up" style={withDelay('0.15s')}>
             divyank ssss, unconventional knowledge through industry-aligned AI programs and tech.
           </p>
         </div>
 
-        <div className="offer-controls reveal-up" style={{ '--delay': '0.2s' }}>
+        <div className="offer-controls reveal-up" style={withDelay('0.2s')}>
           <div className="offer-counter">
             <span className="offer-counter-current">{String(activeIndex + 1).padStart(2, '0')}</span>
             <span className="offer-counter-sep">/</span>
@@ -149,7 +152,7 @@ function OfferCarousel() {
 
       <div
         className="offer-carousel-viewport reveal-up"
-        style={{ '--delay': '0.25s' }}
+        style={withDelay('0.25s')}
         ref={viewportRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
@@ -280,9 +283,9 @@ function TeamSection() {
     <section className="about-team">
       <div className="about-team-container">
         <div className="about-team-header">
-          <span className="about-eyebrow reveal-up" style={{ '--delay': '0.05s' }}>The People</span>
-          <h2 className="about-team-title reveal-up" style={{ '--delay': '0.1s' }}>Meet the Team</h2>
-          <p className="about-team-subtitle reveal-up" style={{ '--delay': '0.15s' }}>
+          <span className="about-eyebrow reveal-up" style={withDelay('0.05s')}>The People</span>
+          <h2 className="about-team-title reveal-up" style={withDelay('0.1s')}>Meet the Team</h2>
+          <p className="about-team-subtitle reveal-up" style={withDelay('0.15s')}>
             A small team building AI education infrastructure for students across Himachal Pradesh and beyond.
           </p>
         </div>
@@ -291,7 +294,7 @@ function TeamSection() {
           {teamMembers.map((member, i) => (
             <div
               className="about-team-card reveal-up"
-              style={{ '--delay': `${0.03 + (i % 6) * 0.03}s` }}
+              style={withDelay(`${0.03 + (i % 6) * 0.03}s`)}
               key={member.name}
             >
               <div className="about-team-img-wrap">
@@ -329,19 +332,19 @@ export default function Home() {
       <section className="hero">
         <div className="hero-inner">
           <div className="hero-left">
-            <h1 className="hero-title reveal-up" style={{ '--delay': '0.05s' }}>
+            <h1 className="hero-title reveal-up" style={withDelay('0.05s')}>
               Welcome to <span className="hero-highlight">Unisole Skill AI Labs</span>
             </h1>
 
-            <span className="hero-eyebrow reveal-up" style={{ '--delay': '0.12s' }}>
+            <span className="hero-eyebrow reveal-up" style={withDelay('0.12s')}>
               Building India's Next Generation of AI Innovators
             </span>
 
-            <p className="hero-subtitle reveal-up" style={{ '--delay': '0.18s' }}>
+            <p className="hero-subtitle reveal-up" style={withDelay('0.18s')}>
               Empowering Schools, Universities, Teachers, and Organizations with world-class Artificial Intelligence education, research, and real-world AI solutions.
             </p>
 
-            <div className="hero-actions reveal-up" style={{ '--delay': '0.26s' }}>
+            <div className="hero-actions reveal-up" style={withDelay('0.26s')}>
               <Link to="/programs" className="btn-hero-primary">
                 Explore Programs
                 <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -351,7 +354,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="hero-right reveal-up" style={{ '--delay': '0.15s' }}>
+          <div className="hero-right reveal-up" style={withDelay('0.15s')}>
             <div className="hero-visual">
               <img
                 src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 600 })}
@@ -372,7 +375,7 @@ export default function Home() {
       <section className="about-stats">
         <div className="about-stats-grid">
           {[{ value: '4', label: 'Academic Pathways' }, { value: '5000+', label: 'Active Students' }, { value: '25+', label: 'Partner Institutions' }, { value: '2+', label: 'Years Building' }].map((s, i) => (
-            <div className="about-stat-card reveal-up" style={{ '--delay': `${0.05 + i * 0.05}s` }} key={s.label}>
+            <div className="about-stat-card reveal-up" style={withDelay(`${0.05 + i * 0.05}s`)} key={s.label}>
               <span className="about-stat-value">{s.value}</span>
               <span className="about-stat-label">{s.label}</span>
             </div>
@@ -415,88 +418,84 @@ export default function Home() {
 
 
       <section className="testimonials">
-        <h2 className="testimonials-title reveal-up" style={{ '--delay': '0.05s' }}>
-                Join others transforming their lives through learning
-            </h2>
+        <h2 className="testimonials-title reveal-up" style={withDelay('0.05s')}>
+          Join others transforming their lives through learning
+        </h2>
 
-            <div className="testimonials-scroll">
-                <div className="testimonial-card reveal-up" style={{ '--delay': '0.1s' }}>
-                <span className="testimonial-quote">{'\u201C'}</span>
-                <p className="testimonial-text">
-                    {'\u201C'}Unisole Empower is a promising platform for anyone interested in AI, Data Science, and Analytics. The mix of live and recorded lectures gives flexibility, and having mentors plus a peer community makes learning much more engaging. The progress tracking is also a helpful touch.{'\u201D'} {'\u2014'} Student
-                </p>
-                <div className="testimonial-author">
-                    <span className="testimonial-avatar">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-                        </svg>
-                    </span>
-                    <div>
-                    <span className="testimonial-name">Mehul Atri</span>
-                    {/* <span className="testimonial-role">Student</span> */}
-                    </div>
-                </div>
-                </div>
-
-                <div className="testimonial-card reveal-up" style={{ '--delay': '0.15s' }}>
-                <span className="testimonial-quote">{'\u201C'}</span>
-                <p className="testimonial-text">
-                    {'\u201C'}unisole is the best platform where you get mentors who not just taught you but how to approach companies for a job or how to get internships ....so helpful.{'\u201D'} {'\u2014'} Student
-                </p>
-                <div className="testimonial-author">
-                    <span className="testimonial-avatar">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-                        </svg>
-                    </span>
-                    <div>
-                    <span className="testimonial-name">Ravi Kumar Saini</span>
-                    {/* <span className="testimonial-role">School Coordinator</span> */}
-                    </div>
-                </div>
-                </div>
-
-                <div className="testimonial-card reveal-up" style={{ '--delay': '0.2s' }}>
-                <span className="testimonial-quote">{'\u201C'}</span>
-                <p className="testimonial-text">
-                    {'\u201C'}Great platform for learning AI!.{'\u201D'} {'\u2014'} Student
-                </p>
-                <div className="testimonial-author">
-                    <span className="testimonial-avatar">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-                        </svg>
-                    </span>
-                    <div>
-                    <span className="testimonial-name">Piyush Sharma</span>
-                    {/* <span className="testimonial-role">Student</span> */}
-                    </div>
-                </div>
-                </div>
-
-                <div className="testimonial-card reveal-up" style={{ '--delay': '0.25s' }}>
-                <span className="testimonial-quote">{'\u201C'}</span>
-                <p className="testimonial-text">
-                    {'\u201C'}A valuable collaboration that brought meaningful AI exposure to our school.{'\u201D'} {'\u2014'} School Teacher
-                </p>
-                <div className="testimonial-author">
-                    <span className="testimonial-avatar">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="8" r="4" />
-                        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-                        </svg>
-                    </span>
-                    <div>
-                    <span className="testimonial-name">Anita Sharma</span>
-                    {/* <span className="testimonial-role">School Teacher</span> */}
-                    </div>
-                </div>
-                </div>
+        <div className="testimonials-scroll">
+          <div className="testimonial-card reveal-up" style={withDelay('0.1s')}>
+            <span className="testimonial-quote">{'\u201C'}</span>
+            <p className="testimonial-text">
+              {'\u201C'}Unisole Empower is a promising platform for anyone interested in AI, Data Science, and Analytics. The mix of live and recorded lectures gives flexibility, and having mentors plus a peer community makes learning much more engaging. The progress tracking is also a helpful touch.{'\u201D'} {'\u2014'} Student
+            </p>
+            <div className="testimonial-author">
+              <span className="testimonial-avatar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+              </span>
+              <div>
+                <span className="testimonial-name">Mehul Atri</span>
+              </div>
             </div>
-            </section>
+          </div>
+
+          <div className="testimonial-card reveal-up" style={withDelay('0.15s')}>
+            <span className="testimonial-quote">{'\u201C'}</span>
+            <p className="testimonial-text">
+              {'\u201C'}unisole is the best platform where you get mentors who not just taught you but how to approach companies for a job or how to get internships ....so helpful.{'\u201D'} {'\u2014'} Student
+            </p>
+            <div className="testimonial-author">
+              <span className="testimonial-avatar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+              </span>
+              <div>
+                <span className="testimonial-name">Ravi Kumar Saini</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="testimonial-card reveal-up" style={withDelay('0.2s')}>
+            <span className="testimonial-quote">{'\u201C'}</span>
+            <p className="testimonial-text">
+              {'\u201C'}Great platform for learning AI!.{'\u201D'} {'\u2014'} Student
+            </p>
+            <div className="testimonial-author">
+              <span className="testimonial-avatar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+              </span>
+              <div>
+                <span className="testimonial-name">Piyush Sharma</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="testimonial-card reveal-up" style={withDelay('0.25s')}>
+            <span className="testimonial-quote">{'\u201C'}</span>
+            <p className="testimonial-text">
+              {'\u201C'}A valuable collaboration that brought meaningful AI exposure to our school.{'\u201D'} {'\u2014'} School Teacher
+            </p>
+            <div className="testimonial-author">
+              <span className="testimonial-avatar">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4" />
+                  <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+                </svg>
+              </span>
+              <div>
+                <span className="testimonial-name">Deepak Katoch</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       <Footer />
     </>

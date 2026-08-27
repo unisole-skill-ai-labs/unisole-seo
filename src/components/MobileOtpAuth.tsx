@@ -1,12 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { setAuthSession } from '../utils/auth';
-import { API_BASE_URL as API_BASE } from '../config/api';
+import { useDispatch } from 'react-redux';
+import { setCredentials } from '../store/authSlice';
+import { useSendOtpMutation, useVerifyOtpMutation } from '../store/apiSlice';
 
-export default function MobileOtpAuth({ onSuccess, onError }) {
+export interface MobileOtpAuthProps {
+  onSuccess?: (data: any) => void;
+  onError?: (err: any) => void;
+}
+
+export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps = {}) {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
   const from = new URLSearchParams(location.search).get('redirect') || '/';
+  const [sendOtp] = useSendOtpMutation();
+  const [verifyOtp] = useVerifyOtpMutation();
 
   const [step, setStep] = useState(1); // 1: Phone + Name, 2: OTP
   const [name, setName] = useState('');
@@ -58,16 +67,10 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/send-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: cleanPhone,
-          name: name.trim() || undefined,
-        }),
-      });
-
-      const data = await res.json();
+      const data = await sendOtp({
+        phone: cleanPhone,
+        name: name.trim() || undefined,
+      }).unwrap();
       const code = data.dummyOtp || '0000';
       setSuccessMsg(`OTP sent to +91 ${cleanPhone}!`);
       setStep(2);
@@ -109,25 +112,17 @@ export default function MobileOtpAuth({ onSuccess, onError }) {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/auth/verify-otp`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          phone: cleanPhone,
-          otp: otp.trim(),
-          name: name.trim() || undefined,
-        }),
-      });
+      const data = await verifyOtp({
+        phone: cleanPhone,
+        otp: otp.trim(),
+        name: name.trim() || undefined,
+      }).unwrap();
 
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.detail || data.error || data.message || 'Verification failed');
-      }
-
-      setAuthSession({
+      dispatch(setCredentials({
         token: data.token || data.accessToken,
         user: data.user,
-      });
+      }));
+      window.dispatchEvent(new Event('authChange'));
 
       if (onSuccess) {
         onSuccess(data);

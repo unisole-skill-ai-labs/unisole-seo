@@ -10,7 +10,14 @@
  * @param {string} [options.crop='limit'] - Crop/scaling mode
  * @returns {string} Optimized image URL
  */
-export function getOptimizedImageUrl(url, options = {}) {
+export interface ImageOptimizationOptions {
+  width?: number;
+  quality?: string;
+  format?: string;
+  crop?: string;
+}
+
+export function getOptimizedImageUrl(url: string, options: ImageOptimizationOptions = {}) {
   if (!url || typeof url !== 'string') return url;
 
   // Cloudinary image transformation insertion

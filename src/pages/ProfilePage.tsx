@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { getUserName, getUserEmail, getUserPhone, getToken, logout, isAuthenticated, setAuthSession } from '../utils/auth';
-import { API_BASE_URL as API_BASE } from '../config/api';
+import { logout, isAuthenticated } from '../utils/auth';
+import { useGetMeQuery, useGetOrdersQuery } from '../store/apiSlice';
 import './ProfilePage.css';
 
 function formatDate(iso) {
@@ -14,11 +15,14 @@ function formatDate(iso) {
 export default function ProfilePage() {
   const navigate = useNavigate();
   const isAuth = isAuthenticated();
-  const [userName, setUserName] = useState(getUserName());
-  const [userEmail, setUserEmail] = useState(getUserEmail());
-  const [userPhone, setUserPhone] = useState(getUserPhone());
-  const [orders, setOrders] = useState([]);
+  const storedUser = useSelector((s: any) => s.auth.user);
+  const [userName, setUserName] = useState(storedUser?.name || 'User');
+  const [userEmail, setUserEmail] = useState(storedUser?.email || '');
+  const [userPhone, setUserPhone] = useState(storedUser?.phone || '');
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { data: meData } = useGetMeQuery(undefined, { skip: !isAuth });
+  const { data: ordersData } = useGetOrdersQuery(undefined, { skip: !isAuth });
 
   // Authentication Protection
   useEffect(() => {
@@ -28,47 +32,20 @@ export default function ProfilePage() {
   }, [navigate]);
 
   useEffect(() => {
-    async function fetchUserData() {
-      const token = getToken();
-      if (!token) {
-        setLoading(false);
-        return;
-      }
+    if (meData) {
+      setUserName(meData.name || (meData.phone ? `+91 ${meData.phone}` : 'Active Member'));
+      setUserEmail(meData.email || '');
+      setUserPhone(meData.phone || '');
+    }
 
-      try {
-        // Fetch current user details
-        const meRes = await fetch(`${API_BASE}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (meRes.ok) {
-          const userData = await meRes.json();
-          if (userData) {
-            setAuthSession({ token, user: userData });
-            setUserName(userData.name || (userData.phone ? `+91 ${userData.phone}` : 'Active Member'));
-            setUserEmail(userData.email || '');
-            setUserPhone(userData.phone || '');
-          }
-        }
-
-        // Fetch user orders
-        const ordersRes = await fetch(`${API_BASE}/api/orders`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (ordersRes.ok) {
-          const ordersData = await ordersRes.json();
-          setOrders(Array.isArray(ordersData) ? ordersData : ordersData.orders || []);
-        }
-      } catch {
-        // graceful fallback
-      } finally {
-        setLoading(false);
-      }
+    if (ordersData) {
+      setOrders(Array.isArray(ordersData) ? ordersData : ordersData.orders || []);
     }
 
     if (isAuth) {
-      fetchUserData();
+      setLoading(false);
     }
-  }, [isAuth]);
+  }, [isAuth, meData, ordersData]);
 
   if (!isAuth) {
     return null;

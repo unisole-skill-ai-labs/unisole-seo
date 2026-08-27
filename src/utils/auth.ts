@@ -1,5 +1,8 @@
+const TOKEN_KEY = 'unisole-seo:token';
+const USER_KEY = 'unisole-seo:user';
+
 export function getToken() {
-  return localStorage.getItem('token');
+  return localStorage.getItem(TOKEN_KEY) || localStorage.getItem('token');
 }
 
 export function isAuthenticated() {
@@ -8,7 +11,7 @@ export function isAuthenticated() {
 
 export function getUser() {
   try {
-    const raw = localStorage.getItem('user');
+    const raw = localStorage.getItem(USER_KEY) || localStorage.getItem('user');
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -36,9 +39,14 @@ export function getUserName() {
 }
 
 export function setAuthSession({ token, user }) {
-  if (token) localStorage.setItem('token', token);
+  if (token) {
+    localStorage.setItem(TOKEN_KEY, token);
+    localStorage.setItem('token', token);
+  }
   if (user) {
-    localStorage.setItem('user', JSON.stringify(user));
+    const serialized = JSON.stringify(user);
+    localStorage.setItem(USER_KEY, serialized);
+    localStorage.setItem('user', serialized);
     if (user.name) localStorage.setItem('userName', user.name);
     if (user.email) localStorage.setItem('userEmail', user.email);
     if (user.phone) localStorage.setItem('userPhone', user.phone);
@@ -47,6 +55,8 @@ export function setAuthSession({ token, user }) {
 }
 
 export function logout() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(USER_KEY);
   localStorage.removeItem('token');
   localStorage.removeItem('user');
   localStorage.removeItem('userName');
@@ -54,3 +64,4 @@ export function logout() {
   localStorage.removeItem('userPhone');
   window.dispatchEvent(new Event('authChange'));
 }
+

@@ -1,6 +1,12 @@
 import { API_BASE_URL as API_BASE } from '../config/api';
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID;
 
+declare global {
+  interface Window {
+    Razorpay?: any;
+  }
+}
+
 function loadRazorpayScript() {
   return new Promise((resolve) => {
     if (window.Razorpay) return resolve(true);
@@ -22,7 +28,16 @@ function loadRazorpayScript() {
  * @param {Function} params.onError - called with an error message
  * @param {Function} params.onDismiss - called if modal closed without paying
  */
-export async function buyCourses({ courses, token, user, onSuccess, onError, onDismiss }) {
+export interface BuyCoursesParams {
+  courses: any[];
+  token?: string;
+  user?: any;
+  onSuccess?: (data?: any) => void;
+  onError?: (err?: any) => void;
+  onDismiss?: () => void;
+}
+
+export async function buyCourses({ courses, token, user, onSuccess, onError, onDismiss }: BuyCoursesParams) {
   try {
     const scriptLoaded = await loadRazorpayScript();
     if (!scriptLoaded) {
@@ -86,8 +101,8 @@ export async function buyCourses({ courses, token, user, onSuccess, onError, onD
             throw new Error(verifyData.message || 'Payment verification failed');
           }
           onSuccess?.();
-        } catch (err) {
-          onError?.(err.message || 'Payment verification failed. Contact support if money was deducted.');
+        } catch (err: any) {
+          onError?.((err as any)?.message || 'Payment verification failed. Contact support if money was deducted.');
         }
       },
       modal: {
@@ -100,7 +115,7 @@ export async function buyCourses({ courses, token, user, onSuccess, onError, onD
 
     const rzp = new window.Razorpay(options);
     rzp.open();
-  } catch (err) {
-    onError?.(err.message || 'Something went wrong');
+  } catch (err: any) {
+    onError?.((err as any)?.message || 'Failed to initialize payment gateway.');
   }
 }
