@@ -16,11 +16,18 @@ export default function AuthModal() {
   } = useAuthModal();
   const navigate = useNavigate();
 
+  const handleClose = () => {
+    closeAuthModal();
+    if (window.location.pathname === '/login' || window.location.pathname === '/register') {
+      navigate('/', { replace: true });
+    }
+  };
+
   // Escape key listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
-        closeAuthModal();
+        handleClose();
       }
     };
     if (isOpen) {
@@ -31,14 +38,16 @@ export default function AuthModal() {
       document.body.style.overflow = 'unset';
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, closeAuthModal]);
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   const handleAuthSuccess = () => {
     closeAuthModal();
-    if (redirectUrl) {
-      navigate(redirectUrl);
+    if (redirectUrl && redirectUrl !== '/login' && redirectUrl !== '/register') {
+      navigate(redirectUrl, { replace: true });
+    } else if (window.location.pathname === '/login' || window.location.pathname === '/register') {
+      navigate('/', { replace: true });
     }
   };
 
@@ -55,7 +64,7 @@ export default function AuthModal() {
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-zinc-950/60 backdrop-blur-xs animate-in fade-in duration-150"
-      onClick={(e) => e.target === e.currentTarget && closeAuthModal()}
+      onClick={(e) => e.target === e.currentTarget && handleClose()}
       role="dialog"
       aria-modal="true"
       aria-labelledby="auth-modal-title"
@@ -73,7 +82,7 @@ export default function AuthModal() {
           </div>
 
           <button
-            onClick={closeAuthModal}
+            onClick={handleClose}
             className="p-1.5 text-zinc-400 hover:text-zinc-700 dark:hover:text-white rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
