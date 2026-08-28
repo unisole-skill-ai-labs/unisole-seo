@@ -22,6 +22,7 @@ import {
   Check,
 } from "lucide-react";
 import { API_BASE_URL } from "../../config/api";
+import { isAuthenticated, getUser, getUserName, getUserPhone } from "../../utils/auth";
 
 export default function LiveAudiencePage() {
   const { sessionCode } = useParams<{ sessionCode: string }>();
@@ -70,9 +71,16 @@ export default function LiveAudiencePage() {
   const socketRef = useRef<Socket | null>(null);
   const timerIntervalRef = useRef<any>(null);
 
-  // Fetch session details on mount
+  // Fetch session details on mount & auto-join logged in user
   useEffect(() => {
     if (!code) return;
+
+    // If not authenticated, redirect to SEO login with return path to this live session
+    if (!isAuthenticated()) {
+      navigate(`/login?redirect=/live/${code}`, { replace: true });
+      return;
+    }
+
     setIsLoadingSession(true);
     setSessionError(null);
 
@@ -81,7 +89,7 @@ export default function LiveAudiencePage() {
         if (!res.ok) throw new Error("Presentation session not found");
         return res.json();
       })
-      .then((data) => {
+      .then(async (data) => {
         if (data.data) {
           setSession(data.data.session);
           setPresentation(data.data.presentation);
@@ -93,8 +101,41 @@ export default function LiveAudiencePage() {
             try {
               const parsed = JSON.parse(savedLead);
               setLead(parsed);
+              return;
             } catch (e) {
               console.error(e);
+            }
+          }
+
+          // Automatically register lead using authenticated user credentials
+          const currentUser = getUser();
+          const studentName = getUserName() || currentUser?.name || "Student";
+          const studentPhone = getUserPhone() || currentUser?.phone || "";
+
+          if (studentPhone) {
+            try {
+              const joinRes = await fetch(
+                `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    name: studentName,
+                    phone: studentPhone,
+                    userId: currentUser?.id,
+                  }),
+                }
+              );
+              const joinData = await joinRes.json();
+              if (joinData.data?.lead) {
+                setLead(joinData.data.lead);
+                localStorage.setItem(
+                  `unisole_lead_${code}`,
+                  JSON.stringify(joinData.data.lead)
+                );
+              }
+            } catch (err) {
+              console.error("Auto join error:", err);
             }
           }
         }
@@ -105,7 +146,7 @@ export default function LiveAudiencePage() {
       .finally(() => {
         setIsLoadingSession(false);
       });
-  }, [code]);
+  }, [code, navigate]);
 
   // Connect Socket.io once lead is registered
   useEffect(() => {
