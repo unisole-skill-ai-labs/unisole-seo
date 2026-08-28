@@ -33,7 +33,7 @@ export function Tabs({ defaultValue, value, onValueChange, children, className =
 
 export function TabsList({ children, className = "" }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("flex items-center gap-1.5 p-1.5 bg-slate-100/90 dark:bg-slate-900/90 border border-slate-200/80 dark:border-slate-800/80 rounded-2xl overflow-x-auto no-scrollbar max-w-full", className)}>
+    <div className={cn("flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg overflow-x-auto no-scrollbar max-w-full", className)}>
       {children}
     </div>
   );
@@ -48,10 +48,10 @@ export function TabsTrigger({ value, children, className = "" }: { value: string
       type="button"
       onClick={() => changeValue(value)}
       className={cn(
-        "px-4 py-2 text-xs sm:text-sm font-bold rounded-xl whitespace-nowrap transition-all duration-200 ease-out select-none flex-shrink-0 cursor-pointer min-h-[38px]",
+        "px-3.5 py-1.5 text-xs font-semibold rounded-md whitespace-nowrap transition-all duration-150 select-none flex-shrink-0 cursor-pointer min-h-[36px]",
         isActive
-          ? "bg-white dark:bg-slate-800 text-indigo-600 dark:text-indigo-400 shadow-sm border border-slate-200/60 dark:border-slate-700/60"
-          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-200/40 dark:hover:bg-slate-800/40",
+          ? "bg-white dark:bg-zinc-800 text-zinc-900 dark:text-white shadow-xs font-bold"
+          : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/50",
         className
       )}
     >

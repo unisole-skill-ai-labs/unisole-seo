@@ -16,19 +16,19 @@ export function Card({
   ...props
 }: CardProps) {
   const variantStyles = {
-    default: "bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800/80 shadow-xs",
-    glass: "glass-card shadow-sm",
-    bordered: "bg-transparent border border-slate-200 dark:border-slate-800",
-    interactive: "bg-white dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 hover:border-indigo-500/50 hover:shadow-card-hover dark:hover:shadow-dark-card-hover hover:-translate-y-1 cursor-pointer",
+    default: "minimal-card",
+    glass: "bg-white/80 dark:bg-zinc-900/80 border border-zinc-200/80 dark:border-zinc-800/80 backdrop-blur-xs",
+    bordered: "bg-transparent border border-zinc-200 dark:border-zinc-800",
+    interactive: "minimal-card hover:border-zinc-400 dark:hover:border-zinc-600 cursor-pointer",
   };
 
   return (
     <div
       onClick={onClick}
       className={cn(
-        "rounded-2xl transition-all duration-300 ease-out overflow-hidden",
+        "rounded-xl transition-all duration-150 overflow-hidden",
         variantStyles[variant] || variantStyles.default,
-        onClick && variant !== "interactive" && "hover:border-indigo-500/40 hover:shadow-md cursor-pointer hover:-translate-y-[2px]",
+        onClick && variant !== "interactive" && "hover:border-zinc-400 dark:hover:border-zinc-600 cursor-pointer",
         className
       )}
       {...props}
@@ -40,7 +40,7 @@ export function Card({
 
 export function CardHeader({ children, className = "", ...props }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("flex items-center justify-between p-6 pb-3 border-b border-slate-100 dark:border-slate-800/40", className)} {...props}>
+    <div className={cn("flex items-center justify-between p-5 pb-2.5 border-b border-zinc-100 dark:border-zinc-800", className)} {...props}>
       {children}
     </div>
   );
@@ -48,7 +48,7 @@ export function CardHeader({ children, className = "", ...props }: { children: R
 
 export function CardTitle({ children, className = "", ...props }: { children: React.ReactNode; className?: string }) {
   return (
-    <h3 className={cn("text-base sm:text-lg font-black text-slate-900 dark:text-slate-100 tracking-tight", className)} {...props}>
+    <h3 className={cn("text-sm sm:text-base font-bold text-zinc-900 dark:text-zinc-100 tracking-tight", className)} {...props}>
       {children}
     </h3>
   );
@@ -56,7 +56,7 @@ export function CardTitle({ children, className = "", ...props }: { children: Re
 
 export function CardContent({ children, className = "", ...props }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("p-6 text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed", className)} {...props}>
+    <div className={cn("p-5 text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed", className)} {...props}>
       {children}
     </div>
   );

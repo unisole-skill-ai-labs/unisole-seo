@@ -49,37 +49,42 @@ export default function EventsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-20 space-y-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-20 space-y-10 flex-grow w-full">
         {/* Header */}
-        <header className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-800/70 uppercase tracking-wider shadow-xs">
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Campus Community & Seminars</span>
-          </span>
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight">
-            Upcoming & Past <span className="gradient-heading">Events</span>
+        <header className="max-w-2xl space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            <span>Campus Meetups & Seminars</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white">
+            Upcoming AI Seminars & <br />
+            <span className="text-zinc-500 dark:text-zinc-400">
+              Campus Showcases
+            </span>
           </h1>
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-xl mx-auto leading-relaxed">
-            Hands-on AI workshops, teacher training symposiums, and research seminars hosted across partner colleges and schools.
+
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
+            Connect with our researchers and mentors across colleges and schools for hands-on ML workshops and laboratory inaugurations.
           </p>
 
-          {/* Search bar & filter pills */}
-          <div className="pt-4 max-w-md mx-auto flex items-center bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 rounded-2xl p-1.5 shadow-xs focus-within:border-indigo-500 transition-colors">
-            <Search className="w-4 h-4 text-slate-400 ml-2.5 flex-shrink-0" />
+          {/* Search bar */}
+          <div className="pt-2 max-w-md flex items-center bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg p-1">
+            <Search className="w-3.5 h-3.5 text-zinc-400 ml-2.5 flex-shrink-0" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search by event title, topic, or college..."
-              className="bg-transparent text-xs text-slate-900 dark:text-white px-3 py-2 outline-none w-full placeholder:text-slate-400"
+              placeholder="Search events, topics, or colleges..."
+              className="bg-transparent text-xs text-zinc-900 dark:text-white px-2.5 py-1.5 outline-none w-full placeholder:text-zinc-400"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
-                className="text-[11px] text-slate-400 hover:text-slate-600 dark:hover:text-white px-2 cursor-pointer"
+                className="text-[10px] text-zinc-400 hover:text-zinc-600 dark:hover:text-white px-2 cursor-pointer"
               >
                 Clear
               </button>
@@ -90,82 +95,77 @@ export default function EventsPage() {
         {/* Content Section */}
         {loading ? (
           <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            <Loader2 className="w-6 h-6 animate-spin text-zinc-500" />
           </div>
         ) : error ? (
-          <div className="text-center py-16 border border-slate-200 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/40 p-8 max-w-md mx-auto space-y-3">
-            <p className="text-base font-bold text-slate-800 dark:text-white">Couldn't load events</p>
-            <p className="text-xs text-slate-500">{error}</p>
+          <div className="text-center py-16 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900/40 p-6 max-w-md mx-auto space-y-2">
+            <p className="text-sm font-bold text-zinc-800 dark:text-white">Couldn't load events</p>
+            <p className="text-xs text-zinc-500">{error}</p>
           </div>
         ) : filteredEvents.length === 0 ? (
-          <div className="text-center py-20 border border-slate-200/80 dark:border-slate-800 rounded-3xl bg-white dark:bg-slate-900/30 p-12 max-w-md mx-auto space-y-4">
-            <Calendar className="w-12 h-12 text-slate-400 dark:text-slate-600 mx-auto" />
-            <h3 className="text-base font-bold text-slate-900 dark:text-white">No matching events found</h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
-              {searchQuery ? `No results for "${searchQuery}".` : 'Check back soon for upcoming seminars, lab showcases, and workshops.'}
+          <div className="text-center py-16 border border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50 dark:bg-zinc-900/30 p-8 max-w-md mx-auto space-y-3">
+            <Calendar className="w-8 h-8 text-zinc-400 mx-auto" />
+            <h3 className="text-sm font-bold text-zinc-900 dark:text-white">No matching events found</h3>
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              {searchQuery ? `No results for "${searchQuery}".` : 'Check back soon for upcoming seminars and workshops.'}
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {filteredEvents.map((event) => (
               <div 
-                className="bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs hover:shadow-card-hover dark:hover:shadow-dark-card-hover hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-all duration-300 flex flex-col justify-between hover-lift group"
+                className="minimal-card overflow-hidden flex flex-col justify-between group"
                 key={event._id}
               >
                 
                 {/* Event Image Banner */}
-                <div className="relative aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800/80">
+                <div className="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950 border-b border-zinc-100 dark:border-zinc-850">
                   {event.banner ? (
                     <img
                       src={getOptimizedImageUrl(event.banner, { width: 500 })}
                       alt={event.title}
-                      className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      className="h-full w-full object-cover group-hover:scale-103 transition-transform duration-300"
                       width="360"
                       height="200"
                       loading="lazy"
                       decoding="async"
                     />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400">
-                      <Calendar className="w-10 h-10" />
+                    <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-900 text-zinc-400">
+                      <Calendar className="w-8 h-8" />
                     </div>
                   )}
 
                   {/* Left Date Ribbon */}
-                  <div className="absolute top-4 left-4 p-2 bg-slate-950/85 backdrop-blur-md text-white rounded-2xl flex flex-col items-center justify-center min-w-[54px] shadow-lg border border-white/10">
-                    <span className="text-base font-black tracking-tight leading-none text-indigo-400">{formatDay(event.date)}</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider mt-1">{formatMonth(event.date)}</span>
+                  <div className="absolute top-3 left-3 px-2 py-1 bg-zinc-950/80 backdrop-blur-xs text-white rounded-md flex flex-col items-center justify-center min-w-[48px] border border-white/10">
+                    <span className="text-sm font-bold tracking-tight leading-none text-white">{formatDay(event.date)}</span>
+                    <span className="text-[9px] font-mono uppercase tracking-wider mt-0.5 text-zinc-400">{formatMonth(event.date)}</span>
                   </div>
                 </div>
 
                 {/* Event info details */}
-                <div className="p-6 flex-grow flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
-                    <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                <div className="p-5 flex-grow flex flex-col justify-between space-y-3">
+                  <div className="space-y-1.5">
+                    <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white leading-snug group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                       {event.title}
                     </h3>
                     {event.description && (
-                      <p className="text-xs text-slate-500 dark:text-slate-400 line-clamp-3 leading-relaxed">
+                      <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
                         {event.description}
                       </p>
                     )}
                   </div>
 
                   {/* Event Meta rows */}
-                  <div className="pt-4 border-t border-slate-100 dark:border-slate-800 space-y-2.5 text-xs text-slate-600 dark:text-slate-350">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
+                  <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                    <div className="flex items-center gap-1.5">
+                      <Calendar className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
                       <span>{formatDate(event.date)}{event.time ? ` • ${event.time}` : ''}</span>
                     </div>
 
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
                       <span className="line-clamp-1">{event.location}</span>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                      <Users className="w-3.5 h-3.5 text-indigo-500 flex-shrink-0" />
-                      <span className="line-clamp-1">{event.audience}</span>
                     </div>
                   </div>
                 </div>

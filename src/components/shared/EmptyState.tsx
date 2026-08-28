@@ -21,14 +21,14 @@ export default function EmptyState({
   className = "",
 }: EmptyStateProps) {
   return (
-    <div className={cn("flex flex-col items-center justify-center p-12 text-center border border-dashed border-slate-200 rounded-2xl bg-slate-50/50", className)}>
-      <div className="p-3 bg-white shadow-xs border border-slate-100 rounded-2xl text-slate-400 mb-3.5">
-        <Icon className="w-8 h-8 text-slate-800" />
+    <div className={cn("flex flex-col items-center justify-center p-10 text-center border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl bg-zinc-50/50 dark:bg-zinc-900/30", className)}>
+      <div className="p-2.5 bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-400 mb-3">
+        <Icon className="w-6 h-6 text-zinc-700 dark:text-zinc-200" />
       </div>
-      <h4 className="text-base font-semibold text-slate-800">{title}</h4>
-      <p className="mt-1 text-sm text-slate-500 max-w-sm">{description}</p>
+      <h4 className="text-sm font-semibold text-zinc-900 dark:text-white">{title}</h4>
+      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400 max-w-sm leading-relaxed">{description}</p>
       {actionLabel && onAction && (
-        <div className="mt-4">
+        <div className="mt-3.5">
           <Button size="sm" onClick={onAction}>
             {actionLabel}
           </Button>

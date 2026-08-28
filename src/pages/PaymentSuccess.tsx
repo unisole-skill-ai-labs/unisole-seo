@@ -20,46 +20,46 @@ export default function PaymentSuccess() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950">
       <Navbar />
 
       <main className="flex-grow pt-24 sm:pt-32 pb-20 px-4 sm:px-6 flex items-center justify-center">
-        <div className="max-w-xl w-full bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 sm:p-10 shadow-xl text-center space-y-6">
+        <div className="max-w-md w-full minimal-card p-6 sm:p-8 text-center space-y-5">
           
           {/* Success Check Icon */}
-          <div className="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 flex items-center justify-center mx-auto shadow-md">
-            <CheckCircle2 className="w-8 h-8" />
+          <div className="w-12 h-12 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-6 h-6" />
           </div>
 
-          <div className="space-y-2">
-            <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 uppercase tracking-wider">
-              Payment Received
+          <div className="space-y-1.5">
+            <span className="mono-tag text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/5">
+              Payment Confirmed
             </span>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight mt-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white tracking-tight mt-2">
               Thank You{userName && userName !== 'Learner' ? `, ${userName}` : ''}!
             </h1>
-            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
-              Your transaction has been confirmed on the Unisole payment gateway.
+            <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              Your enrollment transaction has been verified on the Unisole payment gateway.
             </p>
           </div>
 
           {/* 24-Hour Notice Card */}
-          <div className="p-4 rounded-2xl bg-indigo-50/60 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 text-xs text-slate-700 dark:text-indigo-200 flex items-start gap-3 text-left">
-            <Clock className="w-4 h-4 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
-            <p className="leading-relaxed">
-              Your purchased program modules and lab repository access will get reflected in your <strong>enrolled profile section within 24 hours</strong>.
+          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-300 flex items-start gap-2.5 text-left">
+            <Clock className="w-3.5 h-3.5 text-zinc-400 mt-0.5 flex-shrink-0" />
+            <p className="leading-relaxed text-xs">
+              Purchased program modules and lab repository access will reflect in your <strong>enrolled profile section within 24 hours</strong>.
             </p>
           </div>
 
           {/* Transaction ID */}
           {paymentId && (
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-slate-200/70 dark:border-slate-800 flex items-center justify-between gap-2 text-xs">
-              <span className="text-slate-500 font-semibold text-[11px]">Transaction ID:</span>
-              <code className="font-mono font-bold text-slate-800 dark:text-slate-200 truncate">{paymentId}</code>
+            <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs">
+              <span className="text-zinc-500 font-mono text-[10px]">ID:</span>
+              <code className="font-mono font-semibold text-zinc-800 dark:text-zinc-200 text-xs truncate">{paymentId}</code>
               <button
                 type="button"
                 onClick={handleCopyId}
-                className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-[10px] font-bold text-slate-700 dark:text-slate-200 hover:bg-indigo-50 hover:text-indigo-600 transition-colors cursor-pointer flex items-center gap-1 flex-shrink-0"
+                className="px-2 py-1 rounded bg-white dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-[10px] font-mono text-zinc-700 dark:text-zinc-200 hover:bg-zinc-100 transition-colors cursor-pointer flex items-center gap-1 flex-shrink-0"
               >
                 {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
                 <span>{copied ? 'Copied' : 'Copy'}</span>
@@ -68,23 +68,23 @@ export default function PaymentSuccess() {
           )}
 
           {/* Action CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <div className="flex flex-col sm:flex-row gap-2.5 pt-1">
             <Link to="/profile" className="w-full">
-              <button className="w-full inline-flex items-center justify-center font-bold px-5 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 text-xs transition-all cursor-pointer">
-                <span>Go to Profile</span>
+              <button className="w-full inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-all cursor-pointer">
+                <span>View Profile</span>
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </button>
             </Link>
             <Link to="/programs" className="w-full">
-              <button className="w-full inline-flex items-center justify-center font-bold px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-300 text-xs hover:border-slate-300 transition-all cursor-pointer">
-                Explore More Pathways
+              <button className="w-full inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs hover:border-zinc-300 transition-all cursor-pointer">
+                Explore Programs
               </button>
             </Link>
           </div>
 
           {/* Support line */}
-          <div className="pt-4 border-t border-slate-100 dark:border-slate-800 text-[11px] text-slate-400">
-            Need urgent assistance? Call <a href="tel:+918219691201" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">+91 8219691201</a> or email <a href="mailto:unisole.empower@gmail.com" className="text-indigo-600 dark:text-indigo-400 font-bold hover:underline">unisole.empower@gmail.com</a>.
+          <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 text-[10px] text-zinc-400">
+            Need assistance? Call <a href="tel:+918219691201" className="text-zinc-900 dark:text-white font-medium hover:underline">+91 8219691201</a> or email <a href="mailto:unisole.empower@gmail.com" className="text-zinc-900 dark:text-white font-medium hover:underline">unisole.empower@gmail.com</a>.
           </div>
 
         </div>

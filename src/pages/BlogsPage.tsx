@@ -160,61 +160,58 @@ export default function BlogsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950">
       <Navbar />
 
-      <main className="flex-grow pt-24 sm:pt-32 pb-20 space-y-12">
+      <main className="flex-grow pt-24 sm:pt-32 pb-20 space-y-10">
         
-        {/* Hero Section */}
+        {/* Header Section */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl border border-indigo-900/40">
-            <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 max-w-2xl space-y-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-md text-indigo-300 border border-white/15 uppercase tracking-wider">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Technical Research Archives</span>
-              </span>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
-                Unisole AI Labs <br />
-                <span className="gradient-heading">Insights & Guides</span>
-              </h1>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
-                Deep dive into machine learning architectures, MLOps telemetry, lab deployments, and academic innovation guides written by our mentors.
-              </p>
+          <div className="max-w-2xl space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span>Research & Publications</span>
             </div>
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-zinc-900 dark:text-white">
+              Technical Guides & <br />
+              <span className="text-zinc-500 dark:text-zinc-400">
+                Applied AI Research
+              </span>
+            </h1>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
+              Articles and architectural blueprints written by engineers and faculty advisors from IIT Delhi, NIT Hamirpur, and IIT Patna.
+            </p>
           </div>
         </section>
 
         {/* Filter Controls */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-3">
           {/* Categories Tab Pill List */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-            <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
-              {categories.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
-                    selectedCategory === cat
-                      ? 'bg-indigo-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap cursor-pointer ${
+                  selectedCategory === cat
+                    ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shadow-xs'
+                    : 'bg-zinc-100 hover:bg-zinc-200/70 text-zinc-600 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
 
           {/* Search Inputs */}
-          <div className="relative min-w-[260px] md:w-72">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <div className="relative min-w-[240px] md:w-64">
+            <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Search research logs..."
+              placeholder="Search articles..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200/90 bg-white dark:border-slate-800 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 dark:text-slate-200 placeholder:text-slate-400 shadow-xs"
+              className="w-full text-xs pl-9 pr-3 py-2 rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 focus:outline-none focus:border-zinc-400 text-zinc-800 dark:text-zinc-200 placeholder:text-zinc-400"
             />
           </div>
         </section>
@@ -222,13 +219,14 @@ export default function BlogsPage() {
         {/* Grid Blogs Layout */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {filteredPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs hover:shadow-card-hover dark:hover:shadow-dark-card-hover hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-all duration-300 group hover-lift cursor-pointer"
+                  className="minimal-card flex flex-col justify-between overflow-hidden group cursor-pointer"
                   onClick={() => setReadingPost(post)}
                 >
+
                   {/* Aspect Cover Image */}
                   <div className="relative aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
                     <img

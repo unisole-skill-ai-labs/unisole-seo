@@ -27,36 +27,36 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center font-bold tracking-tight rounded-xl transition-all duration-200 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none cursor-pointer";
+    "inline-flex items-center justify-center font-semibold tracking-normal rounded-lg transition-all duration-150 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none disabled:active:scale-100 select-none cursor-pointer";
 
   const sizeStyles = {
     sm: "px-3 py-1.5 text-xs gap-1.5 min-h-[36px]",
-    md: "px-4.5 py-2.5 text-xs sm:text-sm gap-2 min-h-[42px]",
-    lg: "px-6 py-3 text-sm sm:text-base gap-2.5 min-h-[48px]",
-    icon: "p-2.5 min-h-[40px] min-w-[40px] rounded-xl",
+    md: "px-4 py-2 text-xs sm:text-sm gap-2 min-h-[40px]",
+    lg: "px-5 py-2.5 text-sm sm:text-base gap-2.5 min-h-[44px]",
+    icon: "p-2 min-h-[36px] min-w-[36px] rounded-lg",
   };
 
   const variantStyles = {
     primary:
-      "bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-md shadow-indigo-600/20 focus-visible:ring-indigo-500",
+      "bg-zinc-900 hover:bg-zinc-800 active:bg-zinc-950 text-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 dark:active:bg-zinc-200 shadow-xs focus-visible:ring-zinc-500",
     brand:
-      "bg-gradient-to-r from-indigo-600 via-indigo-700 to-violet-700 hover:from-indigo-700 hover:to-violet-800 text-white shadow-lg shadow-indigo-600/25 focus-visible:ring-indigo-500 border border-indigo-400/20",
+      "bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 shadow-xs focus-visible:ring-zinc-500",
     glow:
-      "bg-indigo-600 hover:bg-indigo-700 text-white shadow-glow-primary hover:shadow-indigo-500/40 focus-visible:ring-indigo-400",
+      "bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 shadow-xs focus-visible:ring-zinc-400",
     secondary:
-      "bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-900 border border-slate-200/80 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-100 dark:border-slate-700/60 focus-visible:ring-slate-400",
+      "bg-zinc-100 hover:bg-zinc-200 active:bg-zinc-300 text-zinc-900 border border-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 dark:text-zinc-100 dark:border-zinc-700 focus-visible:ring-zinc-400",
     outline:
-      "border border-slate-200/90 hover:border-indigo-400 hover:bg-indigo-50/50 bg-white/50 dark:bg-slate-900/50 text-slate-700 hover:text-indigo-600 dark:border-slate-800 dark:hover:border-indigo-500/60 dark:text-slate-300 dark:hover:text-white dark:hover:bg-indigo-950/30 focus-visible:ring-indigo-400",
+      "border border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 bg-white dark:bg-zinc-900 text-zinc-800 dark:border-zinc-800 dark:hover:border-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-850 focus-visible:ring-zinc-400",
     ghost:
-      "bg-transparent hover:bg-slate-100 text-slate-600 hover:text-slate-900 dark:hover:bg-slate-800/60 dark:text-slate-400 dark:hover:text-white focus-visible:ring-slate-300",
+      "bg-transparent hover:bg-zinc-100 text-zinc-600 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:text-zinc-400 dark:hover:text-white focus-visible:ring-zinc-300",
     glass:
-      "border border-white/20 bg-white/10 hover:bg-white/20 text-white backdrop-blur-md focus-visible:ring-white/40 shadow-sm",
+      "border border-zinc-200/50 bg-white/70 hover:bg-white/90 text-zinc-900 dark:border-zinc-800/60 dark:bg-zinc-900/70 dark:text-white backdrop-blur-xs focus-visible:ring-zinc-400",
     white:
-      "bg-white hover:bg-slate-50 text-slate-900 font-extrabold border border-slate-200 shadow-sm focus-visible:ring-slate-300",
+      "bg-white hover:bg-zinc-50 text-zinc-900 font-semibold border border-zinc-200 shadow-xs focus-visible:ring-zinc-300",
     danger:
-      "bg-rose-600 hover:bg-rose-700 text-white shadow-sm focus-visible:ring-rose-500",
+      "bg-rose-600 hover:bg-rose-700 text-white shadow-xs focus-visible:ring-rose-500",
     success:
-      "bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm focus-visible:ring-emerald-500",
+      "bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs focus-visible:ring-emerald-500",
   };
 
   return (

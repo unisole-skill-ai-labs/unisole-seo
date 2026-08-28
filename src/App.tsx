@@ -2,6 +2,8 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import AuthGuard from './components/AuthGuard';
+import { AuthModalProvider } from './context/AuthModalContext';
+import AuthModal from './components/AuthModal';
 import './App.css';
 
 // Route Code-Splitting for Optimal Page Load Performance
@@ -22,7 +24,7 @@ function PageLoader() {
         width: '32px',
         height: '32px',
         border: '3px solid rgba(0, 0, 0, 0.08)',
-        borderTopColor: '#0f172a',
+        borderTopColor: '#18181b',
         borderRadius: '50%',
         animation: 'pageSpin 0.7s linear infinite'
       }} />
@@ -37,8 +39,9 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <>
+    <AuthModalProvider>
       <ScrollToTop />
+      <AuthModal />
       <main>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -72,6 +75,6 @@ export default function App() {
           </Routes>
         </Suspense>
       </main>
-    </>
+    </AuthModalProvider>
   );
 }
