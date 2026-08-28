@@ -72,7 +72,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
         phone: cleanPhone,
         name: name.trim() || undefined,
       }).unwrap();
-      const code = data.dummyOtp || '0000';
+      const code = data.dummyOtp || '1234';
       setSuccessMsg(`Verification code sent to +91 ${cleanPhone}`);
       setStep(2);
       setCountdown(30);
@@ -82,7 +82,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       }, 1200);
     } catch {
       // Fallback
-      const randomOtp = '0000';
+      const randomOtp = '1234';
       setSuccessMsg(`Verification code sent to +91 ${cleanPhone}`);
       setStep(2);
       setCountdown(30);
