@@ -1,34 +1,9 @@
 /* ==========================================
-   BASE RESET, TOKENS & MOBILE OPTIMIZATIONS
+   MOBILE TOUCH & ANIMATION BASE
 ========================================== */
 *, *::before, *::after { 
   box-sizing: border-box; 
-  margin: 0; 
-  padding: 0; 
   -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-  --bg: #ffffff;
-  --bg2: #f8fafc;
-  --white: #0f172a;
-  --muted: #475569;
-  --border: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.12);
-  --accent: #0f172a;
-  --accent-primary: #334155;
-  --accent-glow: rgba(51, 65, 85, 0.25);
-  --error: #ef4444;
-  --success: #10b981;
-  --radius-sm: 12px;
-  --radius-md: 20px;
-  --radius-lg: 32px;
-  --nav-h: 72px;
-  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-  --font-body: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-  --font-serif: "Instrument Serif", Georgia, serif;
-  --ease-spring: cubic-bezier(0.32, 1.2, 0.6, 1);
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html { 
@@ -38,80 +13,21 @@ html {
   text-rendering: optimizeLegibility;
 }
 
-body {
-  background: var(--bg);
-  color: var(--white);
-  font-family: var(--font-body);
-  font-size: 16px;
-  line-height: 1.6;
-  overflow-x: hidden;
-  width: 100%;
-  min-height: 100vh;
-  -webkit-overflow-scrolling: touch;
-}
-
-img { 
-  display: block; 
-  max-width: 100%; 
-  height: auto;
-  user-select: none;
-  -webkit-user-drag: none;
-}
-
-a { 
-  text-decoration: none; 
-  color: inherit; 
-  -webkit-tap-highlight-color: transparent;
-}
-
-button {
-  font-family: inherit;
-  -webkit-tap-highlight-color: transparent;
-  user-select: none;
-}
-
-strong { 
-  font-weight: 600; 
-}
-
-/* ==========================================
-   SCROLLBAR
-========================================== */
-::-webkit-scrollbar { 
-  width: 6px;
-  height: 6px;
-}
-
-::-webkit-scrollbar-track { 
-  background: var(--bg); 
-}
-
-::-webkit-scrollbar-thumb { 
-  background: #cbd5e1; 
-  border-radius: 4px; 
-}
-
-::-webkit-scrollbar-thumb:hover { 
-  background: #94a3b8; 
-}
-
-/* ==========================================
-   TOUCH & MOBILE OPTIMIZATIONS
-========================================== */
+/* Touch targets & mobile optimization */
 @media (hover: none) and (pointer: coarse) {
-  /* Mobile touch target minimum sizing */
   button, a, input, select, textarea {
     touch-action: manipulation;
   }
 }
 
-/* ==========================================
-   UTILITY CLASSES
-========================================== */
-.hidden {
-  display: none !important;
+/* Custom interactive animation classes */
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+.hover-lift:active {
+  transform: translateY(0);
 }
 
-.text-center {
-  text-align: center;
-}

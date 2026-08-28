@@ -1,19 +1,21 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { ArrowRight, BookOpen, Clock, Calendar, User, Search, Sparkles, Filter } from 'lucide-react';
+import { ArrowRight, BookOpen, Clock, Calendar, Search, Sparkles, X, Share2, BookmarkCheck } from 'lucide-react';
 
 interface BlogPost {
   id: string;
   title: string;
   category: string;
   excerpt: string;
+  fullContent?: string;
   readTime: string;
   date: string;
   author: {
     name: string;
     role: string;
     avatar: string;
+    org?: string;
   };
   img: string;
 }
@@ -24,12 +26,23 @@ const mockPosts: BlogPost[] = [
     title: 'Building Production-Grade Retrieval-Augmented Generation (RAG)',
     category: 'Applied AI',
     excerpt: 'An in-depth exploration of state-of-the-art vector embedding pipelines, hybrid searches, and reranking mechanisms to minimize hallucination in enterprise setups.',
+    fullContent: `
+      <h3>Introduction to Hybrid Vector Search</h3>
+      <p>Modern RAG pipelines require more than naive cosine similarity on Dense embeddings. When implementing semantic search inside university systems, domain vocabularies (e.g. course codes, faculty designations) require sparse BM25 indexing paired with dense sentence transformers.</p>
+      
+      <h3>Vector Database Topologies</h3>
+      <p>We evaluate pgvector on PostgreSQL vs dedicated vector stores like Qdrant and Pinecone. For campus labs with air-gapped compute, local pgvector with HNSW indexing delivers sub-50ms query latencies on 500,000 document chunks.</p>
+      
+      <h3>Reranking with Cross-Encoders</h3>
+      <p>Passing top-20 candidate documents through a bge-reranker-large model improves retrieval precision by over 34%, eliminating context distraction for smaller language models like Llama-3-8B.</p>
+    `,
     readTime: '8 min read',
     date: 'Aug 24, 2026',
     author: {
       name: 'Aditya Kaudhal',
       role: 'AI & Technology Lead',
-      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg'
+      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg',
+      org: 'IIT Delhi'
     },
     img: 'https://images.unsplash.com/photo-1677442136019-21780efad99a?auto=format&fit=crop&q=80&w=600'
   },
@@ -38,6 +51,13 @@ const mockPosts: BlogPost[] = [
     title: 'The Future of MLOps in Distributed Learning Environments',
     category: 'MLOps',
     excerpt: 'Deploying edge intelligence across school lab setups. How we orchestrate Dockerized PyTorch models with minimal network overhead and standard instrumentation.',
+    fullContent: `
+      <h3>Edge Orchestration in High Schools</h3>
+      <p>School computer labs often experience erratic bandwidth. By packaging PyTorch runtime environments inside slim Alpine Docker containers with pre-cached ONNX weights, offline lab sessions execute without cloud dependency.</p>
+      
+      <h3>Model Registry & Telemetry</h3>
+      <p>We use lightweight FastAPI listeners that log inference throughput, token latency, and GPU VRAM consumption to a central Prometheus dashboard, letting teachers monitor student workloads in real-time.</p>
+    `,
     readTime: '6 min read',
     date: 'Aug 18, 2026',
     author: {
@@ -52,12 +72,17 @@ const mockPosts: BlogPost[] = [
     title: 'Introducing Sustainable AI Frameworks in Higher Education',
     category: 'Research',
     excerpt: 'Aligning college projects with actual industrial application. A review of academic pathways designed to introduce practical machine learning skills to undergraduates.',
+    fullContent: `
+      <h3>From Toy Datasets to Real Pipelines</h3>
+      <p>Undergraduate projects frequently stall at the Jupyter Notebook stage. Our structured curriculum transitions students to building modular Python packages with automated CI/CD testing on GitHub Actions.</p>
+    `,
     readTime: '5 min read',
     date: 'Aug 12, 2026',
     author: {
       name: 'Girish Gaurav Sharma',
-      role: 'Lead Advisor',
-      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg'
+      role: 'Lead Advisor – Research',
+      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260730-WA0005.jpg_bgzql0.jpg',
+      org: 'NIT Hamirpur'
     },
     img: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=600'
   },
@@ -65,13 +90,18 @@ const mockPosts: BlogPost[] = [
     id: '4',
     title: 'Practical Fine-Tuning of Small Language Models (SLMs)',
     category: 'Applied AI',
-    excerpt: 'Why massive LLMs are not always the answer. A step-by-step breakdown of fine-tuning smaller 3B-7B parameters models on domain-specific datasets with LoRA/QLoRA.',
+    excerpt: 'Why massive LLMs are not always the answer. A step-by-step breakdown of fine-tuning smaller 3B-7B parameter models on domain-specific datasets with LoRA/QLoRA.',
+    fullContent: `
+      <h3>Efficiency of Quantized Low-Rank Adaptation (QLoRA)</h3>
+      <p>4-bit NormalFloat (NF4) quantization allows fine-tuning 8B parameter models on single consumer GPUs (RTX 4090 / A10G) without catastrophic forgetting.</p>
+    `,
     readTime: '10 min read',
     date: 'Jul 29, 2026',
     author: {
       name: 'Peeyush',
       role: 'Lead Researcher',
-      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg'
+      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg',
+      org: 'NIT Hamirpur'
     },
     img: 'https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=600'
   },
@@ -80,12 +110,17 @@ const mockPosts: BlogPost[] = [
     title: 'Interactive Python Sandboxes for Classroom AI Labs',
     category: 'Web Dev & AI',
     excerpt: 'Behind the engineering of real-time sandboxes. Building secure code playgrounds that execute machine learning models asynchronously without server overload.',
+    fullContent: `
+      <h3>Sandboxing with WebAssembly & Pyodide</h3>
+      <p>Running NumPy and Scikit-Learn directly within client browsers via WebAssembly eliminates backend server costs while providing immediate student feedback.</p>
+    `,
     readTime: '7 min read',
     date: 'Jul 15, 2026',
     author: {
       name: 'Anshu Roy',
       role: 'Software Developer',
-      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg'
+      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg',
+      org: 'NIT Hamirpur'
     },
     img: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=600'
   },
@@ -94,12 +129,17 @@ const mockPosts: BlogPost[] = [
     title: 'The AI Lab Paradigm: Scaling Compute Resources Locally',
     category: 'Hardware',
     excerpt: 'Optimizing local hardware nodes inside public high schools. Setting up small clusters that run offline models efficiently for batch evaluations.',
+    fullContent: `
+      <h3>Local Hardware Architectures</h3>
+      <p>How we design resilient hardware nodes with thermal throttling management and offline model caches for continuous classroom uptime.</p>
+    `,
     readTime: '9 min read',
     date: 'Jun 22, 2026',
     author: {
       name: 'Kushal',
       role: 'Academic Head',
-      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg'
+      avatar: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg',
+      org: 'IIT Patna'
     },
     img: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?auto=format&fit=crop&q=80&w=600'
   }
@@ -110,6 +150,7 @@ const categories = ['All', 'Applied AI', 'MLOps', 'Research', 'Web Dev & AI', 'H
 export default function BlogsPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [readingPost, setReadingPost] = useState<BlogPost | null>(null);
 
   const filteredPosts = mockPosts.filter((post) => {
     const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
@@ -119,43 +160,44 @@ export default function BlogsPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-slate-900 selection:text-white dark:selection:bg-white dark:selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
       <Navbar />
 
-      <main className="flex-grow pt-28 pb-20">
+      <main className="flex-grow pt-24 sm:pt-32 pb-20 space-y-12">
+        
         {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-          <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-3xl p-8 md:p-12 shadow-xl">
-            <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-slate-850 rounded-full blur-3xl opacity-20 pointer-events-none" />
-            <div className="relative z-10 max-w-2xl">
-              <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-white/15 backdrop-blur-md text-slate-200 border border-white/10 uppercase tracking-wider mb-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-10 lg:p-12 shadow-xl border border-indigo-900/40">
+            <div className="absolute right-0 top-0 translate-x-12 -translate-y-12 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 max-w-2xl space-y-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-white/10 backdrop-blur-md text-indigo-300 border border-white/15 uppercase tracking-wider">
                 <Sparkles className="w-3.5 h-3.5" />
-                Member Only Insight Portal
+                <span>Technical Research Archives</span>
               </span>
-              <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight">
                 Unisole AI Labs <br />
-                Research Archives & Blog
+                <span className="gradient-heading">Insights & Guides</span>
               </h1>
-              <p className="text-sm sm:text-base text-slate-300 mt-4 leading-relaxed">
-                Dive deep into real-world machine learning architectures, MLOps telemetry, lab implementations, and academic innovation guides curated directly by our advisors.
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+                Deep dive into machine learning architectures, MLOps telemetry, lab deployments, and academic innovation guides written by our mentors.
               </p>
             </div>
           </div>
         </section>
 
         {/* Filter Controls */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           {/* Categories Tab Pill List */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/40">
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+            <div className="flex items-center gap-1.5 p-1.5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 shadow-xs">
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                     selectedCategory === cat
-                      ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-950 shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                      ? 'bg-indigo-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800'
                   }`}
                 >
                   {cat}
@@ -165,26 +207,27 @@ export default function BlogsPage() {
           </div>
 
           {/* Search Inputs */}
-          <div className="relative min-w-[260px]">
+          <div className="relative min-w-[260px] md:w-72">
             <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
               placeholder="Search research logs..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full text-xs pl-10 pr-4 py-3 rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all text-slate-700 dark:text-slate-250 placeholder:text-slate-400"
+              className="w-full text-xs pl-10 pr-4 py-2.5 rounded-2xl border border-slate-200/90 bg-white dark:border-slate-800 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-700 dark:text-slate-200 placeholder:text-slate-400 shadow-xs"
             />
           </div>
         </section>
 
         {/* Grid Blogs Layout */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {filteredPosts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {filteredPosts.map((post) => (
                 <article
                   key={post.id}
-                  className="flex flex-col bg-white dark:bg-slate-900/40 border border-slate-200/55 dark:border-slate-800/60 rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 group"
+                  className="flex flex-col bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-3xl overflow-hidden shadow-xs hover:shadow-card-hover dark:hover:shadow-dark-card-hover hover:border-indigo-300 dark:hover:border-indigo-700/60 transition-all duration-300 group hover-lift cursor-pointer"
+                  onClick={() => setReadingPost(post)}
                 >
                   {/* Aspect Cover Image */}
                   <div className="relative aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
@@ -194,36 +237,37 @@ export default function BlogsPage() {
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
-                    <span className="absolute top-4 left-4 px-2.5 py-1 text-[9px] font-bold bg-slate-900/90 text-white dark:bg-white/95 dark:text-slate-950 rounded-lg border border-white/10 uppercase tracking-wider">
+                    <span className="absolute top-3.5 left-3.5 px-2.5 py-1 text-[9px] font-bold bg-slate-950/80 text-white rounded-lg backdrop-blur-md border border-white/10 uppercase tracking-wider">
                       {post.category}
                     </span>
                   </div>
 
                   {/* Body Content */}
-                  <div className="p-6 flex flex-col flex-grow justify-between">
+                  <div className="p-6 flex flex-col flex-grow justify-between space-y-4">
                     <div>
                       {/* Meta tags */}
-                      <div className="flex items-center gap-4 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">
+                      <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2.5">
                         <span className="flex items-center gap-1">
-                          <Calendar className="w-3.5 h-3.5" />
+                          <Calendar className="w-3 h-3 text-indigo-500" />
                           {post.date}
                         </span>
+                        <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5" />
+                          <Clock className="w-3 h-3 text-indigo-500" />
                           {post.readTime}
                         </span>
                       </div>
 
-                      <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white group-hover:text-slate-700 dark:group-hover:text-slate-350 transition-colors leading-snug">
+                      <h2 className="text-base sm:text-lg font-black text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
                         {post.title}
                       </h2>
-                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-2.5 leading-relaxed line-clamp-3">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-3">
                         {post.excerpt}
                       </p>
                     </div>
 
                     {/* Author & Footer CTA */}
-                    <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800/60 flex items-center justify-between">
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
                       {/* Author Details */}
                       <div className="flex items-center gap-2.5">
                         <img
@@ -233,14 +277,14 @@ export default function BlogsPage() {
                         />
                         <div>
                           <span className="text-xs font-bold text-slate-900 dark:text-white block leading-tight">{post.author.name}</span>
-                          <span className="text-[9px] text-slate-450 block">{post.author.role}</span>
+                          <span className="text-[10px] text-slate-400 block">{post.author.org || post.author.role}</span>
                         </div>
                       </div>
 
                       {/* Read More Link */}
-                      <span className="text-xs font-bold text-slate-900 dark:text-white inline-flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
-                        Read
-                        <ArrowRight className="w-4 h-4" />
+                      <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400 inline-flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        <span>Read</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </span>
                     </div>
                   </div>
@@ -248,36 +292,73 @@ export default function BlogsPage() {
               ))}
             </div>
           ) : (
-            <div className="text-center py-16 bg-white dark:bg-slate-900/30 border border-dashed border-slate-250 dark:border-slate-800 rounded-3xl">
-              <BookOpen className="w-10 h-10 text-slate-350 mx-auto mb-3" />
-              <h3 className="text-base font-bold text-slate-700 dark:text-slate-300">No blog posts found</h3>
-              <p className="text-xs text-slate-500 mt-1">Try modifying your search query or choosing another category tag.</p>
+            <div className="text-center py-16 bg-white dark:bg-slate-900/30 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-8 space-y-3">
+              <BookOpen className="w-10 h-10 text-slate-400 mx-auto" />
+              <h3 className="text-base font-bold text-slate-800 dark:text-white">No research logs found</h3>
+              <p className="text-xs text-slate-500">Try searching another term or switching categories.</p>
             </div>
           )}
         </section>
 
-        {/* Newsletter subscription panel */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="border border-slate-200/50 dark:border-slate-800/40 bg-white dark:bg-slate-900/30 rounded-3xl p-6 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="max-w-md">
-              <h3 className="text-lg font-bold text-slate-900 dark:text-white">Subscribe to AI Lab Research</h3>
-              <p className="text-xs sm:text-sm text-slate-500 mt-1">Receive technical alerts, codebase guides, and notifications of open webinars directly in your inbox.</p>
-            </div>
-            <div className="flex gap-2.5 max-w-sm w-full">
-              <input
-                type="email"
-                placeholder="developer@institute.edu"
-                className="w-full text-xs px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 dark:border-slate-800 dark:bg-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 dark:focus:ring-white transition-all text-slate-750 placeholder:text-slate-400"
+      </main>
+
+      {/* Reader Modal */}
+      {readingPost && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200"
+          onClick={() => setReadingPost(null)}
+        >
+          <div 
+            className="relative w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close */}
+            <button
+              className="absolute top-4 right-4 z-10 p-2 rounded-full bg-slate-950/70 hover:bg-slate-900 text-white backdrop-blur-md cursor-pointer transition-colors"
+              onClick={() => setReadingPost(null)}
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            {/* Header image */}
+            <div className="relative h-48 sm:h-56 w-full flex-shrink-0 bg-slate-950 overflow-hidden">
+              <img
+                src={readingPost.img}
+                alt={readingPost.title}
+                className="w-full h-full object-cover"
               />
-              <button className="px-5 py-3 rounded-xl bg-slate-900 hover:bg-slate-800 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-100 text-xs font-bold text-white transition-colors whitespace-nowrap">
-                Sign Up
-              </button>
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
+              <div className="absolute bottom-5 left-6 right-6 text-white space-y-1">
+                <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest">{readingPost.category}</span>
+                <h2 className="text-xl sm:text-2xl font-black leading-tight">{readingPost.title}</h2>
+              </div>
+            </div>
+
+            {/* Body */}
+            <div className="flex-grow overflow-y-auto p-6 sm:p-8 space-y-4 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+              <div className="flex items-center gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                <img
+                  src={readingPost.author.avatar}
+                  alt={readingPost.author.name}
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">{readingPost.author.name}</h4>
+                  <p className="text-[11px] text-slate-400">{readingPost.author.role} {readingPost.author.org ? `• ${readingPost.author.org}` : ''} • {readingPost.readTime}</p>
+                </div>
+              </div>
+
+              <div 
+                dangerouslySetInnerHTML={{ __html: readingPost.fullContent || `<p>${readingPost.excerpt}</p>` }}
+                className="prose dark:prose-invert prose-indigo max-w-none prose-h3:text-sm sm:prose-h3:text-base prose-h3:font-black prose-p:my-2"
+              />
             </div>
           </div>
-        </section>
-      </main>
+        </div>
+      )}
 
       <Footer />
     </div>
   );
 }
+

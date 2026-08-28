@@ -11,6 +11,7 @@ import {
   TrendingUp, 
   ChevronDown, 
   Check, 
+  CheckCircle2,
   Download, 
   ExternalLink,
   Award,
@@ -594,23 +595,24 @@ export default function ProgramsPage() {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 selection:bg-indigo-500 selection:text-white">
       <Navbar />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-20 space-y-16">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 sm:pt-32 pb-20 space-y-16">
         
         {/* ================= HERO HEADER ================= */}
-        <header className="text-center max-w-3xl mx-auto space-y-6">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/30 dark:text-indigo-400 border border-indigo-100 dark:border-indigo-900/40 uppercase tracking-wider">
-            ⚡ Campus Programs
+        <header className="text-center max-w-3xl mx-auto space-y-5">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-800/70 uppercase tracking-wider shadow-xs">
+            <Rocket className="w-3.5 h-3.5" />
+            <span>Academic Curriculum 2026</span>
           </span>
           
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-none text-slate-900 dark:text-white">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight leading-tight text-slate-900 dark:text-white">
             Industry-Ready Curriculum — <br />
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-500">
+            <span className="gradient-heading">
               4 Student Pathways
             </span>
           </h1>
           
-          <p className="text-sm sm:text-base text-slate-650 dark:text-slate-405 leading-relaxed">
-            Practical, industry-aligned AI education frameworks designed across 4 core academic streams.
+          <p className="text-xs sm:text-base text-slate-600 dark:text-slate-350 leading-relaxed max-w-2xl mx-auto">
+            Practical, industry-aligned AI education frameworks designed across 4 core academic streams, taking students from fundamentals to live deployments.
           </p>
 
           {/* Quick Group Switcher Tab Bar */}
@@ -623,19 +625,23 @@ export default function ProgramsPage() {
                   key={g.id}
                   role="tab"
                   aria-selected={isActive}
-                  className={`flex flex-col items-center p-4 border rounded-2xl transition-all duration-300 text-center ${
+                  className={`flex flex-col items-center p-3.5 sm:p-4 border rounded-2xl transition-all duration-300 text-center cursor-pointer ${
                     isActive 
-                      ? 'border-indigo-500 bg-white dark:bg-slate-900 shadow-md ring-2 ring-indigo-500/10' 
-                      : 'border-slate-200 bg-white/40 dark:border-slate-800 dark:bg-slate-900/30 hover:border-slate-300 hover:bg-white dark:hover:bg-slate-900/50'
+                      ? 'border-indigo-500 bg-white dark:bg-slate-900 shadow-lg ring-2 ring-indigo-500/20 -translate-y-0.5' 
+                      : 'border-slate-200/80 bg-white dark:border-slate-800 dark:bg-slate-900/40 hover:border-indigo-300 hover:bg-indigo-50/20'
                   }`}
                   onClick={() => {
                     setActiveGroup(g.id);
                     setExpandedPathway(g.pathways[0].id);
                   }}
                 >
-                  <IconComp className={`w-5 h-5 mb-2 ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-400'}`} />
+                  <div className={`p-2 rounded-xl mb-1.5 ${isActive ? 'bg-indigo-600 text-white' : 'bg-slate-100 dark:bg-slate-800 text-slate-500'}`}>
+                    <IconComp className="w-4 h-4" />
+                  </div>
                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none">{g.badge}</span>
-                  <span className="text-xs font-extrabold text-slate-900 dark:text-white mt-1.5 leading-tight">{g.title.split(' & ')[0]}</span>
+                  <span className={`text-xs font-bold mt-1 leading-tight ${isActive ? 'text-indigo-600 dark:text-indigo-400' : 'text-slate-800 dark:text-slate-200'}`}>
+                    {g.title}
+                  </span>
                 </button>
               );
             })}
@@ -646,19 +652,19 @@ export default function ProgramsPage() {
         <section className="space-y-6" id="group-content">
           
           {/* Main Info Card for selected group */}
-          <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-xl border border-indigo-900/40">
-            <div className="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 space-y-4">
-              <div className="flex flex-wrap items-center gap-3">
-                <span className="px-2.5 py-1 text-[10px] font-bold bg-white/10 backdrop-blur-md rounded-md tracking-wider border border-white/10">
+          <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-xl border border-indigo-900/50">
+            <div className="absolute right-0 top-0 translate-x-1/4 -translate-y-1/4 w-80 h-80 bg-indigo-500/15 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 space-y-3">
+              <div className="flex flex-wrap items-center gap-2.5">
+                <span className="px-2.5 py-1 text-[10px] font-bold bg-white/10 backdrop-blur-md rounded-lg tracking-wider border border-white/15 uppercase">
                   {currentGroupData.badge}
                 </span>
-                <span className="text-xs text-indigo-200">
-                  <strong>Target Learners:</strong> {currentGroupData.target}
+                <span className="text-xs text-indigo-200 font-medium">
+                  <strong>Target Audience:</strong> {currentGroupData.target}
                 </span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-black">{currentGroupData.title}</h2>
-              <p className="text-sm text-indigo-100 max-w-2xl leading-relaxed">{currentGroupData.tagline}</p>
+              <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{currentGroupData.title}</h2>
+              <p className="text-xs sm:text-sm text-indigo-100 max-w-2xl leading-relaxed">{currentGroupData.tagline}</p>
             </div>
           </div>
 
@@ -669,15 +675,15 @@ export default function ProgramsPage() {
               return (
                 <article
                   key={pathway.id}
-                  className={`bg-white dark:bg-slate-900 border rounded-2xl overflow-hidden transition-all duration-300 ${
+                  className={`bg-white dark:bg-slate-900 border rounded-3xl overflow-hidden transition-all duration-300 ${
                     isOpen 
-                      ? 'border-indigo-200 dark:border-indigo-900/50 shadow-md' 
-                      : 'border-slate-200/80 dark:border-slate-800/80 hover:border-slate-350 dark:hover:border-slate-700'
+                      ? 'border-indigo-500/50 dark:border-indigo-700/50 shadow-xl ring-2 ring-indigo-500/10' 
+                      : 'border-slate-200/80 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-slate-700 shadow-xs'
                   }`}
                   id={pathway.id}
                 >
                   <header
-                    className="p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
+                    className="p-5 sm:p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
                     onClick={() => setExpandedPathway(isOpen ? '' : pathway.id)}
                     tabIndex={0}
                     role="button"
@@ -685,71 +691,73 @@ export default function ProgramsPage() {
                   >
                     <div className="space-y-2 flex-grow">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase">{pathway.eyebrow}</span>
+                        <span className="text-[10px] font-bold text-indigo-600 dark:text-indigo-400 tracking-wider uppercase px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200/50 dark:border-indigo-800/50">
+                          {pathway.eyebrow}
+                        </span>
                         {pathway.duration && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
                             <Clock className="w-3 h-3 text-slate-400" />
                             {pathway.duration}
                           </span>
                         )}
                         {pathway.level && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 dark:text-slate-300">
                             <TrendingUp className="w-3 h-3 text-slate-400" />
                             {pathway.level}
                           </span>
                         )}
                       </div>
-                      <h3 className="text-lg font-black text-slate-900 dark:text-white leading-tight">{pathway.title}</h3>
+                      <h3 className="text-base sm:text-lg font-black text-slate-900 dark:text-white leading-tight">{pathway.title}</h3>
                       <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed max-w-4xl">{pathway.description}</p>
                     </div>
                     
-                    <div className={`p-1.5 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-transform duration-300 self-start md:self-auto ${isOpen ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white' : ''}`}>
+                    <div className={`p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 transition-transform duration-300 self-start md:self-auto ${isOpen ? 'rotate-180 bg-indigo-50 border-indigo-200 text-indigo-600 dark:bg-slate-800 dark:border-slate-700 dark:text-white' : ''}`}>
                       <ChevronDown className="w-4 h-4" />
                     </div>
                   </header>
 
                   {isOpen && (
-                    <div className="px-6 pb-6 pt-4 border-t border-slate-100 dark:border-slate-800/40 space-y-6">
+                    <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-slate-100 dark:border-slate-800 space-y-6 animate-in fade-in duration-200">
                       
                       {/* Curriculum Modules grid */}
-                      <div className="space-y-4">
+                      <div className="space-y-3 pt-3">
                         <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                           <BookOpen className="w-4 h-4 text-indigo-500" />
-                          Core Curriculum Modules
+                          <span>Core Curriculum Modules</span>
                         </h4>
                         
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
                           {pathway.modules.map((mod) => (
-                            <div key={mod.num} className="border border-slate-200/60 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/20 rounded-xl p-5 space-y-3">
-                              <div className="flex items-center gap-3">
-                                <span className="text-xs font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-950/50 dark:text-indigo-400 w-6 h-6 rounded-lg flex items-center justify-center border border-indigo-100/50 dark:border-indigo-900/30">
+                            <div key={mod.num} className="border border-slate-200/70 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/30 rounded-2xl p-4 sm:p-5 space-y-3">
+                              <div className="flex items-center gap-2.5">
+                                <span className="text-xs font-black text-indigo-600 bg-indigo-50 dark:bg-indigo-950/60 dark:text-indigo-400 w-6 h-6 rounded-lg flex items-center justify-center border border-indigo-100 dark:border-indigo-900/40">
                                   {mod.num}
                                 </span>
-                                <h5 className="text-sm font-bold text-slate-900 dark:text-white leading-tight">{mod.title}</h5>
+                                <h5 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white leading-tight">{mod.title}</h5>
                               </div>
                               
-                              <ul className="space-y-1.5 text-xs text-slate-650 dark:text-slate-400 pl-1">
+                              <ul className="space-y-1.5 text-xs text-slate-600 dark:text-slate-400">
                                 {mod.topics.map((t, idx) => (
                                   <li key={idx} className="flex items-start gap-2">
                                     <Check className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 mt-0.5 flex-shrink-0" />
-                                    <span>{t}</span>
+                                    <span className="leading-normal">{t}</span>
                                   </li>
                                 ))}
                               </ul>
 
                               {mod.practical && (
-                                <div className="mt-3 pt-2.5 border-t border-slate-150 dark:border-slate-800/60 text-xs">
-                                  <span className="font-bold text-slate-700 dark:text-slate-350 block">Hands-on Lab:</span>
+                                <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800 text-xs">
+                                  <span className="font-bold text-slate-700 dark:text-slate-300 block">Hands-on Lab:</span>
                                   <span className="text-slate-500 dark:text-slate-400 mt-0.5 block italic">{mod.practical}</span>
                                 </div>
                               )}
 
                               {mod.pipeline && (
-                                <div className="mt-3 pt-2.5 border-t border-slate-150 dark:border-slate-800/60 text-xs">
-                                  <span className="font-bold text-slate-700 dark:text-slate-350 block">Pipeline Blueprint:</span>
+                                <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800 text-xs">
+                                  <span className="font-bold text-slate-700 dark:text-slate-300 block">Pipeline Blueprint:</span>
                                   <div className="flex flex-wrap items-center gap-1 mt-1">
                                     {mod.pipeline.map((step, sIdx) => (
-                                      <span key={sIdx} className="px-1.5 py-0.5 text-[9px] font-semibold bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded border border-slate-300/20">
+                                      <span key={sIdx} className="px-1.5 py-0.5 text-[9px] font-semibold bg-slate-200/50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded border border-slate-300/30">
                                         {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
                                       </span>
                                     ))}
@@ -763,25 +771,25 @@ export default function ProgramsPage() {
 
                       {/* Capstone System */}
                       {pathway.capstone && (
-                        <div className="border border-indigo-100 dark:border-indigo-900/40 bg-indigo-50/20 dark:bg-indigo-950/10 rounded-2xl p-6 space-y-4">
-                          <div className="flex items-center justify-between border-b border-indigo-100/50 dark:border-indigo-900/20 pb-3">
-                            <span className="px-2 py-0.5 text-[9px] font-bold bg-indigo-600 text-white rounded uppercase tracking-wider">
+                        <div className="border border-indigo-100 dark:border-indigo-900/40 bg-indigo-50/25 dark:bg-indigo-950/20 rounded-2xl p-5 sm:p-6 space-y-4">
+                          <div className="flex flex-wrap items-center justify-between border-b border-indigo-100 dark:border-indigo-900/30 pb-3 gap-2">
+                            <span className="px-2.5 py-0.5 text-[10px] font-bold bg-indigo-600 text-white rounded-md uppercase tracking-wider">
                               Capstone Project
                             </span>
-                            <h4 className="text-sm font-extrabold text-slate-900 dark:text-white">{pathway.capstone.title}</h4>
+                            <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white">{pathway.capstone.title}</h4>
                           </div>
 
                           {pathway.capstone.flow && (
                             <div className="space-y-2">
-                              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">System Flow:</span>
+                              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Production Workflow:</span>
                               <div className="flex flex-wrap items-center gap-2">
                                 {pathway.capstone.flow.map((st, i) => (
                                   <div key={st} className="flex items-center gap-2 text-xs">
-                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-300 font-bold text-[10px]">
+                                    <span className="inline-flex items-center justify-center w-5 h-5 rounded-md bg-indigo-600 text-white font-bold text-[10px]">
                                       {i + 1}
                                     </span>
-                                    <span className="font-semibold text-slate-700 dark:text-slate-300">{st}</span>
-                                    {i < pathway.capstone.flow.length - 1 && <span className="text-slate-400 dark:text-slate-600">&rarr;</span>}
+                                    <span className="font-bold text-slate-700 dark:text-slate-300">{st}</span>
+                                    {i < pathway.capstone.flow.length - 1 && <span className="text-slate-400 dark:text-slate-600 font-bold">&rarr;</span>}
                                   </div>
                                 ))}
                               </div>
@@ -790,11 +798,11 @@ export default function ProgramsPage() {
 
                           {pathway.capstone.outputs && (
                             <div className="space-y-2 pt-2">
-                              <span className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Project Deliverables:</span>
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                              <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider block">Deliverables:</span>
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                                 {pathway.capstone.outputs.map((out, oIdx) => (
-                                  <div key={oIdx} className="flex items-center gap-2 text-xs text-slate-650 dark:text-slate-350">
-                                    <Check className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                                  <div key={oIdx} className="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-350 bg-white/60 dark:bg-slate-900/60 p-2 rounded-xl border border-indigo-100/50 dark:border-indigo-900/30">
+                                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
                                     <span>{out}</span>
                                   </div>
                                 ))}
@@ -804,23 +812,23 @@ export default function ProgramsPage() {
                         </div>
                       )}
 
-                      {/* Action buttons inside Pathway */}
-                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800/40 flex flex-wrap items-center gap-3">
+                      {/* Action buttons */}
+                      <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-wrap items-center gap-3">
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-750 text-white shadow-md shadow-indigo-500/10 transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[40px]"
+                          className="inline-flex items-center justify-center font-bold px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white shadow-md shadow-indigo-600/20 transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[42px] cursor-pointer"
                           onClick={() => handleEnrollClick(pathway)}
                         >
-                          Enroll Pathway
+                          <span>Enroll Pathway</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-4 py-2.5 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 bg-white dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[40px]"
+                          className="inline-flex items-center justify-center font-bold px-5 py-3 rounded-xl border border-slate-200 hover:border-slate-300 text-slate-700 hover:text-slate-900 bg-white dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:text-white transition-all duration-200 active:scale-[0.98] gap-2 text-xs min-h-[42px] cursor-pointer shadow-xs"
                           onClick={() => handleSyllabusClick(pathway)}
                         >
                           <Download className="w-3.5 h-3.5" />
-                          {pathway.syllabusLink ? 'Download Syllabus' : 'Request Syllabus'}
+                          <span>{pathway.syllabusLink ? 'Download Syllabus PDF' : 'Request Syllabus'}</span>
                         </button>
                       </div>
 
@@ -834,12 +842,17 @@ export default function ProgramsPage() {
         </section>
 
         {/* ================= PROGRAM HIGHLIGHTS ================= */}
-        <section className="border-t border-slate-200/60 dark:border-slate-800/80 pt-16 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">What We Deliver</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">Why Unisole Programs</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Every pathway is designed to turn classroom theory into verifiable, industry-ready capability.
+        <section className="border-t border-slate-200/70 dark:border-slate-800/80 pt-16 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60 uppercase tracking-wider">
+              <Award className="w-3.5 h-3.5" />
+              What Sets Us Apart
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+              Why Learn With Unisole AI
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
+              Every pathway is designed to turn classroom theory into verifiable, employer-ready capability.
             </p>
           </div>
 
@@ -847,11 +860,11 @@ export default function ProgramsPage() {
             {PROGRAM_HIGHLIGHTS.map((item) => {
               const IconComp = item.icon;
               return (
-                <div key={item.title} className="bg-white dark:bg-slate-900/40 border border-slate-200/60 dark:border-slate-800/80 rounded-2xl p-6 space-y-4 hover:shadow-md transition-shadow">
-                  <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/20 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100/50 dark:border-indigo-900/30">
+                <div key={item.title} className="bg-white dark:bg-slate-900/50 border border-slate-200/80 dark:border-slate-800 rounded-3xl p-6 space-y-3 hover:border-indigo-300 dark:hover:border-indigo-700/60 shadow-xs hover-lift transition-all">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-900/30">
                     <IconComp className="w-5 h-5" />
                   </div>
-                  <h3 className="text-base font-bold text-slate-900 dark:text-white">{item.title}</h3>
+                  <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white">{item.title}</h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{item.desc}</p>
                 </div>
               );
@@ -860,31 +873,36 @@ export default function ProgramsPage() {
         </section>
 
         {/* ================= THE STUDENT JOURNEY ================= */}
-        <section className="border-t border-slate-200/60 dark:border-slate-800/80 pt-16 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="text-xs font-bold uppercase tracking-widest text-indigo-600 dark:text-indigo-400">Lifecycle</span>
-            <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">The Student Journey</h2>
-            <p className="text-sm text-slate-500 dark:text-slate-400">
+        <section className="border-t border-slate-200/70 dark:border-slate-800/80 pt-16 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold text-indigo-700 bg-indigo-50 dark:bg-indigo-950/40 dark:text-indigo-400 border border-indigo-200/60 dark:border-indigo-800/60 uppercase tracking-wider">
+              <Rocket className="w-3.5 h-3.5" />
+              5-Stage Lifecycle
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 dark:text-white">
+              The Unisole Student Journey
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400">
               A structured progression from foundational concepts to an employer-ready portfolio.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-5 gap-4 sm:gap-6">
             {JOURNEY_STEPS.map((s, idx) => (
-              <div key={s.num} className="relative border border-slate-200/60 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/20 rounded-2xl p-6 space-y-4">
-                <span className="text-2xl font-black text-indigo-100 dark:text-slate-800 block">
+              <div key={s.num} className="relative border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/40 rounded-3xl p-5 sm:p-6 space-y-3 hover-lift shadow-xs">
+                <span className="text-2xl sm:text-3xl font-black text-indigo-200 dark:text-slate-800 block">
                   {s.num}
                 </span>
-                <h4 className="text-sm font-extrabold text-slate-900 dark:text-white leading-tight">
+                <h4 className="text-xs sm:text-sm font-black text-slate-900 dark:text-white leading-tight">
                   {s.title}
                 </h4>
                 <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
                   {s.desc}
                 </p>
                 
-                {/* Visual arrow connector on larger screens */}
+                {/* Arrow connector */}
                 {idx < 4 && (
-                  <div className="hidden sm:block absolute top-1/2 -right-3.5 -translate-y-1/2 z-10 text-slate-300 dark:text-slate-800 font-bold text-lg select-none">
+                  <div className="hidden sm:block absolute top-1/2 -right-3 -translate-y-1/2 z-10 text-indigo-300 dark:text-slate-700 font-bold text-sm select-none">
                     &rarr;
                   </div>
                 )}
@@ -894,6 +912,7 @@ export default function ProgramsPage() {
         </section>
 
       </main>
+
 
       <Footer />
     </div>

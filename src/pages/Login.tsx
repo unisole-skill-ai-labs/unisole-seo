@@ -9,16 +9,16 @@ export default function Login() {
   const redirect = new URLSearchParams(location.search).get('redirect') || '';
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-slate-900 selection:text-white dark:selection:bg-white dark:selection:text-slate-950">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
       <Navbar />
 
-      <main className="flex-grow flex items-center justify-center pt-28 pb-16 px-4">
-        <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/60 rounded-3xl shadow-xl overflow-hidden min-h-[580px]">
+      <main className="flex-grow flex items-center justify-center pt-24 sm:pt-32 pb-16 px-4">
+        <div className="max-w-5xl w-full grid grid-cols-1 md:grid-cols-12 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-3xl shadow-xl overflow-hidden min-h-[580px]">
           
           {/* Left panel: Premium features preview */}
-          <div className="md:col-span-6 bg-slate-900 dark:bg-slate-950 text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
+          <div className="md:col-span-6 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
             {/* Background blur */}
-            <div className="absolute right-0 top-0 w-64 h-64 bg-slate-800 rounded-full blur-3xl opacity-30 pointer-events-none" />
+            <div className="absolute right-0 top-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none" />
             
             <div className="space-y-8 relative z-10">
               <div>
