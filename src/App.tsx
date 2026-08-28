@@ -16,6 +16,8 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const AiPlaygroundPage = lazy(() => import('./pages/AiPlaygroundPage'));
+const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
+const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
 
 function PageLoader() {
   return (
@@ -47,6 +49,8 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/live/:sessionCode" element={<LiveAudiencePage />} />
+            <Route path="/join" element={<JoinSessionPage />} />
             <Route path="/" element={<Home />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="/events" element={<EventsPage />} />
