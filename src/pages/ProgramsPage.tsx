@@ -1047,24 +1047,14 @@ export default function ProgramsPage() {
 
                         {/* Action buttons & Razorpay link */}
                         <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-                          <div className="flex flex-wrap items-center gap-2.5">
-                            <button
-                              type="button"
-                              className="inline-flex items-center justify-center font-semibold px-5 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[40px] cursor-pointer"
-                              onClick={() => handleEnrollClick(pathway)}
-                            >
-                              <span>Enroll Pathway</span>
-                              <ArrowRight className="w-3.5 h-3.5" />
-                            </button>
-                            <button
-                              type="button"
-                              className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer"
-                              onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
-                            >
-                              <Download className="w-3.5 h-3.5 text-zinc-400" />
-                              <span>View Syllabus & Curriculum</span>
-                            </button>
-                          </div>
+                          <button
+                            type="button"
+                            className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer shadow-2xs hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                            onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
+                          >
+                            <Download className="w-3.5 h-3.5 text-zinc-400" />
+                            <span>View Syllabus & Curriculum</span>
+                          </button>
 
                           <span className="text-[11px] text-zinc-400 font-mono">
                             Instant Razorpay Confirmation • Limited Batch Size
