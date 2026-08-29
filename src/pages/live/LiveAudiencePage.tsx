@@ -82,12 +82,6 @@ export default function LiveAudiencePage() {
   useEffect(() => {
     if (!code) return;
 
-    // If not authenticated, redirect to SEO login with return path to this live session
-    if (!isAuthenticated()) {
-      navigate(`/login?redirect=/live/${code}`, { replace: true });
-      return;
-    }
-
     setIsLoadingSession(true);
     setSessionError(null);
 
@@ -114,44 +108,56 @@ export default function LiveAudiencePage() {
             }
           }
 
-          // Automatically register lead using authenticated user credentials
-          const currentUser = getUser();
-          const studentName =
-            getUserName() ||
-            currentUser?.name ||
-            currentUser?.fullName ||
-            "Student";
-          const studentPhone =
-            getUserPhone() ||
-            currentUser?.phone ||
-            currentUser?.mobile ||
-            "9999999999";
-          const studentEmail = currentUser?.email || "";
+          // If user is already authenticated on the SEO website, auto-join immediately!
+          if (isAuthenticated()) {
+            const currentUser = getUser();
+            const studentName =
+              getUserName() ||
+              currentUser?.name ||
+              currentUser?.fullName ||
+              "Student";
+            const studentPhone =
+              getUserPhone() ||
+              currentUser?.phone ||
+              currentUser?.mobile ||
+              "9999999999";
+            const studentEmail = currentUser?.email || "";
 
-          try {
-            const joinRes = await fetch(
-              `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  name: studentName,
-                  phone: studentPhone,
-                  email: studentEmail,
-                  userId: currentUser?.id,
-                }),
-              }
-            );
-            const joinData = await joinRes.json();
-            if (joinData.data?.lead) {
-              setLead(joinData.data.lead);
-              localStorage.setItem(
-                `unisole_lead_${code}`,
-                JSON.stringify(joinData.data.lead)
+            // Set lead immediately so user enters presentation instantly with zero delay
+            const initialLead = {
+              id: currentUser?.id || `lead_${Date.now()}`,
+              name: studentName,
+              phone: studentPhone,
+              email: studentEmail,
+            };
+            setLead(initialLead);
+
+            // Register lead in backend in parallel
+            try {
+              const joinRes = await fetch(
+                `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    name: studentName,
+                    phone: studentPhone,
+                    email: studentEmail,
+                    userId: currentUser?.id,
+                  }),
+                }
               );
+              const joinData = await joinRes.json();
+              if (joinData.data?.lead) {
+                setLead(joinData.data.lead);
+                localStorage.setItem(
+                  `unisole_lead_${code}`,
+                  JSON.stringify(joinData.data.lead)
+                );
+              }
+            } catch (err) {
+              console.error("Auto join error:", err);
             }
-          } catch (err) {
-            console.error("Auto join error:", err);
           }
         }
       })
@@ -161,7 +167,7 @@ export default function LiveAudiencePage() {
       .finally(() => {
         setIsLoadingSession(false);
       });
-  }, [code, navigate]);
+  }, [code]);
 
   // Connect Socket.io once lead is registered
   useEffect(() => {
