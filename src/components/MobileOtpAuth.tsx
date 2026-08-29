@@ -68,15 +68,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
 
-  const { data: serverColleges = [] } = useGetPublicCollegesQuery(undefined);
-  const selectedCollegeObj = serverColleges.find(
-    (c: any) => c.name === selectedCollege || c.id === selectedCollege
-  );
-  const { data: serverBranches = [] } = useGetPublicBranchesQuery(selectedCollegeObj?.id);
-
-  const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
-  const branchOptions = serverBranches.length > 0 ? serverBranches : DEFAULT_BRANCHES;
-
+  // Form states
   const [step, setStep] = useState<AuthStep>('PHONE');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
@@ -87,6 +79,15 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const [otp, setOtp] = useState('');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [existingUserName, setExistingUserName] = useState('');
+
+  const { data: serverColleges = [] } = useGetPublicCollegesQuery(undefined);
+  const selectedCollegeObj = serverColleges.find(
+    (c: any) => c.name === selectedCollege || c.id === selectedCollege
+  );
+  const { data: serverBranches = [] } = useGetPublicBranchesQuery(selectedCollegeObj?.id);
+
+  const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
+  const branchOptions = serverBranches.length > 0 ? serverBranches : DEFAULT_BRANCHES;
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
