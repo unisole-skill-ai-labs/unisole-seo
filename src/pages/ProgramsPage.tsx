@@ -1,6 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import SyllabusDrawer from '../components/SyllabusDrawer';
 import { 
   Laptop, 
   Microscope, 
@@ -672,6 +673,10 @@ export default function ProgramsPage() {
     });
   }, [currentGroupData, searchQuery, selectedDuration]);
 
+  const [selectedSyllabusPathway, setSelectedSyllabusPathway] = useState<any>(null);
+  const [selectedSyllabusGroup, setSelectedSyllabusGroup] = useState<string>('');
+  const [isSyllabusDrawerOpen, setIsSyllabusDrawerOpen] = useState(false);
+
   const handleEnrollClick = (pathway: any) => {
     if (pathway.enrollLink) {
       window.open(pathway.enrollLink, '_blank', 'noopener,noreferrer');
@@ -680,12 +685,10 @@ export default function ProgramsPage() {
     }
   };
 
-  const handleSyllabusClick = (pathway: any) => {
-    if (pathway.syllabusLink && pathway.syllabusLink !== '#') {
-      window.open(pathway.syllabusLink, '_blank', 'noopener,noreferrer');
-    } else {
-      window.open(`mailto:unisole.empower@gmail.com?subject=${encodeURIComponent(`Syllabus Request: ${pathway.title}`)}`, '_blank');
-    }
+  const handleSyllabusClick = (pathway: any, groupTitle?: string) => {
+    setSelectedSyllabusPathway(pathway);
+    setSelectedSyllabusGroup(groupTitle || currentGroupData?.title || '');
+    setIsSyllabusDrawerOpen(true);
   };
 
   return (
@@ -1041,10 +1044,10 @@ export default function ProgramsPage() {
                             <button
                               type="button"
                               className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer"
-                              onClick={() => handleSyllabusClick(pathway)}
+                              onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
                             >
                               <Download className="w-3.5 h-3.5 text-zinc-400" />
-                              <span>Download Syllabus (PDF)</span>
+                              <span>View Syllabus & Curriculum</span>
                             </button>
                           </div>
 
@@ -1253,6 +1256,15 @@ export default function ProgramsPage() {
           <span>Call</span>
         </a>
       </div>
+
+      {/* Interactive Curriculum & Syllabus Drawer */}
+      <SyllabusDrawer
+        isOpen={isSyllabusDrawerOpen}
+        pathway={selectedSyllabusPathway}
+        groupTitle={selectedSyllabusGroup}
+        onClose={() => setIsSyllabusDrawerOpen(false)}
+        onEnroll={(link) => handleEnrollClick({ enrollLink: link })}
+      />
 
       <Footer />
     </div>
