@@ -29,7 +29,7 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
   const [pdfDoc, setPdfDoc] = useState<any>(null);
   const [numPages, setNumPages] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [scale, setScale] = useState<number>(1.2);
+  const [scale, setScale] = useState<number>(1.0);
   const [rotation, setRotation] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -39,7 +39,30 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<{ [key: number]: HTMLCanvasElement | null }>({});
 
-  // Load PDF Document
+  // Auto calculate Fit to Width
+  const calculateFitWidth = (customDoc?: any) => {
+    const docToUse = customDoc || pdfDoc;
+    if (!containerRef.current) return;
+
+    const containerWidth = containerRef.current.clientWidth - (window.innerWidth < 640 ? 32 : 64);
+    if (containerWidth > 200) {
+      if (docToUse) {
+        docToUse.getPage(1).then((firstPage: any) => {
+          const defaultViewport = firstPage.getViewport({ scale: 1.0, rotation });
+          const newScale = containerWidth / defaultViewport.width;
+          setScale(Math.max(0.6, Math.min(newScale, 2.2)));
+        }).catch(() => {
+          const fallbackScale = containerWidth / 595;
+          setScale(Math.max(0.6, Math.min(fallbackScale, 2.2)));
+        });
+      } else {
+        const fallbackScale = containerWidth / 595;
+        setScale(Math.max(0.6, Math.min(fallbackScale, 2.2)));
+      }
+    }
+  };
+
+  // Load PDF Document & Auto Fit Width
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
@@ -58,6 +81,10 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
         setPdfDoc(doc);
         setNumPages(doc.numPages);
         setLoading(false);
+        // Default to Fit Width on document load
+        setTimeout(() => {
+          if (isMounted) calculateFitWidth(doc);
+        }, 50);
       })
       .catch((err) => {
         if (!isMounted) return;
@@ -71,6 +98,16 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
       loadingTask.destroy().catch(() => {});
     };
   }, [url]);
+
+  // ResizeObserver for dynamic fit-width on window resize
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const observer = new ResizeObserver(() => {
+      calculateFitWidth();
+    });
+    observer.observe(containerRef.current);
+    return () => observer.disconnect();
+  }, [pdfDoc, rotation]);
 
   // Render a specific page onto its canvas with HiDPI support
   const renderPage = async (pageNumber: number, canvas: HTMLCanvasElement) => {
