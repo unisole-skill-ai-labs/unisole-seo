@@ -206,20 +206,48 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
     }
   };
 
+  // Fullscreen change listener
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      const isNativeFs = !!(document.fullscreenElement || (document as any).webkitFullscreenElement);
+      if (!isNativeFs && isFullscreen) {
+        setIsFullscreen(false);
+      }
+      setTimeout(() => calculateFitWidth(), 100);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullscreenChange);
+    document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullscreenChange);
+      document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+    };
+  }, [isFullscreen]);
+
   const toggleFullscreen = () => {
-    if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen?.().then(() => setIsFullscreen(true)).catch(() => {});
-    } else {
-      document.exitFullscreen?.().then(() => setIsFullscreen(false)).catch(() => {});
-    }
+    setIsFullscreen((prev) => {
+      const next = !prev;
+      if (next) {
+        if (containerRef.current?.requestFullscreen) {
+          containerRef.current.requestFullscreen().catch(() => {});
+        }
+      } else {
+        if ((document.fullscreenElement || (document as any).webkitFullscreenElement) && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      }
+      setTimeout(() => calculateFitWidth(), 100);
+      return next;
+    });
   };
 
   return (
     <div
       ref={containerRef}
       className={`flex flex-col bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl transition-all ${
-        isFullscreen ? 'fixed inset-0 z-[200] rounded-none' : 'w-full h-full min-h-[560px]'
+        isFullscreen
+          ? 'fixed inset-0 z-[9999] w-screen h-screen rounded-none border-none'
+          : 'w-full h-full min-h-[560px]'
       }`}
     >
       {/* ================= PDF TOOLBAR ================= */}
