@@ -15,7 +15,6 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const BlogsPage = lazy(() => import('./pages/BlogsPage'));
-const AiPlaygroundPage = lazy(() => import('./pages/AiPlaygroundPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
 
@@ -59,11 +58,7 @@ export default function App() {
                 <BlogsPage />
               </AuthGuard>
             } />
-            <Route path="/playground" element={
-              <AuthGuard>
-                <AiPlaygroundPage />
-              </AuthGuard>
-            } />
+            <Route path="/playground" element={<Navigate to="/programs" replace />} />
             <Route path="/query" element={<Navigate to="/programs" replace />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/payment/success" element={<PaymentSuccess />} />

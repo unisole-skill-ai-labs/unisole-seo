@@ -13,7 +13,7 @@ export default function Register() {
       mode: 'register',
       redirectUrl: redirect,
       title: 'Register on Unisole',
-      subtitle: 'Enter your mobile number to register and access models, sandbox telemetry, and curriculum.'
+      subtitle: 'Enter your mobile number to register and access programs, certifications, and curriculum.'
     });
   }, [openAuthModal, redirect]);
 

@@ -107,11 +107,11 @@ const mockPosts: BlogPost[] = [
   },
   {
     id: '5',
-    title: 'Interactive Python Sandboxes for Classroom AI Labs',
+    title: 'Interactive Python Environments for Classroom AI Labs',
     category: 'Web Dev & AI',
-    excerpt: 'Behind the engineering of real-time sandboxes. Building secure code playgrounds that execute machine learning models asynchronously without server overload.',
+    excerpt: 'Behind the engineering of real-time browser runtimes. Building secure client-side code environments that execute machine learning models asynchronously without server overload.',
     fullContent: `
-      <h3>Sandboxing with WebAssembly & Pyodide</h3>
+      <h3>Client-Side Execution with WebAssembly & Pyodide</h3>
       <p>Running NumPy and Scikit-Learn directly within client browsers via WebAssembly eliminates backend server costs while providing immediate student feedback.</p>
     `,
     readTime: '7 min read',

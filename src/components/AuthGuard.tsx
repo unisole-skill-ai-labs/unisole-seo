@@ -4,7 +4,7 @@ import { isAuthenticated } from '../utils/auth';
 import { useAuthModal } from '../context/AuthModalContext';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { ArrowRight, Terminal } from 'lucide-react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
 interface AuthGuardProps {
   children: React.ReactNode;
@@ -44,7 +44,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
         <main className="flex-grow flex items-center justify-center pt-24 sm:pt-32 pb-20 px-4">
           <div className="max-w-md w-full minimal-card p-6 sm:p-8 text-center space-y-5">
             <div className="w-12 h-12 rounded-xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white flex items-center justify-center mx-auto border border-zinc-200 dark:border-zinc-700">
-              <Terminal className="w-5 h-5 text-zinc-700 dark:text-zinc-200" />
+              <ShieldCheck className="w-5 h-5 text-zinc-700 dark:text-zinc-200" />
             </div>
 
             <div className="space-y-1.5">
@@ -55,7 +55,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
                 Authentication Required
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-xs mx-auto leading-relaxed">
-                Login with your mobile number to access models, sandbox telemetry, and technical curriculum.
+                Login with your mobile number to access programs, certifications, and technical curriculum.
               </p>
             </div>
 

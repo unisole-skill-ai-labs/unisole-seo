@@ -15,7 +15,7 @@ import {
   Award, 
   BookOpen, 
   Clock, 
-  Terminal, 
+  Calendar, 
   Sparkles, 
   ShieldCheck, 
   Cpu, 
@@ -434,10 +434,10 @@ export default function Home() {
                   </button>
                 </Link>
 
-                <Link to="/playground" className="w-full sm:w-auto">
+                <Link to="/events" className="w-full sm:w-auto">
                   <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 min-h-[44px] cursor-pointer">
-                    <Terminal className="w-4 h-4 text-zinc-500" />
-                    <span>Inference Sandbox</span>
+                    <Calendar className="w-4 h-4 text-zinc-500" />
+                    <span>Campus Events</span>
                   </button>
                 </Link>
               </div>

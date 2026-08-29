@@ -70,7 +70,7 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         openAuthModal({
           mode: 'register',
           title: 'Welcome to Unisole AI Labs',
-          subtitle: 'Sign in with your mobile number to access models, sandbox telemetry, and research guides.',
+          subtitle: 'Sign in with your mobile number to access programs, certifications, and research guides.',
         });
       }
     }, TIMED_POPUP_DELAY_MS);

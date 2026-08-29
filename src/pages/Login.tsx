@@ -13,7 +13,7 @@ export default function Login() {
       mode: 'login',
       redirectUrl: redirect,
       title: 'Login to Unisole',
-      subtitle: 'Enter your mobile number to access models, sandbox telemetry, and curriculum.'
+      subtitle: 'Enter your mobile number to access programs, certifications, and curriculum.'
     });
   }, [openAuthModal, redirect]);
 

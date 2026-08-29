@@ -14,7 +14,6 @@ import {
   BookOpen, 
   Calendar, 
   FileText, 
-  Terminal,
   Activity
 } from 'lucide-react';
 
@@ -89,7 +88,6 @@ export default function Navbar() {
     { title: "Machine Learning & Production MLOps", category: "Programs", link: "/programs", desc: "FastAPI, Docker, RAG & PyTorch Pipelines" },
     { title: "Full Stack Web Development (AI-Powered)", category: "Programs", link: "/programs", desc: "React, Node.js, Express & LLM integration" },
     { title: "Complete ML + Full Stack Dual-Track", category: "Programs", link: "/programs", desc: "Dual credential engineering track" },
-    { title: "AI Sandbox & Telemetry Gateway", category: "AI Tools", link: "/playground", desc: "Test live inference on Llama-3 & Mistral" },
     { title: "Applied AI Research & Technical Blogs", category: "Blogs", link: "/blogs", desc: "Deep dive articles by IIT & NIT mentors" },
     { title: "Community Meetups & AI Seminars", category: "Events", link: "/events", desc: "Upcoming campus showcases & sessions" },
   ];
@@ -143,7 +141,6 @@ export default function Navbar() {
               { label: 'Programs', path: '/programs', icon: BookOpen },
               { label: 'Events', path: '/events', icon: Calendar },
               { label: 'Blogs', path: '/blogs', icon: FileText },
-              { label: 'AI Sandbox', path: '/playground', icon: Terminal },
             ].map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -254,7 +251,7 @@ export default function Navbar() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search programs, research blogs, sandbox..."
+                placeholder="Search programs, research blogs, events..."
                 className="w-full bg-transparent outline-none text-xs sm:text-sm font-medium text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400"
                 autoFocus
               />
@@ -350,7 +347,6 @@ export default function Navbar() {
                   { label: 'Programs Catalog', path: '/programs', icon: BookOpen, desc: 'AI Engineering & Dual tracks' },
                   { label: 'Meetups & Events', path: '/events', icon: Calendar, desc: 'Campus sessions & labs' },
                   { label: 'AI Blogs & Guides', path: '/blogs', icon: FileText, desc: 'Research & tutorials' },
-                  { label: 'AI Sandbox & Telemetry', path: '/playground', icon: Terminal, desc: 'Test model weights' },
                 ].map((item) => {
                   const isActive = location.pathname === item.path;
                   const IconComp = item.icon;

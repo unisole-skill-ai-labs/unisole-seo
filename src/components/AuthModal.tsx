@@ -58,7 +58,7 @@ export default function AuthModal() {
   const subtitle =
     customSubtitle ||
     (mode === 'login'
-      ? 'Enter your mobile number to access models, sandbox, and curriculum.'
+      ? 'Enter your mobile number to access programs, certifications, and curriculum.'
       : 'Create a learner account with mobile number and instant verification.');
 
   return (
