@@ -22,6 +22,7 @@ import {
   Check,
   Crown,
   Medal,
+  UserX,
 } from "lucide-react";
 import { API_BASE_URL } from "../../config/api";
 import { isAuthenticated, getUser, getUserName, getUserPhone } from "../../utils/auth";
@@ -71,6 +72,8 @@ export default function LiveAudiencePage() {
   const [reactions, setReactions] = useState<{ id: string; emoji: string }[]>([]);
   const [copied, setCopied] = useState(false);
   const [remainingTime, setRemainingTime] = useState<number | null>(null);
+  const [isKicked, setIsKicked] = useState(false);
+  const [kickedMessage, setKickedMessage] = useState("");
 
   const socketRef = useRef<Socket | null>(null);
   const timerIntervalRef = useRef<any>(null);
@@ -284,6 +287,12 @@ export default function LiveAudiencePage() {
       }
     });
 
+    socket.on("audience:kicked", ({ message }: { message: string }) => {
+      setIsKicked(true);
+      setKickedMessage(message || "You have been removed from this live presentation by the host.");
+      socket.disconnect();
+    });
+
     socket.on("reaction_pulse", ({ emoji, id }) => {
       setReactions((prev) => [...prev.slice(-10), { id, emoji }]);
       setTimeout(() => {
@@ -407,6 +416,39 @@ export default function LiveAudiencePage() {
           <span className="text-xs font-mono text-zinc-400">
             Connecting to Live Presentation Arena...
           </span>
+        </div>
+      </div>
+    );
+  }
+
+  // Kicked Screen
+  if (isKicked) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex items-center justify-center p-6 text-center">
+        <div className="max-w-md w-full p-8 rounded-3xl bg-zinc-900 border border-rose-500/30 text-center space-y-5 shadow-2xl animate-fade-in">
+          <div className="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center mx-auto border border-rose-500/30">
+            <UserX className="w-7 h-7" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-bold text-white">Removed from Session</h2>
+            <p className="text-xs text-zinc-400 leading-relaxed">
+              {kickedMessage || "You have been removed from this live presentation by the host."}
+            </p>
+          </div>
+          <div className="flex gap-3 pt-2">
+            <Link
+              to="/programs"
+              className="flex-1 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs transition-colors text-center"
+            >
+              Explore Programs
+            </Link>
+            <Link
+              to="/"
+              className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs transition-colors text-center"
+            >
+              Back Home
+            </Link>
+          </div>
         </div>
       </div>
     );
