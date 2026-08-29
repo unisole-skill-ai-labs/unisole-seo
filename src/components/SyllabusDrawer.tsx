@@ -104,6 +104,28 @@ export default function SyllabusDrawer({
     }
   }, [pathway?.id]);
 
+  // Instant direct PDF file download (bypasses Google Drive web tab)
+  const handleDownloadPdf = () => {
+    if (!pathway) return;
+
+    let downloadUrl = `/syllabi/${pathway.id}.pdf`;
+    if (pathway.syllabusLink && pathway.syllabusLink.includes('drive.google.com')) {
+      const driveMatch = pathway.syllabusLink.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (driveMatch && driveMatch[1]) {
+        downloadUrl = `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
+      }
+    } else if (pathway.syllabusLink && pathway.syllabusLink !== '#') {
+      downloadUrl = pathway.syllabusLink;
+    }
+
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.setAttribute('download', `Unisole_${pathway.title.replace(/[^a-zA-Z0-9]/g, '_')}_Syllabus.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (!isOpen || !pathway) return null;
 
   const embedUrl = getEmbedPdfUrl(pathway.syllabusLink);
@@ -451,20 +473,14 @@ export default function SyllabusDrawer({
 
         {/* ================= FOOTER / CTA ACTIONS ================= */}
         <div className="px-6 py-4 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
-          {pathway.syllabusLink && pathway.syllabusLink !== '#' ? (
-            <a
-              href={pathway.syllabusLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition-colors cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Download PDF Copy</span>
-              <ExternalLink className="w-3 h-3 text-zinc-400" />
-            </a>
-          ) : (
-            <div />
-          )}
+          <button
+            type="button"
+            onClick={handleDownloadPdf}
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 text-xs font-bold transition-colors cursor-pointer active:scale-95"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Download PDF Copy</span>
+          </button>
 
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <button
