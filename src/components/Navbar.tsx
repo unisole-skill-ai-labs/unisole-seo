@@ -192,20 +192,13 @@ export default function Navbar() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-1.5">
+              <div className="flex items-center">
                 <button
                   type="button"
                   onClick={() => openAuthModal({ mode: 'login' })}
-                  className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white px-3 py-1.5 transition-colors cursor-pointer"
-                >
-                  Login
-                </button>
-                <button
-                  type="button"
-                  onClick={() => openAuthModal({ mode: 'register' })}
                   className="inline-flex items-center justify-center font-semibold px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs transition-all duration-150 active:scale-[0.98] cursor-pointer"
                 >
-                  Register
+                  Login / Register
                 </button>
               </div>
             )}
@@ -431,19 +424,9 @@ export default function Navbar() {
                       setMenuOpen(false);
                       openAuthModal({ mode: 'login' });
                     }}
-                    className="flex justify-center w-full font-semibold py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-800 dark:text-zinc-300 text-xs transition-colors cursor-pointer"
+                    className="flex justify-center w-full font-semibold py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-colors cursor-pointer"
                   >
-                    Login
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setMenuOpen(false);
-                      openAuthModal({ mode: 'register' });
-                    }}
-                    className="flex justify-center w-full font-semibold py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-colors cursor-pointer"
-                  >
-                    Register
+                    Login / Register
                   </button>
                 </div>
               )}
