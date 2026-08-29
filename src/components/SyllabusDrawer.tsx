@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PdfViewer from './PdfViewer';
 import {
   X,
   BookOpen,
@@ -441,23 +442,13 @@ export default function SyllabusDrawer({
               )}
             </div>
           ) : (
-            /* PDF Tab Embed */
-            <div className="h-full flex flex-col space-y-3">
-              {embedUrl ? (
-                <div className="flex-1 min-h-[500px] rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-950 shadow-inner relative">
-                  <iframe
-                    src={embedUrl}
-                    title={`${pathway.title} Syllabus PDF`}
-                    className="w-full h-full min-h-[500px] border-0"
-                    allow="autoplay"
-                  />
-                </div>
-              ) : (
-                <div className="h-64 flex flex-col items-center justify-center text-center p-6 text-zinc-400">
-                  <FileText className="w-10 h-10 mb-2 text-zinc-500" />
-                  <p className="text-xs">PDF preview not available for this pathway.</p>
-                </div>
-              )}
+            /* Native In-App PDF Viewer (No Google Drive) */
+            <div className="h-full min-h-[580px] flex flex-col">
+              <PdfViewer
+                url={`/syllabi/${pathway.id}.pdf`}
+                title={`${pathway.title} Syllabus`}
+                onDownload={handleDownloadPdf}
+              />
             </div>
           )}
         </div>
