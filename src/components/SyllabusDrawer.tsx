@@ -69,15 +69,14 @@ export default function SyllabusDrawer({
     '02': true,
   });
 
-  // Resolve local self-hosted PDF URL
-  const getEmbedPdfUrl = (pathwayId?: string, fallbackUrl?: string) => {
-    if (pathwayId) return `/syllabi/${pathwayId}.pdf`;
-    if (!fallbackUrl || fallbackUrl === '#') return null;
-    const driveMatch = fallbackUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  // Extract Google Drive Preview URL for reliable HTML5 PDF rendering
+  const getEmbedPdfUrl = (url?: string) => {
+    if (!url || url === '#') return null;
+    const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (driveMatch && driveMatch[1]) {
       return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
     }
-    return fallbackUrl;
+    return url;
   };
 
   // Keyboard shortcut ESC to close
@@ -120,7 +119,7 @@ export default function SyllabusDrawer({
 
   if (!isOpen || !pathway) return null;
 
-  const embedUrl = getEmbedPdfUrl(pathway.id, pathway.syllabusLink);
+  const embedUrl = getEmbedPdfUrl(pathway.syllabusLink);
 
   const toggleModule = (num: string) => {
     setExpandedModules((prev) => ({
