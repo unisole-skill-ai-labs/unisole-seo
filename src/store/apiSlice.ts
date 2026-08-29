@@ -66,22 +66,6 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ['User'],
     }),
-    updateProfile: builder.mutation({
-      query: (body) => ({
-        url: '/api/auth/profile',
-        method: 'PUT',
-        body,
-      }),
-      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
-        try {
-          const { data } = await queryFulfilled;
-          dispatch(setCredentials({ token: data.token || data.accessToken, user: data.user }));
-        } catch {
-          // handled by the caller
-        }
-      },
-      invalidatesTags: ['User'],
-    }),
     getMe: builder.query({
       query: () => '/api/auth/me',
       providesTags: ['User'],
@@ -106,7 +90,6 @@ export const {
   useCheckUserMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
-  useUpdateProfileMutation,
   useGetMeQuery,
   useGetOrdersQuery,
   useGetPublicCollegesQuery,
