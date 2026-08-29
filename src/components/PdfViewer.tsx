@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfjsWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import {
@@ -241,12 +242,12 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
     });
   };
 
-  return (
+  const viewerContent = (
     <div
       ref={containerRef}
       className={`flex flex-col bg-zinc-950 border border-zinc-800 rounded-2xl overflow-hidden shadow-2xl transition-all ${
         isFullscreen
-          ? 'fixed inset-0 z-[9999] w-screen h-screen rounded-none border-none'
+          ? 'fixed inset-0 z-[999999] w-screen h-[100dvh] rounded-none border-none'
           : 'w-full h-full min-h-[560px]'
       }`}
     >
@@ -453,4 +454,10 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
       </div>
     </div>
   );
+
+  if (isFullscreen) {
+    return createPortal(viewerContent, document.body);
+  }
+
+  return viewerContent;
 }
