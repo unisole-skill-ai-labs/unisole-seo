@@ -38,6 +38,7 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRefs = useRef<{ [key: number]: HTMLCanvasElement | null }>({});
+  const renderTasksRef = useRef<{ [key: number]: any }>({});
 
   // Auto calculate Fit to Width
   const calculateFitWidth = (customDoc?: any) => {
@@ -48,7 +49,7 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
     if (containerWidth > 200) {
       if (docToUse) {
         docToUse.getPage(1).then((firstPage: any) => {
-          const defaultViewport = firstPage.getViewport({ scale: 1.0, rotation });
+          const defaultViewport = firstPage.getViewport({ scale: 1.0, rotation: 0 });
           const newScale = containerWidth / defaultViewport.width;
           setScale(Math.max(0.6, Math.min(newScale, 2.2)));
         }).catch(() => {
@@ -68,6 +69,7 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
     setLoading(true);
     setError(null);
     setCurrentPage(1);
+    setRotation(0);
 
     const loadingTask = pdfjsLib.getDocument({
       url,
@@ -107,13 +109,19 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
     });
     observer.observe(containerRef.current);
     return () => observer.disconnect();
-  }, [pdfDoc, rotation]);
+  }, [pdfDoc]);
 
   // Render a specific page onto its canvas with HiDPI support
   const renderPage = async (pageNumber: number, canvas: HTMLCanvasElement) => {
     if (!pdfDoc) return;
 
     try {
+      if (renderTasksRef.current[pageNumber]) {
+        try {
+          renderTasksRef.current[pageNumber].cancel();
+        } catch {}
+      }
+
       const page = await pdfDoc.getPage(pageNumber);
       const viewport = page.getViewport({ scale, rotation });
       const context = canvas.getContext('2d');
@@ -133,7 +141,9 @@ export default function PdfViewer({ url, title = 'Document', onDownload }: PdfVi
         viewport,
       };
 
-      await page.render(renderContext).promise;
+      const renderTask = page.render(renderContext);
+      renderTasksRef.current[pageNumber] = renderTask;
+      await renderTask.promise;
     } catch (err: any) {
       if (err?.name !== 'RenderingCancelledException') {
         console.error(`Error rendering page ${pageNumber}:`, err);
