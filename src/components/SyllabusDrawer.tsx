@@ -69,14 +69,15 @@ export default function SyllabusDrawer({
     '02': true,
   });
 
-  // Extract Google Drive Preview URL
-  const getEmbedPdfUrl = (url?: string) => {
-    if (!url || url === '#') return null;
-    const driveMatch = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  // Resolve local self-hosted PDF URL
+  const getEmbedPdfUrl = (pathwayId?: string, fallbackUrl?: string) => {
+    if (pathwayId) return `/syllabi/${pathwayId}.pdf`;
+    if (!fallbackUrl || fallbackUrl === '#') return null;
+    const driveMatch = fallbackUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
     if (driveMatch && driveMatch[1]) {
       return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
     }
-    return url;
+    return fallbackUrl;
   };
 
   // Keyboard shortcut ESC to close
@@ -104,20 +105,11 @@ export default function SyllabusDrawer({
     }
   }, [pathway?.id]);
 
-  // Instant direct PDF file download (bypasses Google Drive web tab)
+  // Instant direct PDF file download from local domain
   const handleDownloadPdf = () => {
     if (!pathway) return;
 
-    let downloadUrl = `/syllabi/${pathway.id}.pdf`;
-    if (pathway.syllabusLink && pathway.syllabusLink.includes('drive.google.com')) {
-      const driveMatch = pathway.syllabusLink.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (driveMatch && driveMatch[1]) {
-        downloadUrl = `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`;
-      }
-    } else if (pathway.syllabusLink && pathway.syllabusLink !== '#') {
-      downloadUrl = pathway.syllabusLink;
-    }
-
+    const downloadUrl = `/syllabi/${pathway.id}.pdf`;
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.setAttribute('download', `Unisole_${pathway.title.replace(/[^a-zA-Z0-9]/g, '_')}_Syllabus.pdf`);
@@ -128,7 +120,7 @@ export default function SyllabusDrawer({
 
   if (!isOpen || !pathway) return null;
 
-  const embedUrl = getEmbedPdfUrl(pathway.syllabusLink);
+  const embedUrl = getEmbedPdfUrl(pathway.id, pathway.syllabusLink);
 
   const toggleModule = (num: string) => {
     setExpandedModules((prev) => ({
