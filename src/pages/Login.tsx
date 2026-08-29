@@ -10,9 +10,10 @@ export default function Login() {
 
   useEffect(() => {
     openAuthModal({
+      mode: 'login',
       redirectUrl: redirect,
-      title: 'Sign In / Register',
-      subtitle: 'Enter your mobile number to access models, sandbox telemetry, and courses.'
+      title: 'Login to Unisole',
+      subtitle: 'Enter your mobile number to access models, sandbox telemetry, and curriculum.'
     });
   }, [openAuthModal, redirect]);
 

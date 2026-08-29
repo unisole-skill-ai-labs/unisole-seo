@@ -2,7 +2,13 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../store/authSlice';
-import { useCheckUserMutation, useSendOtpMutation, useVerifyOtpMutation } from '../store/apiSlice';
+import {
+  useCheckUserMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+  useGetPublicCollegesQuery,
+  useGetPublicBranchesQuery,
+} from '../store/apiSlice';
 import { setAuthSession } from '../utils/auth';
 import {
   Phone,
@@ -17,6 +23,7 @@ import {
   ShieldCheck,
   RefreshCw,
   Sparkles,
+  ChevronDown,
 } from 'lucide-react';
 
 export interface MobileOtpAuthProps {
@@ -25,6 +32,31 @@ export interface MobileOtpAuthProps {
 }
 
 type AuthStep = 'PHONE' | 'PROFILE_SETUP' | 'OTP';
+
+const DEFAULT_COLLEGES = [
+  { id: 'dtu', name: 'Delhi Technological University (DTU)' },
+  { id: 'iitd', name: 'Indian Institute of Technology Delhi (IITD)' },
+  { id: 'nsut', name: 'Netaji Subhas University of Technology (NSUT)' },
+  { id: 'iiitd', name: 'Indraprastha Institute of Information Technology Delhi (IIITD)' },
+  { id: 'nit', name: 'National Institute of Technology (NIT)' },
+  { id: 'au', name: 'Anna University' },
+  { id: 'other', name: 'Other University / College' },
+];
+
+const DEFAULT_BRANCHES = [
+  { id: 'cse', name: 'Computer Science & Engineering (CSE)' },
+  { id: 'it', name: 'Information Technology (IT)' },
+  { id: 'aiml', name: 'Artificial Intelligence & Machine Learning (AIML)' },
+  { id: 'ds', name: 'Data Science & Big Data Analytics' },
+  { id: 'ece', name: 'Electronics & Communication Engineering (ECE)' },
+  { id: 'eee', name: 'Electrical & Electronics Engineering (EEE)' },
+  { id: 'mech', name: 'Mechanical Engineering (MECH)' },
+  { id: 'civil', name: 'Civil Engineering (CIVIL)' },
+  { id: 'cs', name: 'Cyber Security & Digital Forensics' },
+  { id: 'bca_mca', name: 'Computer Applications (BCA / MCA)' },
+  { id: 'bba_mba', name: 'Management & Business Studies (BBA / MBA)' },
+  { id: 'other', name: 'Other / Multidisciplinary' },
+];
 
 export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps = {}) {
   const navigate = useNavigate();
@@ -36,11 +68,19 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
 
+  const { data: serverColleges = [] } = useGetPublicCollegesQuery(undefined);
+  const { data: serverBranches = [] } = useGetPublicBranchesQuery(undefined);
+
+  const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
+  const branchOptions = serverBranches.length > 0 ? serverBranches : DEFAULT_BRANCHES;
+
   const [step, setStep] = useState<AuthStep>('PHONE');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
-  const [college, setCollege] = useState('');
-  const [branch, setBranch] = useState('');
+  const [selectedCollege, setSelectedCollege] = useState('');
+  const [customCollege, setCustomCollege] = useState('');
+  const [selectedBranch, setSelectedBranch] = useState('');
+  const [customBranch, setCustomBranch] = useState('');
   const [otp, setOtp] = useState('');
   const [isExistingUser, setIsExistingUser] = useState(false);
   const [existingUserName, setExistingUserName] = useState('');
@@ -138,12 +178,24 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       setErrorMsg('Please enter your full name');
       return;
     }
-    if (!college.trim()) {
-      setErrorMsg('Please enter your college / university');
+
+    const effectiveCollege =
+      selectedCollege === 'other' || selectedCollege === 'Other University / College'
+        ? customCollege.trim()
+        : selectedCollege.trim();
+
+    if (!effectiveCollege) {
+      setErrorMsg('Please select or enter your college / university');
       return;
     }
-    if (!branch.trim()) {
-      setErrorMsg('Please enter your branch / specialization');
+
+    const effectiveBranch =
+      selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
+        ? customBranch.trim()
+        : selectedBranch.trim();
+
+    if (!effectiveBranch) {
+      setErrorMsg('Please select or enter your branch / field of study');
       return;
     }
 
@@ -227,14 +279,24 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       return;
     }
 
+    const effectiveCollege =
+      selectedCollege === 'other' || selectedCollege === 'Other University / College'
+        ? customCollege.trim()
+        : selectedCollege.trim();
+
+    const effectiveBranch =
+      selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
+        ? customBranch.trim()
+        : selectedBranch.trim();
+
     setLoading(true);
     try {
       const data = await verifyOtp({
         phone: cleanPhone,
         otp: otp.trim(),
         name: name.trim() || undefined,
-        collegeName: college.trim() || undefined,
-        branch: branch.trim() || undefined,
+        collegeName: effectiveCollege || undefined,
+        branch: effectiveBranch || undefined,
       }).unwrap();
 
       const token = data.token || data.accessToken;
@@ -299,7 +361,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               />
             </div>
             <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-              Enter your mobile number to sign in or create an account instantly.
+              Enter your mobile number to login or register instantly.
             </p>
           </div>
 
@@ -315,7 +377,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               </>
             ) : (
               <>
-                <span>Continue</span>
+                <span>Continue to Login / Register</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -362,40 +424,82 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             </div>
           </div>
 
+          {/* College Dropdown */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-college">
               College / University <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <GraduationCap className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
+              <GraduationCap className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select
                 id="new-user-college"
-                type="text"
+                value={selectedCollege}
+                onChange={(e) => setSelectedCollege(e.target.value)}
                 required
-                className="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[40px]"
-                placeholder="e.g. IIT Delhi / DTU / Anna University"
-                value={college}
-                onChange={(e) => setCollege(e.target.value)}
-              />
+                className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
+              >
+                <option value="">-- Select Your College / University --</option>
+                {collegeOptions.map((c: any) => (
+                  <option key={c.id || c.slug || c.name} value={c.name}>
+                    {c.name} {c.shortName ? `(${c.shortName})` : ''}
+                  </option>
+                ))}
+                <option value="other">Other University / College (Specify below)</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
+
+            {(selectedCollege === 'other' || selectedCollege === 'Other University / College') && (
+              <div className="pt-1.5 animate-in fade-in duration-150">
+                <input
+                  type="text"
+                  required
+                  placeholder="Enter your college / university name"
+                  value={customCollege}
+                  onChange={(e) => setCustomCollege(e.target.value)}
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
+                />
+              </div>
+            )}
           </div>
 
+          {/* Academic Branch Dropdown */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-branch">
-              Branch / Field of Study <span className="text-rose-500">*</span>
+              Branch / Specialization <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
-              <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
-              <input
+              <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <select
                 id="new-user-branch"
-                type="text"
+                value={selectedBranch}
+                onChange={(e) => setSelectedBranch(e.target.value)}
                 required
-                className="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[40px]"
-                placeholder="e.g. Computer Science, AI, Mechanical, etc."
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-              />
+                className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
+              >
+                <option value="">-- Select Your Academic Branch --</option>
+                {branchOptions.map((b: any) => (
+                  <option key={b.id || b.code || b.name} value={b.name}>
+                    {b.name} {b.code ? `(${b.code})` : ''}
+                  </option>
+                ))}
+                <option value="other">Other / Multidisciplinary (Specify below)</option>
+              </select>
+              <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
             </div>
+
+            {(selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary') && (
+              <div className="pt-1.5 animate-in fade-in duration-150">
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. Chemical, Biotechnology, etc."
+                  value={customBranch}
+                  onChange={(e) => setCustomBranch(e.target.value)}
+                  className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
+                />
+              </div>
+            )}
           </div>
 
           <button
@@ -410,7 +514,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               </>
             ) : (
               <>
-                <span>Get OTP & Create Account</span>
+                <span>Send OTP & Register</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -471,7 +575,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             ) : (
               <>
                 <ShieldCheck className="w-4 h-4 text-emerald-500" />
-                <span>Verify & Sign In</span>
+                <span>Verify & Login</span>
               </>
             )}
           </button>

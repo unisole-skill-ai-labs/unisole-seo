@@ -78,7 +78,7 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
             onClick={handleLogout}
           >
             <LogOut className="w-3.5 h-3.5 text-rose-500" />
-            <span>Sign Out</span>
+            <span>Logout</span>
           </button>
         </div>
       </div>

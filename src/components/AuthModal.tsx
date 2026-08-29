@@ -53,13 +53,13 @@ export default function AuthModal() {
 
   const title =
     customTitle ||
-    (mode === 'login' ? 'Sign in to Unisole' : 'Join Unisole AI Labs');
+    (mode === 'login' ? 'Login to Unisole' : 'Register on Unisole');
 
   const subtitle =
     customSubtitle ||
     (mode === 'login'
-      ? 'Enter your mobile number to access models, sandbox, and guides.'
-      : 'Create a free member account to access our AI tools & telemetry.');
+      ? 'Enter your mobile number to access models, sandbox, and curriculum.'
+      : 'Create a learner account with mobile number and instant verification.');
 
   return (
     <div
@@ -98,10 +98,10 @@ export default function AuthModal() {
               id="auth-modal-title"
               className="text-lg font-bold text-zinc-900 dark:text-white tracking-tight"
             >
-              {customTitle || 'Welcome to Unisole'}
+              {title}
             </h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              {customSubtitle || 'Enter your mobile number to sign in or get started with instant OTP verification.'}
+              {subtitle}
             </p>
           </div>
 

@@ -34,7 +34,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User', 'Order'],
+  tagTypes: ['User', 'Order', 'College', 'Branch'],
   endpoints: (builder) => ({
     checkUser: builder.mutation({
       query: (body) => ({
@@ -74,6 +74,14 @@ export const apiSlice = createApi({
       query: () => '/api/orders',
       providesTags: ['Order'],
     }),
+    getPublicColleges: builder.query<any[], void>({
+      query: () => '/api/public/colleges',
+      providesTags: ['College'],
+    }),
+    getPublicBranches: builder.query<any[], void>({
+      query: () => '/api/public/branches',
+      providesTags: ['Branch'],
+    }),
   }),
 });
 
@@ -83,4 +91,6 @@ export const {
   useVerifyOtpMutation,
   useGetMeQuery,
   useGetOrdersQuery,
+  useGetPublicCollegesQuery,
+  useGetPublicBranchesQuery,
 } = apiSlice;

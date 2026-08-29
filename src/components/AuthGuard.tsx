@@ -30,7 +30,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
       openAuthModal({
         mode: 'login',
         redirectUrl: location.pathname,
-        title: 'Sign in to Access',
+        title: 'Login to Access',
         subtitle: 'Enter your mobile number to unlock this protected resource.',
       });
     }
@@ -55,7 +55,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
                 Authentication Required
               </h2>
               <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-xs mx-auto leading-relaxed">
-                Sign in with your mobile number to access models, sandbox telemetry, and technical guides.
+                Login with your mobile number to access models, sandbox telemetry, and technical curriculum.
               </p>
             </div>
 
@@ -65,13 +65,13 @@ export default function AuthGuard({ children }: AuthGuardProps) {
                 openAuthModal({
                   mode: 'login',
                   redirectUrl: location.pathname,
-                  title: 'Sign in to Access',
+                  title: 'Login to Access',
                   subtitle: 'Enter your mobile number to unlock this protected resource.',
                 })
               }
               className="w-full inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 cursor-pointer"
             >
-              <span>Sign In to Continue</span>
+              <span>Login to Continue</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>

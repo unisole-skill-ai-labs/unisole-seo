@@ -513,25 +513,42 @@ export default function LiveAudiencePage() {
                 <label className="block text-[11px] font-bold text-zinc-300 mb-1">
                   Branch / Major
                 </label>
-                <input
-                  type="text"
+                <select
                   value={branchInput}
                   onChange={(e) => setBranchInput(e.target.value)}
-                  placeholder="e.g. CSE / IT / ECE"
-                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-hidden focus:border-indigo-500"
-                />
+                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
+                >
+                  <option value="">Select Branch</option>
+                  <option value="Computer Science & Engineering">CSE</option>
+                  <option value="Information Technology">IT</option>
+                  <option value="Artificial Intelligence & Machine Learning">AIML</option>
+                  <option value="Data Science">Data Science</option>
+                  <option value="Electronics & Communication">ECE</option>
+                  <option value="Electrical & Electronics">EEE</option>
+                  <option value="Mechanical Engineering">MECH</option>
+                  <option value="Civil Engineering">CIVIL</option>
+                  <option value="Cyber Security">Cyber Security</option>
+                  <option value="BCA / MCA">BCA / MCA</option>
+                  <option value="BBA / MBA">BBA / MBA</option>
+                  <option value="Other">Other</option>
+                </select>
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-zinc-300 mb-1">
                   Year of Study
                 </label>
-                <input
-                  type="text"
+                <select
                   value={yearInput}
                   onChange={(e) => setYearInput(e.target.value)}
-                  placeholder="e.g. 2nd / 3rd Year"
-                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-hidden focus:border-indigo-500"
-                />
+                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
+                >
+                  <option value="">Select Year</option>
+                  <option value="1st Year">1st Year</option>
+                  <option value="2nd Year">2nd Year</option>
+                  <option value="3rd Year">3rd Year</option>
+                  <option value="4th Year">4th Year</option>
+                  <option value="Graduate / Alum">Graduate</option>
+                </select>
               </div>
             </div>
 
