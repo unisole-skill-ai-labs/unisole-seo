@@ -69,7 +69,10 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const [verifyOtp] = useVerifyOtpMutation();
 
   const { data: serverColleges = [] } = useGetPublicCollegesQuery(undefined);
-  const { data: serverBranches = [] } = useGetPublicBranchesQuery(undefined);
+  const selectedCollegeObj = serverColleges.find(
+    (c: any) => c.name === selectedCollege || c.id === selectedCollege
+  );
+  const { data: serverBranches = [] } = useGetPublicBranchesQuery(selectedCollegeObj?.id);
 
   const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
   const branchOptions = serverBranches.length > 0 ? serverBranches : DEFAULT_BRANCHES;
