@@ -50,7 +50,7 @@ export default function SlideRenderer({
 }: SlideRendererProps) {
   if (!slide) return null;
 
-  const currentStep = buildStep;
+  const currentStep = buildStep ?? 0;
 
   switch (slide.type) {
     // ==========================================
@@ -61,12 +61,12 @@ export default function SlideRenderer({
         <div className="w-full max-w-5xl mx-auto text-center space-y-6 sm:space-y-8 animate-fade-in">
           {/* Badge */}
           <div
-            className={`inline-flex items-center gap-2 px-5 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/40 text-xs sm:text-sm font-bold text-indigo-300 shadow-lg shadow-indigo-500/10 transition-all duration-700 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`inline-flex items-center gap-2 px-4 sm:px-5 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/40 text-xs sm:text-sm font-bold text-indigo-300 shadow-lg shadow-indigo-500/10 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
-            <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse" />
-            <span>{slide.badge || "INDUSTRIAL TRAINING & INTERNSHIP OPPORTUNITY PROGRAM"}</span>
+            <Sparkles className="w-4 h-4 text-indigo-400 animate-pulse shrink-0" />
+            <span className="truncate">{slide.badge || "INDUSTRIAL TRAINING & INTERNSHIP OPPORTUNITY PROGRAM"}</span>
           </div>
 
           {/* Main Title & Subtitle */}
@@ -75,8 +75,8 @@ export default function SlideRenderer({
               {slide.title || "UNISOLE AI CAMPUS PROGRAM"}
             </h1>
             <p
-              className={`text-base sm:text-2xl text-zinc-300 font-medium max-w-3xl mx-auto leading-relaxed transition-all duration-700 ${
-                currentStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`text-sm sm:text-2xl text-zinc-300 font-medium max-w-3xl mx-auto leading-relaxed transition-all duration-300 ease-out ${
+                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               {slide.subtitle || "For College Students Across Himachal Pradesh"}
@@ -85,8 +85,8 @@ export default function SlideRenderer({
 
           {/* Org Pill */}
           <div
-            className={`pt-2 transition-all duration-700 ${
-              currentStep >= 3 ? "opacity-100 scale-100" : "opacity-0 scale-95"
+            className={`pt-2 transition-all duration-300 ease-out ${
+              currentStep >= 2 ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-mono text-zinc-400">
@@ -118,16 +118,16 @@ export default function SlideRenderer({
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-center">
             {/* Left: Avatar & Credentials */}
             <div className="lg:col-span-5 flex flex-col items-center text-center space-y-4">
               <div
-                className={`w-36 h-36 sm:w-44 sm:h-44 rounded-3xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 p-1 shadow-2xl transition-all duration-700 ${
-                  currentStep >= 0 ? "scale-100 opacity-100" : "scale-90 opacity-0"
+                className={`w-32 h-32 sm:w-44 sm:h-44 rounded-3xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 p-1 shadow-2xl transition-all duration-300 ease-out ${
+                  currentStep >= 0 ? "scale-100 opacity-100" : "scale-95 opacity-0"
                 }`}
               >
                 <div className="w-full h-full rounded-[22px] bg-zinc-950 flex flex-col items-center justify-center border border-white/10">
-                  <span className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-200">
+                  <span className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 to-violet-200">
                     {slide.initials || "AM"}
                   </span>
                   <span className="text-[10px] uppercase font-mono tracking-widest text-zinc-400 mt-1">
@@ -137,7 +137,7 @@ export default function SlideRenderer({
               </div>
 
               <div>
-                <h3 className="text-2xl sm:text-3xl font-black text-white">{slide.title || "AJAY MOKTA"}</h3>
+                <h3 className="text-xl sm:text-3xl font-black text-white">{slide.title || "AJAY MOKTA"}</h3>
                 <p className="text-xs sm:text-sm text-indigo-300 font-medium mt-0.5">
                   {slide.subtitle || "Founder, UNISOLE Skill AI Labs · B.Tech, NIT Hamirpur"}
                 </p>
@@ -145,10 +145,10 @@ export default function SlideRenderer({
             </div>
 
             {/* Right: Journey & Quote */}
-            <div className="lg:col-span-7 space-y-5">
+            <div className="lg:col-span-7 space-y-4 sm:space-y-5">
               <div
-                className={`space-y-2.5 transition-all duration-700 ${
-                  currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                className={`space-y-2.5 transition-all duration-300 ease-out ${
+                  currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-3"
                 }`}
               >
                 <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
@@ -158,7 +158,7 @@ export default function SlideRenderer({
                   {creds.map((c: string, idx: number) => (
                     <div
                       key={idx}
-                      className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-2.5 text-xs text-zinc-200"
+                      className="p-3 rounded-2xl bg-white/5 border border-white/10 flex items-center gap-2.5 text-xs text-zinc-200 shadow-sm"
                     >
                       <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
                       <span className="font-medium">{c}</span>
@@ -168,8 +168,8 @@ export default function SlideRenderer({
               </div>
 
               <div
-                className={`p-5 rounded-3xl bg-gradient-to-r from-indigo-950/60 to-violet-950/60 border border-indigo-500/30 text-indigo-100 font-medium text-xs sm:text-sm leading-relaxed transition-all duration-700 shadow-xl ${
-                  currentStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                className={`p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-indigo-950/60 to-violet-950/60 border border-indigo-500/30 text-indigo-100 font-medium text-xs sm:text-sm leading-relaxed transition-all duration-300 ease-out shadow-xl ${
+                  currentStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
                 }`}
               >
                 <p className="italic">
@@ -205,13 +205,13 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-6xl mx-auto space-y-5 animate-fade-in">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
               <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
                 {slide.badge || "THE UNISOLE TEAM"}
               </span>
-              <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+              <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
                 {slide.title || "BUILT BY PRACTITIONERS"}
               </h2>
             </div>
@@ -222,14 +222,14 @@ export default function SlideRenderer({
 
           {/* 4 Pillars Header Tags */}
           <div
-            className={`flex flex-wrap gap-2 transition-all duration-700 ${
+            className={`flex flex-wrap gap-2 transition-all duration-300 ease-out ${
               currentStep >= 0 ? "opacity-100" : "opacity-0"
             }`}
           >
             {pillars.map((p: string, idx: number) => (
               <span
                 key={idx}
-                className="px-3.5 py-1 rounded-xl bg-white/5 border border-white/10 text-[11px] font-mono font-bold text-indigo-300"
+                className="px-3 py-1 rounded-xl bg-white/5 border border-white/10 text-[10px] sm:text-[11px] font-mono font-bold text-indigo-300"
               >
                 {p}
               </span>
@@ -238,21 +238,21 @@ export default function SlideRenderer({
 
           {/* Mentors Grid */}
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5 pt-2 transition-all duration-700 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
             }`}
           >
             {members.map((m: any, idx: number) => (
               <div
                 key={idx}
-                className="p-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md text-center space-y-3 hover:border-indigo-500/40 transition-all shadow-xl"
+                className="p-3.5 sm:p-4 rounded-3xl bg-white/5 border border-white/10 backdrop-blur-md text-center space-y-2 hover:border-indigo-500/40 transition-all shadow-lg"
               >
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 mx-auto flex items-center justify-center text-white font-black text-sm shadow-md">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-violet-500 mx-auto flex items-center justify-center text-white font-black text-xs sm:text-sm shadow-md">
                   {m.initials}
                 </div>
                 <div>
-                  <h4 className="font-extrabold text-sm text-zinc-100">{m.name}</h4>
-                  <p className="text-[11px] text-indigo-300 font-medium mt-1 leading-tight">
+                  <h4 className="font-extrabold text-xs sm:text-sm text-zinc-100">{m.name}</h4>
+                  <p className="text-[10px] sm:text-[11px] text-indigo-300 font-medium mt-0.5 leading-tight">
                     {m.role}
                   </p>
                 </div>
@@ -261,7 +261,7 @@ export default function SlideRenderer({
           </div>
 
           <p
-            className={`text-center text-xs sm:text-sm text-zinc-400 pt-2 transition-all duration-700 ${
+            className={`text-center text-xs text-zinc-400 pt-1 transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -276,10 +276,10 @@ export default function SlideRenderer({
     // ==========================================
     case "BIG_QUESTION": {
       return (
-        <div className="w-full max-w-4xl mx-auto text-center space-y-8 py-10 animate-fade-in">
+        <div className="w-full max-w-4xl mx-auto text-center space-y-6 sm:space-y-8 py-6 sm:py-10 animate-fade-in">
           <div
-            className={`transition-all duration-1000 transform ${
-              currentStep >= 0 ? "opacity-100 scale-100" : "opacity-0 scale-90"
+            className={`transition-all duration-500 ease-out transform ${
+              currentStep >= 0 ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
             <h1 className="text-4xl sm:text-7xl lg:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 drop-shadow-2xl font-serif tracking-tight">
@@ -288,11 +288,11 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`transition-all duration-700 delay-200 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`transition-all duration-300 ease-out ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             }`}
           >
-            <p className="text-base sm:text-2xl text-zinc-300 font-medium max-w-2xl mx-auto leading-relaxed">
+            <p className="text-sm sm:text-2xl text-zinc-300 font-medium max-w-2xl mx-auto leading-relaxed">
               {slide.subtitle ||
                 "Not what your parents have decided. Not what your friends are doing. What have YOU thought about?"}
             </p>
@@ -300,11 +300,11 @@ export default function SlideRenderer({
 
           {/* Pulsating Amber Cue Dot */}
           <div
-            className={`pt-6 transition-all duration-700 ${
+            className={`pt-4 transition-all duration-300 ${
               currentStep >= 1 ? "opacity-100" : "opacity-0"
             }`}
           >
-            <span className="inline-block w-4 h-4 rounded-full bg-amber-400 animate-ping" />
+            <span className="inline-block w-3.5 h-3.5 rounded-full bg-amber-400 animate-ping" />
           </div>
         </div>
       );
@@ -322,12 +322,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "THE LANDSCAPE"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "FOUR THINGS HAVE CHANGED"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -335,25 +335,25 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
             {pillars.map((p: any, idx: number) => {
               const isRevealed = currentStep >= idx;
               return (
                 <div
                   key={idx}
-                  className={`p-6 rounded-3xl border transition-all duration-700 shadow-xl ${
+                  className={`p-4 sm:p-5 rounded-3xl border transition-all duration-300 ease-out shadow-lg ${
                     isRevealed
                       ? "bg-gradient-to-br from-indigo-950/60 to-zinc-900 border-indigo-500/40 opacity-100 translate-y-0"
-                      : "bg-white/2 border-white/5 opacity-30 translate-y-4"
+                      : "bg-white/2 border-white/5 opacity-30 translate-y-2"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center justify-between mb-2">
                     <span className="text-xs font-mono font-bold text-indigo-400">
                       PILLAR {p.number}
                     </span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-indigo-400" />
+                    <span className="w-2 h-2 rounded-full bg-indigo-400" />
                   </div>
-                  <h3 className="text-lg sm:text-xl font-black text-white mb-1">
+                  <h3 className="text-base sm:text-lg font-black text-white mb-0.5">
                     {p.label}
                   </h3>
                   <p className="text-xs sm:text-sm text-zinc-300 font-medium leading-relaxed">
@@ -390,12 +390,12 @@ export default function SlideRenderer({
       };
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "PILLAR 01"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "THE JOB MARKET"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -403,43 +403,43 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-1">
             {/* Stat 1 */}
             <div
-              className={`p-6 rounded-3xl bg-white/5 border border-white/10 text-center space-y-2 transition-all duration-700 ${
-                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-white/5 border border-white/10 text-center space-y-1.5 transition-all duration-300 ease-out ${
+                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <span className="text-xs font-mono text-zinc-400 font-bold">{s1.year}</span>
-              <div className="text-3xl sm:text-4xl font-black text-indigo-300">{s1.count}</div>
+              <div className="text-2xl sm:text-4xl font-black text-indigo-300">{s1.count}</div>
               <p className="text-xs font-bold text-zinc-300">{s1.label}</p>
-              <span className="text-[11px] font-mono text-zinc-500 block">{s1.ratio}</span>
+              <span className="text-[10px] font-mono text-zinc-500 block">{s1.ratio}</span>
             </div>
 
             {/* Stat 2 */}
             <div
-              className={`p-6 rounded-3xl bg-gradient-to-b from-indigo-900/40 to-indigo-950/60 border border-indigo-500/40 text-center space-y-2 transition-all duration-700 shadow-xl ${
-                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-gradient-to-b from-indigo-900/40 to-indigo-950/60 border border-indigo-500/40 text-center space-y-1.5 transition-all duration-300 ease-out shadow-xl ${
+                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <span className="text-xs font-mono text-indigo-400 font-bold">{s2.year}</span>
-              <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">
+              <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">
                 {s2.count}
               </div>
               <p className="text-xs font-bold text-white">{s2.label}</p>
-              <span className="text-[11px] font-mono text-emerald-400 block font-bold">
+              <span className="text-[10px] font-mono text-emerald-400 block font-bold">
                 {s2.ratio} (9x surge)
               </span>
             </div>
 
             {/* Competition ratio */}
             <div
-              className={`p-6 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-center space-y-2 transition-all duration-700 shadow-xl ${
-                currentStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-center space-y-1.5 transition-all duration-300 ease-out shadow-xl ${
+                currentStep >= 2 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <span className="text-xs font-mono text-amber-400 font-bold">COMPETITION</span>
-              <div className="text-3xl sm:text-4xl font-black text-amber-300">{comp.number}</div>
+              <div className="text-2xl sm:text-4xl font-black text-amber-300">{comp.number}</div>
               <p className="text-xs font-bold text-amber-200">{comp.label}</p>
               <span className="text-[10px] text-zinc-400 block leading-tight">{comp.detail}</span>
             </div>
@@ -447,11 +447,11 @@ export default function SlideRenderer({
 
           {/* Empathy Insight Box */}
           <div
-            className={`p-5 rounded-3xl bg-zinc-900/90 border border-amber-500/40 text-xs sm:text-sm text-zinc-200 leading-relaxed transition-all duration-700 shadow-xl ${
-              currentStep >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`p-4 rounded-3xl bg-zinc-900/90 border border-amber-500/40 text-xs sm:text-sm text-zinc-200 leading-relaxed transition-all duration-300 ease-out shadow-xl ${
+              currentStep >= 3 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
-            <strong className="block font-bold text-amber-300 mb-1">
+            <strong className="block font-bold text-amber-300 mb-0.5">
               {slide.insightBox?.title || "Government jobs are not a bad choice."}
             </strong>
             <p>
@@ -482,12 +482,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "PILLAR 02"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "THE RISE OF THE PRIVATE SECTOR"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -497,14 +497,14 @@ export default function SlideRenderer({
 
           {/* Timeline Step Bar */}
           <div
-            className={`grid grid-cols-2 sm:grid-cols-6 gap-2 pt-2 transition-all duration-700 ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {timeline.map((t: any, idx: number) => (
               <div
                 key={idx}
-                className="p-3 rounded-2xl bg-white/5 border border-white/10 text-center space-y-1"
+                className="p-2.5 rounded-2xl bg-white/5 border border-white/10 text-center space-y-0.5"
               >
                 <div className="text-xs font-mono font-bold text-indigo-400">{t.year}</div>
                 <div className="text-[10px] font-bold text-zinc-200 leading-tight">{t.label}</div>
@@ -514,26 +514,26 @@ export default function SlideRenderer({
 
           {/* 3 Impact Numbers */}
           <div
-            className={`grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 transition-all duration-700 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {stats.map((s: any, idx: number) => (
               <div
                 key={idx}
-                className="p-6 rounded-3xl bg-gradient-to-b from-indigo-950/60 to-zinc-900 border border-indigo-500/30 text-center space-y-1.5 shadow-xl"
+                className="p-4 sm:p-5 rounded-3xl bg-gradient-to-b from-indigo-950/60 to-zinc-900 border border-indigo-500/30 text-center space-y-1 shadow-lg"
               >
-                <div className="text-3xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-violet-300">
+                <div className="text-2xl sm:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-white to-violet-300">
                   {s.value}
                 </div>
                 <div className="text-xs font-bold text-zinc-200">{s.label}</div>
-                <div className="text-[11px] text-zinc-400 font-mono">{s.sub}</div>
+                <div className="text-[10px] text-zinc-400 font-mono">{s.sub}</div>
               </div>
             ))}
           </div>
 
           <p
-            className={`text-xs text-zinc-400 text-center pt-2 transition-all duration-700 ${
+            className={`text-xs text-zinc-400 text-center pt-1 transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -563,12 +563,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "PILLAR 03"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "WHAT PEOPLE GET WRONG"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -576,18 +576,18 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             {/* Left: Fears / Myths */}
             <div
-              className={`p-6 rounded-3xl bg-rose-950/20 border border-rose-500/30 space-y-3 transition-all duration-700 shadow-xl ${
-                currentStep >= 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-rose-950/20 border border-rose-500/30 space-y-2.5 transition-all duration-300 ease-out shadow-lg ${
+                currentStep >= 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
               }`}
             >
               <div className="flex items-center gap-2 text-rose-400 text-xs font-bold uppercase tracking-wider">
                 <AlertTriangle className="w-4 h-4" />
                 <span>The Perception / Fear</span>
               </div>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-zinc-200">
+              <ul className="space-y-2 text-xs sm:text-sm text-zinc-200">
                 {myths.map((m: string, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <span className="text-rose-400 font-bold shrink-0">✕</span>
@@ -595,22 +595,22 @@ export default function SlideRenderer({
                   </li>
                 ))}
               </ul>
-              <p className="text-[11px] text-zinc-400 italic pt-2 border-t border-rose-500/20">
+              <p className="text-[10px] text-zinc-400 italic pt-1 border-t border-rose-500/20">
                 {slide.mythsFooter || "These come from watching real people lose real jobs."}
               </p>
             </div>
 
             {/* Right: Facts & Upside */}
             <div
-              className={`p-6 rounded-3xl bg-emerald-950/20 border border-emerald-500/30 space-y-3 transition-all duration-700 shadow-xl ${
-                currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-emerald-950/20 border border-emerald-500/30 space-y-2.5 transition-all duration-300 ease-out shadow-lg ${
+                currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-3"
               }`}
             >
               <div className="flex items-center gap-2 text-emerald-400 text-xs font-bold uppercase tracking-wider">
                 <ShieldCheck className="w-4 h-4" />
                 <span>The Fuller Picture & Facts</span>
               </div>
-              <ul className="space-y-2.5 text-xs sm:text-sm text-zinc-200">
+              <ul className="space-y-2 text-xs sm:text-sm text-zinc-200">
                 {facts.map((f: any, idx: number) => (
                   <li key={idx} className="flex items-start gap-2">
                     <strong className="text-emerald-400 font-mono font-bold shrink-0">{f.value}</strong>
@@ -618,7 +618,7 @@ export default function SlideRenderer({
                   </li>
                 ))}
               </ul>
-              <p className="text-[11px] text-zinc-400 italic pt-2 border-t border-emerald-500/20">
+              <p className="text-[10px] text-zinc-400 italic pt-1 border-t border-emerald-500/20">
                 {slide.factsFooter || "Mobility, remote work, global roles, entrepreneurship."}
               </p>
             </div>
@@ -626,7 +626,7 @@ export default function SlideRenderer({
 
           {/* Key Takeaway */}
           <div
-            className={`p-4 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 text-center font-bold text-xs sm:text-sm text-indigo-200 transition-all duration-700 ${
+            className={`p-3.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/40 text-center font-bold text-xs sm:text-sm text-indigo-200 transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100 scale-100" : "opacity-0 scale-95"
             }`}
           >
@@ -659,12 +659,12 @@ export default function SlideRenderer({
       };
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "PILLAR 04"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "TIME & OPPORTUNITY COST"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -672,58 +672,58 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             {/* Scenario A */}
             <div
-              className={`p-6 rounded-3xl bg-white/5 border border-white/10 space-y-4 transition-all duration-700 shadow-xl ${
-                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-white/5 border border-white/10 space-y-3 transition-all duration-300 ease-out shadow-lg ${
+                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <div>
                 <span className="text-xs font-mono font-bold text-zinc-400">{scA.title}</span>
-                <h4 className="text-base font-bold text-white mt-0.5">{scA.subtitle}</h4>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">{scA.subtitle}</h4>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {scA.steps.map((st: string, idx: number) => (
-                  <div key={idx} className="p-2.5 rounded-xl bg-black/30 text-xs text-zinc-300">
+                  <div key={idx} className="p-2 rounded-xl bg-black/30 text-xs text-zinc-300">
                     {st}
                   </div>
                 ))}
               </div>
-              <div className="text-xs font-mono text-zinc-400 pt-2 border-t border-white/10">
+              <div className="text-xs font-mono text-zinc-400 pt-1 border-t border-white/10">
                 {scA.footer}
               </div>
             </div>
 
             {/* Scenario B */}
             <div
-              className={`p-6 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-4 transition-all duration-700 shadow-2xl ${
-                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-3 transition-all duration-300 ease-out shadow-xl ${
+                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <div>
                 <span className="text-xs font-mono font-bold text-indigo-400">{scB.title}</span>
-                <h4 className="text-base font-bold text-white mt-0.5">{scB.subtitle}</h4>
+                <h4 className="text-sm sm:text-base font-bold text-white mt-0.5">{scB.subtitle}</h4>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {scB.steps.map((st: any, idx: number) => (
                   <div
                     key={idx}
-                    className="p-2.5 rounded-xl bg-indigo-900/30 border border-indigo-500/20 flex items-center justify-between text-xs"
+                    className="p-2 rounded-xl bg-indigo-900/30 border border-indigo-500/20 flex items-center justify-between text-xs"
                   >
                     <span className="font-mono text-indigo-300 font-bold">{st.time}</span>
                     <span className="text-zinc-200 font-medium">{st.label}</span>
                   </div>
                 ))}
               </div>
-              <div className="text-xs font-mono text-emerald-400 font-bold pt-2 border-t border-indigo-500/20">
+              <div className="text-xs font-mono text-emerald-400 font-bold pt-1 border-t border-indigo-500/20">
                 {scB.footer}
               </div>
             </div>
           </div>
 
           <p
-            className={`text-xs text-zinc-400 text-center italic transition-all duration-700 ${
+            className={`text-xs text-zinc-400 text-center italic transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -747,12 +747,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "CAREER POTENTIAL"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "THE OTHER SIDE OF THE LEDGER"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -761,26 +761,26 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-2 transition-all duration-700 ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {benefits.map((b: any, idx: number) => (
               <div
                 key={idx}
-                className="p-5 rounded-3xl bg-white/5 border border-white/10 text-center space-y-2 hover:border-indigo-500/40 transition-all shadow-xl"
+                className="p-3.5 sm:p-4 rounded-3xl bg-white/5 border border-white/10 text-center space-y-1.5 hover:border-indigo-500/40 transition-all shadow-md"
               >
                 <span className="text-[10px] font-mono text-zinc-400 font-bold block leading-tight">
                   {b.title}
                 </span>
-                <div className="text-2xl sm:text-3xl font-black text-indigo-300">{b.value}</div>
+                <div className="text-xl sm:text-3xl font-black text-indigo-300">{b.value}</div>
                 <span className="text-[10px] text-zinc-400 block">{b.sub}</span>
               </div>
             ))}
           </div>
 
           <p
-            className={`text-xs text-zinc-400 text-center italic transition-all duration-700 ${
+            className={`text-xs text-zinc-400 text-center italic transition-all duration-300 ease-out ${
               currentStep >= 1 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -802,12 +802,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "ACADEMIC ALIGNMENT"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "YOUR DEGREE, YOUR ENTRY POINT"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -815,28 +815,28 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="space-y-2.5 pt-2">
+          <div className="space-y-2 pt-1">
             {rows.map((r: any, idx: number) => {
               const isRevealed = currentStep >= idx;
               return (
                 <div
                   key={idx}
-                  className={`p-4 sm:p-5 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-all duration-700 shadow-lg ${
+                  className={`p-3.5 sm:p-4 rounded-2xl border flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 transition-all duration-300 ease-out shadow-md ${
                     isRevealed
                       ? "bg-white/5 border-white/10 opacity-100 translate-x-0"
-                      : "bg-white/2 border-white/5 opacity-30 -translate-x-4"
+                      : "bg-white/2 border-white/5 opacity-30 -translate-x-3"
                   }`}
                 >
                   <div className="space-y-0.5">
                     <span className="text-xs font-mono font-bold text-indigo-400">{r.branch}</span>
-                    <h4 className="font-bold text-sm sm:text-base text-white">{r.role}</h4>
-                    <p className="text-[11px] text-zinc-400">{r.degrees}</p>
+                    <h4 className="font-bold text-xs sm:text-base text-white">{r.role}</h4>
+                    <p className="text-[10px] sm:text-[11px] text-zinc-400">{r.degrees}</p>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono font-black text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-xl border border-emerald-500/20">
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-xs font-mono font-black text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-xl border border-emerald-500/20">
                       {r.range}
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 px-2.5 py-1 rounded-lg">
+                    <span className="text-[10px] font-mono font-bold text-zinc-400 bg-white/5 px-2 py-1 rounded-lg">
                       EFFORT: {r.effort}
                     </span>
                   </div>
@@ -847,7 +847,7 @@ export default function SlideRenderer({
 
           {/* Formula */}
           <div
-            className={`p-4 rounded-2xl bg-indigo-950/60 border border-indigo-500/30 flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-black transition-all duration-700 shadow-xl ${
+            className={`p-3 rounded-2xl bg-indigo-950/60 border border-indigo-500/30 flex flex-wrap items-center justify-center gap-2 text-xs sm:text-sm font-black transition-all duration-300 ease-out shadow-lg ${
               currentStep >= 3 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -878,12 +878,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "REALITY CHECK"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "THE GAP"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -891,27 +891,27 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-1">
             {/* Degree Foundation */}
             <div
-              className={`lg:col-span-4 p-6 rounded-3xl bg-white/5 border border-white/10 text-center space-y-3 transition-all duration-700 shadow-xl ${
-                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`lg:col-span-4 p-4 sm:p-5 rounded-3xl bg-white/5 border border-white/10 text-center space-y-2 transition-all duration-300 ease-out shadow-lg ${
+                currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <span className="text-xs font-mono text-zinc-400 font-bold uppercase">THE FOUNDATION</span>
-              <div className="w-16 h-16 rounded-2xl bg-indigo-600/30 border border-indigo-500/40 mx-auto flex items-center justify-center">
-                <GraduationCap className="w-8 h-8 text-indigo-400" />
+              <div className="w-12 h-12 rounded-2xl bg-indigo-600/30 border border-indigo-500/40 mx-auto flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 text-indigo-400" />
               </div>
-              <h4 className="font-extrabold text-base text-white">YOUR DEGREE</h4>
-              <p className="text-xs text-zinc-400 leading-relaxed">
+              <h4 className="font-extrabold text-sm sm:text-base text-white">YOUR DEGREE</h4>
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
                 Domain knowledge. Irreplaceable — and what every other graduate already has.
               </p>
             </div>
 
             {/* Industry Layer (Gap) */}
             <div
-              className={`lg:col-span-8 p-6 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-4 transition-all duration-700 shadow-2xl ${
-                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              className={`lg:col-span-8 p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-3 transition-all duration-300 ease-out shadow-xl ${
+                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
               }`}
             >
               <div className="flex items-center justify-between">
@@ -920,11 +920,11 @@ export default function SlideRenderer({
                 </span>
                 <span className="text-xs text-amber-400 font-bold">Nobody hands you this</span>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {layers.map((l: string, idx: number) => (
                   <span
                     key={idx}
-                    className="px-3.5 py-1.5 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-xs font-bold text-white shadow-sm"
+                    className="px-3 py-1 rounded-xl bg-indigo-500/20 border border-indigo-500/30 text-[11px] font-bold text-white shadow-sm"
                   >
                     {l}
                   </span>
@@ -938,7 +938,7 @@ export default function SlideRenderer({
           </div>
 
           <p
-            className={`text-center font-bold text-xs sm:text-sm text-indigo-300 transition-all duration-700 ${
+            className={`text-center font-bold text-xs sm:text-sm text-indigo-300 transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -962,12 +962,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "THE BLUEPRINT"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "THE ROADMAP"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -975,22 +975,22 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-2">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 pt-1">
             {steps.map((st: any, idx: number) => {
               const isRevealed = currentStep >= idx;
               return (
                 <div
                   key={idx}
-                  className={`p-4 rounded-3xl border text-center space-y-3 transition-all duration-700 shadow-xl ${
+                  className={`p-3.5 rounded-3xl border text-center space-y-2 transition-all duration-300 ease-out shadow-lg ${
                     isRevealed
                       ? "bg-gradient-to-b from-indigo-900/40 to-zinc-900 border-indigo-500/40 opacity-100 scale-100"
                       : "bg-white/2 border-white/5 opacity-20 scale-95"
                   }`}
                 >
-                  <div className="w-8 h-8 rounded-xl bg-indigo-600/30 text-indigo-300 font-mono font-black text-xs mx-auto flex items-center justify-center border border-indigo-500/30">
+                  <div className="w-7 h-7 rounded-xl bg-indigo-600/30 text-indigo-300 font-mono font-black text-xs mx-auto flex items-center justify-center border border-indigo-500/30">
                     {st.num}
                   </div>
-                  <h4 className="font-extrabold text-xs text-white leading-tight min-h-[32px] flex items-center justify-center">
+                  <h4 className="font-extrabold text-[11px] text-white leading-tight min-h-[28px] flex items-center justify-center">
                     {st.title}
                   </h4>
                 </div>
@@ -999,7 +999,7 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center font-bold text-xs sm:text-sm text-amber-300 transition-all duration-700 ${
+            className={`p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-center font-bold text-xs sm:text-sm text-amber-300 transition-all duration-300 ease-out ${
               currentStep >= 5 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -1024,12 +1024,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "STEP 02 FOCUS"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "LEARNING IS NOT BUILDING."}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1039,30 +1039,30 @@ export default function SlideRenderer({
 
           {/* Tutorial Trap */}
           <div
-            className={`p-5 rounded-3xl bg-rose-950/20 border border-rose-500/30 space-y-2 transition-all duration-700 shadow-xl ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`p-4 rounded-3xl bg-rose-950/20 border border-rose-500/30 space-y-1.5 transition-all duration-300 ease-out shadow-lg ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             <span className="text-xs font-mono font-bold text-rose-400 uppercase">THE TUTORIAL TRAP</span>
-            <div className="flex flex-wrap items-center gap-2 pt-1 text-xs font-mono font-bold">
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-xs font-mono font-bold">
               {tut.map((t: string, idx: number) => (
                 <React.Fragment key={idx}>
-                  <span className="px-3 py-1 rounded-xl bg-rose-500/20 text-rose-200 border border-rose-500/30">
+                  <span className="px-2.5 py-1 rounded-xl bg-rose-500/20 text-rose-200 border border-rose-500/30">
                     {t}
                   </span>
                   {idx < tut.length - 1 && <span className="text-rose-400">→</span>}
                 </React.Fragment>
               ))}
             </div>
-            <p className="text-[11px] text-zinc-400 italic pt-1">
+            <p className="text-[10px] text-zinc-400 italic pt-0.5">
               {slide.tutorialNote || "The feeling of progress. None of the evidence."}
             </p>
           </div>
 
           {/* Real Project Cycle */}
           <div
-            className={`p-5 rounded-3xl bg-emerald-950/20 border border-emerald-500/30 space-y-2 transition-all duration-700 shadow-xl ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`p-4 rounded-3xl bg-emerald-950/20 border border-emerald-500/30 space-y-1.5 transition-all duration-300 ease-out shadow-lg ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             <span className="text-xs font-mono font-bold text-emerald-400 uppercase">
@@ -1072,7 +1072,7 @@ export default function SlideRenderer({
               {proj.map((p: any, idx: number) => (
                 <div
                   key={idx}
-                  className="p-2.5 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-center"
+                  className="p-2 rounded-xl bg-emerald-500/20 border border-emerald-500/30 text-center"
                 >
                   <span className="text-[10px] font-mono text-emerald-400 block font-bold">0{p.step}</span>
                   <span className="text-xs font-bold text-white">{p.label}</span>
@@ -1083,7 +1083,7 @@ export default function SlideRenderer({
 
           {/* The Test */}
           <div
-            className={`p-4 rounded-2xl bg-zinc-900 border border-white/10 text-xs sm:text-sm text-zinc-200 leading-relaxed transition-all duration-700 ${
+            className={`p-3.5 rounded-2xl bg-zinc-900 border border-white/10 text-xs sm:text-sm text-zinc-200 leading-relaxed transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -1120,12 +1120,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "STEPS 03 TO 06"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "GOOD SKILL ≠ GOOD OPPORTUNITY."}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1133,17 +1133,17 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-2">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-center pt-1">
             {/* Funnel Flow */}
             <div
-              className={`lg:col-span-6 p-5 rounded-3xl bg-white/5 border border-white/10 space-y-2 transition-all duration-700 shadow-xl ${
+              className={`lg:col-span-6 p-4 rounded-3xl bg-white/5 border border-white/10 space-y-1.5 transition-all duration-300 ease-out shadow-lg ${
                 currentStep >= 0 ? "opacity-100" : "opacity-0"
               }`}
             >
               <span className="text-xs font-mono font-bold text-indigo-400 uppercase">
                 THE 7-STAGE CONVERSION FUNNEL
               </span>
-              <div className="space-y-1.5 pt-1">
+              <div className="space-y-1 pt-1">
                 {funnel.map((f: string, idx: number) => (
                   <div
                     key={idx}
@@ -1158,7 +1158,7 @@ export default function SlideRenderer({
 
             {/* 8 Channels */}
             <div
-              className={`lg:col-span-6 p-5 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-3 transition-all duration-700 shadow-2xl ${
+              className={`lg:col-span-6 p-4 rounded-3xl bg-gradient-to-br from-indigo-950/70 to-zinc-900 border border-indigo-500/40 space-y-2.5 transition-all duration-300 ease-out shadow-xl ${
                 currentStep >= 1 ? "opacity-100" : "opacity-0"
               }`}
             >
@@ -1169,13 +1169,13 @@ export default function SlideRenderer({
                 {channels.map((c: string, idx: number) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-zinc-100 text-center"
+                    className="p-2.5 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-xs font-bold text-zinc-100 text-center"
                   >
                     {c}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-amber-300 font-bold pt-2 border-t border-white/10 text-center">
+              <p className="text-xs text-amber-300 font-bold pt-1 border-t border-white/10 text-center">
                 {slide.punchline || "Most students use only one of these eight."}
               </p>
             </div>
@@ -1199,12 +1199,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "THE STRUCTURED SOLUTION"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "SO HOW DO YOU BUILD THIS?"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1213,18 +1213,18 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 pt-2 transition-all duration-700 ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {comps.map((c: any, idx: number) => (
               <div
                 key={idx}
-                className="p-5 rounded-3xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition-all shadow-xl space-y-1.5"
+                className="p-4 rounded-3xl bg-white/5 border border-white/10 hover:border-indigo-500/40 transition-all shadow-md space-y-1"
               >
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-indigo-400" />
-                  <h4 className="font-extrabold text-sm text-white">{c.title}</h4>
+                  <h4 className="font-extrabold text-xs sm:text-sm text-white">{c.title}</h4>
                 </div>
                 <p className="text-xs text-zinc-300 font-medium leading-relaxed">{c.desc}</p>
               </div>
@@ -1280,12 +1280,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-6xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "CHOOSE YOUR TRACK"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "COURSE PATHWAYS"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1293,39 +1293,39 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-1">
             {groups.map((g: any, idx: number) => {
               const isRevealed = currentStep >= idx;
               return (
                 <div
                   key={idx}
-                  className={`p-5 rounded-3xl border transition-all duration-700 flex flex-col justify-between shadow-xl ${
+                  className={`p-4 rounded-3xl border transition-all duration-300 ease-out flex flex-col justify-between shadow-lg ${
                     isRevealed
                       ? "bg-gradient-to-b from-indigo-950/60 to-zinc-900 border-indigo-500/40 opacity-100 translate-y-0"
-                      : "bg-white/2 border-white/5 opacity-25 translate-y-4"
+                      : "bg-white/2 border-white/5 opacity-25 translate-y-2"
                   }`}
                 >
-                  <div className="space-y-2">
+                  <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <span className="text-[10px] font-mono font-bold text-indigo-400">{g.group}</span>
                       <span className="text-xs font-black text-white">{g.branch}</span>
                     </div>
-                    <p className="text-[11px] text-zinc-400 leading-tight">{g.degrees}</p>
+                    <p className="text-[10px] text-zinc-400 leading-tight">{g.degrees}</p>
 
-                    <div className="space-y-2 pt-3 border-t border-white/10">
+                    <div className="space-y-1.5 pt-2 border-t border-white/10">
                       {g.courses.map((c: any, cIdx: number) => (
                         <div
                           key={cIdx}
-                          className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between text-xs"
+                          className="p-2 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between text-xs"
                         >
-                          <span className="font-medium text-zinc-200 truncate mr-2">{c.name}</span>
-                          <span className="font-mono font-black text-amber-400 shrink-0">{c.price}</span>
+                          <span className="font-medium text-zinc-200 truncate mr-2 text-[11px]">{c.name}</span>
+                          <span className="font-mono font-black text-amber-400 shrink-0 text-xs">{c.price}</span>
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  <div className="pt-4 mt-2 border-t border-white/5 text-[10px] text-zinc-500 text-center font-mono">
+                  <div className="pt-2 mt-1 border-t border-white/5 text-[9px] text-zinc-500 text-center font-mono">
                     Structured Curriculum + Projects
                   </div>
                 </div>
@@ -1334,7 +1334,7 @@ export default function SlideRenderer({
           </div>
 
           <p
-            className={`text-center text-xs text-indigo-300 transition-all duration-700 ${
+            className={`text-center text-xs text-indigo-300 transition-all duration-300 ease-out ${
               currentStep >= 3 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -1359,12 +1359,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "CAREER PIPELINE"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "BEYOND THE TRAINING"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1374,14 +1374,14 @@ export default function SlideRenderer({
 
           {/* Flow pipeline */}
           <div
-            className={`grid grid-cols-2 sm:grid-cols-6 gap-2 pt-2 transition-all duration-700 ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-6 gap-2 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {flow.map((f: string, idx: number) => (
               <div
                 key={idx}
-                className="p-3 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-center text-xs font-black text-white shadow-md"
+                className="p-2.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-center text-xs font-black text-white shadow-sm"
               >
                 {f}
               </div>
@@ -1390,14 +1390,14 @@ export default function SlideRenderer({
 
           {/* 6 Opportunities Grid */}
           <div
-            className={`grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2 transition-all duration-700 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {opps.map((o: string, idx: number) => (
               <div
                 key={idx}
-                className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center text-xs font-bold text-zinc-200 shadow-md"
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-center text-xs font-bold text-zinc-200 shadow-sm"
               >
                 {o}
               </div>
@@ -1405,7 +1405,7 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`p-4 rounded-2xl bg-zinc-900 border border-white/10 text-center space-y-1 transition-all duration-700 ${
+            className={`p-3.5 rounded-2xl bg-zinc-900 border border-white/10 text-center space-y-0.5 transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
@@ -1437,12 +1437,12 @@ export default function SlideRenderer({
       };
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "EXPERIENCE"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "WHAT IT FEELS LIKE"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1450,15 +1450,15 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             {/* Panel A */}
             <div
-              className={`p-6 rounded-3xl bg-white/5 border border-white/10 space-y-4 transition-all duration-700 shadow-xl ${
-                currentStep >= 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-white/5 border border-white/10 space-y-3 transition-all duration-300 ease-out shadow-lg ${
+                currentStep >= 0 ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"
               }`}
             >
-              <h3 className="text-base sm:text-lg font-black text-indigo-300">{pA.title}</h3>
-              <ul className="space-y-2 text-xs sm:text-sm text-zinc-200">
+              <h3 className="text-sm sm:text-base font-black text-indigo-300">{pA.title}</h3>
+              <ul className="space-y-1.5 text-xs text-zinc-200">
                 {pA.points.map((pt: string, idx: number) => (
                   <li key={idx} className="flex items-center gap-2">
                     <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
@@ -1466,17 +1466,17 @@ export default function SlideRenderer({
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-zinc-400 italic pt-2 border-t border-white/10">{pA.footer}</p>
+              <p className="text-xs text-zinc-400 italic pt-1 border-t border-white/10">{pA.footer}</p>
             </div>
 
             {/* Panel B */}
             <div
-              className={`p-6 rounded-3xl bg-gradient-to-br from-indigo-950/60 to-zinc-900 border border-indigo-500/40 space-y-4 transition-all duration-700 shadow-2xl ${
-                currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+              className={`p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-indigo-950/60 to-zinc-900 border border-indigo-500/40 space-y-3 transition-all duration-300 ease-out shadow-xl ${
+                currentStep >= 1 ? "opacity-100 translate-x-0" : "opacity-0 translate-x-3"
               }`}
             >
-              <h3 className="text-base sm:text-lg font-black text-violet-300">{pB.title}</h3>
-              <ul className="space-y-2 text-xs sm:text-sm text-zinc-200">
+              <h3 className="text-sm sm:text-base font-black text-violet-300">{pB.title}</h3>
+              <ul className="space-y-1.5 text-xs text-zinc-200">
                 {pB.points.map((pt: string, idx: number) => (
                   <li key={idx} className="flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
@@ -1484,7 +1484,7 @@ export default function SlideRenderer({
                   </li>
                 ))}
               </ul>
-              <p className="text-xs text-indigo-300 font-bold pt-2 border-t border-indigo-500/20">{pB.footer}</p>
+              <p className="text-xs text-indigo-300 font-bold pt-1 border-t border-indigo-500/20">{pB.footer}</p>
             </div>
           </div>
         </div>
@@ -1505,12 +1505,12 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "ADVANCED PATHWAYS"}
             </span>
-            <h2 className="text-2xl sm:text-4xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-4xl font-black text-white mt-2">
               {slide.title || "WHERE STRONG PERFORMANCE LEADS"}
             </h2>
             <p className="text-xs sm:text-sm text-zinc-400">
@@ -1519,14 +1519,14 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 transition-all duration-700 ${
-              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 0 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {flow.map((f: string, idx: number) => (
               <div
                 key={idx}
-                className="p-3 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-center text-xs font-black text-white shadow-md"
+                className="p-2.5 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 text-center text-xs font-black text-white shadow-sm"
               >
                 {f}
               </div>
@@ -1534,14 +1534,14 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 pt-2 transition-all duration-700 ${
-              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            className={`grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1 transition-all duration-300 ease-out ${
+              currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
             }`}
           >
             {doors.map((d: string, idx: number) => (
               <div
                 key={idx}
-                className="p-4 rounded-2xl bg-white/5 border border-white/10 text-center text-xs font-bold text-zinc-200 shadow-md"
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 text-center text-xs font-bold text-zinc-200 shadow-sm"
               >
                 {d}
               </div>
@@ -1549,11 +1549,11 @@ export default function SlideRenderer({
           </div>
 
           <div
-            className={`p-5 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 leading-relaxed transition-all duration-700 ${
+            className={`p-4 rounded-3xl bg-amber-500/10 border border-amber-500/30 text-xs text-amber-200 leading-relaxed transition-all duration-300 ease-out ${
               currentStep >= 2 ? "opacity-100" : "opacity-0"
             }`}
           >
-            <strong className="block font-bold text-amber-300 mb-1">RESEARCH-ORIENTED STUDENTS</strong>
+            <strong className="block font-bold text-amber-300 mb-0.5">RESEARCH-ORIENTED STUDENTS</strong>
             {slide.academicNote?.body ||
               "IAPT-linked and academic-network exposure is offered only where formally supported at the time. Nothing here is a guaranteed internship, research placement or IAPT selection — all subject to eligibility, institutional availability and selection procedures."}
           </div>
@@ -1566,12 +1566,12 @@ export default function SlideRenderer({
     // ==========================================
     case "IMAGE_BANNER": {
       return (
-        <div className="w-full max-w-5xl mx-auto text-center space-y-6 animate-fade-in">
+        <div className="w-full max-w-5xl mx-auto text-center space-y-5 animate-fade-in">
           <div>
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "CAMPUS ROADSHOW"}
             </span>
-            <h2 className="text-2xl sm:text-5xl font-black text-white mt-2">
+            <h2 className="text-xl sm:text-5xl font-black text-white mt-2">
               {slide.title || "Empowering Himachal's Next-Gen Tech Talent"}
             </h2>
             <p className="text-xs sm:text-base text-zinc-400 font-medium mt-1">
@@ -1579,7 +1579,7 @@ export default function SlideRenderer({
             </p>
           </div>
 
-          <div className="rounded-3xl overflow-hidden border border-white/15 shadow-2xl max-h-[380px] mx-auto bg-black/40">
+          <div className="rounded-3xl overflow-hidden border border-white/15 shadow-2xl max-h-[360px] mx-auto bg-black/40">
             <img
               src={slide.image}
               alt={slide.title}
@@ -1605,22 +1605,22 @@ export default function SlideRenderer({
       ];
 
       return (
-        <div className="w-full max-w-6xl mx-auto space-y-6 animate-fade-in">
+        <div className="w-full max-w-6xl mx-auto space-y-5 animate-fade-in">
           <div className="flex items-center justify-between">
             <span className="px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-xs font-bold text-indigo-300 uppercase tracking-wider">
               {slide.badge || "A RECOGNITION PATHWAY"}
             </span>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
             {/* Left: Perks */}
-            <div className="lg:col-span-7 space-y-4">
-              <h2 className="text-2xl sm:text-5xl font-black text-white leading-tight">
+            <div className="lg:col-span-7 space-y-3.5">
+              <h2 className="text-xl sm:text-5xl font-black text-white leading-tight">
                 {slide.title || "UNISOLE COLLEGE AMBASSADORS"}
               </h2>
 
               <div
-                className={`grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-2 transition-all duration-700 ${
+                className={`grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1 transition-all duration-300 ease-out ${
                   currentStep >= 0 ? "opacity-100" : "opacity-0"
                 }`}
               >
@@ -1632,43 +1632,43 @@ export default function SlideRenderer({
                 ))}
               </div>
 
-              <p className="text-xs text-zinc-400 italic pt-2 border-t border-white/10">
+              <p className="text-xs text-zinc-400 italic pt-1 border-t border-white/10">
                 {slide.disclaimer || "A recognition and mentorship pathway — not a job, internship or placement."}
               </p>
             </div>
 
             {/* Right: Scan QR / Return of Big Question */}
             <div
-              className={`lg:col-span-5 p-6 rounded-3xl bg-gradient-to-b from-indigo-950/80 to-zinc-900 border border-indigo-500/40 text-center space-y-4 shadow-2xl transition-all duration-700 ${
-                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+              className={`lg:col-span-5 p-5 rounded-3xl bg-gradient-to-b from-indigo-950/80 to-zinc-900 border border-indigo-500/40 text-center space-y-3 shadow-xl transition-all duration-300 ease-out ${
+                currentStep >= 1 ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
               }`}
             >
-              <div className="p-3 bg-white rounded-2xl inline-block shadow-xl">
+              <div className="p-2.5 bg-white rounded-2xl inline-block shadow-lg">
                 <img
                   src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(
                     slide.targetUrl || "https://unisole.org/programs"
                   )}`}
                   alt="Scan QR"
-                  className="w-32 h-32 sm:w-36 sm:h-36 object-contain"
+                  className="w-28 h-28 sm:w-36 sm:h-36 object-contain"
                 />
               </div>
 
               <div>
-                <span className="text-xs font-bold text-indigo-300 uppercase tracking-widest block mb-1">
+                <span className="text-xs font-bold text-indigo-300 uppercase tracking-widest block mb-0.5">
                   SIGN UP NOW
                 </span>
-                <p className="text-xs text-zinc-300 font-medium">
+                <p className="text-[11px] text-zinc-300 font-medium">
                   {slide.qrAction || "Scan to sign up or connect with your college coordinator"}
                 </p>
               </div>
 
               {/* The Return Question in Step 2 */}
               <div
-                className={`pt-2 transition-all duration-1000 ${
+                className={`pt-1 transition-all duration-500 ease-out ${
                   currentStep >= 2 ? "opacity-100 scale-100" : "opacity-0 scale-95"
                 }`}
               >
-                <div className="text-xl sm:text-2xl font-black text-amber-300 font-serif">
+                <div className="text-lg sm:text-2xl font-black text-amber-300 font-serif">
                   {slide.finalQuestion || "आगे क्या सोचा है?"}
                 </div>
               </div>
@@ -1683,17 +1683,17 @@ export default function SlideRenderer({
     // ==========================================
     case "POLL": {
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in text-center sm:text-left">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in text-center sm:text-left">
           <div className="flex items-center gap-2 text-cyan-400 text-xs font-bold uppercase tracking-wider">
             <BarChart3 className="w-5 h-5" />
             <span>{slide.badge || "LIVE AUDIENCE POLL"}</span>
           </div>
 
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
+          <h2 className="text-xl sm:text-4xl lg:text-5xl font-black text-white leading-tight">
             {slide.question || slide.title || "Live Audience Poll"}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
             {(slide.options || []).map((opt: string, optIdx: number) => {
               const count = quizState?.pollCounts?.[optIdx] || 0;
               const totalVotes = Object.values(quizState?.pollCounts || {}).reduce(
@@ -1709,7 +1709,7 @@ export default function SlideRenderer({
                   type="button"
                   disabled={isProjector || (!quizState?.isQuizActive && !isSubmitted)}
                   onClick={() => onSelectOption && onSelectOption(optIdx)}
-                  className={`relative p-5 rounded-2xl border transition-all duration-500 overflow-hidden shadow-lg text-left ${
+                  className={`relative p-4 sm:p-5 rounded-2xl border transition-all duration-300 ease-out overflow-hidden shadow-lg text-left ${
                     isSelected
                       ? "ring-4 ring-cyan-400 bg-cyan-950/60 border-cyan-400"
                       : "bg-white/5 border-cyan-500/30 hover:border-cyan-400/60"
@@ -1717,18 +1717,18 @@ export default function SlideRenderer({
                 >
                   {/* Fill Bar */}
                   <div
-                    className="absolute inset-y-0 left-0 bg-cyan-500/20 transition-all duration-700 ease-out"
+                    className="absolute inset-y-0 left-0 bg-cyan-500/20 transition-all duration-500 ease-out"
                     style={{ width: `${percent}%` }}
                   />
 
                   <div className="relative flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-sm">
+                      <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-xs sm:text-sm">
                         {String.fromCharCode(65 + optIdx)}
                       </span>
-                      <span className="text-sm sm:text-base font-bold text-white">{opt}</span>
+                      <span className="text-xs sm:text-base font-bold text-white">{opt}</span>
                     </div>
-                    <span className="text-base sm:text-lg font-mono font-black text-cyan-400">
+                    <span className="text-sm sm:text-lg font-mono font-black text-cyan-400">
                       {percent}%
                     </span>
                   </div>
@@ -1745,26 +1745,26 @@ export default function SlideRenderer({
     // ==========================================
     case "QUIZ": {
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider">
               <Flame className="w-5 h-5" />
               <span>{slide.badge || "FAST-FINGER TECH CHALLENGE"}</span>
             </div>
 
             {remainingTime !== null && (
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono font-black text-lg shadow-lg">
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono font-black text-base sm:text-lg shadow-lg">
                 <Clock className="w-4 h-4 animate-spin" />
                 <span>{remainingTime}s remaining</span>
               </div>
             )}
           </div>
 
-          <h2 className="text-2xl sm:text-4xl font-black text-white leading-tight">
+          <h2 className="text-xl sm:text-4xl font-black text-white leading-tight">
             {slide.question || slide.title}
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-2">
             {(slide.options || []).map((opt: any, optIdx: number) => {
               const colors = [
                 "bg-rose-500/20 border-rose-500/40 text-rose-100",
@@ -1783,7 +1783,7 @@ export default function SlideRenderer({
                   type="button"
                   disabled={isProjector || (!quizState?.isQuizActive && !isSubmitted)}
                   onClick={() => onSelectOption && onSelectOption(optIdx)}
-                  className={`p-5 rounded-2xl border transition-all duration-500 flex items-center justify-between gap-3 shadow-lg text-left ${
+                  className={`p-4 sm:p-5 rounded-2xl border transition-all duration-300 ease-out flex items-center justify-between gap-3 shadow-lg text-left ${
                     colors[optIdx % 4]
                   } ${
                     isSelected ? "ring-4 ring-amber-400 scale-102" : ""
@@ -1796,15 +1796,15 @@ export default function SlideRenderer({
                   } ${!isProjector ? "cursor-pointer active:scale-98" : ""}`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-sm">
+                    <span className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-white/20 flex items-center justify-center font-bold text-xs sm:text-sm">
                       {String.fromCharCode(65 + optIdx)}
                     </span>
-                    <span className="text-sm sm:text-base font-bold">{text}</span>
+                    <span className="text-xs sm:text-base font-bold">{text}</span>
                   </div>
 
                   {isRevealed && isCorrect && (
-                    <span className="px-3 py-1 rounded-full bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 shadow-md">
-                      <CheckCircle2 className="w-4 h-4" /> Correct Answer
+                    <span className="px-2.5 py-1 rounded-full bg-emerald-500 text-white font-bold text-xs flex items-center gap-1 shadow-md">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Correct
                     </span>
                   )}
                 </button>
@@ -1820,7 +1820,7 @@ export default function SlideRenderer({
     // ==========================================
     case "STATS": {
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in text-center sm:text-left">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in text-center sm:text-left">
           {slide.badge && (
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-indigo-300">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
@@ -1828,31 +1828,31 @@ export default function SlideRenderer({
             </div>
           )}
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             {slide.title || "Impact Stats"}
           </h1>
 
           {slide.subtitle && (
-            <p className="text-base sm:text-xl text-zinc-300 max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-xl text-zinc-300 max-w-3xl leading-relaxed">
               {slide.subtitle}
             </p>
           )}
 
           {Array.isArray(slide.stats) && (
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
               {slide.stats.map((st: any, idx: number) => {
                 const isRevealed = currentStep >= idx;
                 return (
                   <div
                     key={idx}
-                    className={`p-8 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 backdrop-blur-md text-center shadow-xl transition-all duration-700 ${
-                      isRevealed ? "opacity-100 translate-y-0" : "opacity-20 translate-y-4"
+                    className={`p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/10 to-white/5 border border-white/10 backdrop-blur-md text-center shadow-xl transition-all duration-300 ease-out ${
+                      isRevealed ? "opacity-100 translate-y-0" : "opacity-20 translate-y-2"
                     }`}
                   >
-                    <div className="text-4xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">
+                    <div className="text-3xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-300">
                       {st.value}
                     </div>
-                    <div className="text-sm sm:text-base font-semibold text-zinc-300 mt-2">
+                    <div className="text-xs sm:text-base font-semibold text-zinc-300 mt-2">
                       {st.label}
                     </div>
                   </div>
@@ -1869,22 +1869,22 @@ export default function SlideRenderer({
     // ==========================================
     case "OFFER_CTA": {
       return (
-        <div className="w-full max-w-4xl mx-auto p-8 rounded-3xl bg-gradient-to-r from-indigo-900/60 to-violet-900/60 border border-indigo-500/40 backdrop-blur-xl space-y-4 shadow-2xl text-center sm:text-left animate-fade-in">
+        <div className="w-full max-w-4xl mx-auto p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-indigo-900/60 to-violet-900/60 border border-indigo-500/40 backdrop-blur-xl space-y-4 shadow-2xl text-center sm:text-left animate-fade-in">
           <div className="inline-block px-3.5 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs">
             {slide.badge || "Special Roadshow Grant"}
           </div>
-          <h3 className="text-2xl sm:text-4xl font-black text-white leading-tight">
+          <h3 className="text-xl sm:text-4xl font-black text-white leading-tight">
             {slide.title || "Exclusive Student Scholarship Available Now"}
           </h3>
           {slide.subtitle && (
-            <p className="text-sm text-zinc-300 leading-relaxed max-w-xl">
+            <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-xl">
               {slide.subtitle}
             </p>
           )}
           {slide.couponCode && (
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <span className="text-xs text-zinc-300">Use Promo Code:</span>
-              <span className="px-4 py-2 rounded-xl bg-black/40 border border-amber-400/50 text-amber-300 font-mono font-black text-lg tracking-wider shadow-inner">
+              <span className="px-4 py-2 rounded-xl bg-black/40 border border-amber-400/50 text-amber-300 font-mono font-black text-base sm:text-lg tracking-wider shadow-inner">
                 {slide.couponCode}
               </span>
             </div>
@@ -1899,7 +1899,7 @@ export default function SlideRenderer({
     case "CONTENT":
     default: {
       return (
-        <div className="w-full max-w-5xl mx-auto space-y-6 animate-fade-in text-center sm:text-left">
+        <div className="w-full max-w-5xl mx-auto space-y-5 animate-fade-in text-center sm:text-left">
           {slide.badge && (
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-xs font-bold text-indigo-300">
               <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
@@ -1907,33 +1907,33 @@ export default function SlideRenderer({
             </div>
           )}
 
-          <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
+          <h1 className="text-2xl sm:text-5xl font-black text-white tracking-tight leading-tight">
             {slide.title || "Slide Title"}
           </h1>
 
           {slide.subtitle && (
-            <p className="text-base sm:text-xl text-zinc-300 max-w-3xl leading-relaxed">
+            <p className="text-sm sm:text-xl text-zinc-300 max-w-3xl leading-relaxed">
               {slide.subtitle}
             </p>
           )}
 
           {Array.isArray(slide.bullets) && slide.bullets.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-2">
               {slide.bullets.map((bullet: string, idx: number) => {
                 const isRevealed = currentStep >= idx;
                 return (
                   <div
                     key={idx}
-                    className={`p-5 rounded-2xl border backdrop-blur-md flex items-start gap-4 shadow-lg transition-all duration-700 ${
+                    className={`p-4 sm:p-5 rounded-2xl border backdrop-blur-md flex items-start gap-3.5 shadow-md transition-all duration-300 ease-out ${
                       isRevealed
                         ? "bg-white/5 border-white/10 opacity-100 translate-y-0"
-                        : "bg-white/2 border-white/5 opacity-20 translate-y-4"
+                        : "bg-white/2 border-white/5 opacity-20 translate-y-2"
                     }`}
                   >
-                    <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm shrink-0">
+                    <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm shrink-0">
                       {idx + 1}
                     </div>
-                    <p className="text-sm sm:text-base text-zinc-200 font-medium leading-relaxed">
+                    <p className="text-xs sm:text-base text-zinc-200 font-medium leading-relaxed">
                       {bullet}
                     </p>
                   </div>

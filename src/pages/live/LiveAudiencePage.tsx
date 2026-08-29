@@ -722,6 +722,7 @@ export default function LiveAudiencePage() {
           /* Render Active Slide with Progressive Step Animations */
           <div className="w-full max-w-5xl mx-auto z-10">
             <SlideRenderer
+              key={`slide-${currentSlideIndex}`}
               slide={currentSlide}
               buildStep={buildStep}
               presentationTitle={presentation?.title}
