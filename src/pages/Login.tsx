@@ -8,7 +8,8 @@ export default function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   const { openAuthModal } = useAuthModal();
-  const redirect = new URLSearchParams(location.search).get('redirect') || '/';
+  const searchParams = new URLSearchParams(location.search);
+  const redirect = searchParams.get('redirect') || '/';
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -20,8 +21,19 @@ export default function Login() {
       mode: 'login',
       redirectUrl: redirect,
       title: 'Login to Unisole',
-      subtitle: 'Enter your mobile number to access programs, certifications, and curriculum.'
+      subtitle: 'Enter your mobile number to access the live presentation.',
     });
+
+    const handleAuthChange = () => {
+      if (isAuthenticated()) {
+        navigate(redirect, { replace: true });
+      }
+    };
+
+    window.addEventListener('authChange', handleAuthChange);
+    return () => {
+      window.removeEventListener('authChange', handleAuthChange);
+    };
   }, [openAuthModal, redirect, navigate]);
 
   return <Home />;

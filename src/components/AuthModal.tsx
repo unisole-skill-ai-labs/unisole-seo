@@ -43,9 +43,11 @@ export default function AuthModal() {
   if (!isOpen) return null;
 
   const handleAuthSuccess = () => {
+    const searchRedirect = new URLSearchParams(window.location.search).get('redirect');
+    const targetUrl = redirectUrl || searchRedirect;
     closeAuthModal();
-    if (redirectUrl && redirectUrl !== '/login' && redirectUrl !== '/register') {
-      navigate(redirectUrl, { replace: true });
+    if (targetUrl && targetUrl !== '/login' && targetUrl !== '/register') {
+      navigate(targetUrl, { replace: true });
     } else if (window.location.pathname === '/login' || window.location.pathname === '/register') {
       navigate('/', { replace: true });
     }
