@@ -924,8 +924,23 @@ export default function ProgramsPage() {
                         </div>
                       </div>
 
-                      <div className={`p-2 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-transform duration-200 self-start md:self-auto ${isOpen ? 'rotate-180 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white' : ''}`}>
-                        <ChevronDown className="w-4 h-4" />
+                      {/* Right Action Cluster: Enroll Button + Chevron */}
+                      <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+                        <button
+                          type="button"
+                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-xs hover:shadow-md"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleEnrollClick(pathway);
+                          }}
+                        >
+                          <span>Enroll Pathway</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+
+                        <div className={`p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white' : ''}`}>
+                          <ChevronDown className="w-4 h-4" />
+                        </div>
                       </div>
                     </header>
 
