@@ -10,10 +10,9 @@ export default function Register() {
 
   useEffect(() => {
     openAuthModal({
-      mode: 'register',
       redirectUrl: redirect,
       title: 'Join Unisole AI Labs',
-      subtitle: 'Create a free member account to access our AI tools, telemetry, and curriculum.'
+      subtitle: 'Enter your mobile number to access models, sandbox telemetry, and curriculum.'
     });
   }, [openAuthModal, redirect]);
 

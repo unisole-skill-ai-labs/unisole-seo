@@ -36,6 +36,13 @@ export const apiSlice = createApi({
   baseQuery: baseQueryWithReauth,
   tagTypes: ['User', 'Order'],
   endpoints: (builder) => ({
+    checkUser: builder.mutation({
+      query: (body) => ({
+        url: '/api/auth/check-user',
+        method: 'POST',
+        body,
+      }),
+    }),
     sendOtp: builder.mutation({
       query: (body) => ({
         url: '/api/auth/send-otp',
@@ -71,6 +78,7 @@ export const apiSlice = createApi({
 });
 
 export const {
+  useCheckUserMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
   useGetMeQuery,

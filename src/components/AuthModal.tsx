@@ -77,7 +77,7 @@ export default function AuthModal() {
               U
             </span>
             <span className="mono-tag text-zinc-600 dark:text-zinc-400">
-              {mode === 'login' ? 'Authentication' : 'Registration'}
+              Unisole Access
             </span>
           </div>
 
@@ -92,42 +92,16 @@ export default function AuthModal() {
 
         {/* Modal Body */}
         <div className="p-6 space-y-5">
-          {/* Segmented Mode Switcher */}
-          <div className="grid grid-cols-2 p-1 bg-zinc-100 dark:bg-zinc-800/80 rounded-lg border border-zinc-200 dark:border-zinc-700/60">
-            <button
-              type="button"
-              onClick={() => setMode('login')}
-              className={`py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
-                mode === 'login'
-                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs font-bold'
-                  : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
-              }`}
-            >
-              Sign In
-            </button>
-            <button
-              type="button"
-              onClick={() => setMode('register')}
-              className={`py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
-                mode === 'register'
-                  ? 'bg-white dark:bg-zinc-900 text-zinc-900 dark:text-white shadow-xs font-bold'
-                  : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
-              }`}
-            >
-              Create Account
-            </button>
-          </div>
-
           {/* Heading */}
           <div className="space-y-1">
             <h3
               id="auth-modal-title"
               className="text-lg font-bold text-zinc-900 dark:text-white tracking-tight"
             >
-              {title}
+              {customTitle || 'Welcome to Unisole'}
             </h3>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              {subtitle}
+              {customSubtitle || 'Enter your mobile number to sign in or get started with instant OTP verification.'}
             </p>
           </div>
 

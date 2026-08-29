@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { logout, isAuthenticated } from '../utils/auth';
 import { useGetMeQuery, useGetOrdersQuery } from '../store/apiSlice';
-import { User, Phone, Mail, Shield, LogOut, ArrowRight, BookOpen, Clock, CheckCircle2, ChevronRight } from 'lucide-react';
+import { User, Phone, Mail, Shield, LogOut, ArrowRight, BookOpen, Clock, CheckCircle2, ChevronRight, GraduationCap } from 'lucide-react';
 
 function formatDate(iso: string) {
   if (!iso) return '—';
@@ -19,6 +19,8 @@ export default function ProfilePage() {
   const [userName, setUserName] = useState(storedUser?.name || 'User');
   const [userEmail, setUserEmail] = useState(storedUser?.email || '');
   const [userPhone, setUserPhone] = useState(storedUser?.phone || '');
+  const [userCollege, setUserCollege] = useState(storedUser?.collegeName || storedUser?.college || '');
+  const [userBranch, setUserBranch] = useState(storedUser?.branch || '');
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { data: meData } = useGetMeQuery(undefined, { skip: !isAuth });
@@ -36,6 +38,8 @@ export default function ProfilePage() {
       setUserName(meData.name || (meData.phone ? `+91 ${meData.phone}` : 'Active Member'));
       setUserEmail(meData.email || '');
       setUserPhone(meData.phone || '');
+      setUserCollege(meData.collegeName || meData.college || '');
+      setUserBranch(meData.branch || '');
     }
 
     if (ordersData) {
@@ -81,7 +85,7 @@ export default function ProfilePage() {
 
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs text-zinc-500 dark:text-zinc-400">
                 {userPhone && (
-                  <span className="flex items-center gap-1.5">
+                  <span className="flex items-center gap-1.5 font-mono">
                     <Phone className="w-3.5 h-3.5 text-zinc-400" />
                     <span>+91 {userPhone}</span>
                   </span>
@@ -90,6 +94,18 @@ export default function ProfilePage() {
                   <span className="flex items-center gap-1.5">
                     <Mail className="w-3.5 h-3.5 text-zinc-400" />
                     <span>{userEmail}</span>
+                  </span>
+                )}
+                {userCollege && (
+                  <span className="flex items-center gap-1.5">
+                    <GraduationCap className="w-3.5 h-3.5 text-indigo-500" />
+                    <span>{userCollege}</span>
+                  </span>
+                )}
+                {userBranch && (
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-emerald-500" />
+                    <span>{userBranch}</span>
                   </span>
                 )}
               </div>
