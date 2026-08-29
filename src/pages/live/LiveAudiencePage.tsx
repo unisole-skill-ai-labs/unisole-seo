@@ -116,34 +116,42 @@ export default function LiveAudiencePage() {
 
           // Automatically register lead using authenticated user credentials
           const currentUser = getUser();
-          const studentName = getUserName() || currentUser?.name || "Student";
-          const studentPhone = getUserPhone() || currentUser?.phone || "";
+          const studentName =
+            getUserName() ||
+            currentUser?.name ||
+            currentUser?.fullName ||
+            "Student";
+          const studentPhone =
+            getUserPhone() ||
+            currentUser?.phone ||
+            currentUser?.mobile ||
+            "9999999999";
+          const studentEmail = currentUser?.email || "";
 
-          if (studentPhone) {
-            try {
-              const joinRes = await fetch(
-                `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
-                {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({
-                    name: studentName,
-                    phone: studentPhone,
-                    userId: currentUser?.id,
-                  }),
-                }
-              );
-              const joinData = await joinRes.json();
-              if (joinData.data?.lead) {
-                setLead(joinData.data.lead);
-                localStorage.setItem(
-                  `unisole_lead_${code}`,
-                  JSON.stringify(joinData.data.lead)
-                );
+          try {
+            const joinRes = await fetch(
+              `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  name: studentName,
+                  phone: studentPhone,
+                  email: studentEmail,
+                  userId: currentUser?.id,
+                }),
               }
-            } catch (err) {
-              console.error("Auto join error:", err);
+            );
+            const joinData = await joinRes.json();
+            if (joinData.data?.lead) {
+              setLead(joinData.data.lead);
+              localStorage.setItem(
+                `unisole_lead_${code}`,
+                JSON.stringify(joinData.data.lead)
+              );
             }
+          } catch (err) {
+            console.error("Auto join error:", err);
           }
         }
       })
