@@ -44,6 +44,14 @@ export default function AuthModal() {
 
   if (!isOpen) return null;
 
+  // Never render on live presentation pages or join pages
+  if (
+    typeof window !== 'undefined' &&
+    (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
+  ) {
+    return null;
+  }
+
   const handleAuthSuccess = () => {
     const searchRedirect = new URLSearchParams(window.location.search).get('redirect');
     const targetUrl = redirectUrl || searchRedirect;

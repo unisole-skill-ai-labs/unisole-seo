@@ -58,6 +58,12 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   // Listen for global custom event 'openAuthModal'
   useEffect(() => {
     const handleGlobalEvent = (e: any) => {
+      if (
+        typeof window !== 'undefined' &&
+        (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
+      ) {
+        return;
+      }
       const detail: OpenAuthModalOptions = e.detail || {};
       openAuthModal(detail);
     };
@@ -72,9 +78,21 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   useEffect(() => {
     if (isAuthenticated()) return;
     if (sessionStorage.getItem(DISMISS_SESSION_KEY) === 'true') return;
+    if (
+      typeof window !== 'undefined' &&
+      (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
+    ) {
+      return;
+    }
 
     const timer = setTimeout(() => {
-      if (!isAuthenticated() && sessionStorage.getItem(DISMISS_SESSION_KEY) !== 'true') {
+      if (
+        !isAuthenticated() &&
+        sessionStorage.getItem(DISMISS_SESSION_KEY) !== 'true' &&
+        typeof window !== 'undefined' &&
+        !window.location.pathname.startsWith('/live') &&
+        !window.location.pathname.startsWith('/join')
+      ) {
         openAuthModal({
           mode: 'register',
           source: 'NON_PAMPHLET',
