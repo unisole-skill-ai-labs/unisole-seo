@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { isAuthenticated } from '../utils/auth';
 
 export interface OpenAuthModalOptions {
@@ -30,6 +31,7 @@ const TIMED_POPUP_DELAY_MS = 15000; // 15 seconds
 const DISMISS_SESSION_KEY = 'unisole_auth_modal_dismissed';
 
 export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [redirectUrl, setRedirectUrl] = useState<string | undefined>(undefined);
@@ -40,6 +42,17 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [successCallback, setSuccessCallback] = useState<(() => void) | undefined>(undefined);
 
   const openAuthModal = useCallback((options?: OpenAuthModalOptions) => {
+    // If the user is already authenticated, never open the modal
+    if (isAuthenticated()) {
+      if (options?.redirectUrl) {
+        navigate(options.redirectUrl, { replace: true });
+      }
+      if (options?.onSuccess) {
+        options.onSuccess();
+      }
+      return;
+    }
+
     if (options?.mode) setMode(options.mode);
     setRedirectUrl(options?.redirectUrl);
     setSource(options?.source);
@@ -48,7 +61,7 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setCustomSubtitle(options?.subtitle);
     if (options?.onSuccess) setSuccessCallback(() => options.onSuccess);
     setIsOpen(true);
-  }, []);
+  }, [navigate]);
 
   const closeAuthModal = useCallback(() => {
     setIsOpen(false);
@@ -62,6 +75,9 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         typeof window !== 'undefined' &&
         (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
       ) {
+        return;
+      }
+      if (isAuthenticated()) {
         return;
       }
       const detail: OpenAuthModalOptions = e.detail || {};
