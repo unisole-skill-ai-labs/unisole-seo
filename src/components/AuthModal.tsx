@@ -18,9 +18,16 @@ export default function AuthModal() {
   } = useAuthModal();
   const navigate = useNavigate();
 
+  const isAuthRoute =
+    window.location.pathname === '/login' ||
+    window.location.pathname === '/register' ||
+    window.location.pathname === '/iapt' ||
+    window.location.pathname === '/iapt/login' ||
+    window.location.pathname === '/login/iapt';
+
   const handleClose = () => {
     closeAuthModal();
-    if (window.location.pathname === '/login' || window.location.pathname === '/register') {
+    if (isAuthRoute) {
       navigate('/', { replace: true });
     }
   };
@@ -56,9 +63,11 @@ export default function AuthModal() {
     const searchRedirect = new URLSearchParams(window.location.search).get('redirect');
     const targetUrl = redirectUrl || searchRedirect;
     closeAuthModal();
-    if (targetUrl && targetUrl !== '/login' && targetUrl !== '/register') {
+    if (targetUrl && !isAuthRoute) {
       navigate(targetUrl, { replace: true });
-    } else if (window.location.pathname === '/login' || window.location.pathname === '/register') {
+    } else if (targetUrl && (window.location.pathname === '/iapt' || window.location.pathname === '/iapt/login' || window.location.pathname === '/login/iapt')) {
+      navigate(targetUrl, { replace: true });
+    } else if (isAuthRoute) {
       navigate('/', { replace: true });
     }
   };

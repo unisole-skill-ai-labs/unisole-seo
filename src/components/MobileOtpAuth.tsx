@@ -116,17 +116,21 @@ export default function MobileOtpAuth({
 
   const isPamphletChannel =
     !isSessionChannel &&
+    propSource !== 'IAPT' &&
+    querySource !== 'IAPT' &&
     (propSource === 'PAMPHLET_QR' ||
       querySource === 'PAMPHLET_QR' ||
       querySource === 'pamphlet' ||
       querySource === 'qr' ||
       location.pathname === '/login');
 
-  const effectiveSource: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' = isSessionChannel
+  const effectiveSource: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' | string = isSessionChannel
     ? 'SESSION_QR'
+    : propSource === 'IAPT' || querySource === 'IAPT'
+    ? 'IAPT'
     : isPamphletChannel
     ? 'PAMPHLET_QR'
-    : 'NON_PAMPHLET';
+    : (propSource || querySource || 'NON_PAMPHLET');
 
   const { data: serverBranches = [] } = useGetPublicBranchesQuery(sessionCollege?.id);
   const branchOptions =
