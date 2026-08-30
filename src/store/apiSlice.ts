@@ -43,6 +43,22 @@ export const apiSlice = createApi({
         body,
       }),
     }),
+    login: builder.mutation({
+      query: (body) => ({
+        url: '/api/auth/login',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          dispatch(setCredentials({ token: data.token || data.accessToken, user: data.user }));
+        } catch {
+          // handled by the caller
+        }
+      },
+      invalidatesTags: ['User'],
+    }),
     sendOtp: builder.mutation({
       query: (body) => ({
         url: '/api/auth/send-otp',
@@ -52,7 +68,7 @@ export const apiSlice = createApi({
     }),
     verifyOtp: builder.mutation({
       query: (body) => ({
-        url: '/api/auth/verify-otp',
+        url: '/api/auth/login',
         method: 'POST',
         body,
       }),
@@ -88,6 +104,7 @@ export const apiSlice = createApi({
 
 export const {
   useCheckUserMutation,
+  useLoginMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
   useGetMeQuery,

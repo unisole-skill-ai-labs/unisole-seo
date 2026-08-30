@@ -73,7 +73,7 @@ export default function AuthModal() {
       ? 'Enter your mobile number to participate in the presentation.'
       : mode === 'login'
       ? 'Enter your mobile number to access programs, certifications, and curriculum.'
-      : 'Create a learner account with mobile number and instant verification.');
+      : 'Create a learner account with your mobile number.');
 
   return (
     <div
@@ -116,7 +116,7 @@ export default function AuthModal() {
             </p>
           </div>
 
-          {/* OTP Auth Form */}
+          {/* Direct Auth Form */}
           <div>
             <MobileOtpAuth
               source={source}
@@ -129,7 +129,7 @@ export default function AuthModal() {
           <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-[11px] text-zinc-400">
             <span className="inline-flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              Instant SMS Code
+              Direct Instant Access
             </span>
             <span className="inline-flex items-center gap-1">
               <Sparkles className="w-3 h-3 text-zinc-400" />
