@@ -140,7 +140,6 @@ export default function Navbar() {
             {[
               { label: 'Programs', path: '/programs', icon: BookOpen },
               { label: 'Events', path: '/events', icon: Calendar },
-              { label: 'Blogs', path: '/blogs', icon: FileText },
             ].map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -346,7 +345,6 @@ export default function Navbar() {
                 {[
                   { label: 'Programs Catalog', path: '/programs', icon: BookOpen, desc: 'AI Engineering & Dual tracks' },
                   { label: 'Meetups & Events', path: '/events', icon: Calendar, desc: 'Campus sessions & labs' },
-                  { label: 'AI Blogs & Guides', path: '/blogs', icon: FileText, desc: 'Research & tutorials' },
                 ].map((item) => {
                   const isActive = location.pathname === item.path;
                   const IconComp = item.icon;

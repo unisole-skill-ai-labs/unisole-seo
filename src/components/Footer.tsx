@@ -102,7 +102,6 @@ export default function Footer() {
           <ul className="space-y-2 text-xs text-zinc-400">
             <li><Link to="/programs" className="hover:text-white transition-colors">Programs Catalog</Link></li>
             <li><Link to="/events" className="hover:text-white transition-colors">Meetups & Events</Link></li>
-            <li><Link to="/blogs" className="hover:text-white transition-colors">AI Research Blogs</Link></li>
           </ul>
         </div>
 
