@@ -130,12 +130,15 @@ export default function LiveAudiencePage() {
             "9999999999";
           const studentEmail = currentUser?.email || "";
 
+          const studentBranch = currentUser?.branch || "";
+
           // Set lead immediately so the live slideshow appears instantly with zero delay
           const initialLead = {
             id: currentUser?.id || `lead_${Date.now()}`,
             name: studentName,
             phone: studentPhone,
             email: studentEmail,
+            branch: studentBranch,
           };
           setLead(initialLead);
 
@@ -150,6 +153,7 @@ export default function LiveAudiencePage() {
                   name: studentName,
                   phone: studentPhone,
                   email: studentEmail,
+                  branch: studentBranch || undefined,
                   userId: currentUser?.id,
                 }),
               }

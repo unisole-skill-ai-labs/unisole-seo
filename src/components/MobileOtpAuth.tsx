@@ -64,6 +64,10 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const dispatch = useDispatch();
   const from = new URLSearchParams(location.search).get('redirect') || '/';
 
+  // Detect sessionCode from redirect parameter or path (e.g. /live/UNI123 or ?redirect=/live/UNI123)
+  const [sessionCollege, setSessionCollege] = useState<{ id?: string; name: string } | null>(null);
+  const [sessionBranches, setSessionBranches] = useState<any[]>([]);
+
   const [checkUser] = useCheckUserMutation();
   const [sendOtp] = useSendOtpMutation();
   const [verifyOtp] = useVerifyOtpMutation();
@@ -84,10 +88,53 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const selectedCollegeObj = serverColleges.find(
     (c: any) => c.name === selectedCollege || c.id === selectedCollege
   );
-  const { data: serverBranches = [] } = useGetPublicBranchesQuery(selectedCollegeObj?.id);
+  const { data: serverBranches = [] } = useGetPublicBranchesQuery(
+    sessionCollege?.id || selectedCollegeObj?.id
+  );
+
+  // Extract session code and pre-fetch college info
+  useEffect(() => {
+    const redirectParam = new URLSearchParams(location.search).get('redirect') || '';
+    const match =
+      redirectParam.match(/\/live\/([A-Z0-9_-]+)/i) ||
+      location.pathname.match(/\/live\/([A-Z0-9_-]+)/i);
+
+    if (match && match[1]) {
+      const code = match[1].toUpperCase();
+      const apiUrl = (
+        import.meta.env.VITE_API_URL ||
+        (typeof window !== 'undefined' &&
+        window.location.hostname !== 'localhost' &&
+        window.location.hostname !== '127.0.0.1'
+          ? 'https://api.unisole.org'
+          : 'http://localhost:3000')
+      ).replace(/\/+$/, '');
+
+      fetch(`${apiUrl}/api/public/presentations/sessions/${code}`)
+        .then((res) => (res.ok ? res.json() : null))
+        .then((data) => {
+          if (data?.data?.session?.collegeName) {
+            const clgName = data.data.session.collegeName;
+            const clgId = data.data.session.collegeId;
+            setSessionCollege({ id: clgId, name: clgName });
+            setSelectedCollege(clgName);
+
+            if (Array.isArray(data.data.collegeBranches) && data.data.collegeBranches.length > 0) {
+              setSessionBranches(data.data.collegeBranches);
+            }
+          }
+        })
+        .catch((e) => console.warn('Could not prefetch session college', e));
+    }
+  }, [location.search, location.pathname]);
 
   const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
-  const branchOptions = serverBranches.length > 0 ? serverBranches : DEFAULT_BRANCHES;
+  const branchOptions =
+    sessionBranches.length > 0
+      ? sessionBranches
+      : serverBranches.length > 0
+      ? serverBranches
+      : DEFAULT_BRANCHES;
 
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -152,7 +199,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
           setOtp(code);
         }, 1000);
       } else {
-        // New user: ask for Name, College, Branch
+        // New user: ask for Name and Branch (College is locked if from QR scan)
         setIsExistingUser(false);
         setStep('PROFILE_SETUP');
       }
@@ -183,10 +230,11 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       return;
     }
 
-    const effectiveCollege =
-      selectedCollege === 'other' || selectedCollege === 'Other University / College'
-        ? customCollege.trim()
-        : selectedCollege.trim();
+    const effectiveCollege = sessionCollege?.name
+      ? sessionCollege.name
+      : selectedCollege === 'other' || selectedCollege === 'Other University / College'
+      ? customCollege.trim()
+      : selectedCollege.trim();
 
     if (!effectiveCollege) {
       setErrorMsg('Please select or enter your college / university');
@@ -283,10 +331,11 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       return;
     }
 
-    const effectiveCollege =
-      selectedCollege === 'other' || selectedCollege === 'Other University / College'
-        ? customCollege.trim()
-        : selectedCollege.trim();
+    const effectiveCollege = sessionCollege?.name
+      ? sessionCollege.name
+      : selectedCollege === 'other' || selectedCollege === 'Other University / College'
+      ? customCollege.trim()
+      : selectedCollege.trim();
 
     const effectiveBranch =
       selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
@@ -300,6 +349,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
         otp: otp.trim(),
         name: name.trim() || undefined,
         collegeName: effectiveCollege || undefined,
+        collegeId: sessionCollege?.id || selectedCollegeObj?.id || undefined,
         branch: effectiveBranch || undefined,
       }).unwrap();
 
@@ -325,6 +375,28 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
 
   return (
     <div className="w-full space-y-3.5">
+      {/* Session College Verified Banner */}
+      {sessionCollege && (
+        <div className="p-3 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/80 flex items-center justify-between gap-2.5 text-xs text-indigo-900 dark:text-indigo-200 shadow-xs animate-in fade-in duration-150">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
+              🏛️
+            </span>
+            <div className="min-w-0">
+              <span className="text-[10px] uppercase tracking-wider font-bold text-indigo-500 dark:text-indigo-400 block font-mono">
+                Campus Roadshow Presentation
+              </span>
+              <span className="font-black truncate block text-xs text-zinc-900 dark:text-zinc-100">
+                {sessionCollege.name}
+              </span>
+            </div>
+          </div>
+          <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold shrink-0">
+            QR Verified
+          </span>
+        </div>
+      )}
+
       {/* Alert Error */}
       {errorMsg && (
         <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2 animate-in fade-in duration-150">
@@ -428,49 +500,67 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             </div>
           </div>
 
-          {/* College Dropdown */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-college">
-              College / University <span className="text-rose-500">*</span>
-            </label>
-            <div className="relative">
-              <GraduationCap className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <select
-                id="new-user-college"
-                value={selectedCollege}
-                onChange={(e) => setSelectedCollege(e.target.value)}
-                required
-                className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
-              >
-                <option value="">-- Select Your College / University --</option>
-                {collegeOptions.map((c: any) => (
-                  <option key={c.id || c.slug || c.name} value={c.name}>
-                    {c.name} {c.shortName ? `(${c.shortName})` : ''}
-                  </option>
-                ))}
-                <option value="other">Other University / College (Specify below)</option>
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-
-            {(selectedCollege === 'other' || selectedCollege === 'Other University / College') && (
-              <div className="pt-1.5 animate-in fade-in duration-150">
-                <input
-                  type="text"
-                  required
-                  placeholder="Enter your college / university name"
-                  value={customCollege}
-                  onChange={(e) => setCustomCollege(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
-                />
+          {/* College Dropdown or Locked QR Detected College */}
+          {sessionCollege ? (
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-indigo-500" />
+                  <span>College / University</span>
+                </span>
+                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/20 flex items-center gap-1">
+                  <CheckCircle2 className="w-3 h-3" /> Taken from QR Scan
+                </span>
+              </label>
+              <div className="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200/80 dark:border-indigo-800/80 bg-indigo-50/50 dark:bg-indigo-950/30 text-xs font-black text-zinc-900 dark:text-zinc-100 flex items-center justify-between min-h-[40px]">
+                <span className="truncate">{sessionCollege.name}</span>
+                <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 ml-2" />
               </div>
-            )}
-          </div>
+            </div>
+          ) : (
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-college">
+                College / University <span className="text-rose-500">*</span>
+              </label>
+              <div className="relative">
+                <GraduationCap className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <select
+                  id="new-user-college"
+                  value={selectedCollege}
+                  onChange={(e) => setSelectedCollege(e.target.value)}
+                  required
+                  className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
+                >
+                  <option value="">-- Select Your College / University --</option>
+                  {collegeOptions.map((c: any) => (
+                    <option key={c.id || c.slug || c.name} value={c.name}>
+                      {c.name} {c.shortName ? `(${c.shortName})` : ''}
+                    </option>
+                  ))}
+                  <option value="other">Other University / College (Specify below)</option>
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
+
+              {(selectedCollege === 'other' || selectedCollege === 'Other University / College') && (
+                <div className="pt-1.5 animate-in fade-in duration-150">
+                  <input
+                    type="text"
+                    required
+                    placeholder="Enter your college / university name"
+                    value={customCollege}
+                    onChange={(e) => setCustomCollege(e.target.value)}
+                    className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
+                  />
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Academic Branch Dropdown */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-branch">
-              Branch / Specialization <span className="text-rose-500">*</span>
+              Branch / Department <span className="text-rose-500">*</span>
             </label>
             <div className="relative">
               <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
