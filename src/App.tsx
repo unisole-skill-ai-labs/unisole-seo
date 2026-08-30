@@ -52,6 +52,7 @@ export default function App() {
             <Route path="/join" element={<JoinSessionPage />} />
             <Route path="/" element={<Home />} />
             <Route path="/programs" element={<ProgramsPage />} />
+            <Route path="/pathways" element={<ProgramsPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/blogs" element={
               <AuthGuard>
