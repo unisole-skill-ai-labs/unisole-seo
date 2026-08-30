@@ -30,18 +30,14 @@ export interface MobileOtpAuthProps {
 type AuthStep = 'PHONE' | 'PROFILE_SETUP';
 
 const DEFAULT_BRANCHES = [
-  { id: 'cse', name: 'Computer Science & Engineering (CSE)' },
-  { id: 'it', name: 'Information Technology (IT)' },
-  { id: 'aiml', name: 'Artificial Intelligence & Machine Learning (AIML)' },
-  { id: 'ds', name: 'Data Science & Big Data Analytics' },
-  { id: 'ece', name: 'Electronics & Communication Engineering (ECE)' },
-  { id: 'eee', name: 'Electrical & Electronics Engineering (EEE)' },
-  { id: 'mech', name: 'Mechanical Engineering (MECH)' },
-  { id: 'civil', name: 'Civil Engineering (CIVIL)' },
-  { id: 'cs', name: 'Cyber Security & Digital Forensics' },
-  { id: 'bca_mca', name: 'Computer Applications (BCA / MCA)' },
-  { id: 'bba_mba', name: 'Management & Business Studies (BBA / MBA)' },
-  { id: 'other', name: 'Other / Multidisciplinary' },
+  { id: 'ba', name: 'BA' },
+  { id: 'bcom', name: 'BCOM' },
+  { id: 'bca', name: 'BCA' },
+  { id: 'dca', name: 'DCA' },
+  { id: 'mca', name: 'MCA' },
+  { id: 'bsc_non_med', name: 'BSC non med' },
+  { id: 'bsc_med', name: 'BSC Med' },
+  { id: 'others', name: 'Others' },
 ];
 
 export default function MobileOtpAuth({
