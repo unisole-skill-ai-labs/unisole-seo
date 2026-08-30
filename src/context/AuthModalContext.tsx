@@ -4,6 +4,8 @@ import { isAuthenticated } from '../utils/auth';
 export interface OpenAuthModalOptions {
   mode?: 'login' | 'register';
   redirectUrl?: string;
+  source?: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' | string;
+  sessionCode?: string;
   onSuccess?: () => void;
   title?: string;
   subtitle?: string;
@@ -13,6 +15,8 @@ interface AuthModalContextType {
   isOpen: boolean;
   mode: 'login' | 'register';
   redirectUrl?: string;
+  source?: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' | string;
+  sessionCode?: string;
   customTitle?: string;
   customSubtitle?: string;
   openAuthModal: (options?: OpenAuthModalOptions) => void;
@@ -29,6 +33,8 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [isOpen, setIsOpen] = useState(false);
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [redirectUrl, setRedirectUrl] = useState<string | undefined>(undefined);
+  const [source, setSource] = useState<'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' | string | undefined>(undefined);
+  const [sessionCode, setSessionCode] = useState<string | undefined>(undefined);
   const [customTitle, setCustomTitle] = useState<string | undefined>(undefined);
   const [customSubtitle, setCustomSubtitle] = useState<string | undefined>(undefined);
   const [successCallback, setSuccessCallback] = useState<(() => void) | undefined>(undefined);
@@ -36,6 +42,8 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const openAuthModal = useCallback((options?: OpenAuthModalOptions) => {
     if (options?.mode) setMode(options.mode);
     setRedirectUrl(options?.redirectUrl);
+    setSource(options?.source);
+    setSessionCode(options?.sessionCode);
     setCustomTitle(options?.title);
     setCustomSubtitle(options?.subtitle);
     if (options?.onSuccess) setSuccessCallback(() => options.onSuccess);
@@ -69,6 +77,7 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       if (!isAuthenticated() && sessionStorage.getItem(DISMISS_SESSION_KEY) !== 'true') {
         openAuthModal({
           mode: 'register',
+          source: 'NON_PAMPHLET',
           title: 'Welcome to Unisole AI Labs',
           subtitle: 'Sign in with your mobile number to access programs, certifications, and research guides.',
         });
@@ -99,6 +108,8 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         isOpen,
         mode,
         redirectUrl,
+        source,
+        sessionCode,
         customTitle,
         customSubtitle,
         openAuthModal,

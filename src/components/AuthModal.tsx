@@ -9,6 +9,8 @@ export default function AuthModal() {
     isOpen,
     mode,
     redirectUrl,
+    source,
+    sessionCode,
     customTitle,
     customSubtitle,
     closeAuthModal,
@@ -55,11 +57,21 @@ export default function AuthModal() {
 
   const title =
     customTitle ||
-    (mode === 'login' ? 'Login to Unisole' : 'Register on Unisole');
+    (source === 'PAMPHLET_QR'
+      ? 'Welcome to Unisole'
+      : source === 'SESSION_QR'
+      ? 'Join Live Presentation'
+      : mode === 'login'
+      ? 'Login to Unisole'
+      : 'Register on Unisole');
 
   const subtitle =
     customSubtitle ||
-    (mode === 'login'
+    (source === 'PAMPHLET_QR'
+      ? 'Enter your mobile number to get started instantly.'
+      : source === 'SESSION_QR'
+      ? 'Enter your mobile number to participate in the presentation.'
+      : mode === 'login'
       ? 'Enter your mobile number to access programs, certifications, and curriculum.'
       : 'Create a learner account with mobile number and instant verification.');
 
@@ -106,7 +118,11 @@ export default function AuthModal() {
 
           {/* OTP Auth Form */}
           <div>
-            <MobileOtpAuth onSuccess={handleAuthSuccess} />
+            <MobileOtpAuth
+              source={source}
+              sessionCode={sessionCode}
+              onSuccess={handleAuthSuccess}
+            />
           </div>
 
           {/* Trust Footer */}

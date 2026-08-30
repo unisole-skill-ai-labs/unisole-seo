@@ -10,6 +10,7 @@ export default function Login() {
   const { openAuthModal } = useAuthModal();
   const searchParams = new URLSearchParams(location.search);
   const redirect = searchParams.get('redirect') || '/';
+  const querySource = searchParams.get('source');
 
   useEffect(() => {
     if (isAuthenticated()) {
@@ -17,11 +18,17 @@ export default function Login() {
       return;
     }
 
+    const isSessionRedirect = redirect.includes('/live/') || querySource === 'SESSION_QR' || querySource === 'session';
+    const effectiveSource = isSessionRedirect ? 'SESSION_QR' : (querySource || 'PAMPHLET_QR');
+
     openAuthModal({
       mode: 'login',
       redirectUrl: redirect,
-      title: 'Login to Unisole',
-      subtitle: 'Enter your mobile number to access the live presentation.',
+      source: effectiveSource,
+      title: isSessionRedirect ? 'Join Live Presentation' : 'Welcome to Unisole',
+      subtitle: isSessionRedirect
+        ? 'Enter your mobile number to join your campus presentation.'
+        : 'Enter your mobile number to get started instantly.',
     });
 
     const handleAuthChange = () => {
@@ -34,7 +41,7 @@ export default function Login() {
     return () => {
       window.removeEventListener('authChange', handleAuthChange);
     };
-  }, [openAuthModal, redirect, navigate]);
+  }, [openAuthModal, redirect, querySource, navigate]);
 
   return <Home />;
 }

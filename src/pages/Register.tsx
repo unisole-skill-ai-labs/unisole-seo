@@ -12,6 +12,7 @@ export default function Register() {
     openAuthModal({
       mode: 'register',
       redirectUrl: redirect,
+      source: 'NON_PAMPHLET',
       title: 'Register on Unisole',
       subtitle: 'Enter your mobile number to register and access programs, certifications, and curriculum.'
     });

@@ -30,6 +30,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
       openAuthModal({
         mode: 'login',
         redirectUrl: location.pathname,
+        source: 'NON_PAMPHLET',
         title: 'Login to Access',
         subtitle: 'Enter your mobile number to unlock this protected resource.',
       });
@@ -65,6 +66,7 @@ export default function AuthGuard({ children }: AuthGuardProps) {
                 openAuthModal({
                   mode: 'login',
                   redirectUrl: location.pathname,
+                  source: 'NON_PAMPHLET',
                   title: 'Login to Access',
                   subtitle: 'Enter your mobile number to unlock this protected resource.',
                 })

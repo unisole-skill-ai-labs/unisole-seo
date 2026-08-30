@@ -192,7 +192,7 @@ export default function Navbar() {
               <div className="flex items-center">
                 <button
                   type="button"
-                  onClick={() => openAuthModal({ mode: 'login' })}
+                  onClick={() => openAuthModal({ mode: 'login', source: 'NON_PAMPHLET' })}
                   className="inline-flex items-center justify-center font-semibold px-3.5 py-1.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs transition-all duration-150 active:scale-[0.98] cursor-pointer"
                 >
                   Login / Register
@@ -418,7 +418,7 @@ export default function Navbar() {
                     type="button"
                     onClick={() => {
                       setMenuOpen(false);
-                      openAuthModal({ mode: 'login' });
+                      openAuthModal({ mode: 'login', source: 'NON_PAMPHLET' });
                     }}
                     className="flex justify-center w-full font-semibold py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-colors cursor-pointer"
                   >

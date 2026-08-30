@@ -184,7 +184,7 @@ export default function LiveAudiencePage() {
 
     // If not authenticated, redirect directly to SEO login page with redirect back to this session
     if (!isAuthenticated()) {
-      navigate(`/login?redirect=/live/${code}`, { replace: true });
+      navigate(`/login?redirect=/live/${code}&source=SESSION_QR`, { replace: true });
       return;
     }
 

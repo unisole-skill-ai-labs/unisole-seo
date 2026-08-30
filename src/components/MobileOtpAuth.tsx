@@ -6,14 +6,11 @@ import {
   useCheckUserMutation,
   useSendOtpMutation,
   useVerifyOtpMutation,
-  useGetPublicCollegesQuery,
   useGetPublicBranchesQuery,
 } from '../store/apiSlice';
 import { setAuthSession } from '../utils/auth';
 import {
-  Phone,
   User,
-  GraduationCap,
   BookOpen,
   CheckCircle2,
   AlertCircle,
@@ -24,24 +21,17 @@ import {
   RefreshCw,
   Sparkles,
   ChevronDown,
+  QrCode,
 } from 'lucide-react';
 
 export interface MobileOtpAuthProps {
+  source?: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' | string;
+  sessionCode?: string;
   onSuccess?: (data: any) => void;
   onError?: (err: any) => void;
 }
 
 type AuthStep = 'PHONE' | 'PROFILE_SETUP' | 'OTP';
-
-const DEFAULT_COLLEGES = [
-  { id: 'dtu', name: 'Delhi Technological University (DTU)' },
-  { id: 'iitd', name: 'Indian Institute of Technology Delhi (IITD)' },
-  { id: 'nsut', name: 'Netaji Subhas University of Technology (NSUT)' },
-  { id: 'iiitd', name: 'Indraprastha Institute of Information Technology Delhi (IIITD)' },
-  { id: 'nit', name: 'National Institute of Technology (NIT)' },
-  { id: 'au', name: 'Anna University' },
-  { id: 'other', name: 'Other University / College' },
-];
 
 const DEFAULT_BRANCHES = [
   { id: 'cse', name: 'Computer Science & Engineering (CSE)' },
@@ -58,7 +48,12 @@ const DEFAULT_BRANCHES = [
   { id: 'other', name: 'Other / Multidisciplinary' },
 ];
 
-export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps = {}) {
+export default function MobileOtpAuth({
+  source: propSource,
+  sessionCode: propSessionCode,
+  onSuccess,
+  onError,
+}: MobileOtpAuthProps = {}) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
@@ -67,6 +62,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   // Detect sessionCode from redirect parameter or path (e.g. /live/UNI123 or ?redirect=/live/UNI123)
   const [sessionCollege, setSessionCollege] = useState<{ id?: string; name: string } | null>(null);
   const [sessionBranches, setSessionBranches] = useState<any[]>([]);
+  const [detectedSessionCode, setDetectedSessionCode] = useState<string | null>(propSessionCode || null);
 
   const [checkUser] = useCheckUserMutation();
   const [sendOtp] = useSendOtpMutation();
@@ -76,31 +72,22 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
   const [step, setStep] = useState<AuthStep>('PHONE');
   const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
-  const [selectedCollege, setSelectedCollege] = useState('');
-  const [customCollege, setCustomCollege] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('');
   const [customBranch, setCustomBranch] = useState('');
   const [otp, setOtp] = useState('');
-  const [isExistingUser, setIsExistingUser] = useState(false);
-  const [existingUserName, setExistingUserName] = useState('');
 
-  const { data: serverColleges = [] } = useGetPublicCollegesQuery(undefined);
-  const selectedCollegeObj = serverColleges.find(
-    (c: any) => c.name === selectedCollege || c.id === selectedCollege
-  );
-  const { data: serverBranches = [] } = useGetPublicBranchesQuery(
-    sessionCollege?.id || selectedCollegeObj?.id
-  );
-
-  // Extract session code and pre-fetch college info
+  // Extract session code and pre-fetch college info if live presentation
   useEffect(() => {
     const redirectParam = new URLSearchParams(location.search).get('redirect') || '';
     const match =
       redirectParam.match(/\/live\/([A-Z0-9_-]+)/i) ||
-      location.pathname.match(/\/live\/([A-Z0-9_-]+)/i);
+      location.pathname.match(/\/live\/([A-Z0-9_-]+)/i) ||
+      (propSessionCode ? [null, propSessionCode] : null);
 
     if (match && match[1]) {
       const code = match[1].toUpperCase();
+      setDetectedSessionCode(code);
+
       const apiUrl = (
         import.meta.env.VITE_API_URL ||
         (typeof window !== 'undefined' &&
@@ -117,7 +104,6 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             const clgName = data.data.session.collegeName;
             const clgId = data.data.session.collegeId;
             setSessionCollege({ id: clgId, name: clgName });
-            setSelectedCollege(clgName);
 
             if (Array.isArray(data.data.collegeBranches) && data.data.collegeBranches.length > 0) {
               setSessionBranches(data.data.collegeBranches);
@@ -126,9 +112,33 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
         })
         .catch((e) => console.warn('Could not prefetch session college', e));
     }
-  }, [location.search, location.pathname]);
+  }, [location.search, location.pathname, propSessionCode]);
 
-  const collegeOptions = serverColleges.length > 0 ? serverColleges : DEFAULT_COLLEGES;
+  // Determine effective signup channel
+  const searchParams = new URLSearchParams(location.search);
+  const querySource = searchParams.get('source');
+  const isSessionChannel =
+    propSource === 'SESSION_QR' ||
+    querySource === 'SESSION_QR' ||
+    querySource === 'session' ||
+    !!detectedSessionCode ||
+    from.includes('/live/');
+
+  const isPamphletChannel =
+    !isSessionChannel &&
+    (propSource === 'PAMPHLET_QR' ||
+      querySource === 'PAMPHLET_QR' ||
+      querySource === 'pamphlet' ||
+      querySource === 'qr' ||
+      location.pathname === '/login');
+
+  const effectiveSource: 'PAMPHLET_QR' | 'NON_PAMPHLET' | 'SESSION_QR' = isSessionChannel
+    ? 'SESSION_QR'
+    : isPamphletChannel
+    ? 'PAMPHLET_QR'
+    : 'NON_PAMPHLET';
+
+  const { data: serverBranches = [] } = useGetPublicBranchesQuery(sessionCollege?.id);
   const branchOptions =
     sessionBranches.length > 0
       ? sessionBranches
@@ -184,9 +194,6 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
 
       if (checkRes.exists && checkRes.user) {
         // User is existing: send OTP directly and move to OTP screen
-        setIsExistingUser(true);
-        setExistingUserName(checkRes.user.name || '');
-
         const otpRes = await sendOtp({ phone: cleanPhone }).unwrap();
         const code = otpRes.dummyOtp || '1234';
 
@@ -199,20 +206,18 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
           setOtp(code);
         }, 1000);
       } else {
-        // New user: ask for Name and Branch (College is locked if from QR scan)
-        setIsExistingUser(false);
+        // New user: ask for Name (and Branch if from Live Session QR)
         setStep('PROFILE_SETUP');
       }
     } catch {
       // Fallback: if check endpoint fails, ask for profile details
-      setIsExistingUser(false);
       setStep('PROFILE_SETUP');
     } finally {
       setLoading(false);
     }
   };
 
-  // Step 1b: New user fills profile and requests OTP
+  // Step 1b: New user fills profile (Name only for Pamphlet/Organic; Name + Branch for Session)
   const handleProfileSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setErrorMsg('');
@@ -230,25 +235,18 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       return;
     }
 
-    const effectiveCollege = sessionCollege?.name
-      ? sessionCollege.name
-      : selectedCollege === 'other' || selectedCollege === 'Other University / College'
-      ? customCollege.trim()
-      : selectedCollege.trim();
+    // Branch is only mandatory for Live Campus Presentation Sessions
+    let effectiveBranch = '';
+    if (isSessionChannel) {
+      effectiveBranch =
+        selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
+          ? customBranch.trim()
+          : selectedBranch.trim();
 
-    if (!effectiveCollege) {
-      setErrorMsg('Please select or enter your college / university');
-      return;
-    }
-
-    const effectiveBranch =
-      selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
-        ? customBranch.trim()
-        : selectedBranch.trim();
-
-    if (!effectiveBranch) {
-      setErrorMsg('Please select or enter your branch / field of study');
-      return;
+      if (!effectiveBranch) {
+        setErrorMsg('Please select or enter your academic branch');
+        return;
+      }
     }
 
     setLoading(true);
@@ -331,16 +329,11 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
       return;
     }
 
-    const effectiveCollege = sessionCollege?.name
-      ? sessionCollege.name
-      : selectedCollege === 'other' || selectedCollege === 'Other University / College'
-      ? customCollege.trim()
-      : selectedCollege.trim();
-
-    const effectiveBranch =
-      selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
+    const effectiveBranch = isSessionChannel
+      ? selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
         ? customBranch.trim()
-        : selectedBranch.trim();
+        : selectedBranch.trim()
+      : undefined;
 
     setLoading(true);
     try {
@@ -348,9 +341,11 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
         phone: cleanPhone,
         otp: otp.trim(),
         name: name.trim() || undefined,
-        collegeName: effectiveCollege || undefined,
-        collegeId: sessionCollege?.id || selectedCollegeObj?.id || undefined,
+        collegeName: isSessionChannel ? sessionCollege?.name : undefined,
+        collegeId: isSessionChannel ? sessionCollege?.id : undefined,
         branch: effectiveBranch || undefined,
+        sessionCode: detectedSessionCode || undefined,
+        signupSource: effectiveSource,
       }).unwrap();
 
       const token = data.token || data.accessToken;
@@ -375,8 +370,8 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
 
   return (
     <div className="w-full space-y-3.5">
-      {/* Session College Verified Banner */}
-      {sessionCollege && (
+      {/* Session College Verified Banner (Only on Live Session QR flows) */}
+      {isSessionChannel && sessionCollege && (
         <div className="p-3 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/80 flex items-center justify-between gap-2.5 text-xs text-indigo-900 dark:text-indigo-200 shadow-xs animate-in fade-in duration-150">
           <div className="flex items-center gap-2.5 min-w-0">
             <span className="w-7 h-7 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
@@ -384,7 +379,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             </span>
             <div className="min-w-0">
               <span className="text-[10px] uppercase tracking-wider font-bold text-indigo-500 dark:text-indigo-400 block font-mono">
-                Campus Roadshow Presentation
+                Campus Session Presentation
               </span>
               <span className="font-black truncate block text-xs text-zinc-900 dark:text-zinc-100">
                 {sessionCollege.name}
@@ -394,6 +389,14 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
           <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 text-[10px] font-mono font-bold shrink-0">
             QR Verified
           </span>
+        </div>
+      )}
+
+      {/* Pamphlet QR Quick Welcome Banner */}
+      {isPamphletChannel && (
+        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2 text-xs text-amber-900 dark:text-amber-200 font-medium">
+          <QrCode className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
+          <span>Pamphlet Quick Pass: Instant login with name & mobile.</span>
         </div>
       )}
 
@@ -437,7 +440,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               />
             </div>
             <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-              Enter your mobile number to login or register instantly.
+              Enter your mobile number to get instant access.
             </p>
           </div>
 
@@ -453,7 +456,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               </>
             ) : (
               <>
-                <span>Continue to Login / Register</span>
+                <span>Continue</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -481,6 +484,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             </button>
           </div>
 
+          {/* Full Name Input (Always requested for new users) */}
           <div className="space-y-1">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-name">
               Full Name <span className="text-rose-500">*</span>
@@ -500,101 +504,46 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
             </div>
           </div>
 
-          {/* College Dropdown or Locked QR Detected College */}
-          {sessionCollege ? (
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 flex items-center justify-between">
-                <span className="flex items-center gap-1.5">
-                  <GraduationCap className="w-3.5 h-3.5 text-indigo-500" />
-                  <span>College / University</span>
-                </span>
-                <span className="text-[10px] font-mono font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-500/20 flex items-center gap-1">
-                  <CheckCircle2 className="w-3 h-3" /> Taken from QR Scan
-                </span>
-              </label>
-              <div className="w-full px-3.5 py-2.5 rounded-xl border border-indigo-200/80 dark:border-indigo-800/80 bg-indigo-50/50 dark:bg-indigo-950/30 text-xs font-black text-zinc-900 dark:text-zinc-100 flex items-center justify-between min-h-[40px]">
-                <span className="truncate">{sessionCollege.name}</span>
-                <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0 ml-2" />
-              </div>
-            </div>
-          ) : (
-            <div className="space-y-1">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-college">
-                College / University <span className="text-rose-500">*</span>
+          {/* Academic Branch Dropdown (ONLY shown on Live Presentation Session QR flows) */}
+          {isSessionChannel && (
+            <div className="space-y-1 animate-in fade-in duration-150">
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-branch">
+                Branch / Department <span className="text-rose-500">*</span>
               </label>
               <div className="relative">
-                <GraduationCap className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <select
-                  id="new-user-college"
-                  value={selectedCollege}
-                  onChange={(e) => setSelectedCollege(e.target.value)}
+                  id="new-user-branch"
+                  value={selectedBranch}
+                  onChange={(e) => setSelectedBranch(e.target.value)}
                   required
                   className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
                 >
-                  <option value="">-- Select Your College / University --</option>
-                  {collegeOptions.map((c: any) => (
-                    <option key={c.id || c.slug || c.name} value={c.name}>
-                      {c.name} {c.shortName ? `(${c.shortName})` : ''}
+                  <option value="">-- Select Your Academic Branch --</option>
+                  {branchOptions.map((b: any) => (
+                    <option key={b.id || b.code || b.name} value={b.name}>
+                      {b.name} {b.code ? `(${b.code})` : ''}
                     </option>
                   ))}
-                  <option value="other">Other University / College (Specify below)</option>
+                  <option value="other">Other / Multidisciplinary (Specify below)</option>
                 </select>
                 <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
-              {(selectedCollege === 'other' || selectedCollege === 'Other University / College') && (
+              {(selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary') && (
                 <div className="pt-1.5 animate-in fade-in duration-150">
                   <input
                     type="text"
                     required
-                    placeholder="Enter your college / university name"
-                    value={customCollege}
-                    onChange={(e) => setCustomCollege(e.target.value)}
+                    placeholder="e.g. Chemical, Biotechnology, etc."
+                    value={customBranch}
+                    onChange={(e) => setCustomBranch(e.target.value)}
                     className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
                   />
                 </div>
               )}
             </div>
           )}
-
-          {/* Academic Branch Dropdown */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-branch">
-              Branch / Department <span className="text-rose-500">*</span>
-            </label>
-            <div className="relative">
-              <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-              <select
-                id="new-user-branch"
-                value={selectedBranch}
-                onChange={(e) => setSelectedBranch(e.target.value)}
-                required
-                className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
-              >
-                <option value="">-- Select Your Academic Branch --</option>
-                {branchOptions.map((b: any) => (
-                  <option key={b.id || b.code || b.name} value={b.name}>
-                    {b.name} {b.code ? `(${b.code})` : ''}
-                  </option>
-                ))}
-                <option value="other">Other / Multidisciplinary (Specify below)</option>
-              </select>
-              <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </div>
-
-            {(selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary') && (
-              <div className="pt-1.5 animate-in fade-in duration-150">
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Chemical, Biotechnology, etc."
-                  value={customBranch}
-                  onChange={(e) => setCustomBranch(e.target.value)}
-                  className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
-                />
-              </div>
-            )}
-          </div>
 
           <button
             type="submit"
@@ -608,7 +557,7 @@ export default function MobileOtpAuth({ onSuccess, onError }: MobileOtpAuthProps
               </>
             ) : (
               <>
-                <span>Send OTP & Register</span>
+                <span>Send OTP & Continue</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
