@@ -31,11 +31,11 @@ type AuthStep = 'PHONE' | 'PROFILE_SETUP';
 
 const DEFAULT_BRANCHES = [
   { id: 'ba', name: 'BA' },
+  { id: 'bba', name: 'BBA' },
   { id: 'bcom', name: 'BCOM' },
   { id: 'bca', name: 'BCA' },
-  { id: 'dca', name: 'DCA' },
   { id: 'mca', name: 'MCA' },
-  { id: 'bsc_non_med', name: 'BSC non med' },
+  { id: 'bsc_non_med', name: 'BSC Non-Med' },
   { id: 'bsc_med', name: 'BSC Med' },
   { id: 'others', name: 'Others' },
 ];
