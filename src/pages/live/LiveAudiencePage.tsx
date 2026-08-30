@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import { io, Socket } from "socket.io-client";
 import confetti from "canvas-confetti";
 import {
@@ -28,8 +29,6 @@ import {
   RotateCcw,
   Smartphone,
 } from "lucide-react";
-import { API_BASE_URL } from "../../config/api";
-import { isAuthenticated, getUser, getUserName, getUserPhone } from "../../utils/auth";
 import SlideRenderer from "../../components/presentations/SlideRenderer";
 import AutoFitSlideStage from "../../components/presentations/AutoFitSlideStage";
 import BranchDistributionPieChart, {
@@ -39,7 +38,16 @@ import BranchDistributionPieChart, {
 
 export default function LiveAudiencePage() {
   const { sessionCode } = useParams<{ sessionCode: string }>();
-  const navigate = useNavigate();
+  const settingsBaseUrl = useSelector((s: any) => s?.settings?.baseUrl);
+  const baseUrl = (
+    settingsBaseUrl ||
+    (import.meta as any).env?.VITE_API_URL ||
+    (typeof window !== "undefined" &&
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+      ? "https://api.unisole.org"
+      : "http://localhost:3000")
+  ).replace(/\/+$/, "");
 
   const code = (sessionCode || "").trim().toUpperCase();
 
@@ -64,6 +72,7 @@ export default function LiveAudiencePage() {
   const [attendeesList, setAttendeesList] = useState<any[]>([]);
   const [branchSelectorOpen, setBranchSelectorOpen] = useState(false);
 
+  // Real-time state
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [buildStep, setBuildStep] = useState(0);
   const [attendeeCount, setAttendeeCount] = useState(0);
@@ -150,7 +159,7 @@ export default function LiveAudiencePage() {
           await (screen.orientation as any).lock("landscape");
         }
       } catch (err) {
-        // Screen orientation lock not supported on this platform/browser
+        // Orientation lock not supported
       }
 
       setIsFullscreenLandscape(true);
@@ -178,25 +187,19 @@ export default function LiveAudiencePage() {
     }
   };
 
-  // Fetch session details on mount & auto-join logged in user
+  // Fetch session details on mount
   useEffect(() => {
     if (!code) return;
-
-    // If not authenticated, redirect directly to SEO login page with redirect back to this session
-    if (!isAuthenticated()) {
-      navigate(`/login?redirect=/live/${code}&source=SESSION_QR`, { replace: true });
-      return;
-    }
 
     setIsLoadingSession(true);
     setSessionError(null);
 
-    fetch(`${API_BASE_URL}/api/public/presentations/sessions/${code}`)
+    fetch(`${baseUrl}/api/public/presentations/sessions/${code}`)
       .then((res) => {
         if (!res.ok) throw new Error("Presentation session not found");
         return res.json();
       })
-      .then(async (data) => {
+      .then((data) => {
         if (data.data) {
           setSession(data.data.session);
           setPresentation(data.data.presentation);
@@ -209,65 +212,10 @@ export default function LiveAudiencePage() {
               const parsed = JSON.parse(savedLead);
               if (parsed?.id) {
                 setLead(parsed);
-                return;
               }
             } catch (e) {
               console.error(e);
             }
-          }
-
-          // User is already authenticated on the SEO website -> auto-join directly!
-          const currentUser = getUser();
-          const studentName =
-            getUserName() ||
-            currentUser?.name ||
-            currentUser?.fullName ||
-            "Student";
-          const studentPhone =
-            getUserPhone() ||
-            currentUser?.phone ||
-            currentUser?.mobile ||
-            "9999999999";
-          const studentEmail = currentUser?.email || "";
-
-          const studentBranch = currentUser?.branch || "";
-
-          // Set lead immediately so the live slideshow appears instantly with zero delay
-          const initialLead = {
-            id: currentUser?.id || `lead_${Date.now()}`,
-            name: studentName,
-            phone: studentPhone,
-            email: studentEmail,
-            branch: studentBranch,
-          };
-          setLead(initialLead);
-
-          // Register lead in backend in parallel
-          try {
-            const joinRes = await fetch(
-              `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                  name: studentName,
-                  phone: studentPhone,
-                  email: studentEmail,
-                  branch: studentBranch || undefined,
-                  userId: currentUser?.id,
-                }),
-              }
-            );
-            const joinData = await joinRes.json();
-            if (joinData.data?.lead) {
-              setLead(joinData.data.lead);
-              localStorage.setItem(
-                `unisole_lead_${code}`,
-                JSON.stringify(joinData.data.lead)
-              );
-            }
-          } catch (err) {
-            console.error("Auto join error:", err);
           }
         }
       })
@@ -277,13 +225,13 @@ export default function LiveAudiencePage() {
       .finally(() => {
         setIsLoadingSession(false);
       });
-  }, [code, navigate]);
+  }, [baseUrl, code]);
 
   // Connect Socket.io once lead is registered
   useEffect(() => {
     if (!code || !lead?.id) return;
 
-    const socketUrl = API_BASE_URL.replace(/\/+$/, "");
+    const socketUrl = baseUrl.replace(/\/+$/, "");
     const socket = io(socketUrl, {
       transports: ["websocket", "polling"],
     });
@@ -377,10 +325,6 @@ export default function LiveAudiencePage() {
       setIsPresentationStarted(false);
       if (data.branchStats) setBranchStats(data.branchStats);
       if (data.attendees) setAttendeesList(data.attendees);
-    });
-
-    socket.on("attendee_count", ({ count }) => {
-      setAttendeeCount(count);
     });
 
     socket.on("slide_updated", ({ slideIndex, buildStep: bStep, quizState: qState }) => {
@@ -490,7 +434,7 @@ export default function LiveAudiencePage() {
     return () => {
       socket.disconnect();
     };
-  }, [code, lead?.id, lead?.name, lead?.phone]);
+  }, [baseUrl, code, lead?.id, lead?.name, lead?.phone]);
 
   // Quiz timer
   useEffect(() => {
@@ -523,7 +467,7 @@ export default function LiveAudiencePage() {
 
     try {
       const res = await fetch(
-        `${API_BASE_URL}/api/public/presentations/sessions/${code}/join`,
+        `${baseUrl}/api/public/presentations/sessions/${code}/join`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -654,8 +598,8 @@ export default function LiveAudiencePage() {
             {sessionError || "The session code is invalid or has expired."}
           </p>
           <Link
-            to="/join"
-            className="inline-block px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg transition-colors"
+            to="/live"
+            className="inline-block px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg transition-colors cursor-pointer"
           >
             Enter Another Code
           </Link>
@@ -755,7 +699,7 @@ export default function LiveAudiencePage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="block text-[11px] font-bold text-zinc-300 mb-1">
-                  Branch / Major
+                  Branch / Department
                 </label>
                 <select
                   value={branchInput}
@@ -766,7 +710,7 @@ export default function LiveAudiencePage() {
                   <option value="Computer Science & Engineering">CSE</option>
                   <option value="Information Technology">IT</option>
                   <option value="Artificial Intelligence & Machine Learning">AIML</option>
-                  <option value="Data Science">Data Science</option>
+                  <option value="Data Science & Big Data">Data Science</option>
                   <option value="Electronics & Communication">ECE</option>
                   <option value="Electrical & Electronics">EEE</option>
                   <option value="Mechanical Engineering">MECH</option>
@@ -774,25 +718,20 @@ export default function LiveAudiencePage() {
                   <option value="Cyber Security">Cyber Security</option>
                   <option value="BCA / MCA">BCA / MCA</option>
                   <option value="BBA / MBA">BBA / MBA</option>
-                  <option value="Other">Other</option>
+                  <option value="Other / Multidisciplinary">Other</option>
                 </select>
               </div>
               <div>
                 <label className="block text-[11px] font-bold text-zinc-300 mb-1">
                   Year of Study
                 </label>
-                <select
+                <input
+                  type="text"
                   value={yearInput}
                   onChange={(e) => setYearInput(e.target.value)}
-                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 focus:outline-hidden focus:border-indigo-500 cursor-pointer"
-                >
-                  <option value="">Select Year</option>
-                  <option value="1st Year">1st Year</option>
-                  <option value="2nd Year">2nd Year</option>
-                  <option value="3rd Year">3rd Year</option>
-                  <option value="4th Year">4th Year</option>
-                  <option value="Graduate / Alum">Graduate</option>
-                </select>
+                  placeholder="e.g. 2nd / 3rd Year"
+                  className="w-full px-3 py-2.5 bg-zinc-950 border border-zinc-800 rounded-xl text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-hidden focus:border-indigo-500"
+                />
               </div>
             </div>
 
@@ -809,7 +748,7 @@ export default function LiveAudiencePage() {
 
         {/* Footer */}
         <div className="text-center text-[11px] text-zinc-500 z-10 pb-2">
-          Powered by Unisole EdTech Engine • unisole.in
+          Powered by Unisole EdTech Engine • unisole.org
         </div>
       </div>
     );
@@ -1299,29 +1238,18 @@ export default function LiveAudiencePage() {
               <span>#{myRank.rank}</span>
             </div>
           )}
-
-          {/* Fullscreen Landscape Trigger Button */}
-          <button
-            type="button"
-            onClick={toggleFullscreenLandscape}
-            className="flex items-center gap-1.5 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-[10px] sm:text-[11px] font-extrabold shadow-md shadow-indigo-600/25 active:scale-95 transition-all cursor-pointer shrink-0"
-            title="Open Presentation in Fullscreen Landscape Mode"
-          >
-            <Maximize2 className="w-3.5 h-3.5" />
-            <span className="hidden xs:inline">Landscape</span>
-          </button>
         </div>
       </header>
 
-      {/* Main Interactive Stage Canvas (Auto-Fit Without Scroll in Portrait) */}
-      <main className="flex-1 min-h-0 relative flex items-center justify-center p-2 sm:p-4 z-20 overflow-hidden w-full">
+      {/* Main Interactive Stage Canvas (Responsive & Full-Width on Mobile) */}
+      <main className="flex-1 min-h-0 relative w-full overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 z-20 overscroll-contain flex flex-col items-stretch">
         {/* Glow ambient lights */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-indigo-600/15 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-violet-600/15 rounded-full blur-3xl pointer-events-none" />
 
-        <AutoFitSlideStage className="w-full h-full">
+        <div className="w-full max-w-2xl mx-auto my-auto min-w-[280px] flex-1 flex flex-col justify-center shrink-0 z-10 animate-fade-in">
           {quizState.isLeaderboardActive ? (
-            <div className="w-full max-w-4xl mx-auto space-y-4 pt-1 animate-fade-in text-center z-10">
+            <div className="w-full space-y-4 pt-1 animate-fade-in text-center">
               <div className="flex items-center justify-center gap-2 mb-1">
                 <Trophy className="w-6 h-6 text-amber-400" />
                 <h2 className="text-xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-200 to-yellow-400">
@@ -1393,25 +1321,23 @@ export default function LiveAudiencePage() {
               </div>
             </div>
           ) : (
-            /* Render Active Slide with Progressive Step Animations */
-            <div className="w-full max-w-5xl mx-auto z-10">
-              <SlideRenderer
-                key={`slide-${currentSlideIndex}`}
-                slide={currentSlide}
-                buildStep={buildStep}
-                presentationTitle={presentation?.title}
-                isProjector={false}
-                isLandscape={false}
-                quizState={quizState}
-                remainingTime={remainingTime}
-                leaderboard={leaderboard}
-                onSelectOption={handleSelectOption}
-                selectedOption={selectedOption}
-                isSubmitted={isSubmitted}
-              />
-            </div>
+            /* Render Active Slide with Responsive Typography and Step Animations */
+            <SlideRenderer
+              key={`slide-${currentSlideIndex}`}
+              slide={currentSlide}
+              buildStep={buildStep}
+              presentationTitle={presentation?.title}
+              isProjector={false}
+              isLandscape={false}
+              quizState={quizState}
+              remainingTime={remainingTime}
+              leaderboard={leaderboard}
+              onSelectOption={handleSelectOption}
+              selectedOption={selectedOption}
+              isSubmitted={isSubmitted}
+            />
           )}
-        </AutoFitSlideStage>
+        </div>
       </main>
 
       {/* Floating Bottom Emoji Reaction Bar */}
