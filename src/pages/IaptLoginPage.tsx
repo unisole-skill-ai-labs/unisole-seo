@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 import {
   Phone,
   ArrowRight,
@@ -11,7 +13,9 @@ import {
   Award,
   BookOpen,
   GraduationCap,
-  Lock,
+  Building2,
+  Check,
+  User,
 } from 'lucide-react';
 import { useLoginMutation } from '../store/apiSlice';
 import { setCredentials } from '../store/authSlice';
@@ -37,7 +41,7 @@ export default function IaptLoginPage() {
   const isAlreadyLoggedIn = isAuthenticated();
 
   useEffect(() => {
-    document.title = 'IAPT Portal Login | Unisole × NIT Hamirpur';
+    document.title = 'IAPT Candidate Portal | Unisole';
   }, []);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -68,20 +72,20 @@ export default function IaptLoginPage() {
 
       setSuccess(true);
       confetti({
-        particleCount: 80,
-        spread: 70,
+        particleCount: 70,
+        spread: 60,
         origin: { y: 0.6 },
-        colors: ['#6366f1', '#a855f7', '#ec4899', '#10b981'],
+        colors: ['#18181b', '#6366f1', '#10b981', '#f59e0b'],
       });
 
       setTimeout(() => {
         navigate(redirectTarget, { replace: true });
-      }, 800);
+      }, 700);
     } catch (err: any) {
       const msg =
         err?.data?.message ||
         err?.message ||
-        'Unable to log in. Please check your mobile number and try again.';
+        'Unable to log in. Please verify your mobile number and try again.';
       setErrorMsg(msg);
     } finally {
       setLoading(false);
@@ -89,97 +93,73 @@ export default function IaptLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-between selection:bg-indigo-500 selection:text-white relative overflow-hidden">
-      {/* Background Ambient Glows */}
-      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-indigo-600/20 via-purple-600/15 to-pink-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 right-10 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="min-h-screen bg-[#fafafa] text-zinc-900 flex flex-col justify-between selection:bg-zinc-900 selection:text-white font-sans antialiased">
+      {/* ─── 1. Standard Unisole SEO Navbar ──────────────────────────────── */}
+      <Navbar />
 
-      {/* ─── 1. Header Navigation ────────────────────────────────────────── */}
-      <header className="px-6 py-5 flex items-center justify-between border-b border-white/10 backdrop-blur-xl relative z-10">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center text-white font-black text-sm shadow-lg shadow-indigo-600/20 group-hover:scale-105 transition-transform">
-            U
-          </div>
-          <div>
-            <span className="text-base font-black tracking-tight block text-white leading-none">
-              UNISOLE
-            </span>
-            <span className="text-[10px] text-zinc-400 font-mono tracking-wider uppercase">
-              SKILL AI LABS
-            </span>
-          </div>
-        </Link>
-
-        <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 text-xs font-bold font-mono">
-            IAPT × NIT HAMIRPUR
-          </span>
-        </div>
-      </header>
-
-      {/* ─── 2. Main Login Hero Card ─────────────────────────────────────── */}
-      <main className="my-auto px-4 py-12 flex items-center justify-center relative z-10">
-        <div className="w-full max-w-md space-y-6 animate-fade-in">
-          {/* Partnership Banner Card */}
-          <div className="p-6 sm:p-8 rounded-3xl bg-zinc-900/90 border border-white/10 shadow-2xl backdrop-blur-2xl space-y-6 relative">
-            <div className="text-center space-y-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500/20 via-indigo-500/20 to-purple-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold shadow-sm">
-                <Award className="w-3.5 h-3.5 text-amber-400" />
-                <span>Official IAPT Candidate Fast-Pass</span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-300">
-                IAPT Program Login
-              </h1>
-
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-xs mx-auto leading-relaxed">
-                Enter your mobile number to access your curriculum, technical pathways, and joint certifications.
-              </p>
+      {/* ─── 2. Main Body Section ────────────────────────────────────────── */}
+      <main className="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16 flex flex-col items-center justify-center">
+        <div className="w-full max-w-xl space-y-8 animate-fade-in">
+          {/* Top Header Badge & Text */}
+          <div className="text-center space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-zinc-700 text-xs font-semibold">
+              <Sparkles className="w-3.5 h-3.5 text-zinc-900" />
+              <span>Academic Partnership · IAPT & NIT Hamirpur</span>
             </div>
 
-            {/* If user is already authenticated */}
-            {isAlreadyLoggedIn && currentUser && (
-              <div className="p-4 rounded-2xl bg-indigo-950/50 border border-indigo-500/30 text-center space-y-3 animate-fade-in">
-                <div className="flex items-center justify-center gap-2 text-emerald-400 text-xs font-bold">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Already Logged In</span>
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-zinc-900 tracking-tight">
+              IAPT Candidate Portal
+            </h1>
+
+            <p className="text-sm sm:text-base text-zinc-600 max-w-md mx-auto leading-relaxed">
+              Enter your mobile number to access your curriculum tracks, live projects, and verified joint certifications.
+            </p>
+          </div>
+
+          {/* Authentication Card */}
+          <div className="bg-white border border-zinc-200 rounded-3xl p-6 sm:p-10 shadow-sm space-y-6">
+            {/* If user is already logged in */}
+            {isAlreadyLoggedIn && currentUser ? (
+              <div className="p-6 rounded-2xl bg-zinc-50 border border-zinc-200 text-center space-y-4 animate-fade-in">
+                <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-600 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-6 h-6" />
                 </div>
-                <div className="text-sm font-bold text-white">
-                  {currentUser.name || 'Candidate'}{' '}
-                  <span className="text-xs font-normal text-zinc-400 font-mono">
-                    ({currentUser.phone})
-                  </span>
+                <div className="space-y-1">
+                  <h3 className="text-base font-bold text-zinc-900">
+                    Welcome back, {currentUser.name || 'Learner'}!
+                  </h3>
+                  <p className="text-xs text-zinc-500 font-mono">
+                    Signed in with +91 {currentUser.phone}
+                  </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => navigate(redirectTarget, { replace: true })}
-                  className="w-full py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/30 transition-all cursor-pointer"
+                  className="w-full py-3.5 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
                 >
-                  <span>Continue to IAPT Portal</span>
+                  <span>Continue to IAPT Pathways</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
-            )}
-
-            {/* Direct Mobile Login Form */}
-            {(!isAlreadyLoggedIn || success) && (
-              <form onSubmit={handleLoginSubmit} className="space-y-4">
+            ) : (
+              /* Direct Mobile Login Form */
+              <form onSubmit={handleLoginSubmit} className="space-y-5">
                 {errorMsg && (
-                  <div className="p-3.5 rounded-2xl bg-rose-500/15 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2.5 animate-shake">
+                  <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-center gap-2.5">
                     <AlertCircle className="w-4 h-4 shrink-0" />
                     <span>{errorMsg}</span>
                   </div>
                 )}
 
-                {/* Mobile Number Input */}
+                {/* Mobile Number Field */}
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-zinc-300">
-                    WhatsApp / Mobile Number <span className="text-indigo-400">*</span>
+                  <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider">
+                    Mobile Number <span className="text-rose-500">*</span>
                   </label>
                   <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 font-bold text-xs">
-                      <Phone className="w-4 h-4 mr-1 text-indigo-400" />
-                      <span>+91</span>
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400 font-bold text-sm">
+                      <Phone className="w-4 h-4 mr-1.5 text-zinc-400" />
+                      <span className="text-zinc-600 font-mono">+91</span>
                     </div>
                     <input
                       type="tel"
@@ -192,33 +172,38 @@ export default function IaptLoginPage() {
                       maxLength={10}
                       required
                       autoFocus
-                      className="w-full pl-16 pr-4 py-3.5 bg-zinc-950 border border-white/15 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-2xl text-white font-mono text-sm font-bold placeholder-zinc-500 outline-none transition-all"
+                      className="w-full pl-20 pr-4 py-3.5 bg-white border border-zinc-300 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 rounded-xl text-zinc-900 font-mono text-sm font-semibold placeholder-zinc-400 outline-none transition-all"
                     />
                   </div>
                 </div>
 
-                {/* Optional Name Input */}
+                {/* Optional Full Name Field */}
                 <div className="space-y-1.5">
-                  <label className="block text-xs font-bold text-zinc-300">
-                    Full Name <span className="text-zinc-500 font-normal">(Optional)</span>
+                  <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider">
+                    Full Name <span className="text-zinc-400 font-normal lowercase">(optional)</span>
                   </label>
-                  <input
-                    type="text"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="e.g. Rahul Sharma"
-                    className="w-full px-4 py-3.5 bg-zinc-950 border border-white/15 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 rounded-2xl text-white text-sm font-medium placeholder-zinc-500 outline-none transition-all"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-zinc-400">
+                      <User className="w-4 h-4 text-zinc-400" />
+                    </div>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      placeholder="e.g. Rahul Sharma"
+                      className="w-full pl-10 pr-4 py-3.5 bg-white border border-zinc-300 focus:border-zinc-900 focus:ring-1 focus:ring-zinc-900 rounded-xl text-zinc-900 text-sm font-medium placeholder-zinc-400 outline-none transition-all"
+                    />
+                  </div>
                 </div>
 
-                {/* Submit Action Button */}
+                {/* Submit CTA Button */}
                 <button
                   type="submit"
                   disabled={loading || phone.length !== 10}
-                  className="w-full py-4 px-4 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-black text-sm flex items-center justify-center gap-2 shadow-xl shadow-indigo-600/30 active:scale-[0.98] transition-all cursor-pointer"
+                  className="w-full py-4 px-6 rounded-xl bg-zinc-900 hover:bg-zinc-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-all cursor-pointer"
                 >
                   {loading ? (
-                    <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                    <div className="w-5 h-5 rounded-full border-2 border-zinc-400 border-t-white animate-spin" />
                   ) : (
                     <>
                       <span>Access IAPT Portal</span>
@@ -227,41 +212,51 @@ export default function IaptLoginPage() {
                   )}
                 </button>
 
-                <div className="pt-2 flex items-center justify-center gap-2 text-[11px] text-zinc-500">
-                  <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-                  <span>Instant 1-Click Fast Pass • No Password Required</span>
+                <div className="pt-2 flex items-center justify-center gap-2 text-xs text-zinc-500 font-medium">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  <span>Instant 1-Click Fast Pass · Direct Mobile Login</span>
                 </div>
               </form>
             )}
           </div>
 
-          {/* Feature Highlights Grid */}
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="p-3 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-1">
-              <BookOpen className="w-4 h-4 text-indigo-400 mx-auto" />
-              <div className="text-[11px] font-bold text-zinc-200">AI Curriculum</div>
-              <div className="text-[9px] text-zinc-500">Industrial Modules</div>
+          {/* Institutional Trust Badges */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="p-4 rounded-2xl bg-white border border-zinc-200/80 shadow-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-800 shrink-0">
+                <Building2 className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-zinc-900 truncate">NIT Hamirpur</div>
+                <div className="text-[11px] text-zinc-500">Academic Host</div>
+              </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-1">
-              <Award className="w-4 h-4 text-amber-400 mx-auto" />
-              <div className="text-[11px] font-bold text-zinc-200">Certification</div>
-              <div className="text-[9px] text-zinc-500">NIT × IAPT × Unisole</div>
+            <div className="p-4 rounded-2xl bg-white border border-zinc-200/80 shadow-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-800 shrink-0">
+                <Award className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-zinc-900 truncate">IAPT Association</div>
+                <div className="text-[11px] text-zinc-500">Joint Certification</div>
+              </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-zinc-900/60 border border-white/5 space-y-1">
-              <GraduationCap className="w-4 h-4 text-emerald-400 mx-auto" />
-              <div className="text-[11px] font-bold text-zinc-200">Placement Pool</div>
-              <div className="text-[9px] text-zinc-500">Tier-1 Network</div>
+            <div className="p-4 rounded-2xl bg-white border border-zinc-200/80 shadow-xs flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-zinc-100 flex items-center justify-center text-zinc-800 shrink-0">
+                <GraduationCap className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <div className="text-xs font-bold text-zinc-900 truncate">UNISOLE AI Labs</div>
+                <div className="text-[11px] text-zinc-500">Execution Partner</div>
+              </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* ─── 3. Footer ───────────────────────────────────────────────────── */}
-      <footer className="px-6 py-4 border-t border-white/10 text-center text-xs text-zinc-500 relative z-10">
-        © {new Date().getFullYear()} UNISOLE Skill AI Labs in academic collaboration with IAPT & NIT Hamirpur.
-      </footer>
+      {/* ─── 3. Standard Unisole SEO Footer ──────────────────────────────── */}
+      <Footer />
     </div>
   );
 }
