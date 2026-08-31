@@ -73,7 +73,9 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     const handleGlobalEvent = (e: any) => {
       if (
         typeof window !== 'undefined' &&
-        (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
+        (window.location.pathname.startsWith('/live') ||
+          window.location.pathname.startsWith('/join') ||
+          window.location.pathname.startsWith('/iapt'))
       ) {
         return;
       }
@@ -88,37 +90,6 @@ export const AuthModalProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     return () => {
       window.removeEventListener('openAuthModal', handleGlobalEvent as EventListener);
     };
-  }, [openAuthModal]);
-
-  // Timed popup trigger for unauthenticated users
-  useEffect(() => {
-    if (isAuthenticated()) return;
-    if (sessionStorage.getItem(DISMISS_SESSION_KEY) === 'true') return;
-    if (
-      typeof window !== 'undefined' &&
-      (window.location.pathname.startsWith('/live') || window.location.pathname.startsWith('/join'))
-    ) {
-      return;
-    }
-
-    const timer = setTimeout(() => {
-      if (
-        !isAuthenticated() &&
-        sessionStorage.getItem(DISMISS_SESSION_KEY) !== 'true' &&
-        typeof window !== 'undefined' &&
-        !window.location.pathname.startsWith('/live') &&
-        !window.location.pathname.startsWith('/join')
-      ) {
-        openAuthModal({
-          mode: 'register',
-          source: 'NON_PAMPHLET',
-          title: 'Welcome to Unisole AI Labs',
-          subtitle: 'Sign in with your mobile number to access programs, certifications, and research guides.',
-        });
-      }
-    }, TIMED_POPUP_DELAY_MS);
-
-    return () => clearTimeout(timer);
   }, [openAuthModal]);
 
   // Close modal when auth changes to authenticated
