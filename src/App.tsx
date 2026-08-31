@@ -15,6 +15,7 @@ const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const IaptLoginPage = lazy(() => import('./pages/IaptLoginPage'));
+const IaptPage = lazy(() => import('./pages/IaptPage'));
 const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
@@ -47,8 +48,9 @@ export default function App() {
       <main>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route path="/iapt" element={<IaptLoginPage />} />
+            <Route path="/iapt" element={<IaptPage />} />
             <Route path="/iapt/login" element={<IaptLoginPage />} />
+            <Route path="/iapt-login" element={<IaptLoginPage />} />
             <Route path="/login/iapt" element={<IaptLoginPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
