@@ -34,7 +34,6 @@ const DEFAULT_BRANCHES = [
   { id: 'bba', name: 'BBA' },
   { id: 'bcom', name: 'BCOM' },
   { id: 'bca', name: 'BCA' },
-  { id: 'mca', name: 'MCA' },
   { id: 'bsc_non_med', name: 'BSC Non-Med' },
   { id: 'bsc_med', name: 'BSC Med' },
   { id: 'others', name: 'Others' },
