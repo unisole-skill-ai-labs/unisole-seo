@@ -5,6 +5,10 @@ import IaptFooter from '../../components/iapt/IaptFooter';
 import IaptAuthGuard from '../../components/iapt/IaptAuthGuard';
 import { getUser } from '../../utils/auth';
 import {
+  useRegisterNainMutation,
+  useGetMyNainRegistrationQuery,
+} from '../../store/apiSlice';
+import {
   Sparkles,
   ArrowRight,
   ChevronLeft,
@@ -22,22 +26,62 @@ import {
   Layers,
   ArrowUpRight,
   Lightbulb,
+  Loader2,
+  Edit3,
+  Building,
+  MapPin,
+  Phone,
+  User,
 } from 'lucide-react';
 
 export default function IaptNainPage() {
   const currentUser = getUser();
+  const { data: existingRegData, isLoading: isLoadingReg } = useGetMyNainRegistrationQuery();
+  const [registerNain, { isLoading: isRegistering }] = useRegisterNainMutation();
+
   const [joined, setJoined] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const [role, setRole] = useState('Physics Teacher / Educator');
-  const [city, setCity] = useState('');
+  const [cityState, setCityState] = useState('');
   const [institution, setInstitution] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const currentReg = existingRegData?.data;
 
   useEffect(() => {
     document.title = 'NAIN — National AI Network of IAPT | In collaboration with Unisole';
   }, []);
 
-  const handleJoin = (e: React.FormEvent) => {
+  useEffect(() => {
+    if (currentReg) {
+      setRole(currentReg.category || 'Physics Teacher / Educator');
+      setInstitution(currentReg.institution || '');
+      setCityState(currentReg.cityState || '');
+      setJoined(true);
+    }
+  }, [currentReg]);
+
+  const handleJoin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setJoined(true);
+    setErrorMsg('');
+
+    if (!role || !institution.trim() || !cityState.trim()) {
+      setErrorMsg('Please fill in all fields (category, institution, and city/state).');
+      return;
+    }
+
+    try {
+      await registerNain({
+        category: role,
+        institution: institution.trim(),
+        cityState: cityState.trim(),
+      }).unwrap();
+      setJoined(true);
+      setIsEditing(false);
+    } catch (err: any) {
+      console.error('NAIN registration error:', err);
+      setErrorMsg(err?.data?.error || err?.message || 'Failed to submit NAIN registration.');
+    }
   };
 
   return (
@@ -367,18 +411,91 @@ export default function IaptNainPage() {
                 </p>
               </div>
 
-              {joined ? (
-                <div className="p-6 rounded-2xl bg-blue-500/10 border border-blue-500/30 text-center space-y-2">
-                  <div className="w-12 h-12 bg-blue-500/20 text-cyan-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <CheckCircle className="w-6 h-6" />
+              {errorMsg && (
+                <div className="mb-6 p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs flex items-center gap-2">
+                  <span className="font-semibold">{errorMsg}</span>
+                </div>
+              )}
+
+              {isLoadingReg ? (
+                <div className="py-12 flex flex-col items-center justify-center text-slate-400 space-y-3">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-500" />
+                  <p className="text-xs">Checking your NAIN registration status...</p>
+                </div>
+              ) : joined && !isEditing ? (
+                <div className="space-y-6">
+                  <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-900/30 via-slate-900 to-cyan-950/30 border border-blue-500/30 shadow-lg">
+                    <div className="flex items-center justify-between gap-4 mb-4">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 bg-blue-500/20 text-cyan-400 rounded-xl flex items-center justify-center">
+                          <CheckCircle className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-white">
+                            Officially Registered with NAIN
+                          </h3>
+                          <span className="text-xs text-cyan-400 font-mono">
+                            ID: {currentReg?.id || 'Active Member'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button
+                        onClick={() => setIsEditing(true)}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition-colors cursor-pointer"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Update</span>
+                      </button>
+                    </div>
+
+                    <div className="grid sm:grid-cols-2 gap-3 pt-2 text-xs text-slate-300">
+                      <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                        <span className="text-[11px] text-slate-500 block mb-0.5">Participant Name</span>
+                        <span className="font-semibold text-white flex items-center gap-1.5">
+                          <User className="w-3.5 h-3.5 text-blue-400" />
+                          {currentReg?.name || currentUser?.name || 'Educator'}
+                        </span>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                        <span className="text-[11px] text-slate-500 block mb-0.5">Mobile Number</span>
+                        <span className="font-semibold text-white flex items-center gap-1.5">
+                          <Phone className="w-3.5 h-3.5 text-blue-400" />
+                          +91 {currentReg?.phone || currentUser?.phone}
+                        </span>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                        <span className="text-[11px] text-slate-500 block mb-0.5">Category</span>
+                        <span className="font-semibold text-white">{currentReg?.category || role}</span>
+                      </div>
+
+                      <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                        <span className="text-[11px] text-slate-500 block mb-0.5">Institution / College</span>
+                        <span className="font-semibold text-white flex items-center gap-1.5">
+                          <Building className="w-3.5 h-3.5 text-cyan-400" />
+                          {currentReg?.institution || institution}
+                        </span>
+                      </div>
+
+                      <div className="sm:col-span-2 p-3 rounded-xl bg-slate-950/70 border border-slate-800/80">
+                        <span className="text-[11px] text-slate-500 block mb-0.5">City / State</span>
+                        <span className="font-semibold text-white flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+                          {currentReg?.cityState || cityState}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <h3 className="text-lg font-bold text-white">Registered with NAIN!</h3>
-                  <p className="text-xs text-slate-300 max-w-md mx-auto">
-                    Welcome to the National AI Network of IAPT. You will be notified regarding the upcoming regional chapters, webinars, and open physics-AI repositories.
+
+                  <p className="text-center text-xs text-slate-400">
+                    Your details are verified in the IAPT × UNISOLE National AI Network directory.
                   </p>
                 </div>
               ) : (
                 <form onSubmit={handleJoin} className="space-y-4">
+                  {/* Category */}
                   <div>
                     <label className="block text-xs font-semibold text-slate-300 mb-1">
                       Your Category
@@ -386,15 +503,17 @@ export default function IaptNainPage() {
                     <select
                       value={role}
                       onChange={(e) => setRole(e.target.value)}
-                      className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer"
                     >
                       <option>Physics Teacher / Educator</option>
                       <option>College / University Student</option>
                       <option>Physics Researcher / PostDoc</option>
                       <option>Tech / Industry Professional</option>
+                      <option>Institutional Head / Principal</option>
                     </select>
                   </div>
 
+                  {/* Institution & City / State */}
                   <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-slate-300 mb-1">
@@ -416,21 +535,43 @@ export default function IaptNainPage() {
                       <input
                         type="text"
                         required
-                        placeholder="e.g. New Delhi / Bangalore"
-                        value={city}
-                        onChange={(e) => setCity(e.target.value)}
+                        placeholder="e.g. New Delhi, Delhi / Bangalore, KA"
+                        value={cityState}
+                        onChange={(e) => setCityState(e.target.value)}
                         className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
                       />
                     </div>
                   </div>
 
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-600/25 transition-all active:scale-98 cursor-pointer"
-                  >
-                    <span>Confirm NAIN Registration</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
+                  <div className="pt-2 flex items-center gap-3">
+                    <button
+                      type="submit"
+                      disabled={isRegistering}
+                      className="flex-1 inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-600/25 transition-all active:scale-98 cursor-pointer disabled:opacity-60"
+                    >
+                      {isRegistering ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          <span>Saving to NAIN Directory...</span>
+                        </>
+                      ) : (
+                        <>
+                          <span>{isEditing ? 'Save Updated Details' : 'Confirm NAIN Registration'}</span>
+                          <ArrowRight className="w-4 h-4" />
+                        </>
+                      )}
+                    </button>
+
+                    {isEditing && (
+                      <button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        className="px-4 py-3.5 rounded-xl bg-slate-800 text-slate-300 hover:bg-slate-700 text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </form>
               )}
             </div>
