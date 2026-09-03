@@ -434,8 +434,9 @@ export default function IaptNainPage() {
                           <h3 className="text-base font-bold text-white">
                             Officially Registered with NAIN
                           </h3>
-                          <span className="text-xs text-cyan-400 font-mono">
-                            ID: {currentReg?.id || 'Active Member'}
+                          <span className="inline-flex items-center gap-1 text-xs text-emerald-400 font-medium">
+                            <Sparkles className="w-3 h-3 text-emerald-400" />
+                            Verified Member
                           </span>
                         </div>
                       </div>
@@ -462,7 +463,12 @@ export default function IaptNainPage() {
                         <span className="text-[11px] text-slate-500 block mb-0.5">Mobile Number</span>
                         <span className="font-semibold text-white flex items-center gap-1.5">
                           <Phone className="w-3.5 h-3.5 text-blue-400" />
-                          +91 {currentReg?.phone || currentUser?.phone}
+                          {(() => {
+                            const raw = currentReg?.phone || currentUser?.phone || '';
+                            const digits = raw.replace(/\D/g, '');
+                            const last10 = digits.slice(-10);
+                            return last10 ? `+91 ${last10}` : raw;
+                          })()}
                         </span>
                       </div>
 
