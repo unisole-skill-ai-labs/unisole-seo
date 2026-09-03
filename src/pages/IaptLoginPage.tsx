@@ -92,13 +92,13 @@ export default function IaptLoginPage() {
         <div className="max-w-md w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl backdrop-blur-xl space-y-6">
           <div className="text-center space-y-2">
             <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-1">
-              Workshop Portal Access
+              Academic Portal Access
             </div>
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              AI for Physics
+              IAPT × UNISOLE
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 max-w-sm mx-auto">
-              Enter your details to view the 7-day curriculum and workshop resources.
+              Enter your details to access NAIN, the 7-Day Curriculum, and academic resources.
             </p>
           </div>
 
@@ -155,7 +155,7 @@ export default function IaptLoginPage() {
             <div className="pt-2 pb-1 space-y-1.5 text-[11px] text-slate-400">
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-blue-400 shrink-0" />
-                <span>Instant access to 7-Day Curriculum & Modules</span>
+                <span>Instant access to NAIN Network &amp; 7-Day Curriculum</span>
               </div>
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-3.5 h-3.5 text-blue-400 shrink-0" />
@@ -176,7 +176,7 @@ export default function IaptLoginPage() {
                 </>
               ) : (
                 <>
-                  <span>Access Workshop Portal</span>
+                  <span>Access IAPT × Unisole Portal</span>
                   <ArrowRight className="w-4 h-4" />
                 </>
               )}

@@ -16,6 +16,8 @@ const Login = lazy(() => import('./pages/Login'));
 const Register = lazy(() => import('./pages/Register'));
 const IaptLoginPage = lazy(() => import('./pages/IaptLoginPage'));
 const IaptPage = lazy(() => import('./pages/IaptPage'));
+const IaptNainPage = lazy(() => import('./pages/iapt/IaptNainPage'));
+const IaptWorkshopPage = lazy(() => import('./pages/iapt/IaptWorkshopPage'));
 const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
@@ -49,6 +51,11 @@ export default function App() {
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/iapt" element={<IaptPage />} />
+            <Route path="/iapt/nain" element={<IaptNainPage />} />
+            <Route path="/iapt/naina" element={<Navigate to="/iapt/nain" replace />} />
+            <Route path="/iapt/workshop" element={<IaptWorkshopPage />} />
+            <Route path="/iapt/7-day-workshop" element={<Navigate to="/iapt/workshop" replace />} />
+            <Route path="/iapt/curriculum" element={<Navigate to="/iapt/workshop" replace />} />
             <Route path="/iapt/login" element={<IaptLoginPage />} />
             <Route path="/iapt-login" element={<IaptLoginPage />} />
             <Route path="/login/iapt" element={<IaptLoginPage />} />
