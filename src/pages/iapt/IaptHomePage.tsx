@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import IaptNavbar from '../../components/iapt/IaptNavbar';
 import IaptFooter from '../../components/iapt/IaptFooter';
@@ -22,25 +22,14 @@ import {
   ArrowUpRight,
   ExternalLink,
   ChevronRight,
-  Send,
-  Check,
 } from 'lucide-react';
 
 export default function IaptHomePage() {
   const currentUser = getUser();
-  const [interestSubmitted, setInterestSubmitted] = useState(false);
-  const [interestRole, setInterestRole] = useState('Physics Teacher / Professor');
-  const [interestEmail, setInterestEmail] = useState('');
-  const [interestCollege, setInterestCollege] = useState('');
 
   useEffect(() => {
     document.title = 'IAPT × UNISOLE — Bridging Physics & Artificial Intelligence';
   }, []);
-
-  const handleInterestSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setInterestSubmitted(true);
-  };
 
   return (
     <IaptAuthGuard>
@@ -102,13 +91,13 @@ export default function IaptHomePage() {
                   <ArrowRight className="w-5 h-5" />
                 </a>
 
-                <a
-                  href="#join"
+                <Link
+                  to="/iapt/nain"
                   className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-slate-900/90 hover:bg-slate-800/90 text-slate-200 hover:text-white font-semibold text-base border border-slate-700/80 transition-all duration-200 backdrop-blur-md"
                 >
-                  <Users className="w-4 h-4 text-cyan-400" />
-                  <span>Join the Network</span>
-                </a>
+                  <Network className="w-4 h-4 text-cyan-400" />
+                  <span>Join NAIN Initiative</span>
+                </Link>
               </div>
             </div>
           </section>
@@ -522,97 +511,6 @@ export default function IaptHomePage() {
                   </Link>
                 </div>
               </div>
-            </div>
-          </section>
-
-          {/* ========================================================================= */}
-          {/* JOIN THE NETWORK / INQUIRIES SECTION                                      */}
-          {/* ========================================================================= */}
-          <section id="join" className="py-20 sm:py-24 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-900 via-slate-900/90 to-blue-950/50 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-80 h-80 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
-
-              <div className="text-center max-w-2xl mx-auto mb-8">
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold uppercase tracking-wider mb-4">
-                  Community &amp; College Partnerships
-                </div>
-                <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-3">
-                  Join the IAPT × UNISOLE Network
-                </h2>
-                <p className="text-sm sm:text-base text-slate-300">
-                  Whether you are a physics educator looking to replicate workshops in your college, or a researcher exploring AI workflows, connect with the initiative.
-                </p>
-              </div>
-
-              {interestSubmitted ? (
-                <div className="p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
-                  <div className="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-2">
-                    <Check className="w-6 h-6" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white">Thank you for your interest!</h3>
-                  <p className="text-xs text-slate-300 max-w-md mx-auto">
-                    The IAPT-Unisole academic coordination team has noted your details. You will receive program circulars and institutional access materials shortly.
-                  </p>
-                </div>
-              ) : (
-                <form onSubmit={handleInterestSubmit} className="space-y-4 max-w-xl mx-auto">
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Your Role
-                      </label>
-                      <select
-                        value={interestRole}
-                        onChange={(e) => setInterestRole(e.target.value)}
-                        className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                        <option>Physics Teacher / Professor</option>
-                        <option>Student (UG / PG / PhD)</option>
-                        <option>Researcher / Scientist</option>
-                        <option>College Principal / Department Head</option>
-                        <option>AI / Technology Enthusiast</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-300 mb-1">
-                        Institution / College Name
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Delhi University / IIT / DAV"
-                        value={interestCollege}
-                        onChange={(e) => setInterestCollege(e.target.value)}
-                        className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      >
-                      </input>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-slate-300 mb-1">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="name@university.ac.in"
-                      value={interestEmail}
-                      onChange={(e) => setInterestEmail(e.target.value)}
-                      className="w-full bg-slate-800/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full inline-flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs uppercase tracking-wider shadow-lg shadow-blue-600/25 transition-all active:scale-98 cursor-pointer"
-                  >
-                    <Send className="w-4 h-4" />
-                    <span>Express Interest in Network</span>
-                  </button>
-                </form>
-              )}
             </div>
           </section>
         </main>
