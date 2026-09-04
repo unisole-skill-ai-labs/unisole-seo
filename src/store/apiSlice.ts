@@ -15,7 +15,10 @@ const API_BASE_URL = (
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: API_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
-    const token = (getState() as any)?.auth?.token;
+    const token =
+      (getState() as any)?.auth?.token ||
+      localStorage.getItem('unisole-seo:token') ||
+      localStorage.getItem('token');
     if (token) {
       headers.set('Authorization', `Bearer ${token}`);
     }
@@ -36,7 +39,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User', 'Order', 'College', 'Branch'],
+  tagTypes: ['User', 'Order', 'College', 'Branch', 'IaptRegistration'],
   endpoints: (builder) => ({
     checkUser: builder.mutation({
       query: (body) => ({
@@ -70,7 +73,7 @@ export const apiSlice = createApi({
     }),
     verifyOtp: builder.mutation({
       query: (body) => ({
-        url: '/api/auth/login',
+        url: '/api/auth/verify-otp',
         method: 'POST',
         body,
       }),
@@ -101,6 +104,18 @@ export const apiSlice = createApi({
         collegeId ? `/api/public/branches?collegeId=${collegeId}` : '/api/public/branches',
       providesTags: ['Branch'],
     }),
+    registerNain: builder.mutation({
+      query: (body: { category: string; institution: string; cityState: string }) => ({
+        url: '/api/iapt/nain/register',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['IaptRegistration'],
+    }),
+    getMyNainRegistration: builder.query<any, void>({
+      query: () => '/api/iapt/nain/my-registration',
+      providesTags: ['IaptRegistration'],
+    }),
   }),
 });
 
@@ -113,4 +128,6 @@ export const {
   useGetOrdersQuery,
   useGetPublicCollegesQuery,
   useGetPublicBranchesQuery,
+  useRegisterNainMutation,
+  useGetMyNainRegistrationQuery,
 } = apiSlice;
