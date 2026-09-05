@@ -117,6 +117,8 @@ export default function WorkshopLandingPage() {
         orderData: {
           orderId: orderData.orderId,
           amount: orderData.amount || 3900,
+          currency: orderData.currency || 'INR',
+          keyId: orderData.keyId,
           registrationId: orderData.registrationId,
         },
         user: {
