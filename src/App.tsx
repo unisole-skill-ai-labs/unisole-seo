@@ -22,6 +22,11 @@ const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
 
+// AI Workshop & Campaign Pages
+const WorkshopLandingPage = lazy(() => import('./pages/workshop/WorkshopLandingPage'));
+const WorkshopLoginPage = lazy(() => import('./pages/workshop/WorkshopLoginPage'));
+const WorkshopSuccessPage = lazy(() => import('./pages/workshop/WorkshopSuccessPage'));
+
 function PageLoader() {
   return (
     <div style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -50,6 +55,16 @@ export default function App() {
       <main>
         <Suspense fallback={<PageLoader />}>
           <Routes>
+            {/* AI Masterclass & Campaign Routes */}
+            <Route path="/workshop" element={<WorkshopLandingPage />} />
+            <Route path="/ai-workshop" element={<WorkshopLandingPage />} />
+            <Route path="/masterclass" element={<WorkshopLandingPage />} />
+            <Route path="/ai-masterclass" element={<WorkshopLandingPage />} />
+            <Route path="/workshop/login" element={<WorkshopLoginPage />} />
+            <Route path="/ai-workshop/login" element={<WorkshopLoginPage />} />
+            <Route path="/workshop/register" element={<WorkshopLoginPage />} />
+            <Route path="/workshop/success" element={<WorkshopSuccessPage />} />
+
             <Route path="/iapt" element={<IaptPage />} />
             <Route path="/iapt/nain" element={<IaptNainPage />} />
             <Route path="/iapt/naina" element={<Navigate to="/iapt/nain" replace />} />
