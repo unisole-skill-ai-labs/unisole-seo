@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { isAuthenticated, getUser } from '../../utils/auth';
 import {
-  useGetMyWorkshopRegistrationQuery,
+  useGetWorkshopStatusQuery,
   useCreateWorkshopOrderMutation,
   useVerifyWorkshopPaymentMutation,
   useGetWorkshopQrQuery,
@@ -53,7 +53,6 @@ export default function WorkshopLandingPage() {
   const [activeModule, setActiveModule] = useState<number | null>(1);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [showQrModal, setShowQrModal] = useState(false);
-  const [shareRefName, setShareRefName] = useState('');
   const [copiedLink, setCopiedLink] = useState(false);
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [paymentError, setPaymentError] = useState('');
@@ -61,7 +60,7 @@ export default function WorkshopLandingPage() {
   const searchParams = new URLSearchParams(location.search);
   const justRegistered = searchParams.get('registered') === 'true';
 
-  const { data: registrationData, refetch: refetchReg } = useGetMyWorkshopRegistrationQuery(
+  const { data: statusData, refetch: refetchStatus } = useGetWorkshopStatusQuery(
     user?.phone ? { phone: user.phone } : undefined,
     { skip: !loggedIn }
   );
@@ -69,15 +68,14 @@ export default function WorkshopLandingPage() {
   const [createOrder] = useCreateWorkshopOrderMutation();
   const [verifyPayment] = useVerifyWorkshopPaymentMutation();
 
-  const currentRegistration = registrationData?.registration;
-  const isPaid = currentRegistration?.paymentStatus === 'SUCCESS';
+  const isPaid = statusData?.tokenPaid || statusData?.user?.metadata?.workshopTokenPaid;
 
   useEffect(() => {
     document.title = 'Stop Chatting with AI. Start Systemizing It. | Unisole Masterclass';
   }, []);
 
   const shareUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/workshop/login${shareRefName.trim() ? `?ref=${encodeURIComponent(shareRefName.trim())}` : ''}`
+    ? `${window.location.origin}/workshop/login`
     : 'https://unisole.org/workshop/login';
 
   const { data: qrData } = useGetWorkshopQrQuery(shareUrl, { skip: !showQrModal });
@@ -105,7 +103,6 @@ export default function WorkshopLandingPage() {
 
     try {
       const orderRes = await createOrder({
-        registrationId: currentRegistration?.id,
         phone: user?.phone,
       }).unwrap();
 
@@ -133,10 +130,10 @@ export default function WorkshopLandingPage() {
               providerOrderId: payResponse.razorpay_order_id,
               providerPaymentId: payResponse.razorpay_payment_id,
               providerSignature: payResponse.razorpay_signature,
-              registrationId: orderData.registrationId,
+              phone: user?.phone,
             }).unwrap();
 
-            refetchReg();
+            refetchStatus();
             navigate('/workshop/success');
           } catch (verErr: any) {
             console.error('Payment verification failed:', verErr);
@@ -965,19 +962,19 @@ export default function WorkshopLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 8. CAMPUS AMBASSADOR & FACULTY QR GENERATOR TOOL                          */}
+        {/* 8. UNIVERSAL WORKSHOP QR & SHARE SECTION                                  */}
         {/* ========================================================================= */}
         <section className="py-16 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-slate-900/40">
           <div className="max-w-4xl mx-auto text-center space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-300 text-xs font-semibold">
               <QrCode className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Campus &amp; Faculty Referral Hub</span>
+              <span>Universal Workshop Access</span>
             </div>
             <h3 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">
-              Distribute via Professor Network or College Batches
+              Scan &amp; Share Masterclass QR Code
             </h3>
             <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto">
-              Are you a faculty coordinator or student lead? Generate a custom tracked QR code and registration link for your college.
+              Share the official masterclass link or QR code with classmates, batch groups, and peers.
             </p>
             <div>
               <button
@@ -985,7 +982,7 @@ export default function WorkshopLandingPage() {
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition-all cursor-pointer"
               >
                 <QrCode className="w-4 h-4 text-cyan-400" />
-                <span>Open Custom QR Generator</span>
+                <span>View Registration QR &amp; Link</span>
               </button>
             </div>
           </div>
@@ -1038,7 +1035,7 @@ export default function WorkshopLandingPage() {
       </main>
 
       {/* ========================================================================= */}
-      {/* QR MODAL FOR FACULTY / CAMPUS PARTNERS                                   */}
+      {/* UNIVERSAL QR MODAL                                                        */}
       {/* ========================================================================= */}
       {showQrModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
@@ -1050,38 +1047,24 @@ export default function WorkshopLandingPage() {
               ✕
             </button>
 
-            <div className="space-y-1">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-bold uppercase tracking-wider">
+            <div className="space-y-1 text-center">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[11px] font-bold uppercase tracking-wider mx-auto">
                 <QrCode className="w-3.5 h-3.5" />
-                Custom Campus QR
+                Workshop QR
               </div>
-              <h3 className="text-xl font-bold text-white">Generate Tracked QR Code</h3>
+              <h3 className="text-xl font-bold text-white">Scan to Register</h3>
               <p className="text-xs text-slate-400">
-                Enter your name or college code to generate a custom link that attributes student registrations.
+                Scan via any UPI/Camera app to access the AI Masterclass registration portal.
               </p>
             </div>
 
-            {/* Input ref */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1">
-                Faculty Name / College Code
-              </label>
-              <input
-                type="text"
-                placeholder="e.g. ProfSharma or ThaparCSE"
-                value={shareRefName}
-                onChange={(e) => setShareRefName(e.target.value)}
-                className="w-full bg-slate-800 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-            </div>
-
             {/* Display QR */}
-            <div className="p-4 rounded-2xl bg-white flex flex-col items-center justify-center">
+            <div className="p-4 rounded-2xl bg-white flex flex-col items-center justify-center shadow-inner">
               {qrData?.qrDataUrl ? (
                 <img
                   src={qrData.qrDataUrl}
-                  alt="Tracked QR Code"
-                  className="w-48 h-48 rounded-lg shadow-sm"
+                  alt="Registration QR Code"
+                  className="w-48 h-48 rounded-lg"
                 />
               ) : (
                 <div className="w-48 h-48 flex items-center justify-center text-slate-400 text-xs">
@@ -1089,7 +1072,7 @@ export default function WorkshopLandingPage() {
                 </div>
               )}
               <span className="text-[10px] text-slate-600 mt-2 font-mono break-all text-center">
-                Scan to Register for AI Masterclass
+                https://unisole.org/workshop/login
               </span>
             </div>
 
@@ -1097,7 +1080,7 @@ export default function WorkshopLandingPage() {
             <div className="space-y-2">
               <button
                 onClick={handleCopyShareLink}
-                className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer"
+                className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg shadow-indigo-600/30"
               >
                 {copiedLink ? (
                   <>
@@ -1107,7 +1090,7 @@ export default function WorkshopLandingPage() {
                 ) : (
                   <>
                     <Copy className="w-4 h-4" />
-                    <span>Copy Shareable URL</span>
+                    <span>Copy Registration URL</span>
                   </>
                 )}
               </button>

@@ -122,15 +122,10 @@ export const apiSlice = createApi({
         name: string;
         phone: string;
         email?: string;
-        collegeId?: string;
         collegeName?: string;
         branch?: string;
+        occupation?: string;
         yearOfStudy?: string;
-        referredBy?: string;
-        campaignSource?: string;
-        utmSource?: string;
-        utmMedium?: string;
-        utmCampaign?: string;
       }) => ({
         url: '/api/workshop/register',
         method: 'POST',
@@ -148,18 +143,33 @@ export const apiSlice = createApi({
       },
       invalidatesTags: ['User', 'WorkshopRegistration'],
     }),
-    getMyWorkshopRegistration: builder.query<any, { phone?: string } | void>({
+    submitWorkshopSurvey: builder.mutation({
+      query: (body: {
+        userId?: string;
+        phone?: string;
+        primaryGoal?: string;
+        aiToolsUsed?: string[];
+        priorityTopic?: string;
+        additionalNotes?: string;
+      }) => ({
+        url: '/api/workshop/survey',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['User', 'WorkshopRegistration'],
+    }),
+    getWorkshopStatus: builder.query<any, { phone?: string } | void>({
       query: (params) => ({
-        url: '/api/workshop/my-registration',
+        url: '/api/workshop/status',
         params: params && typeof params === 'object' && 'phone' in params && params.phone ? { phone: params.phone } : undefined,
       }),
       providesTags: ['WorkshopRegistration'],
     }),
     createWorkshopOrder: builder.mutation({
-      query: (body: { registrationId?: string; phone?: string }) => ({
+      query: (body?: { phone?: string }) => ({
         url: '/api/workshop/payment/create-order',
         method: 'POST',
-        body,
+        body: body || {},
       }),
     }),
     verifyWorkshopPayment: builder.mutation({
@@ -167,7 +177,7 @@ export const apiSlice = createApi({
         providerOrderId: string;
         providerPaymentId: string;
         providerSignature?: string;
-        registrationId?: string;
+        phone?: string;
       }) => ({
         url: '/api/workshop/payment/verify',
         method: 'POST',
@@ -175,9 +185,9 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: ['WorkshopRegistration', 'User'],
     }),
-    getWorkshopQr: builder.query<{ success: boolean; qrDataUrl: string; targetUrl: string }, string>({
+    getWorkshopQr: builder.query<{ success: boolean; qrDataUrl: string; targetUrl: string }, string | void>({
       query: (url) => ({
-        url: `/api/public/workshop/qr?url=${encodeURIComponent(url)}`,
+        url: url ? `/api/public/workshop/qr?url=${encodeURIComponent(url)}` : '/api/public/workshop/qr',
       }),
     }),
   }),
@@ -195,7 +205,8 @@ export const {
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
   useRegisterWorkshopMutation,
-  useGetMyWorkshopRegistrationQuery,
+  useSubmitWorkshopSurveyMutation,
+  useGetWorkshopStatusQuery,
   useCreateWorkshopOrderMutation,
   useVerifyWorkshopPaymentMutation,
   useGetWorkshopQrQuery,

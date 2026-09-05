@@ -17,19 +17,20 @@ import {
   ExternalLink,
 } from 'lucide-react';
 import { getUser, isAuthenticated } from '../../utils/auth';
-import { useGetMyWorkshopRegistrationQuery } from '../../store/apiSlice';
+import { useGetWorkshopStatusQuery } from '../../store/apiSlice';
 
 export default function WorkshopSuccessPage() {
   const navigate = useNavigate();
   const user = getUser();
   const loggedIn = isAuthenticated();
 
-  const { data: registrationData } = useGetMyWorkshopRegistrationQuery(
+  const { data: statusData } = useGetWorkshopStatusQuery(
     user?.phone ? { phone: user.phone } : undefined,
     { skip: !loggedIn }
   );
 
-  const registration = registrationData?.registration;
+  const currentUser = statusData?.user || user;
+  const isPaid = statusData?.tokenPaid || currentUser?.metadata?.workshopTokenPaid;
 
   useEffect(() => {
     document.title = 'Registration Confirmed | AI Masterclass 2026';
@@ -117,29 +118,31 @@ export default function WorkshopSuccessPage() {
             <div className="flex items-center justify-between border-b border-slate-800 pb-3">
               <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Attendee Pass</span>
               <span className="text-xs font-mono text-indigo-400 bg-indigo-500/10 px-2.5 py-0.5 rounded-full border border-indigo-500/20">
-                {registration?.id || 'PASS-CONFIRMED'}
+                {currentUser?.id ? `PASS-${currentUser.id.slice(0, 8).toUpperCase()}` : 'PASS-CONFIRMED'}
               </span>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
                 <span className="text-slate-500 block mb-0.5">Attendee Name:</span>
-                <span className="text-white font-bold text-sm">{registration?.name || user?.name || 'Registered Participant'}</span>
+                <span className="text-white font-bold text-sm">{currentUser?.name || 'Registered Participant'}</span>
               </div>
 
               <div>
                 <span className="text-slate-500 block mb-0.5">WhatsApp Mobile:</span>
-                <span className="text-white font-mono">{registration?.phone || user?.phone || 'Linked to account'}</span>
+                <span className="text-white font-mono">{currentUser?.phone || 'Linked to account'}</span>
               </div>
 
               <div>
                 <span className="text-slate-500 block mb-0.5">Institution / College:</span>
-                <span className="text-white font-medium">{registration?.collegeName || user?.collegeName || 'Academic Partner'}</span>
+                <span className="text-white font-medium">{currentUser?.collegeName || 'Academic Partner'}</span>
               </div>
 
               <div>
                 <span className="text-slate-500 block mb-0.5">Token Fee Paid:</span>
-                <span className="text-emerald-400 font-bold">₹39 (100% Confirmed)</span>
+                <span className="text-emerald-400 font-bold">
+                  {isPaid ? '₹39 (100% Confirmed)' : 'Pending'}
+                </span>
               </div>
             </div>
           </div>
