@@ -138,6 +138,7 @@ export default function Navbar() {
           {/* Desktop Navigation Links */}
           <div className="hidden md:flex items-center gap-1 lg:gap-1.5">
             {[
+              { label: 'AI Masterclass (₹39)', path: '/workshop', icon: Sparkles, highlight: true },
               { label: 'Programs', path: '/programs', icon: BookOpen },
               { label: 'Events', path: '/events', icon: Calendar },
             ].map((link) => {
@@ -147,11 +148,14 @@ export default function Navbar() {
                   key={link.path}
                   to={link.path}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold tracking-normal transition-all flex items-center gap-1.5 ${
-                    isActive
+                    link.highlight
+                      ? 'bg-indigo-600/15 text-indigo-400 border border-indigo-500/30 hover:bg-indigo-600/25 font-bold shadow-xs'
+                      : isActive
                       ? 'bg-zinc-100 text-zinc-950 dark:bg-zinc-800 dark:text-white font-bold'
                       : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900'
                   }`}
                 >
+                  <link.icon className="w-3.5 h-3.5 text-indigo-400" />
                   <span>{link.label}</span>
                 </Link>
               );
@@ -343,6 +347,7 @@ export default function Navbar() {
                 <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-2">Menu</span>
                 
                 {[
+                  { label: 'AI Masterclass (₹39)', path: '/workshop', icon: Sparkles, desc: '2-Hour Intensive Session' },
                   { label: 'Programs Catalog', path: '/programs', icon: BookOpen, desc: 'AI Engineering & Dual tracks' },
                   { label: 'Meetups & Events', path: '/events', icon: Calendar, desc: 'Campus sessions & labs' },
                 ].map((item) => {

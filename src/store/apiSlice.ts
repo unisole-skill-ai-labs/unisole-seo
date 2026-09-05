@@ -39,7 +39,7 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
 export const apiSlice = createApi({
   reducerPath: 'api',
   baseQuery: baseQueryWithReauth,
-  tagTypes: ['User', 'Order', 'College', 'Branch', 'IaptRegistration'],
+  tagTypes: ['User', 'Order', 'College', 'Branch', 'IaptRegistration', 'WorkshopRegistration'],
   endpoints: (builder) => ({
     checkUser: builder.mutation({
       query: (body) => ({
@@ -116,6 +116,80 @@ export const apiSlice = createApi({
       query: () => '/api/iapt/nain/my-registration',
       providesTags: ['IaptRegistration'],
     }),
+    // Workshop & AI Masterclass Campaign Endpoints
+    registerWorkshop: builder.mutation({
+      query: (body: {
+        name: string;
+        phone: string;
+        email?: string;
+        collegeName?: string;
+        branch?: string;
+        occupation?: string;
+        yearOfStudy?: string;
+      }) => ({
+        url: '/api/workshop/register',
+        method: 'POST',
+        body,
+      }),
+      async onQueryStarted(_arg, { dispatch, queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled;
+          if (data.token || data.accessToken) {
+            dispatch(setCredentials({ token: data.token || data.accessToken, user: data.user }));
+          }
+        } catch {
+          // handled by caller
+        }
+      },
+      invalidatesTags: ['User', 'WorkshopRegistration'],
+    }),
+    submitWorkshopSurvey: builder.mutation({
+      query: (body: {
+        userId?: string;
+        phone?: string;
+        primaryGoal?: string;
+        aiToolsUsed?: string[];
+        priorityTopic?: string;
+        additionalNotes?: string;
+      }) => ({
+        url: '/api/workshop/survey',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['User', 'WorkshopRegistration'],
+    }),
+    getWorkshopStatus: builder.query<any, { phone?: string } | void>({
+      query: (params) => ({
+        url: '/api/workshop/status',
+        params: params && typeof params === 'object' && 'phone' in params && params.phone ? { phone: params.phone } : undefined,
+      }),
+      providesTags: ['WorkshopRegistration'],
+    }),
+    createWorkshopOrder: builder.mutation({
+      query: (body?: { phone?: string }) => ({
+        url: '/api/workshop/payment/create-order',
+        method: 'POST',
+        body: body || {},
+      }),
+    }),
+    verifyWorkshopPayment: builder.mutation({
+      query: (body: {
+        providerOrderId: string;
+        providerPaymentId: string;
+        providerSignature?: string;
+        phone?: string;
+      }) => ({
+        url: '/api/workshop/payment/verify',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['WorkshopRegistration', 'User'],
+    }),
+    getWorkshopQr: builder.query<{ success: boolean; qrDataUrl: string; targetUrl: string }, string | void>({
+      query: (url) => ({
+        url: url ? `/api/public/workshop/qr?url=${encodeURIComponent(url)}` : '/api/public/workshop/qr',
+      }),
+    }),
   }),
 });
 
@@ -130,4 +204,10 @@ export const {
   useGetPublicBranchesQuery,
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
+  useRegisterWorkshopMutation,
+  useSubmitWorkshopSurveyMutation,
+  useGetWorkshopStatusQuery,
+  useCreateWorkshopOrderMutation,
+  useVerifyWorkshopPaymentMutation,
+  useGetWorkshopQrQuery,
 } = apiSlice;
