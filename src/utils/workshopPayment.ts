@@ -25,6 +25,7 @@ export interface WorkshopPaymentParams {
     amount: number; // in paise, e.g. 3900 for ₹39
     currency?: string;
     registrationId?: string;
+    keyId?: string;
   };
   user?: {
     name?: string;
@@ -57,7 +58,7 @@ export async function startWorkshopTokenPayment({
     }
 
     const options = {
-      key: RAZORPAY_KEY_ID,
+      key: orderData.keyId || RAZORPAY_KEY_ID,
       amount: orderData.amount || 3900,
       currency: orderData.currency || 'INR',
       name: 'UNISOLE Academic Initiative',
