@@ -1,5 +1,5 @@
 const RAZORPAY_KEY_ID =
-  import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TZACmk4obIcqzg';
+  import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_TZ6USoYRgfUZsQ';
 
 declare global {
   interface Window {
@@ -22,7 +22,7 @@ function loadRazorpayScript(): Promise<boolean> {
 export interface WorkshopPaymentParams {
   orderData: {
     orderId: string;
-    amount: number; // in paise, e.g. 100 for ₹1
+    amount: number; // in paise, e.g. 3900 for ₹39
     currency?: string;
     registrationId?: string;
     keyId?: string;
@@ -42,7 +42,7 @@ export interface WorkshopPaymentParams {
 }
 
 /**
- * Initiates the ₹1 Token Commitment Payment via Razorpay
+ * Initiates the ₹39 Token Commitment Payment via Razorpay
  */
 export async function startWorkshopTokenPayment({
   orderData,
@@ -59,10 +59,10 @@ export async function startWorkshopTokenPayment({
 
     const options: any = {
       key: orderData.keyId || RAZORPAY_KEY_ID,
-      amount: orderData.amount || 100,
+      amount: orderData.amount || 3900,
       currency: orderData.currency || 'INR',
       name: 'UNISOLE Academic Initiative',
-      description: 'AI Masterclass: Token Commitment Fee (₹1)',
+      description: 'AI Masterclass: Token Commitment Fee (₹39)',
       image: 'https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png',
       order_id: orderData.orderId,
       prefill: {

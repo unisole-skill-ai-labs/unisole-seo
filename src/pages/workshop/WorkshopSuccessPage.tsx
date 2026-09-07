@@ -102,7 +102,7 @@ export default function WorkshopSuccessPage() {
 
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-3.5 h-3.5" />
-              Registration Confirmed • ₹1 Token Received
+              Registration Confirmed • ₹39 Token Received
             </div>
 
             <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -141,7 +141,7 @@ export default function WorkshopSuccessPage() {
               <div>
                 <span className="text-slate-500 block mb-0.5">Token Fee Paid:</span>
                 <span className="text-emerald-400 font-bold">
-                  {isPaid ? '₹1 (100% Confirmed)' : 'Pending'}
+                  {isPaid ? '₹39 (100% Confirmed)' : 'Pending'}
                 </span>
               </div>
             </div>

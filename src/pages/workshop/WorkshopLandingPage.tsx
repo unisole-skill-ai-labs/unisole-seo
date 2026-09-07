@@ -116,7 +116,7 @@ export default function WorkshopLandingPage() {
       await startWorkshopTokenPayment({
         orderData: {
           orderId: orderData.orderId,
-          amount: orderData.amount || 100,
+          amount: orderData.amount || 3900,
           currency: orderData.currency || 'INR',
           keyId: orderData.keyId,
           registrationId: orderData.registrationId,
@@ -317,8 +317,8 @@ export default function WorkshopLandingPage() {
 
   const faqs = [
     {
-      q: 'Why is there a ₹1 token fee for registration?',
-      a: 'The ₹1 fee is a nominal commitment token to ensure serious attendance and prevent seat-hogging for our live, interactive Zoom capacity. The actual ₹999 masterclass fee is 99% subsidized by our Academic Partner Network.',
+      q: 'Why is there a ₹39 token fee for registration?',
+      a: 'The ₹39 fee is a nominal commitment token to ensure serious attendance and prevent seat-hogging for our live, interactive Zoom capacity. The actual ₹999 masterclass fee is 96% subsidized by our Academic Partner Network.',
     },
     {
       q: 'Do I need any programming or coding experience?',
@@ -357,7 +357,7 @@ export default function WorkshopLandingPage() {
           <span>Live 2-Hour Interactive Masterclass • International AI Engineering Standards</span>
           <span className="hidden sm:inline">•</span>
           <strong className="text-white bg-indigo-600/40 px-2 py-0.5 rounded border border-indigo-400/30">
-            Token Fee: ₹1 Only
+            Token Fee: ₹39 Only
           </strong>
         </div>
       </div>
@@ -419,7 +419,7 @@ export default function WorkshopLandingPage() {
                   </>
                 ) : (
                   <>
-                    <span>Pay ₹1 Token</span>
+                    <span>Pay ₹39 Token</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
@@ -429,7 +429,7 @@ export default function WorkshopLandingPage() {
                 to="/workshop/login"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 transition-all active:scale-95"
               >
-                <span>Register (₹1)</span>
+                <span>Register (₹39)</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
@@ -444,14 +444,14 @@ export default function WorkshopLandingPage() {
             <div className="max-w-4xl mx-auto flex items-center justify-center gap-3 flex-wrap text-xs sm:text-sm text-indigo-100">
               <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               <span>
-                Welcome, <strong>{user?.name || 'Learner'}</strong>! Your details have been saved. Complete your <strong>₹1 Token Fee</strong> below to lock your Zoom seat.
+                Welcome, <strong>{user?.name || 'Learner'}</strong>! Your details have been saved. Complete your <strong>₹39 Token Fee</strong> below to lock your Zoom seat.
               </span>
               <button
                 onClick={handleInitiateTokenPayment}
                 disabled={isProcessingPayment}
                 className="px-3.5 py-1 rounded-lg bg-white text-slate-950 font-bold text-xs hover:bg-slate-200 transition-colors shadow"
               >
-                Confirm Now (₹1) →
+                Confirm Now (₹39) →
               </button>
             </div>
           </div>
@@ -534,7 +534,7 @@ export default function WorkshopLandingPage() {
                     </>
                   ) : (
                     <>
-                      <span>Register Now — Pay ₹1 Token Fee</span>
+                      <span>Register Now — Pay ₹39 Token Fee</span>
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}
@@ -878,7 +878,7 @@ export default function WorkshopLandingPage() {
         </section>
 
         {/* ========================================================================= */}
-        {/* 7. TOKEN FEE & REGISTRATION CHECKOUT CARD (₹1)                            */}
+        {/* 7. TOKEN FEE & REGISTRATION CHECKOUT CARD (₹39)                           */}
         {/* ========================================================================= */}
         <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 border-b border-slate-800/80 bg-gradient-to-b from-slate-950 via-indigo-950/20 to-slate-950">
           <div className="max-w-3xl mx-auto">
@@ -902,9 +902,9 @@ export default function WorkshopLandingPage() {
               <div className="my-6 p-6 rounded-2xl bg-slate-950/80 border border-slate-800 max-w-md mx-auto">
                 <div className="flex items-center justify-center gap-3 mb-1">
                   <span className="text-sm text-slate-500 line-through font-semibold">₹999</span>
-                  <span className="text-4xl sm:text-5xl font-black text-white">₹1</span>
+                  <span className="text-4xl sm:text-5xl font-black text-white">₹39</span>
                   <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    99% Subsidized
+                    96% Subsidized
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400">
@@ -941,12 +941,12 @@ export default function WorkshopLandingPage() {
                       </>
                     ) : loggedIn ? (
                       <>
-                        <span>Pay ₹1 Token Fee via Razorpay</span>
+                        <span>Pay ₹39 Token Fee via Razorpay</span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     ) : (
                       <>
-                        <span>Register &amp; Pay ₹1 Token Fee</span>
+                        <span>Register &amp; Pay ₹39 Token Fee</span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}
