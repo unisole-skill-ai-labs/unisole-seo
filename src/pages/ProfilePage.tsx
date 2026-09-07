@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { logout, isAuthenticated } from '../utils/auth';
+import { logout, isAuthenticated, getToken } from '../utils/auth';
 import { useGetMeQuery, useGetOrdersQuery } from '../store/apiSlice';
 import { User, Phone, Mail, Shield, LogOut, ArrowRight, BookOpen, Clock, CheckCircle2, ChevronRight, GraduationCap } from 'lucide-react';
 
@@ -23,15 +23,18 @@ export default function ProfilePage() {
   const [userBranch, setUserBranch] = useState(storedUser?.branch || '');
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { data: meData } = useGetMeQuery(undefined, { skip: !isAuth });
-  const { data: ordersData } = useGetOrdersQuery(undefined, { skip: !isAuth });
+  const { data: meData, refetch: refetchMe } = useGetMeQuery(undefined, { skip: !isAuth });
+  const { data: ordersData, refetch: refetchOrders } = useGetOrdersQuery(undefined, { skip: !isAuth });
 
   // Authentication Protection
   useEffect(() => {
     if (!isAuthenticated()) {
       navigate('/login', { replace: true, state: { from: '/profile' } });
+    } else {
+      refetchMe();
+      refetchOrders();
     }
-  }, [navigate]);
+  }, [navigate, refetchMe, refetchOrders]);
 
   useEffect(() => {
     if (meData) {
@@ -43,7 +46,10 @@ export default function ProfilePage() {
     }
 
     if (ordersData) {
-      setOrders(Array.isArray(ordersData) ? ordersData : ordersData.orders || []);
+      const orderList = Array.isArray(ordersData)
+        ? ordersData
+        : (ordersData.items || ordersData.orders || ordersData.data || []);
+      setOrders(orderList);
     }
 
     if (isAuth) {
@@ -185,7 +191,7 @@ export default function ProfilePage() {
                       )}
 
                       <a
-                        href="http://localhost:5174/courses"
+                        href={`http://localhost:5183/enrolled?token=${encodeURIComponent(getToken() || '')}`}
                         target="_blank"
                         rel="noreferrer"
                         className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
