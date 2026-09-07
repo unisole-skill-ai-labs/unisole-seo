@@ -136,25 +136,67 @@ export default function ProfilePage() {
           </div>
 
           {orders.length > 0 ? (
-            <ul className="space-y-2.5">
-              {orders.map((order, idx) => (
-                <li key={order.id || idx} className="p-3.5 rounded-xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800 flex items-center justify-between gap-4">
-                  <div className="space-y-0.5">
-                    <span className="text-xs font-bold text-zinc-900 dark:text-white block">
-                      {order.title || order.course_name || `Order #${(order.id || idx + 1).toString().slice(0, 8)}`}
-                    </span>
-                    <span className="text-[10px] font-mono text-zinc-400 flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {formatDate(order.created_at || order.createdAt)}
-                    </span>
-                  </div>
-                  <span className="text-xs font-mono font-bold text-zinc-900 dark:text-white">
-                    {order.amount != null
-                      ? `₹${Number(order.amount).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
-                      : 'Active'}
-                  </span>
-                </li>
-              ))}
+            <ul className="space-y-3">
+              {orders.map((order, idx) => {
+                const primaryItem = order.items && order.items.length > 0 ? order.items[0] : null;
+                const title = primaryItem?.itemTitle || order.title || order.orderNumber || `Pathway Enrollment #${idx + 1}`;
+                const amount = order.totalPaise != null ? (order.totalPaise / 100) : (order.amount != null ? order.amount : null);
+                const isPaid = order.status === 'PAID' || order.status === 'SUCCESS' || order.status === 'COMPLETED';
+
+                return (
+                  <li
+                    key={order.id || idx}
+                    className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/80 dark:border-zinc-800/80 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all hover:border-indigo-500/40"
+                  >
+                    <div className="space-y-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-extrabold text-zinc-900 dark:text-white block">
+                          {title}
+                        </span>
+                        {isPaid && (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800">
+                            <CheckCircle2 className="w-3 h-3" />
+                            Active Enrolled
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-3 text-[11px] font-mono text-zinc-400">
+                        {order.orderNumber && (
+                          <span>Order: <strong className="text-zinc-600 dark:text-zinc-300">{order.orderNumber}</strong></span>
+                        )}
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3 text-zinc-400" />
+                          {formatDate(order.created_at || order.createdAt)}
+                        </span>
+                        {primaryItem?.itemType && (
+                          <span className="uppercase text-indigo-600 dark:text-indigo-400 font-bold">
+                            • {primaryItem.itemType}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 self-end sm:self-center shrink-0">
+                      {amount != null && (
+                        <span className="text-sm font-black font-mono text-zinc-900 dark:text-white">
+                          ₹{amount.toLocaleString('en-IN')}
+                        </span>
+                      )}
+
+                      <a
+                        href="http://localhost:5174/courses"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
+                      >
+                        <span>Go to LMS</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </a>
+                    </div>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <div className="text-center py-10 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-xl p-6 space-y-2.5">

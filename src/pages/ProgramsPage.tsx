@@ -2,6 +2,9 @@ import React, { useState, useMemo } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SyllabusDrawer from '../components/SyllabusDrawer';
+import PathwayEnrollModal from '../components/PathwayEnrollModal';
+import { useAuthModal } from '../context/AuthModalContext';
+import { isAuthenticated } from '../utils/auth';
 import { 
   Laptop, 
   Microscope, 
@@ -50,7 +53,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Intermediate',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/6rUVhV4',
+        price: 2999,
+        mrp: 9999,
         syllabusLink: '/syllabi/cs-p1.pdf',
         description: 'End-to-end ML engineering: data pipelines, deep learning, FastAPI model serving, Docker MLOps, and Generative AI/RAG architectures.',
         roles: ['ML Engineer', 'AI Backend Developer', 'MLOps Specialist'],
@@ -107,7 +111,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Beginner to Intermediate',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/K9E9OOw',
+        price: 1499,
+        mrp: 6999,
         syllabusLink: '/syllabi/cs-p2.pdf',
         description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
         roles: ['Full Stack Developer', 'React / Node Engineer', 'AI Web Integrator'],
@@ -157,7 +162,8 @@ const GROUPS_DATA = [
         duration: '6 Months',
         level: 'Dual-Track Mastery',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/34ZzWCiC',
+        price: 3999,
+        mrp: 14999,
         syllabusLink: '/syllabi/cs-p3.pdf',
         description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
         roles: ['Senior AI Engineer', 'Lead Full Stack Architect', 'AI Systems Specialist'],
@@ -212,7 +218,8 @@ const GROUPS_DATA = [
         duration: 'Weekend Track',
         level: 'All Students',
         handsOn: 'Incubator Labs',
-        enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
+        price: 599,
+        mrp: 2999,
         syllabusLink: '/syllabi/cs-common.pdf',
         description: 'Structured incubator track teaching students how to convert AI technical capability into validated commercial products and startups.',
         roles: ['AI Product Manager', 'Startup Founder', 'Innovation Lead'],
@@ -260,7 +267,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Undergraduate / Postgraduate',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/uyG6gkvw',
+        price: 2000,
+        mrp: 6999,
         syllabusLink: '/syllabi/sci-p1.pdf',
         description: 'Combines mathematical principles with modern scientific computing, differential equations, and Physics-Informed Neural Networks (PINNs).',
         roles: ['SciML Researcher', 'Computational Physicist', 'Data Modeler'],
@@ -310,7 +318,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Mathematics & Statistics Majors',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/ik3ig71K',
+        price: 1500,
+        mrp: 5999,
         syllabusLink: '/syllabi/sci-p2.pdf',
         description: 'Rigorous mathematics-oriented pathway focusing on mathematical proofs, optimization theory, statistical learning, and computational algorithms.',
         roles: ['Quantitative Analyst', 'Statistical Model Engineer', 'Algorithm Researcher'],
@@ -358,7 +367,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Undergraduate / Postgraduate',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/X2wGPMm',
+        price: 2000,
+        mrp: 6999,
         syllabusLink: '/syllabi/mgmt-p1.pdf',
         description: 'Equips business students with advanced Excel, SQL, modern data engineering (ETL, Parquet, DuckDB), Power BI, and Generative AI.',
         roles: ['Business Intelligence Analyst', 'Data Engineer for Analytics', 'Corporate Strategist'],
@@ -404,7 +414,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'Finance & Banking Students',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/Z4l1xd30',
+        price: 2000,
+        mrp: 6999,
         syllabusLink: '/syllabi/mgmt-p2.pdf',
         description: 'Explores digital banking, financial modeling, credit risk scoring, fraud detection algorithms, and responsible AI in finance.',
         roles: ['FinTech Risk Analyst', 'Financial Forecaster', 'Credit Risk Specialist'],
@@ -444,7 +455,8 @@ const GROUPS_DATA = [
         duration: '6 Months',
         level: 'Dual-Track Mastery',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/KUuWTEk6',
+        price: 2999,
+        mrp: 9999,
         syllabusLink: '/syllabi/mgmt-p3.pdf',
         description: 'Comprehensive dual-track program merging Business Analytics, SQL & modern Data Engineering with FinTech AI, credit scoring, fraud risk intelligence, and executive BI dashboards.',
         roles: ['Chief Analytics Officer Track', 'Senior FinTech Analyst', 'Enterprise BI Consultant'],
@@ -500,7 +512,8 @@ const GROUPS_DATA = [
         duration: 'Weekend Track',
         level: 'All Commerce & Management',
         handsOn: 'Incubator Labs',
-        enrollLink: 'https://rzp.io/rzp/mysgU9wQ',
+        price: 599,
+        mrp: 2999,
         syllabusLink: '/syllabi/mgmt-common.pdf',
         description: 'Learn how to launch AI-enabled business services, SaaS tools, SME automation platforms, and investor pitch decks.',
         roles: ['AI Venture Builder', 'SaaS Business Analyst', 'Corporate Innovation Manager'],
@@ -548,7 +561,8 @@ const GROUPS_DATA = [
         duration: '3 Months',
         level: 'All Students (No Coding Required)',
         handsOn: '100% Practical Labs',
-        enrollLink: 'https://rzp.io/rzp/qjdUioKf',
+        price: 999,
+        mrp: 3999,
         syllabusLink: '/syllabi/arts-p1.pdf',
         description: 'Elite professional program: prompt engineering, AI research methods, automated content, executive communication, and career mastery.',
         roles: ['AI Productivity Specialist', 'Executive Research Associate', 'Creative Technologist'],
@@ -677,12 +691,25 @@ export default function ProgramsPage() {
   const [selectedSyllabusGroup, setSelectedSyllabusGroup] = useState<string>('');
   const [isSyllabusDrawerOpen, setIsSyllabusDrawerOpen] = useState(false);
 
+  const { openAuthModal } = useAuthModal();
+  const [selectedEnrollPathway, setSelectedEnrollPathway] = useState<any>(null);
+  const [isEnrollModalOpen, setIsEnrollModalOpen] = useState(false);
+
   const handleEnrollClick = (pathway: any) => {
-    if (pathway.enrollLink) {
-      window.open(pathway.enrollLink, '_blank', 'noopener,noreferrer');
-    } else {
-      window.open('tel:+918219691201', '_self');
+    if (!isAuthenticated()) {
+      openAuthModal({
+        mode: 'login',
+        title: 'Sign In to Enroll',
+        subtitle: `Please sign in with your mobile number to enroll in ${pathway?.title || 'the pathway'}.`,
+        onSuccess: () => {
+          setSelectedEnrollPathway(pathway);
+          setIsEnrollModalOpen(true);
+        },
+      });
+      return;
     }
+    setSelectedEnrollPathway(pathway);
+    setIsEnrollModalOpen(true);
   };
 
   const handleSyllabusClick = (pathway: any, groupTitle?: string) => {
@@ -904,6 +931,11 @@ export default function ProgramsPage() {
                             <Zap className="w-3 h-3" />
                             {pathway.handsOn}
                           </span>
+                          {pathway.price && (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
+                              <span>₹{pathway.price.toLocaleString('en-IN')}</span>
+                            </span>
+                          )}
                         </div>
 
                         <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white leading-tight">
@@ -928,13 +960,13 @@ export default function ProgramsPage() {
                       <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 dark:hover:bg-zinc-100 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-xs hover:shadow-md"
+                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
                           onClick={(e) => {
                             e.stopPropagation();
                             handleEnrollClick(pathway);
                           }}
                         >
-                          <span>Enroll Pathway</span>
+                          <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
                           <ArrowRight className="w-3.5 h-3.5" />
                         </button>
 
@@ -1268,7 +1300,18 @@ export default function ProgramsPage() {
         pathway={selectedSyllabusPathway}
         groupTitle={selectedSyllabusGroup}
         onClose={() => setIsSyllabusDrawerOpen(false)}
-        onEnroll={(link) => handleEnrollClick({ enrollLink: link })}
+        onEnroll={(pathway) => {
+          setIsSyllabusDrawerOpen(false);
+          handleEnrollClick(pathway || selectedSyllabusPathway);
+        }}
+      />
+
+      {/* In-App Razorpay Pathway Enrollment Modal */}
+      <PathwayEnrollModal
+        isOpen={isEnrollModalOpen}
+        pathway={selectedEnrollPathway}
+        groupTitle={currentGroupData?.title}
+        onClose={() => setIsEnrollModalOpen(false)}
       />
 
       <Footer />

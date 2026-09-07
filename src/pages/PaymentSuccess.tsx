@@ -8,6 +8,9 @@ import { CheckCircle2, Copy, Check, Clock, Phone, Mail, ArrowRight, ShieldCheck 
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const paymentId = searchParams.get('razorpay_payment_id') || searchParams.get('payment_id') || searchParams.get('razorpay_payment_link_id') || searchParams.get('id');
+  const orderNumber = searchParams.get('orderNumber');
+  const pathwayTitle = searchParams.get('pathwayTitle');
+  const amount = searchParams.get('amount');
   const userName = getUserName();
   const [copied, setCopied] = useState(false);
 
@@ -33,28 +36,43 @@ export default function PaymentSuccess() {
 
           <div className="space-y-1.5">
             <span className="mono-tag text-emerald-600 dark:text-emerald-400 border-emerald-500/20 bg-emerald-500/5">
-              Payment Confirmed
+              Enrollment Confirmed
             </span>
             <h1 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white tracking-tight mt-2">
               Thank You{userName && userName !== 'Learner' ? `, ${userName}` : ''}!
             </h1>
             <p className="text-xs text-zinc-500 dark:text-zinc-400 max-w-sm mx-auto leading-relaxed">
-              Your enrollment transaction has been verified on the Unisole payment gateway.
+              Your admission and program seat have been securely confirmed via Razorpay.
             </p>
           </div>
 
+          {/* Program / Order Summary Card */}
+          {(pathwayTitle || orderNumber || amount) && (
+            <div className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-xs text-left space-y-2">
+              {pathwayTitle && (
+                <div className="font-bold text-sm text-zinc-900 dark:text-white">
+                  {pathwayTitle}
+                </div>
+              )}
+              <div className="flex items-center justify-between text-zinc-500 font-mono text-[11px] pt-1 border-t border-zinc-200/60 dark:border-zinc-800">
+                {orderNumber && <span>Order: {orderNumber}</span>}
+                {amount && <span className="font-bold text-emerald-600 dark:text-emerald-400">Paid: ₹{amount}</span>}
+              </div>
+            </div>
+          )}
+
           {/* 24-Hour Notice Card */}
-          <div className="p-3.5 rounded-lg bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-300 flex items-start gap-2.5 text-left">
-            <Clock className="w-3.5 h-3.5 text-zinc-400 mt-0.5 flex-shrink-0" />
+          <div className="p-3.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 text-xs text-zinc-700 dark:text-zinc-300 flex items-start gap-2.5 text-left">
+            <Clock className="w-3.5 h-3.5 text-indigo-500 mt-0.5 flex-shrink-0" />
             <p className="leading-relaxed text-xs">
-              Purchased program modules and lab repository access will reflect in your <strong>enrolled profile section within 24 hours</strong>.
+              Your credentials, curriculum modules, and lab repository access are being configured and will reflect in your <strong>enrolled profile section</strong>.
             </p>
           </div>
 
           {/* Transaction ID */}
           {paymentId && (
             <div className="p-2.5 rounded-lg bg-zinc-50 dark:bg-zinc-950 border border-zinc-200/70 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs">
-              <span className="text-zinc-500 font-mono text-[10px]">ID:</span>
+              <span className="text-zinc-500 font-mono text-[10px]">Payment ID:</span>
               <code className="font-mono font-semibold text-zinc-800 dark:text-zinc-200 text-xs truncate">{paymentId}</code>
               <button
                 type="button"

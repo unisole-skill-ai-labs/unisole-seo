@@ -68,7 +68,7 @@ export default function WorkshopLandingPage() {
   const [createOrder] = useCreateWorkshopOrderMutation();
   const [verifyPayment] = useVerifyWorkshopPaymentMutation();
 
-  const isPaid = statusData?.tokenPaid || statusData?.user?.metadata?.workshopTokenPaid;
+  const isPaid = statusData?.status?.isTokenPaid || statusData?.tokenPaid || statusData?.user?.metadata?.workshopTokenPaid || user?.metadata?.tokenPaid;
 
   useEffect(() => {
     document.title = 'Stop Chatting with AI. Start Systemizing It. | Unisole Masterclass';
