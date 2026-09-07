@@ -57,7 +57,7 @@ export async function startWorkshopTokenPayment({
       throw new Error('Failed to load secure Razorpay gateway. Please check your network connection.');
     }
 
-    const options = {
+    const options: any = {
       key: orderData.keyId || RAZORPAY_KEY_ID,
       amount: orderData.amount || 3900,
       currency: orderData.currency || 'INR',
@@ -76,23 +76,6 @@ export async function startWorkshopTokenPayment({
       },
       theme: {
         color: '#2563eb', // Indigo / Royal Blue
-        backdrop_color: 'rgba(15, 23, 42, 0.85)',
-      },
-      config: {
-        display: {
-          blocks: {
-            upi: {
-              name: 'Fast UPI Payment (GPay, PhonePe, Paytm)',
-              instruments: [{ method: 'upi' }],
-            },
-            cards: {
-              name: 'Cards & NetBanking',
-              instruments: [{ method: 'card' }, { method: 'netbanking' }],
-            },
-          },
-          sequence: ['block.upi', 'block.cards'],
-          preferences: { show_default_blocks: true },
-        },
       },
       handler: function (response: any) {
         if (response.razorpay_payment_id) {
