@@ -1,5 +1,5 @@
 const RAZORPAY_KEY_ID =
-  import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
+  import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_TZACmk4obIcqzg';
 
 declare global {
   interface Window {
