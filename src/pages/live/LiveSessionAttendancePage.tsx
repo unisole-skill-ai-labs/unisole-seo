@@ -14,7 +14,6 @@ import {
   Sparkles,
   ArrowRight,
   ShieldCheck,
-  RotateCcw,
   BookOpen,
 } from 'lucide-react';
 
@@ -154,13 +153,6 @@ export default function LiveSessionAttendancePage() {
     }
   };
 
-  const handleReset = () => {
-    setSubmittedData(null);
-    setName('');
-    setPhone('');
-    setErrorMsg('');
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-zinc-950 via-zinc-900 to-zinc-950 text-white flex flex-col justify-between p-4 sm:p-6 relative overflow-hidden font-sans">
       {/* Background ambient lighting */}
@@ -253,19 +245,10 @@ export default function LiveSessionAttendancePage() {
               </div>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="flex-1 py-3 px-4 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-200 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-                <span>Mark Another Student</span>
-              </button>
-
+            <div className="pt-2">
               <a
                 href="/programs"
-                className="flex-1 py-3 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+                className="w-full py-3.5 px-4 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
               >
                 <span>Explore AI Pathways</span>
                 <ArrowRight className="w-3.5 h-3.5" />
