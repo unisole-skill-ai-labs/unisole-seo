@@ -1246,7 +1246,7 @@ export default function ProgramsPage() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+          <div className="flex items-center justify-center pt-2">
             <button
               onClick={() => {
                 const catalogEl = document.getElementById('stream-catalog');
@@ -1257,13 +1257,6 @@ export default function ProgramsPage() {
               <span>Explore All Pathways</span>
               <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
             </button>
-            <a
-              href="tel:+918219691201"
-              className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg border border-zinc-700 hover:border-zinc-500 text-white text-xs transition-all"
-            >
-              <PhoneCall className="w-3.5 h-3.5 mr-1.5" />
-              <span>Call Academic Counseling</span>
-            </a>
           </div>
 
           <p className="text-[11px] font-mono text-zinc-500">
