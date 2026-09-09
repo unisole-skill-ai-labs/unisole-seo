@@ -193,16 +193,6 @@ export default function ProfilePage() {
                           ₹{amount.toLocaleString('en-IN')}
                         </span>
                       )}
-
-                      <a
-                        href={`http://localhost:5183/enrolled?token=${encodeURIComponent(getToken() || '')}`}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold transition-all shadow-xs cursor-pointer"
-                      >
-                        <span>Go to LMS</span>
-                        <ArrowRight className="w-3 h-3" />
-                      </a>
                     </div>
                   </li>
                 );

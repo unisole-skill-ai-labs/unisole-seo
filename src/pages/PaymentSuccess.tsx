@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { getUserName, getToken } from '../utils/auth';
-import { CheckCircle2, Copy, Check, Clock, Phone, Mail, ArrowRight, ShieldCheck, BookOpen, Sparkles } from 'lucide-react';
+import { getUserName } from '../utils/auth';
+import { CheckCircle2, Copy, Check, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
@@ -12,7 +12,6 @@ export default function PaymentSuccess() {
   const pathwayTitle = searchParams.get('pathwayTitle');
   const amount = searchParams.get('amount');
   const userName = getUserName();
-  const token = getToken() || '';
   const [copied, setCopied] = useState(false);
 
   const handleCopyId = () => {
@@ -22,8 +21,6 @@ export default function PaymentSuccess() {
       setTimeout(() => setCopied(false), 2000);
     }
   };
-
-  const lmsUrl = `http://localhost:5183/enrolled?token=${encodeURIComponent(token)}`;
 
   return (
     <div className="min-h-screen bg-white dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 flex flex-col justify-between selection:bg-zinc-900 selection:text-white dark:selection:bg-white dark:selection:text-zinc-950">
@@ -64,11 +61,11 @@ export default function PaymentSuccess() {
             </div>
           )}
 
-          {/* 24-Hour Notice Card */}
+          {/* Notice Card */}
           <div className="p-3.5 rounded-lg bg-indigo-50/50 dark:bg-indigo-950/20 border border-indigo-100 dark:border-indigo-900/40 text-xs text-zinc-700 dark:text-zinc-300 flex items-start gap-2.5 text-left">
             <Sparkles className="w-3.5 h-3.5 text-indigo-500 mt-0.5 flex-shrink-0" />
             <p className="leading-relaxed text-xs">
-              Your curriculum modules and video lessons are now active. You can start learning right away on the <strong>LMS Portal</strong> or review your order in your <strong>Profile</strong>.
+              Your curriculum modules and seat reservation are now confirmed. You can review your enrolled programs in your <strong>Profile</strong>.
             </p>
           </div>
 
@@ -90,27 +87,18 @@ export default function PaymentSuccess() {
 
           {/* Action CTAs */}
           <div className="space-y-2 pt-1">
-            <a
-              href={lmsUrl}
-              className="w-full inline-flex items-center justify-center font-bold px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs transition-all shadow-md cursor-pointer"
-            >
-              <BookOpen className="w-4 h-4 mr-1.5" />
-              <span>Go to LMS Learning Portal</span>
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-            </a>
+            <Link to="/profile" className="w-full block">
+              <button className="w-full inline-flex items-center justify-center font-bold px-4 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-all shadow-md cursor-pointer">
+                <span>View My Enrolled Programs</span>
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </button>
+            </Link>
 
-            <div className="grid grid-cols-2 gap-2">
-              <Link to="/profile" className="w-full">
-                <button className="w-full inline-flex items-center justify-center font-semibold px-3 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-all cursor-pointer">
-                  <span>View Profile</span>
-                </button>
-              </Link>
-              <Link to="/programs" className="w-full">
-                <button className="w-full inline-flex items-center justify-center font-semibold px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs hover:border-zinc-300 transition-all cursor-pointer">
-                  <span>Explore More</span>
-                </button>
-              </Link>
-            </div>
+            <Link to="/programs" className="w-full block">
+              <button className="w-full inline-flex items-center justify-center font-semibold px-3 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs hover:border-zinc-300 transition-all cursor-pointer">
+                <span>Explore More Programs</span>
+              </button>
+            </Link>
           </div>
 
           {/* Support line */}
