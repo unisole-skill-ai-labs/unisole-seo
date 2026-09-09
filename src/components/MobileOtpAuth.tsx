@@ -486,7 +486,7 @@ export default function MobileOtpAuth({
           </button>
 
           {/* Resend Controls */}
-          <div className="flex items-center justify-between text-xs pt-1 border-t border-zinc-100 dark:border-zinc-800">
+          <div className="flex items-center justify-center text-xs pt-1 border-t border-zinc-100 dark:border-zinc-800">
             {countdown > 0 ? (
               <span className="text-[11px] text-zinc-400 font-mono">
                 Resend code in {countdown}s
@@ -499,18 +499,9 @@ export default function MobileOtpAuth({
                 className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <RefreshCw className="w-3 h-3" />
-                <span>Resend on WhatsApp</span>
+                <span>Resend code on WhatsApp</span>
               </button>
             )}
-
-            <button
-              type="button"
-              onClick={() => handleRequestOtp('SMS')}
-              disabled={isSendingOtp || countdown > 20}
-              className="text-[11px] font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-800 dark:hover:text-zinc-200 cursor-pointer"
-            >
-              Receive via SMS instead
-            </button>
           </div>
         </form>
       )}
