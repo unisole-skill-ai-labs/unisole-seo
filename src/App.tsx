@@ -21,6 +21,7 @@ const IaptWorkshopPage = lazy(() => import('./pages/iapt/IaptWorkshopPage'));
 const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
+const LiveSessionAttendancePage = lazy(() => import('./pages/live/LiveSessionAttendancePage'));
 
 // AI Workshop & Campaign Pages
 const WorkshopLandingPage = lazy(() => import('./pages/workshop/WorkshopLandingPage'));
@@ -78,6 +79,8 @@ export default function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/live/:sessionCode" element={<LiveAudiencePage />} />
             <Route path="/join" element={<JoinSessionPage />} />
+            <Route path="/live-session" element={<LiveSessionAttendancePage />} />
+            <Route path="/attendance" element={<Navigate to="/live-session" replace />} />
             <Route path="/" element={<Home />} />
             <Route path="/programs" element={<ProgramsPage />} />
             <Route path="/pathways" element={<ProgramsPage />} />
