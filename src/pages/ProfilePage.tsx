@@ -49,7 +49,11 @@ export default function ProfilePage() {
       const orderList = Array.isArray(ordersData)
         ? ordersData
         : (ordersData.items || ordersData.orders || ordersData.data || []);
-      setOrders(orderList);
+      const paidOrders = orderList.filter((order: any) => {
+        const status = (order.status || '').toUpperCase();
+        return status === 'PAID' || status === 'SUCCESS' || status === 'COMPLETED';
+      });
+      setOrders(paidOrders);
     }
 
     if (isAuth) {
