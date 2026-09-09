@@ -19,7 +19,7 @@ interface SyllabusDrawerProps {
   pathway: PathwayData | null;
   groupTitle?: string;
   onClose: () => void;
-  onEnroll?: (link: string) => void;
+  onEnroll?: (pathway: PathwayData) => void;
 }
 
 export default function SyllabusDrawer({
@@ -91,18 +91,13 @@ export default function SyllabusDrawer({
 
           {/* Quick Header Actions */}
           <div className="flex items-center gap-2 shrink-0">
-            {pathway.enrollLink && (
-              <a
-                href={pathway.enrollLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => onEnroll && onEnroll(pathway.enrollLink!)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/20 transition-all cursor-pointer"
-              >
-                <span>Enroll</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </a>
-            )}
+            <button
+              onClick={() => onEnroll && onEnroll(pathway)}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold shadow-md hover:shadow-indigo-500/20 transition-all cursor-pointer"
+            >
+              <span>Enroll Pathway</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
 
             <button
               onClick={onClose}

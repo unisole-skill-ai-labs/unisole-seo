@@ -29,8 +29,8 @@ export default function WorkshopSuccessPage() {
     { skip: !loggedIn }
   );
 
-  const currentUser = statusData?.user || user;
-  const isPaid = statusData?.tokenPaid || currentUser?.metadata?.workshopTokenPaid;
+  const currentUser = statusData?.status || statusData?.user || user;
+  const isPaid = statusData?.status?.isTokenPaid || statusData?.tokenPaid || currentUser?.metadata?.tokenPaid || currentUser?.metadata?.workshopTokenPaid;
 
   useEffect(() => {
     document.title = 'Registration Confirmed | AI Masterclass 2026';
