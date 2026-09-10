@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../store/authSlice';
 import {
   useCheckUserMutation,
-  useLoginMutation,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
   useGetPublicBranchesQuery,
 } from '../store/apiSlice';
 import { setAuthSession } from '../utils/auth';
@@ -18,6 +19,11 @@ import {
   Sparkles,
   ChevronDown,
   QrCode,
+  MessageCircle,
+  Phone,
+  RefreshCw,
+  KeyRound,
+  CheckCircle2,
 } from 'lucide-react';
 
 export interface MobileOtpAuthProps {
@@ -27,7 +33,7 @@ export interface MobileOtpAuthProps {
   onError?: (err: any) => void;
 }
 
-type AuthStep = 'PHONE' | 'PROFILE_SETUP';
+type AuthStep = 'PHONE' | 'OTP_VERIFY' | 'PROFILE_SETUP';
 
 const DEFAULT_BRANCHES = [
   { id: 'ba', name: 'BA' },
@@ -50,20 +56,30 @@ export default function MobileOtpAuth({
   const dispatch = useDispatch();
   const from = new URLSearchParams(location.search).get('redirect') || '/';
 
-  // Detect sessionCode from redirect parameter or path (e.g. /live/UNI123 or ?redirect=/live/UNI123)
+  // Detect sessionCode from redirect parameter or path
   const [sessionCollege, setSessionCollege] = useState<{ id?: string; name: string } | null>(null);
   const [sessionBranches, setSessionBranches] = useState<any[]>([]);
   const [detectedSessionCode, setDetectedSessionCode] = useState<string | null>(propSessionCode || null);
 
   const [checkUser] = useCheckUserMutation();
-  const [login] = useLoginMutation();
+  const [sendOtp, { isLoading: isSendingOtp }] = useSendOtpMutation();
+  const [verifyOtp, { isLoading: isVerifyingOtp }] = useVerifyOtpMutation();
 
   // Form states
   const [step, setStep] = useState<AuthStep>('PHONE');
   const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState('');
   const [name, setName] = useState('');
   const [selectedBranch, setSelectedBranch] = useState('');
   const [customBranch, setCustomBranch] = useState('');
+  const [channel, setChannel] = useState<'WHATSAPP' | 'SMS'>('WHATSAPP');
+  const [isExistingUser, setIsExistingUser] = useState<boolean | null>(null);
+
+  // Timer & Resend state
+  const [countdown, setCountdown] = useState<number>(0);
+  const [errorMsg, setErrorMsg] = useState('');
+  const [successMsg, setSuccessMsg] = useState('');
+  const otpInputRef = useRef<HTMLInputElement>(null);
 
   // Extract session code and pre-fetch college info if live presentation
   useEffect(() => {
@@ -105,6 +121,15 @@ export default function MobileOtpAuth({
     }
   }, [location.search, location.pathname, propSessionCode]);
 
+  // Countdown timer effect for OTP resend
+  useEffect(() => {
+    if (countdown <= 0) return;
+    const timer = setInterval(() => {
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [countdown]);
+
   // Determine effective signup channel
   const searchParams = new URLSearchParams(location.search);
   const querySource = searchParams.get('source');
@@ -141,9 +166,6 @@ export default function MobileOtpAuth({
       ? serverBranches
       : DEFAULT_BRANCHES;
 
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
-
   const completeAuth = (data: any) => {
     const token = data.token || data.accessToken;
     const user = data.user;
@@ -158,10 +180,11 @@ export default function MobileOtpAuth({
     }
   };
 
-  // Step 1: User enters phone number and clicks continue
-  const handlePhoneSubmit = async (e?: React.FormEvent) => {
+  // Step 1: Request WhatsApp OTP via Fast2SMS
+  const handleRequestOtp = async (targetChannel: 'WHATSAPP' | 'SMS' = channel, e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setErrorMsg('');
+    setSuccessMsg('');
 
     const cleanPhone = phone.replace(/\D/g, '');
     if (!cleanPhone || cleanPhone.length !== 10) {
@@ -169,50 +192,96 @@ export default function MobileOtpAuth({
       return;
     }
 
-    setLoading(true);
     try {
-      // Check if user exists in system
-      const checkRes = await checkUser({ phone: cleanPhone }).unwrap();
+      const res: any = await sendOtp({
+        phone: cleanPhone,
+        channel: targetChannel,
+      }).unwrap();
 
-      if (checkRes.exists && checkRes.user) {
-        // User exists: login directly and proceed
-        const authData = await login({
-          phone: cleanPhone,
-          signupSource: effectiveSource,
-          sessionCode: detectedSessionCode || undefined,
-        }).unwrap();
-
-        completeAuth(authData);
-      } else {
-        // New user: ask for Name (and Branch if from Live Session QR)
-        setStep('PROFILE_SETUP');
+      setIsExistingUser(!!res.exists);
+      if (res.exists && res.user?.name) {
+        setName(res.user.name);
       }
-    } catch {
-      // Fallback: if check endpoint fails, ask for profile details
-      setStep('PROFILE_SETUP');
-    } finally {
-      setLoading(false);
+
+      setChannel(targetChannel);
+      setStep('OTP_VERIFY');
+      setCountdown(30);
+      setSuccessMsg(
+        targetChannel === 'WHATSAPP'
+          ? `4-digit OTP sent to WhatsApp (+91 ${cleanPhone})`
+          : `4-digit OTP sent via SMS (+91 ${cleanPhone})`
+      );
+
+      setTimeout(() => {
+        otpInputRef.current?.focus();
+      }, 200);
+    } catch (err: any) {
+      const msg = err?.data?.message || err?.message || 'Failed to send verification code. Please try again.';
+      setErrorMsg(msg);
+      if (onError) onError(err);
     }
   };
 
-  // Step 2: New user fills profile and completes direct registration
+  // Step 2: Verify Submitted OTP
+  const handleVerifyOtp = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    setErrorMsg('');
+
+    const cleanPhone = phone.replace(/\D/g, '');
+    const cleanOtp = otp.trim();
+
+    if (!cleanOtp || cleanOtp.length !== 4) {
+      setErrorMsg('Please enter the 4-digit verification code');
+      return;
+    }
+
+    // If new user and name is not filled yet, transition to profile setup step
+    if (!isExistingUser && !name.trim()) {
+      setStep('PROFILE_SETUP');
+      return;
+    }
+
+    let effectiveBranch = '';
+    if (isSessionChannel) {
+      effectiveBranch =
+        selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary'
+          ? customBranch.trim()
+          : selectedBranch.trim();
+    }
+
+    try {
+      const authData = await verifyOtp({
+        phone: cleanPhone,
+        otp: cleanOtp,
+        name: name.trim() || undefined,
+        collegeName: isSessionChannel ? sessionCollege?.name : undefined,
+        collegeId: isSessionChannel ? sessionCollege?.id : undefined,
+        branch: effectiveBranch || undefined,
+        sessionCode: detectedSessionCode || undefined,
+        signupSource: effectiveSource,
+      }).unwrap();
+
+      completeAuth(authData);
+    } catch (err: any) {
+      const msg = err?.data?.message || err?.message || 'Invalid or expired OTP. Please check and try again.';
+      setErrorMsg(msg);
+      if (onError) onError(err);
+    }
+  };
+
+  // Step 3: Complete Profile for New User after OTP Verified
   const handleProfileSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
     setErrorMsg('');
 
     const cleanPhone = phone.replace(/\D/g, '');
-    if (!cleanPhone || cleanPhone.length !== 10) {
-      setErrorMsg('Please enter a valid 10-digit mobile number');
-      setStep('PHONE');
-      return;
-    }
+    const cleanOtp = otp.trim();
 
     if (!name.trim()) {
       setErrorMsg('Please enter your full name');
       return;
     }
 
-    // Branch is only mandatory for Live Campus Presentation Sessions
     let effectiveBranch = '';
     if (isSessionChannel) {
       effectiveBranch =
@@ -226,10 +295,10 @@ export default function MobileOtpAuth({
       }
     }
 
-    setLoading(true);
     try {
-      const authData = await login({
+      const authData = await verifyOtp({
         phone: cleanPhone,
+        otp: cleanOtp,
         name: name.trim(),
         collegeName: isSessionChannel ? sessionCollege?.name : undefined,
         collegeId: isSessionChannel ? sessionCollege?.id : undefined,
@@ -240,17 +309,15 @@ export default function MobileOtpAuth({
 
       completeAuth(authData);
     } catch (err: any) {
-      const msg = err?.data?.message || err?.message || 'Authentication failed. Please try again.';
+      const msg = err?.data?.message || err?.message || 'Registration failed. Please try again.';
       setErrorMsg(msg);
       if (onError) onError(err);
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="w-full space-y-3.5">
-      {/* Session College Verified Banner (Only on Live Session QR flows) */}
+    <div className="w-full space-y-3.5 font-sans">
+      {/* Session College Verified Banner */}
       {isSessionChannel && sessionCollege && (
         <div className="p-3 rounded-2xl bg-indigo-50/80 dark:bg-indigo-950/60 border border-indigo-200/80 dark:border-indigo-800/80 flex items-center justify-between gap-2.5 text-xs text-indigo-900 dark:text-indigo-200 shadow-xs animate-in fade-in duration-150">
           <div className="flex items-center gap-2.5 min-w-0">
@@ -272,30 +339,30 @@ export default function MobileOtpAuth({
         </div>
       )}
 
-      {/* Pamphlet QR Quick Welcome Banner */}
-      {isPamphletChannel && (
-        <div className="p-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center gap-2 text-xs text-amber-900 dark:text-amber-200 font-medium">
-          <QrCode className="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" />
-          <span>Pamphlet Quick Pass: Instant login with name & mobile.</span>
-        </div>
-      )}
-
       {/* Alert Error */}
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2 animate-in fade-in duration-150">
+        <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-400 text-xs font-medium flex items-center gap-2 animate-in fade-in duration-150">
           <AlertCircle className="w-4 h-4 flex-shrink-0" />
           <span>{errorMsg}</span>
         </div>
       )}
 
+      {/* Alert Success */}
+      {successMsg && !errorMsg && (
+        <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 text-xs font-medium flex items-center gap-2 animate-in fade-in duration-150">
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0" />
+          <span>{successMsg}</span>
+        </div>
+      )}
+
+      {/* STEP 1: Enter Mobile Number */}
       {step === 'PHONE' && (
-        /* STEP 1: Enter Mobile Number */
-        <form onSubmit={handlePhoneSubmit} className="space-y-4">
+        <form onSubmit={(e) => handleRequestOtp(channel, e)} className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="otp-phone">
               Mobile Phone Number
             </label>
-            <div className="relative flex items-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus-within:border-zinc-400 dark:focus-within:border-zinc-600 transition-colors overflow-hidden min-h-[44px]">
+            <div className="relative flex items-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus-within:border-emerald-500 dark:focus-within:border-emerald-500 transition-colors overflow-hidden min-h-[44px]">
               <span className="px-3.5 py-2.5 text-xs font-mono font-bold text-zinc-600 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-800/80 border-r border-zinc-200 dark:border-zinc-800 flex items-center gap-1.5 select-none">
                 <span>🇮🇳 +91</span>
               </span>
@@ -311,24 +378,29 @@ export default function MobileOtpAuth({
                 onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
               />
             </div>
-            <p className="text-[11px] text-zinc-400 dark:text-zinc-500">
-              Enter your mobile number to get instant access.
-            </p>
+            <div className="flex items-center justify-between text-[11px] text-zinc-400 dark:text-zinc-500 pt-0.5">
+              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-medium">
+                <MessageCircle className="w-3 h-3" />
+                <span>Instant OTP via WhatsApp</span>
+              </span>
+              <span>100% Free & Secure</span>
+            </div>
           </div>
 
           <button
             type="submit"
-            disabled={loading || phone.replace(/\D/g, '').length !== 10}
-            className="w-full inline-flex items-center justify-center font-bold px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[44px] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+            disabled={isSendingOtp || phone.replace(/\D/g, '').length !== 10}
+            className="w-full inline-flex items-center justify-center font-extrabold px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[44px] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? (
+            {isSendingOtp ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Signing In...</span>
+                <span>Sending WhatsApp OTP...</span>
               </>
             ) : (
               <>
-                <span>Continue</span>
+                <MessageCircle className="w-4 h-4" />
+                <span>Get OTP on WhatsApp</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -336,100 +408,186 @@ export default function MobileOtpAuth({
         </form>
       )}
 
-      {step === 'PROFILE_SETUP' && (
-        /* STEP 2: New User Profile Details */
-        <form onSubmit={handleProfileSubmit} className="space-y-3.5 animate-in fade-in duration-200">
-          <div className="p-2.5 rounded-xl bg-indigo-50/70 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-800/40 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200 font-medium">
-              <Sparkles className="w-4 h-4 text-indigo-500 flex-shrink-0" />
-              <span>New Learner: <strong>+91 {phone}</strong></span>
+      {/* STEP 2: Enter 4-Digit Verification Code */}
+      {step === 'OTP_VERIFY' && (
+        <form onSubmit={handleVerifyOtp} className="space-y-4 animate-in fade-in duration-150">
+          <div className="p-3 rounded-2xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 min-w-0">
+              <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                <MessageCircle className="w-4 h-4" />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] text-zinc-500 block">Sent to WhatsApp</span>
+                <span className="font-mono font-bold text-zinc-900 dark:text-white truncate block">
+                  +91 {phone}
+                </span>
+              </div>
             </div>
             <button
               type="button"
               onClick={() => {
                 setStep('PHONE');
+                setOtp('');
                 setErrorMsg('');
+                setSuccessMsg('');
               }}
-              className="text-[11px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold cursor-pointer"
+              className="text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline cursor-pointer"
             >
-              Change
+              Edit Number
             </button>
           </div>
 
-          {/* Full Name Input (Always requested for new users) */}
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-name">
-              Full Name <span className="text-rose-500">*</span>
+          <div className="space-y-1.5">
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block text-center" htmlFor="otp-input">
+              Enter 4-Digit Verification Code
             </label>
-            <div className="relative">
-              <User className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              ref={otpInputRef}
+              id="otp-input"
+              type="text"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              maxLength={4}
+              required
+              autoFocus
+              className="w-full text-center text-3xl font-mono font-black py-3 px-4 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-2xl text-emerald-600 dark:text-emerald-400 tracking-[0.35em] placeholder:text-zinc-300 dark:placeholder:text-zinc-700 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 shadow-inner"
+              placeholder="••••"
+              value={otp}
+              onChange={(e) => {
+                const val = e.target.value.replace(/\D/g, '').slice(0, 4);
+                setOtp(val);
+                if (val.length === 4 && isExistingUser) {
+                  // Auto-submit when 4 digits are typed for existing user
+                  setTimeout(() => {
+                    handleVerifyOtp();
+                  }, 50);
+                }
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isVerifyingOtp || otp.trim().length !== 4}
+            className="w-full inline-flex items-center justify-center font-extrabold px-4 py-3 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[44px] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shadow-sm"
+          >
+            {isVerifyingOtp ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Verifying Code...</span>
+              </>
+            ) : (
+              <>
+                <KeyRound className="w-4 h-4" />
+                <span>Verify & Continue</span>
+                <ArrowRight className="w-4 h-4" />
+              </>
+            )}
+          </button>
+
+          {/* Resend Controls */}
+          <div className="flex items-center justify-center text-xs pt-1 border-t border-zinc-100 dark:border-zinc-800">
+            {countdown > 0 ? (
+              <span className="text-[11px] text-zinc-400 font-mono">
+                Resend code in {countdown}s
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => handleRequestOtp('WHATSAPP')}
+                disabled={isSendingOtp}
+                className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline flex items-center gap-1 cursor-pointer"
+              >
+                <RefreshCw className="w-3 h-3" />
+                <span>Resend code on WhatsApp</span>
+              </button>
+            )}
+          </div>
+        </form>
+      )}
+
+      {/* STEP 3: Profile Setup for New User */}
+      {step === 'PROFILE_SETUP' && (
+        <form onSubmit={handleProfileSubmit} className="space-y-3.5 animate-in fade-in duration-150">
+          <div className="p-2.5 rounded-xl bg-emerald-50/70 dark:bg-emerald-950/40 border border-emerald-200/60 dark:border-emerald-800/40 flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200 font-medium">
+              <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
+              <span>Verified: <strong>+91 {phone}</strong></span>
+            </div>
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="reg-name">
+              Your Full Name *
+            </label>
+            <div className="relative flex items-center rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus-within:border-emerald-500 dark:focus-within:border-emerald-500 transition-colors overflow-hidden min-h-[44px]">
+              <span className="px-3.5 py-2.5 text-zinc-400">
+                <User className="w-4 h-4" />
+              </span>
               <input
-                id="new-user-name"
+                id="reg-name"
                 type="text"
                 required
                 autoFocus
-                className="w-full text-xs pl-9 pr-3 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[40px]"
                 placeholder="e.g. Rahul Sharma"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="w-full text-xs font-medium py-2.5 pr-3.5 bg-transparent text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none"
               />
             </div>
           </div>
 
-          {/* Academic Branch Dropdown (ONLY shown on Live Presentation Session QR flows) */}
+          {/* Academic Branch Selection (Only if live presentation session) */}
           {isSessionChannel && (
-            <div className="space-y-1 animate-in fade-in duration-150">
-              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="new-user-branch">
-                Branch / Department <span className="text-rose-500">*</span>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-zinc-700 dark:text-zinc-300 block" htmlFor="reg-branch">
+                Academic Stream / Branch *
               </label>
               <div className="relative">
-                <BookOpen className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <select
-                  id="new-user-branch"
+                  id="reg-branch"
+                  required
                   value={selectedBranch}
                   onChange={(e) => setSelectedBranch(e.target.value)}
-                  required
-                  className="w-full text-xs pl-9 pr-8 py-2.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white min-h-[40px] appearance-none cursor-pointer"
+                  className="w-full text-xs font-medium py-2.5 px-3.5 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 text-zinc-900 dark:text-white outline-none focus:border-emerald-500 appearance-none min-h-[44px] cursor-pointer"
                 >
-                  <option value="">-- Select Your Academic Branch --</option>
+                  <option value="">Select your branch / major...</option>
                   {branchOptions.map((b: any) => (
-                    <option key={b.id || b.code || b.name} value={b.name}>
-                      {b.name} {b.code ? `(${b.code})` : ''}
+                    <option key={b.id || b.name} value={b.name}>
+                      {b.name}
                     </option>
                   ))}
-                  <option value="other">Other / Multidisciplinary (Specify below)</option>
+                  <option value="other">Other / Not Listed</option>
                 </select>
-                <ChevronDown className="w-3.5 h-3.5 text-zinc-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <ChevronDown className="w-4 h-4 text-zinc-400 absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               </div>
 
-              {(selectedBranch === 'other' || selectedBranch === 'Other / Multidisciplinary') && (
-                <div className="pt-1.5 animate-in fade-in duration-150">
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Chemical, Biotechnology, etc."
-                    value={customBranch}
-                    onChange={(e) => setCustomBranch(e.target.value)}
-                    className="w-full text-xs px-3 py-2 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400 min-h-[38px]"
-                  />
-                </div>
+              {selectedBranch === 'other' && (
+                <input
+                  type="text"
+                  required
+                  placeholder="Specify branch name (e.g. Civil, Mechanical)"
+                  value={customBranch}
+                  onChange={(e) => setCustomBranch(e.target.value)}
+                  className="w-full mt-1.5 text-xs font-medium py-2 px-3 rounded-xl border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900/80 text-zinc-900 dark:text-white placeholder:text-zinc-400 outline-none focus:border-emerald-500"
+                />
               )}
             </div>
           )}
 
           <button
             type="submit"
-            disabled={loading}
-            className="w-full inline-flex items-center justify-center font-bold px-4 py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[44px] cursor-pointer disabled:opacity-50 mt-2 shadow-sm"
+            disabled={isVerifyingOtp || !name.trim()}
+            className="w-full inline-flex items-center justify-center font-extrabold px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[44px] cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
           >
-            {loading ? (
+            {isVerifyingOtp ? (
               <>
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Creating Account...</span>
+                <span>Completing Setup...</span>
               </>
             ) : (
               <>
-                <span>Start Learning Now</span>
+                <span>Complete Registration</span>
                 <ArrowRight className="w-4 h-4" />
               </>
             )}

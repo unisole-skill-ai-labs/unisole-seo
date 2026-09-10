@@ -104,6 +104,12 @@ export const apiSlice = createApi({
         collegeId ? `/api/public/branches?collegeId=${collegeId}` : '/api/public/branches',
       providesTags: ['Branch'],
     }),
+    getPublicCourses: builder.query<any[], void>({
+      query: () => '/api/public/courses',
+    }),
+    getPublicCourseBySlug: builder.query<any, string>({
+      query: (slug) => `/api/public/courses/${slug}`,
+    }),
     registerNain: builder.mutation({
       query: (body: { category: string; institution: string; cityState: string }) => ({
         url: '/api/iapt/nain/register',
@@ -190,6 +196,17 @@ export const apiSlice = createApi({
         url: url ? `/api/public/workshop/qr?url=${encodeURIComponent(url)}` : '/api/public/workshop/qr',
       }),
     }),
+    validateCoupon: builder.mutation({
+      query: (body: {
+        code: string;
+        items?: Array<{ itemType: string; itemId: string; pricePaise: number }>;
+        totalAmountPaise?: number;
+      }) => ({
+        url: '/api/public/coupons/validate',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -202,6 +219,8 @@ export const {
   useGetOrdersQuery,
   useGetPublicCollegesQuery,
   useGetPublicBranchesQuery,
+  useGetPublicCoursesQuery,
+  useGetPublicCourseBySlugQuery,
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
   useRegisterWorkshopMutation,
@@ -210,4 +229,5 @@ export const {
   useCreateWorkshopOrderMutation,
   useVerifyWorkshopPaymentMutation,
   useGetWorkshopQrQuery,
+  useValidateCouponMutation,
 } = apiSlice;
