@@ -196,6 +196,17 @@ export const apiSlice = createApi({
         url: url ? `/api/public/workshop/qr?url=${encodeURIComponent(url)}` : '/api/public/workshop/qr',
       }),
     }),
+    validateCoupon: builder.mutation({
+      query: (body: {
+        code: string;
+        items?: Array<{ itemType: string; itemId: string; pricePaise: number }>;
+        totalAmountPaise?: number;
+      }) => ({
+        url: '/api/public/coupons/validate',
+        method: 'POST',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -218,4 +229,5 @@ export const {
   useCreateWorkshopOrderMutation,
   useVerifyWorkshopPaymentMutation,
   useGetWorkshopQrQuery,
+  useValidateCouponMutation,
 } = apiSlice;

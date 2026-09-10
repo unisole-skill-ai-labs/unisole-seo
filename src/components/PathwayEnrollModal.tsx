@@ -8,10 +8,14 @@ import {
   Clock,
   AlertCircle,
   Loader2,
-  ChevronRight
+  ChevronRight,
+  Tag,
+  Check,
+  Percent
 } from 'lucide-react';
 import { getUser, getUserPhone, getUserEmail, getUserName, isAuthenticated } from '../utils/auth';
 import { initiatePathwayPayment, PathwayItem } from '../utils/pathwayPayment';
+import { useValidateCouponMutation } from '../store/apiSlice';
 
 interface PathwayEnrollModalProps {
   isOpen: boolean;
@@ -27,6 +31,7 @@ export default function PathwayEnrollModal({
   onClose,
 }: PathwayEnrollModalProps) {
   const navigate = useNavigate();
+  const [validateCoupon, { isLoading: isValidatingCoupon }] = useValidateCouponMutation();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -37,6 +42,16 @@ export default function PathwayEnrollModal({
     yearOfStudy: '3rd Year',
     occupation: 'STUDENT',
   });
+
+  const [couponCodeInput, setCouponCodeInput] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<{
+    code: string;
+    discountAmountRupees: number;
+    discountType: string;
+    discountValue: number;
+    message?: string;
+  } | null>(null);
+  const [couponFeedback, setCouponFeedback] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -54,6 +69,9 @@ export default function PathwayEnrollModal({
         branch: user?.branch || prev.branch,
       }));
       setErrorMessage('');
+      setCouponCodeInput('');
+      setAppliedCoupon(null);
+      setCouponFeedback(null);
     }
   }, [isOpen]);
 
@@ -76,7 +94,66 @@ export default function PathwayEnrollModal({
 
   if (!isOpen || !pathway || !isAuthenticated()) return null;
 
-  const finalPrice = pathway.price || 2999;
+  const originalPrice = pathway.price || 2999;
+  const discountRupees = appliedCoupon ? appliedCoupon.discountAmountRupees : 0;
+  const finalPrice = Math.max(0, originalPrice - discountRupees);
+
+  const handleApplyCoupon = async (e: React.MouseEvent | React.FormEvent) => {
+    e.preventDefault();
+    setCouponFeedback(null);
+    const code = couponCodeInput.trim().toUpperCase();
+    if (!code) {
+      setCouponFeedback({ type: 'error', message: 'Please enter a coupon code' });
+      return;
+    }
+
+    try {
+      const res: any = await validateCoupon({
+        code,
+        items: [
+          {
+            itemType: 'PATHWAY',
+            itemId: pathway.id,
+            pricePaise: originalPrice * 100,
+          },
+        ],
+        totalAmountPaise: originalPrice * 100,
+      }).unwrap();
+
+      if (res.valid && res.discountAmountPaise > 0) {
+        const discountRupees = Math.round(res.discountAmountPaise / 100);
+        setAppliedCoupon({
+          code,
+          discountAmountRupees: discountRupees,
+          discountType: res.coupon?.discountType || 'PERCENTAGE',
+          discountValue: res.coupon?.discountValue || 0,
+          message: `Coupon applied! You saved ₹${discountRupees.toLocaleString('en-IN')}`,
+        });
+        setCouponFeedback({
+          type: 'success',
+          message: `🎉 Coupon applied! Saved ₹${discountRupees.toLocaleString('en-IN')}`,
+        });
+      } else {
+        setAppliedCoupon(null);
+        setCouponFeedback({
+          type: 'error',
+          message: res.message || 'Invalid or expired coupon code',
+        });
+      }
+    } catch (err: any) {
+      setAppliedCoupon(null);
+      setCouponFeedback({
+        type: 'error',
+        message: err?.data?.message || err?.message || 'Failed to validate coupon code',
+      });
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCodeInput('');
+    setCouponFeedback(null);
+  };
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,6 +186,7 @@ export default function PathwayEnrollModal({
           yearOfStudy: formData.yearOfStudy,
           occupation: formData.occupation,
         },
+        couponCode: appliedCoupon?.code,
         onSuccess: (result) => {
           setIsLoading(false);
           onClose();
@@ -317,13 +395,112 @@ export default function PathwayEnrollModal({
               </div>
             </div>
 
-            {/* Total Summary & Checkout Button */}
-            <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
-              <div className="flex items-center justify-between text-sm font-bold">
-                <span className="text-zinc-900 dark:text-white">Payable Total:</span>
-                <span className="text-xl font-black font-mono text-indigo-600 dark:text-indigo-400">
-                  ₹{finalPrice.toLocaleString('en-IN')}
+            {/* Promo / Discount Coupon Section */}
+            <div className="p-3.5 rounded-2xl bg-zinc-50/80 dark:bg-zinc-950/60 border border-zinc-200/80 dark:border-zinc-800 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+                  <Tag className="w-3.5 h-3.5 text-purple-600 dark:text-purple-400" />
+                  Have a Discount Coupon?
                 </span>
+                {appliedCoupon && (
+                  <button
+                    type="button"
+                    onClick={handleRemoveCoupon}
+                    className="text-[11px] font-bold text-rose-500 hover:underline cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                )}
+              </div>
+
+              {appliedCoupon ? (
+                <div className="flex items-center justify-between p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-xs">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold">
+                      ✓
+                    </span>
+                    <div>
+                      <div className="font-mono font-black text-emerald-700 dark:text-emerald-300 uppercase">
+                        {appliedCoupon.code}
+                      </div>
+                      <div className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                        {appliedCoupon.discountType === 'PERCENTAGE'
+                          ? `${appliedCoupon.discountValue}% Discount Applied`
+                          : `₹${appliedCoupon.discountAmountRupees} Flat Discount`}
+                      </div>
+                    </div>
+                  </div>
+                  <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 text-sm">
+                    -₹{appliedCoupon.discountAmountRupees.toLocaleString('en-IN')}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      placeholder="ENTER COUPON CODE"
+                      value={couponCodeInput}
+                      onChange={(e) => {
+                        setCouponCodeInput(e.target.value.toUpperCase());
+                        if (couponFeedback) setCouponFeedback(null);
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleApplyCoupon(e);
+                        }
+                      }}
+                      className="w-full px-3.5 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-xs font-mono font-bold uppercase text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-hidden focus:border-purple-500"
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={isValidatingCoupon || !couponCodeInput.trim()}
+                    className="py-2 px-4 rounded-xl bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-xs font-bold transition-all cursor-pointer flex items-center gap-1 shadow-sm"
+                  >
+                    {isValidatingCoupon ? (
+                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    ) : (
+                      'Apply'
+                    )}
+                  </button>
+                </div>
+              )}
+
+              {couponFeedback && (
+                <div
+                  className={`text-[11px] font-medium ${
+                    couponFeedback.type === 'success'
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-rose-500 dark:text-rose-400'
+                  }`}
+                >
+                  {couponFeedback.message}
+                </div>
+              )}
+            </div>
+
+            {/* Total Summary & Checkout Button */}
+            <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
+              <div className="space-y-1.5 text-xs">
+                <div className="flex items-center justify-between text-zinc-500 dark:text-zinc-400 font-medium">
+                  <span>Standard Program Fee:</span>
+                  <span className="font-mono">₹{originalPrice.toLocaleString('en-IN')}</span>
+                </div>
+                {appliedCoupon && (
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-400 font-bold">
+                    <span>Coupon Discount ({appliedCoupon.code}):</span>
+                    <span className="font-mono">-₹{appliedCoupon.discountAmountRupees.toLocaleString('en-IN')}</span>
+                  </div>
+                )}
+                <div className="flex items-center justify-between text-sm font-bold pt-1.5 border-t border-dashed border-zinc-200 dark:border-zinc-800">
+                  <span className="text-zinc-900 dark:text-white">Total Amount to Pay:</span>
+                  <span className="text-xl font-black font-mono text-indigo-600 dark:text-indigo-400">
+                    ₹{finalPrice.toLocaleString('en-IN')}
+                  </span>
+                </div>
               </div>
 
               <button
