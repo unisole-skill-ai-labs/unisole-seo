@@ -673,35 +673,31 @@ export default function ProgramsPage() {
     if (!dbCourses || dbCourses.length === 0) return GROUPS_DATA;
 
     return GROUPS_DATA.map((group) => {
-      const dbCourse = dbCourses.find(
-        (c: any) =>
-          c.metadata?.group === group.id ||
-          (group.id === 'group-1' && (c.slug?.includes('cs') || c.id === 'crs_cs_ai')) ||
-          (group.id === 'group-2' && (c.slug?.includes('sci') || c.id === 'crs_sci_math')) ||
-          (group.id === 'group-3' && (c.slug?.includes('mgmt') || c.slug?.includes('business') || c.id === 'crs_commerce_mgmt')) ||
-          (group.id === 'group-4' && (c.slug?.includes('arts') || c.slug?.includes('applied-ai') || c.id === 'crs_humanities_arts'))
-      );
+      const updatedPathways = group.pathways.map((p) => {
+        const dbCourse = dbCourses.find(
+          (c: any) =>
+            c.id === p.id ||
+            c.slug === p.id ||
+            c.metadata?.pathwayId === p.id ||
+            c.metadata?.id === p.id
+        );
 
-      if (!dbCourse) return group;
+        if (!dbCourse) return p;
 
-      const dbPrice = dbCourse.pricePaise ? Math.round(dbCourse.pricePaise / 100) : null;
-      const dbMrp = dbCourse.mrpPaise ? Math.round(dbCourse.mrpPaise / 100) : null;
+        const dbPrice = dbCourse.pricePaise ? Math.round(dbCourse.pricePaise / 100) : null;
+        const dbMrp = dbCourse.mrpPaise ? Math.round(dbCourse.mrpPaise / 100) : null;
 
-      const updatedPathways = group.pathways.map((p, pIdx) => {
-        if (pIdx === 0 && dbPrice) {
-          return {
-            ...p,
-            price: dbPrice,
-            mrp: dbMrp || p.mrp,
-          };
-        }
-        return p;
+        return {
+          ...p,
+          title: dbCourse.title || p.title,
+          description: dbCourse.shortDescription || p.description,
+          price: dbPrice !== null ? dbPrice : p.price,
+          mrp: dbMrp !== null ? dbMrp : p.mrp,
+        };
       });
 
       return {
         ...group,
-        title: dbCourse.title || group.title,
-        tagline: dbCourse.shortDescription || group.tagline,
         pathways: updatedPathways,
       };
     });
