@@ -41,6 +41,7 @@ import {
   useCreateWorkshopOrderMutation,
   useVerifyWorkshopPaymentMutation,
   useGetWorkshopQrQuery,
+  useGetPublicCourseBySlugQuery,
 } from '../../store/apiSlice';
 import { startWorkshopTokenPayment } from '../../utils/workshopPayment';
 
@@ -59,6 +60,10 @@ export default function WorkshopLandingPage() {
 
   const searchParams = new URLSearchParams(location.search);
   const justRegistered = searchParams.get('registered') === 'true';
+
+  const { data: mcCourse } = useGetPublicCourseBySlugQuery('ai-masterclass');
+  const livePriceRupees = mcCourse?.pricePaise ? Math.round(mcCourse.pricePaise / 100) : 39;
+  const liveMrpRupees = mcCourse?.mrpPaise ? Math.round(mcCourse.mrpPaise / 100) : 999;
 
   const { data: statusData, refetch: refetchStatus } = useGetWorkshopStatusQuery(
     user?.phone ? { phone: user.phone } : undefined,
@@ -357,7 +362,7 @@ export default function WorkshopLandingPage() {
           <span>Live 2-Hour Interactive Masterclass • International AI Engineering Standards</span>
           <span className="hidden sm:inline">•</span>
           <strong className="text-white bg-indigo-600/40 px-2 py-0.5 rounded border border-indigo-400/30">
-            Token Fee: ₹39 Only
+            Token Fee: ₹{livePriceRupees} Only
           </strong>
         </div>
       </div>
@@ -419,7 +424,7 @@ export default function WorkshopLandingPage() {
                   </>
                 ) : (
                   <>
-                    <span>Pay ₹39 Token</span>
+                    <span>Pay ₹{livePriceRupees} Token</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
@@ -429,7 +434,7 @@ export default function WorkshopLandingPage() {
                 to="/workshop/login"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white text-xs font-bold shadow-lg shadow-indigo-600/25 transition-all active:scale-95"
               >
-                <span>Register (₹39)</span>
+                <span>Register (₹{livePriceRupees})</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             )}
@@ -444,14 +449,14 @@ export default function WorkshopLandingPage() {
             <div className="max-w-4xl mx-auto flex items-center justify-center gap-3 flex-wrap text-xs sm:text-sm text-indigo-100">
               <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
               <span>
-                Welcome, <strong>{user?.name || 'Learner'}</strong>! Your details have been saved. Complete your <strong>₹39 Token Fee</strong> below to lock your Zoom seat.
+                Welcome, <strong>{user?.name || 'Learner'}</strong>! Your details have been saved. Complete your <strong>₹{livePriceRupees} Token Fee</strong> below to lock your Zoom seat.
               </span>
               <button
                 onClick={handleInitiateTokenPayment}
                 disabled={isProcessingPayment}
                 className="px-3.5 py-1 rounded-lg bg-white text-slate-950 font-bold text-xs hover:bg-slate-200 transition-colors shadow"
               >
-                Confirm Now (₹39) →
+                Confirm Now (₹{livePriceRupees}) →
               </button>
             </div>
           </div>
@@ -901,11 +906,15 @@ export default function WorkshopLandingPage() {
               {/* Pricing Display */}
               <div className="my-6 p-6 rounded-2xl bg-slate-950/80 border border-slate-800 max-w-md mx-auto">
                 <div className="flex items-center justify-center gap-3 mb-1">
-                  <span className="text-sm text-slate-500 line-through font-semibold">₹999</span>
-                  <span className="text-4xl sm:text-5xl font-black text-white">₹39</span>
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                    96% Subsidized
-                  </span>
+                  {liveMrpRupees > livePriceRupees && (
+                    <span className="text-sm text-slate-500 line-through font-semibold">₹{liveMrpRupees}</span>
+                  )}
+                  <span className="text-4xl sm:text-5xl font-black text-white">₹{livePriceRupees}</span>
+                  {liveMrpRupees > livePriceRupees && (
+                    <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                      {Math.round((1 - livePriceRupees / liveMrpRupees) * 100)}% Subsidized
+                    </span>
+                  )}
                 </div>
                 <p className="text-[11px] text-slate-400">
                   One-time nominal token commitment fee • Includes Workbook &amp; Certificate
@@ -941,12 +950,12 @@ export default function WorkshopLandingPage() {
                       </>
                     ) : loggedIn ? (
                       <>
-                        <span>Pay ₹39 Token Fee via Razorpay</span>
+                        <span>Pay ₹{livePriceRupees} Token Fee via Razorpay</span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     ) : (
                       <>
-                        <span>Register &amp; Pay ₹39 Token Fee</span>
+                        <span>Register &amp; Pay ₹{livePriceRupees} Token Fee</span>
                         <ArrowRight className="w-5 h-5" />
                       </>
                     )}

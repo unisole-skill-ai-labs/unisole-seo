@@ -5,6 +5,7 @@ import SyllabusDrawer from '../components/SyllabusDrawer';
 import PathwayEnrollModal from '../components/PathwayEnrollModal';
 import { useAuthModal } from '../context/AuthModalContext';
 import { isAuthenticated } from '../utils/auth';
+import { useGetPublicCoursesQuery } from '../store/apiSlice';
 import { 
   Laptop, 
   Microscope, 
@@ -661,13 +662,52 @@ const FAQS_DATA = [
 ];
 
 export default function ProgramsPage() {
+  const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState('group-1');
   const [expandedPathway, setExpandedPathway] = useState('cs-p1');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
-  const currentGroupData = GROUPS_DATA.find((g) => g.id === activeGroup) || GROUPS_DATA[0];
+  const mergedGroupsData = useMemo(() => {
+    if (!dbCourses || dbCourses.length === 0) return GROUPS_DATA;
+
+    return GROUPS_DATA.map((group) => {
+      const dbCourse = dbCourses.find(
+        (c: any) =>
+          c.metadata?.group === group.id ||
+          (group.id === 'group-1' && (c.slug?.includes('cs') || c.id === 'crs_cs_ai')) ||
+          (group.id === 'group-2' && (c.slug?.includes('sci') || c.id === 'crs_sci_math')) ||
+          (group.id === 'group-3' && (c.slug?.includes('mgmt') || c.slug?.includes('business') || c.id === 'crs_commerce_mgmt')) ||
+          (group.id === 'group-4' && (c.slug?.includes('arts') || c.slug?.includes('applied-ai') || c.id === 'crs_humanities_arts'))
+      );
+
+      if (!dbCourse) return group;
+
+      const dbPrice = dbCourse.pricePaise ? Math.round(dbCourse.pricePaise / 100) : null;
+      const dbMrp = dbCourse.mrpPaise ? Math.round(dbCourse.mrpPaise / 100) : null;
+
+      const updatedPathways = group.pathways.map((p, pIdx) => {
+        if (pIdx === 0 && dbPrice) {
+          return {
+            ...p,
+            price: dbPrice,
+            mrp: dbMrp || p.mrp,
+          };
+        }
+        return p;
+      });
+
+      return {
+        ...group,
+        title: dbCourse.title || group.title,
+        tagline: dbCourse.shortDescription || group.tagline,
+        pathways: updatedPathways,
+      };
+    });
+  }, [dbCourses]);
+
+  const currentGroupData = mergedGroupsData.find((g) => g.id === activeGroup) || mergedGroupsData[0];
 
   const filteredPathways = useMemo(() => {
     return currentGroupData.pathways.filter((pathway) => {
@@ -765,7 +805,7 @@ export default function ProgramsPage() {
           
           {/* 4 Academic Stream Tabs */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5" role="tablist">
-            {GROUPS_DATA.map((g) => {
+            {mergedGroupsData.map((g) => {
               const isActive = activeGroup === g.id;
               const IconComp = g.icon;
               return (

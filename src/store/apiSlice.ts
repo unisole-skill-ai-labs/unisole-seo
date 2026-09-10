@@ -104,6 +104,12 @@ export const apiSlice = createApi({
         collegeId ? `/api/public/branches?collegeId=${collegeId}` : '/api/public/branches',
       providesTags: ['Branch'],
     }),
+    getPublicCourses: builder.query<any[], void>({
+      query: () => '/api/public/courses',
+    }),
+    getPublicCourseBySlug: builder.query<any, string>({
+      query: (slug) => `/api/public/courses/${slug}`,
+    }),
     registerNain: builder.mutation({
       query: (body: { category: string; institution: string; cityState: string }) => ({
         url: '/api/iapt/nain/register',
@@ -202,6 +208,8 @@ export const {
   useGetOrdersQuery,
   useGetPublicCollegesQuery,
   useGetPublicBranchesQuery,
+  useGetPublicCoursesQuery,
+  useGetPublicCourseBySlugQuery,
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
   useRegisterWorkshopMutation,
