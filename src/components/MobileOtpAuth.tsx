@@ -80,6 +80,7 @@ export default function MobileOtpAuth({
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const otpInputRef = useRef<HTMLInputElement>(null);
+  const isVerifyingRef = useRef(false);
 
   // Extract session code and pre-fetch college info if live presentation
   useEffect(() => {
@@ -206,6 +207,8 @@ export default function MobileOtpAuth({
       setChannel(targetChannel);
       setStep('OTP_VERIFY');
       setCountdown(30);
+      setOtp('');
+      setErrorMsg('');
       setSuccessMsg(
         targetChannel === 'WHATSAPP'
           ? `4-digit OTP sent to WhatsApp (+91 ${cleanPhone})`
@@ -223,15 +226,14 @@ export default function MobileOtpAuth({
   };
 
   // Step 2: Verify Submitted OTP
-  const handleVerifyOtp = async (e?: React.FormEvent) => {
+  const handleVerifyOtp = async (e?: React.FormEvent, explicitOtp?: string) => {
     if (e) e.preventDefault();
-    setErrorMsg('');
+    if (isVerifyingRef.current || isVerifyingOtp) return;
 
     const cleanPhone = phone.replace(/\D/g, '');
-    const cleanOtp = otp.trim();
+    const cleanOtp = (explicitOtp !== undefined ? explicitOtp : otp).trim();
 
     if (!cleanOtp || cleanOtp.length !== 4) {
-      setErrorMsg('Please enter the 4-digit verification code');
       return;
     }
 
@@ -249,6 +251,9 @@ export default function MobileOtpAuth({
           : selectedBranch.trim();
     }
 
+    isVerifyingRef.current = true;
+    setErrorMsg('');
+
     try {
       const authData = await verifyOtp({
         phone: cleanPhone,
@@ -263,9 +268,11 @@ export default function MobileOtpAuth({
 
       completeAuth(authData);
     } catch (err: any) {
-      const msg = err?.data?.message || err?.message || 'Invalid or expired OTP. Please check and try again.';
+      const msg = err?.data?.message || err?.message || 'Invalid verification code. Please check and try again.';
       setErrorMsg(msg);
       if (onError) onError(err);
+    } finally {
+      isVerifyingRef.current = false;
     }
   };
 
@@ -456,11 +463,10 @@ export default function MobileOtpAuth({
               onChange={(e) => {
                 const val = e.target.value.replace(/\D/g, '').slice(0, 4);
                 setOtp(val);
-                if (val.length === 4 && isExistingUser) {
-                  // Auto-submit when 4 digits are typed for existing user
-                  setTimeout(() => {
-                    handleVerifyOtp();
-                  }, 50);
+                if (errorMsg) setErrorMsg('');
+                if (val.length === 4) {
+                  // Verify immediately with the exact 4 digits typed
+                  handleVerifyOtp(undefined, val);
                 }
               }}
             />
