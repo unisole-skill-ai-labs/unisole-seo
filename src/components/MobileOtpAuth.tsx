@@ -80,6 +80,7 @@ export default function MobileOtpAuth({
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const otpInputRef = useRef<HTMLInputElement>(null);
+  const isVerifyingRef = useRef(false);
 
   // Extract session code and pre-fetch college info if live presentation
   useEffect(() => {
@@ -227,7 +228,7 @@ export default function MobileOtpAuth({
   // Step 2: Verify Submitted OTP
   const handleVerifyOtp = async (e?: React.FormEvent, explicitOtp?: string) => {
     if (e) e.preventDefault();
-    setErrorMsg('');
+    if (isVerifyingRef.current || isVerifyingOtp) return;
 
     const cleanPhone = phone.replace(/\D/g, '');
     const cleanOtp = (explicitOtp !== undefined ? explicitOtp : otp).trim();
@@ -250,6 +251,9 @@ export default function MobileOtpAuth({
           : selectedBranch.trim();
     }
 
+    isVerifyingRef.current = true;
+    setErrorMsg('');
+
     try {
       const authData = await verifyOtp({
         phone: cleanPhone,
@@ -267,6 +271,8 @@ export default function MobileOtpAuth({
       const msg = err?.data?.message || err?.message || 'Invalid verification code. Please check and try again.';
       setErrorMsg(msg);
       if (onError) onError(err);
+    } finally {
+      isVerifyingRef.current = false;
     }
   };
 
