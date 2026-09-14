@@ -1,424 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import confetti from 'canvas-confetti';
 import {
-  Sparkles,
-  ArrowRight,
-  ArrowLeft,
   CheckCircle2,
-  Check,
-  GraduationCap,
-  Laptop,
-  Flame,
-  Award,
   Send,
   Loader2,
-  Building2,
-  Compass,
-  Zap,
-  Target,
-  BookOpen,
-  Briefcase,
-  HelpCircle,
-  Clock,
-  ShieldCheck,
+  ArrowRight,
+  ArrowLeft,
+  GraduationCap,
 } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 import { setAuthSession } from '../../utils/auth';
 
-interface Question {
+interface QuestionDef {
   id: string;
   title: string;
   subtitle?: string;
   type: 'single-select' | 'multi-select' | 'text';
   required?: boolean;
+  hasOther?: boolean;
   options?: string[];
   placeholder?: string;
-  hasOtherOption?: boolean;
   condition?: {
     field: string;
-    operator: 'eq';
     value: string;
   };
 }
 
-interface Section {
-  id: string;
-  title: string;
-  subtitle?: string;
-  description: string;
-  questions: Question[];
-}
-
-interface SurveySchema {
-  slug: string;
-  title: string;
-  description: string;
-  sections: Section[];
-}
-
-const DEFAULT_COLLEGES = [
-  'Rajkiya Kanya Mahavidyalaya, Shimla',
-  'Centre of Excellence Government College, Sanjauli',
-  'Rajiv Gandhi Government Degree College, Kotshera',
-];
-
-// Complete built-in fallback schema extracted 1-to-1 from the Google Form
-export const DEFAULT_STUDENT_SURVEY_SCHEMA: SurveySchema = {
-  slug: 'student-skills-survey',
-  title: 'Student Skills & Career Aspirations Survey 🎓',
-  description:
-    'A quick snapshot of where you are, where you want to go, and what skills can help you get there. Your responses will help shape tailored, industry-relevant learning opportunities.',
-  sections: [
-    {
-      id: 'career_vision',
-      title: 'Your Goals & Learning Needs 🚀',
-      subtitle: 'Part 1 of 2: Discovering your ambitions',
-      description: 'Tell us about what you want to achieve and the challenges holding you back.',
-      questions: [
-        {
-          id: 'aiming_for',
-          title: 'What are you currently aiming for?',
-          subtitle: 'Select all career tracks you are passionate about exploring',
-          type: 'multi-select',
-          required: true,
-          hasOtherOption: true,
-          options: [
-            '💻 Software Development / IT Career',
-            '🤖 AI / Machine Learning Career',
-            '📊 Data Science / Data Analytics',
-            '🔐 Cybersecurity / Cloud / IT Infrastructure',
-            '💼 Business / Entrepreneurship / Startup',
-            '📈 Finance / Accounting / Commerce Career',
-            '📣 Digital Marketing / Content Creation',
-            '🎓 Higher Studies / Further Education',
-          ],
-        },
-        {
-          id: 'why_learn',
-          title: 'Why do you want to learn new skills?',
-          subtitle: 'What is your primary motivation right now?',
-          type: 'multi-select',
-          required: true,
-          hasOtherOption: true,
-          options: [
-            'Improve job opportunities',
-            'Prepare for internships',
-            'Build real-world projects',
-            'Freelancing / Earning',
-            'Start a business / Startup',
-            'Academic knowledge',
-            'Explore a new field',
-            'Keep up with emerging technology',
-            'Personal interest',
-          ],
-        },
-        {
-          id: 'challenges',
-          title: 'What challenges are you currently facing when trying to learn new skills?',
-          type: 'multi-select',
-          required: true,
-          hasOtherOption: true,
-          options: [
-            'Lack of time',
-            'Course fees',
-            "Don't know where to start",
-            'Lack of proper guidance',
-            'College workload',
-            "Don't know which skills are useful for my career",
-            'Lack of practical learning opportunities',
-            'Lack of access to tools/resources',
-            'Difficulty staying consistent',
-          ],
-        },
-        {
-          id: 'course_factors',
-          title: 'According to you, what factors make a course truly valuable?',
-          type: 'multi-select',
-          required: true,
-          hasOtherOption: true,
-          options: [
-            'Practical, hands-on learning',
-            'Real-world projects',
-            'Industry-relevant skills',
-            'Internship opportunity',
-            'Mentorship from professionals',
-            'Portfolio / GitHub projects',
-            'Certificate',
-            'Flexible timings',
-            'Affordable fees',
-            'Access to AI tools & software',
-            'Beginner-friendly teaching',
-          ],
-        },
-        {
-          id: 'laptop_access',
-          title: 'Do you currently have access to a laptop or computer for learning?',
-          type: 'single-select',
-          required: true,
-          options: [
-            'Yes, I have my own laptop/computer',
-            'Yes, but I share it with someone',
-            "No, I don't currently have access to one",
-            'I can access one when needed (college/lab/library, etc.)',
-          ],
-        },
-      ],
-    },
-    {
-      id: 'stream_skills',
-      title: 'Explore Your Skills & Courses 💡',
-      subtitle: 'Part 2 of 2: Tailored to your academic degree',
-      description: 'Select your degree stream to unlock targeted course and technology paths.',
-      questions: [
-        {
-          id: 'stream',
-          title: 'What is your current course / stream?',
-          type: 'single-select',
-          required: true,
-          options: [
-            'BCA',
-            'MCA',
-            'B.Com',
-            'B.Sc',
-            'B.Sc. CS',
-            'B.A.',
-            'BBA / Management',
-            'Other',
-          ],
-        },
-        {
-          id: 'skills_bca',
-          title: 'Which of the following courses/skills would you be interested in learning? (BCA)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'BCA' },
-          options: [
-            'Web Development — HTML, CSS & JavaScript',
-            'Full-Stack Development',
-            'Python Programming',
-            'Java Programming',
-            'App Development',
-            'DSA & Problem Solving',
-            'Artificial Intelligence & Machine Learning',
-            'Generative AI & AI Tools',
-            'Data Science',
-            'Data Analytics & Visualization',
-            'Cybersecurity & Ethical Hacking',
-            'Cloud Computing & DevOps',
-            'Database & SQL',
-            'Software Testing & Automation',
-          ],
-        },
-        {
-          id: 'skills_mca',
-          title: 'Which of the following courses/skills would you be interested in learning? (MCA)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'MCA' },
-          options: [
-            'Full-Stack Development',
-            'Web Development — HTML, CSS & JavaScript',
-            'Python Programming',
-            'Java Programming',
-            'DSA & Problem Solving',
-            'Artificial Intelligence & Machine Learning',
-            'Generative AI & AI Tools',
-            'Data Science',
-            'Data Analytics & Visualization',
-            'Cloud Computing & DevOps',
-            'Cybersecurity & Ethical Hacking',
-            'Database & SQL',
-            'App Development',
-            'Git & GitHub / Version Control',
-          ],
-        },
-        {
-          id: 'skills_bcom',
-          title: 'Which of the following courses/skills would you be interested in learning? (B.Com)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'B.Com' },
-          options: [
-            'Tally Prime & Accounting',
-            'Excel & Advanced Excel',
-            'Financial Analytics',
-            'Data Analytics & Visualization',
-            'AI for Business & Commerce',
-            'Generative AI & AI Tools',
-            'Digital Marketing',
-            'AI Applications & Automation',
-          ],
-        },
-        {
-          id: 'skills_bsc',
-          title: 'Which of the following courses/skills would you be interested in learning? (B.Sc)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'B.Sc' },
-          options: [
-            'Python Programming',
-            'Artificial Intelligence & Machine Learning',
-            'Data Science',
-            'Data Analytics & Visualization',
-            'Generative AI & AI Tools',
-            'Database & SQL',
-            'Web Development',
-            'Cybersecurity & Ethical Hacking',
-            'Cloud Computing & DevOps',
-          ],
-        },
-        {
-          id: 'skills_bsc_cs',
-          title: 'Which of the following courses/skills would you be interested in learning? (B.Sc CS)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'B.Sc. CS' },
-          options: [
-            'Web Development — HTML, CSS & JavaScript',
-            'Full-Stack Development',
-            'Python Programming',
-            'Java Programming',
-            'DSA & Problem Solving',
-            'Artificial Intelligence & Machine Learning',
-            'Generative AI & AI Tools',
-            'Data Science',
-            'Data Analytics & Visualization',
-            'Cloud Computing & DevOps',
-            'Cybersecurity & Ethical Hacking',
-            'Database & SQL',
-            'App Development',
-          ],
-        },
-        {
-          id: 'skills_ba',
-          title: 'Which of the following courses/skills would you be interested in learning? (B.A.)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'B.A.' },
-          options: [
-            '🧠 AI for Psychology & Behavioural Sciences',
-            '🐍 Python Programming for Beginners',
-            '📚 AI for Education & Teaching',
-            '⚖️ AI for Law & Legal Applications',
-            '🎨 AI for Media, Design & Creative Work',
-            '📱 Generative AI & AI Tools for Everyday Work',
-            '📣 Digital Marketing & Social Media',
-            '🎬 Video Editing & Content Creation',
-            '🎨 Graphic Design',
-            '🖥️ UI/UX Design',
-            '📊 Data Analytics & Visualization',
-            '📝 AI Tools for Research & Academic Work',
-          ],
-        },
-        {
-          id: 'skills_bba',
-          title: 'Which of the following courses/skills would you be interested in learning? (BBA / Management)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'BBA / Management' },
-          options: [
-            '🤖 AI for Business & Management',
-            '📊 Data Analytics for Business',
-            '📈 Business Intelligence & Dashboards',
-            '📣 Digital Marketing & Social Media Strategy',
-            '💰 Financial Analytics & Business Finance',
-            '📊 Excel & Advanced Excel for Business',
-            '🧠 Business Strategy & Decision Making',
-            '🚀 Startup & Entrepreneurship',
-            '🛒 E-Commerce & Digital Business',
-            '📱 Generative AI & AI Tools for Business',
-            '🧾 Tally Prime & Accounting',
-          ],
-        },
-        {
-          id: 'skills_other',
-          title: 'Which AI applications would you be interested in learning? (Other)',
-          type: 'multi-select',
-          required: false,
-          hasOtherOption: true,
-          condition: { field: 'stream', operator: 'eq', value: 'Other' },
-          options: [
-            '🧠 AI for Psychology & Behavioural Sciences',
-            '🧬 AI for Life Sciences & Biotechnology',
-            '🏥 AI for Healthcare & Medical Applications',
-            '📚 AI for Education & Teaching',
-            '⚖️ AI for Law & Legal Applications',
-            '🎨 AI for Media, Design & Creative Work',
-            '📱 Generative AI & AI Tools for Everyday Work',
-            '🔬 AI for Research & Academic Work',
-          ],
-        },
-        {
-          id: 'missed_skills',
-          title: 'Is there any course or skill we missed that you would genuinely like to learn?',
-          type: 'text',
-          required: false,
-          placeholder: 'e.g. Rust, Robotics, Blockchain, Quantum Computing...',
-        },
-      ],
-    },
-    {
-      id: 'student_identity',
-      title: 'Where should we send your results? 🎓',
-      subtitle: 'Final Step: Personal details & verification',
-      description: 'Enter your name and contact details so we can deliver your career roadmap directly to you.',
-      questions: [],
-    },
-  ],
-};
-
 export default function StudentSurveyPage() {
   const { slug = 'student-skills-survey' } = useParams();
-  const navigate = useNavigate();
 
-  const [submitting, setSubmitting] = useState(false);
-  // Default directly to the full Google Form schema so it is NEVER blank or empty
-  const [survey, setSurvey] = useState<SurveySchema>(DEFAULT_STUDENT_SURVEY_SCHEMA);
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [otherInputs, setOtherInputs] = useState<Record<string, string>>({});
 
-  // Final step identity state (Name, Phone, College, Year)
+  // Step 3 (Final Step) Identity State
   const [studentName, setStudentName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
-  const [collegeName, setCollegeName] = useState('');
-  const [customCollege, setCustomCollege] = useState('');
-  const [isCustomCollege, setIsCustomCollege] = useState(false);
+  const [institution, setInstitution] = useState('');
+  const [customInstitution, setCustomInstitution] = useState('');
   const [yearOfStudy, setYearOfStudy] = useState('');
+  const [customYear, setCustomYear] = useState('');
 
+  const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [submissionResult, setSubmissionResult] = useState<any>(null);
 
-  // Background fetch for dynamic admin overrides, keeping built-in schema as instant fallback
+  // Background sync with backend if online
   useEffect(() => {
-    fetchSurveyLiveOverrides();
+    fetch(API_ENDPOINTS.surveys.get(slug)).catch(() => {});
   }, [slug]);
 
-  const fetchSurveyLiveOverrides = async () => {
-    try {
-      const res = await fetch(API_ENDPOINTS.surveys.get(slug));
-      if (res.ok) {
-        const data = await res.json();
-        if (data?.data?.schema && data.data.schema.sections?.length > 0) {
-          setSurvey(data.data.schema);
-        }
-      }
-    } catch (err) {
-      // Safely silent - local fallback is already in place
-    }
+  // Option handlers
+  const handleRadioSelect = (questionId: string, option: string) => {
+    setAnswers((prev) => ({ ...prev, [questionId]: option }));
   };
 
-  const handleToggleMulti = (questionId: string, option: string) => {
+  const handleCheckboxToggle = (questionId: string, option: string) => {
     setAnswers((prev) => {
       const current = Array.isArray(prev[questionId]) ? prev[questionId] : [];
       if (current.includes(option)) {
@@ -429,74 +68,85 @@ export default function StudentSurveyPage() {
     });
   };
 
-  const handleSelectSingle = (questionId: string, option: string) => {
-    setAnswers((prev) => ({ ...prev, [questionId]: option }));
-  };
-
   const handleTextChange = (questionId: string, value: string) => {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  const isQuestionVisible = (q: Question): boolean => {
-    if (!q.condition) return true;
-    const { field, value } = q.condition;
-    const answeredValue = answers[field];
-    if (value === 'BBA / Management') {
-      return answeredValue === 'BBA / Management' || answeredValue === 'BBA';
+  // Visibility logic for stream-based branch
+  const isStreamMatch = (streamValue: string): boolean => {
+    const chosen = answers['stream'];
+    if (streamValue === 'BBA / Management') {
+      return chosen === 'BBA / Management' || chosen === 'BBA';
     }
-    return answeredValue === value;
+    return chosen === streamValue;
   };
 
-  const totalSteps = survey.sections.length; // usually 3
-  const isFinalStep = currentStep === totalSteps - 1;
-  const currentSection = survey.sections[currentStep];
-
-  const validateCurrentStep = (): boolean => {
+  // Validation
+  const validateStep = (): boolean => {
     setErrorMsg('');
 
-    if (isFinalStep) {
+    if (currentStep === 0) {
+      if (!answers['aiming_for'] || answers['aiming_for'].length === 0) {
+        setErrorMsg('Please select at least one career track you are aiming for.');
+        return false;
+      }
+      if (!answers['why_learn'] || answers['why_learn'].length === 0) {
+        setErrorMsg('Please select why you want to learn new skills.');
+        return false;
+      }
+      if (!answers['challenges'] || answers['challenges'].length === 0) {
+        setErrorMsg('Please select the challenges you are facing.');
+        return false;
+      }
+      if (!answers['course_factors'] || answers['course_factors'].length === 0) {
+        setErrorMsg('Please select what factors make a course valuable.');
+        return false;
+      }
+      if (!answers['laptop_access']) {
+        setErrorMsg('Please answer whether you have access to a laptop or computer.');
+        return false;
+      }
+      return true;
+    }
+
+    if (currentStep === 1) {
+      if (!answers['stream']) {
+        setErrorMsg('Please select your current course/stream.');
+        return false;
+      }
+      return true;
+    }
+
+    if (currentStep === 2) {
       if (!studentName.trim()) {
         setErrorMsg('Please enter your full name.');
         return false;
       }
       const cleanPhone = phone.replace(/[^0-9]/g, '');
       if (cleanPhone.length < 10) {
-        setErrorMsg('Please enter a valid 10-digit mobile number.');
+        setErrorMsg('Please enter a valid 10-digit mobile / WhatsApp number.');
         return false;
       }
-      const finalCol = isCustomCollege ? customCollege.trim() : collegeName.trim();
-      if (!finalCol) {
-        setErrorMsg('Please select or enter your institution name.');
+      const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
+      if (!finalInst) {
+        setErrorMsg('Please select or specify your institution name.');
         return false;
       }
-      if (!yearOfStudy) {
+      const finalYr = yearOfStudy === '__OTHER__' ? customYear.trim() : yearOfStudy;
+      if (!finalYr) {
         setErrorMsg('Please select your current year of study.');
         return false;
       }
       return true;
     }
 
-    // Validate regular questions in section
-    if (currentSection?.questions) {
-      for (const q of currentSection.questions) {
-        if (!isQuestionVisible(q)) continue;
-        if (q.required) {
-          const val = answers[q.id];
-          if (!val || (Array.isArray(val) && val.length === 0) || (typeof val === 'string' && !val.trim())) {
-            setErrorMsg(`Please answer: "${q.title.replace(/^[^\w]+/, '')}"`);
-            return false;
-          }
-        }
-      }
-    }
-
     return true;
   };
 
   const handleNext = () => {
-    if (validateCurrentStep()) {
+    if (validateStep()) {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      setCurrentStep((prev) => Math.min(prev + 1, totalSteps - 1));
+      setCurrentStep((prev) => prev + 1);
     }
   };
 
@@ -508,10 +158,11 @@ export default function StudentSurveyPage() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!validateCurrentStep()) return;
+    if (!validateStep()) return;
 
-    const finalCollege = isCustomCollege ? customCollege.trim() : collegeName.trim();
-    const finalStream = answers.stream || 'GENERAL';
+    const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
+    const finalYr = yearOfStudy === '__OTHER__' ? customYear.trim() : yearOfStudy;
+    const finalStream = answers['stream'] === '__OTHER__' ? otherInputs['stream_other'] || 'Other' : answers['stream'] || 'GENERAL';
 
     setSubmitting(true);
     setErrorMsg('');
@@ -522,9 +173,9 @@ export default function StudentSurveyPage() {
         student_name: studentName.trim(),
         student_phone: phone.trim(),
         student_email: email.trim(),
-        student_college: finalCollege,
+        student_college: finalInst,
         student_stream: finalStream,
-        student_year: yearOfStudy,
+        student_year: finalYr,
         ...otherInputs,
       };
 
@@ -532,9 +183,9 @@ export default function StudentSurveyPage() {
         name: studentName.trim(),
         phone: phone.trim(),
         email: email.trim() || undefined,
-        collegeName: finalCollege,
+        collegeName: finalInst,
         stream: finalStream,
-        yearOfStudy,
+        yearOfStudy: finalYr,
         answers: consolidatedAnswers,
       };
 
@@ -553,487 +204,1097 @@ export default function StudentSurveyPage() {
         setAuthSession({ token: data.token, user: data.user });
       }
 
-      setSubmissionResult(data);
       setIsSubmitted(true);
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
-      // Confetti celebration
       try {
-        confetti({
-          particleCount: 120,
-          spread: 70,
-          origin: { y: 0.6 },
-        });
-      } catch (e) {
-        // ignore
-      }
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      } catch (e) {}
     } catch (err: any) {
-      setErrorMsg(err.message || 'Error submitting your responses. Please try again.');
+      setErrorMsg(err.message || 'An error occurred while submitting. Please try again.');
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-start antialiased selection:bg-indigo-500 selection:text-white">
-      {/* Clean Distraction-Free Header (No site Navbar, No SEO clutter) */}
-      <header className="w-full border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-4 py-3.5 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+    <div className="min-h-screen bg-[#f0ebf8] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 py-6 sm:py-10 px-3 sm:px-4 font-sans antialiased">
+      <div className="max-w-2xl mx-auto space-y-4">
+
+        {/* Brand Header Bar */}
+        <div className="flex items-center justify-between px-2 py-1 text-xs text-slate-500 dark:text-slate-400">
+          <div className="flex items-center gap-2">
             <img
               src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
               alt="Unisole"
-              className="w-8 h-8 rounded-lg object-contain shadow-xs"
+              className="w-5 h-5 rounded object-contain"
             />
-            <div>
-              <span className="font-extrabold text-sm sm:text-base text-white tracking-tight">
-                Unisole <span className="text-indigo-400">AI Labs</span>
-              </span>
-              <span className="hidden sm:inline-block ml-2 text-[10px] font-mono px-2 py-0.5 rounded-md bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
-                Official Campus Diagnostic
-              </span>
-            </div>
+            <span className="font-bold text-slate-700 dark:text-slate-300 tracking-tight">
+              Unisole Skill AI Labs
+            </span>
           </div>
-
-          <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span className="hidden sm:inline">Verified & Confidential</span>
-          </div>
+          <span className="font-mono text-[11px]">Official Student Survey</span>
         </div>
-      </header>
 
-      {/* Main Content Area */}
-      <main className="w-full max-w-3xl px-4 py-8 sm:py-12">
+        {/* Main Form Box / Success Box */}
         {isSubmitted ? (
-          /* Submission Success State */
-          <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-6 text-center animate-in fade-in zoom-in-95 duration-300">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
-              <CheckCircle2 className="w-8 h-8" />
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 overflow-hidden text-center p-8 sm:p-12 space-y-5">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-200 dark:border-emerald-800">
+              <CheckCircle2 className="w-9 h-9" />
             </div>
-
-            <div className="space-y-2">
-              <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                Survey Recorded Successfully
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-                Thank You, {studentName || 'Student'}! 🎓
-              </h2>
-              <p className="text-sm text-slate-400 max-w-lg mx-auto">
-                Your career preferences and skills diagnosis have been saved. Your personalized learning
-                roadmap has been generated.
-              </p>
-            </div>
-
-            {/* Student Summary Card */}
-            <div className="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-5 text-left space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
-                <span className="text-xs font-mono font-bold text-slate-400 uppercase">Student Profile</span>
-                <span className="text-xs font-bold text-indigo-400 font-mono">
-                  {answers.stream || 'GENERAL'} • {yearOfStudy}
-                </span>
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                <div>
-                  <span className="text-slate-500 block text-[11px]">Institution</span>
-                  <span className="font-semibold text-slate-200">
-                    {isCustomCollege ? customCollege : collegeName}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-slate-500 block text-[11px]">Registered Contact</span>
-                  <span className="font-mono font-semibold text-slate-200">{phone}</span>
-                </div>
-              </div>
-
-              {/* Chosen Skills Chips */}
-              <div className="pt-2 border-t border-slate-800/80 space-y-1.5">
-                <span className="text-[11px] text-slate-400 font-semibold block">Targeted Career Track:</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {(Array.isArray(answers.aiming_for) ? answers.aiming_for : [answers.aiming_for || 'Software & Technology']).map(
-                    (goal: string, idx: number) => (
-                      <span
-                        key={idx}
-                        className="text-xs bg-indigo-500/10 text-indigo-300 border border-indigo-500/20 px-2.5 py-1 rounded-lg font-medium"
-                      >
-                        {goal}
-                      </span>
-                    )
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2">
-              <p className="text-xs text-slate-500">
-                You may now close this window or return to the main platform.
-              </p>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+              Your response has been recorded.
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
+              Thank you, <span className="font-semibold text-slate-800 dark:text-slate-200">{studentName}</span>! Your
+              skills diagnostic and career interests have been submitted successfully.
+            </p>
+            <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 text-xs text-slate-400">
+              You can now safely close this tab.
             </div>
           </div>
         ) : (
-          /* Multi-Step Wizard Form Card */
-          <div className="space-y-6">
-            {/* Title & Introduction */}
-            <div className="text-center space-y-2 mb-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>UNISOLE SKILLS DIAGNOSTIC 2026</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-white tracking-tight">
-                {survey.title}
+          <div className="space-y-4">
+            {/* Top Google Forms Header Card */}
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 border-t-[10px] border-t-[#5746e3] p-6 sm:p-8 space-y-3">
+              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
+                Student Skills &amp; Career Aspirations Survey 🎓
               </h1>
-              <p className="text-xs sm:text-sm text-slate-400 max-w-xl mx-auto leading-relaxed">
-                {survey.description}
+              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                A quick snapshot of where you are, where you want to go, and what skills can help you get there.
+                Your responses will help us shape high-impact, industry-relevant learning opportunities tailored for you.
               </p>
+              <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between text-xs">
+                <span className="text-red-500 font-medium">* Indicates required question</span>
+                <span className="text-slate-400 font-mono">Page {currentStep + 1} of 3</span>
+              </div>
             </div>
 
-            {/* Stepper Progress Bar */}
-            <div className="bg-slate-900/60 border border-slate-800 rounded-2xl p-4 space-y-3">
-              <div className="flex items-center justify-between text-xs font-semibold">
-                <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-indigo-600 text-white text-[11px] font-bold flex items-center justify-center font-mono">
-                    {currentStep + 1}
-                  </span>
-                  <span className="text-white">{currentSection?.title || 'Survey'}</span>
-                </div>
-                <span className="font-mono text-indigo-400">
-                  Step {currentStep + 1} of {totalSteps}
-                </span>
-              </div>
-
-              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-400 h-full rounded-full transition-all duration-300"
-                  style={{ width: `${((currentStep + 1) / totalSteps) * 100}%` }}
-                />
-              </div>
-
-              {currentSection?.subtitle && (
-                <p className="text-[11px] text-slate-400 italic">{currentSection.subtitle}</p>
-              )}
-            </div>
-
-            {/* Form Error Banner */}
+            {/* Error Message Toast */}
             {errorMsg && (
-              <div className="p-4 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs sm:text-sm flex items-center gap-3 animate-in fade-in">
-                <div className="w-2 h-2 rounded-full bg-rose-400 animate-ping shrink-0" />
+              <div className="bg-red-50 dark:bg-red-950/60 border border-red-200 dark:border-red-900 rounded-xl p-4 text-red-700 dark:text-red-300 text-xs sm:text-sm font-medium flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse shrink-0" />
                 <span>{errorMsg}</span>
               </div>
             )}
 
-            {/* Form Container Card */}
-            <div className="bg-slate-900/90 border border-slate-800 rounded-3xl p-6 sm:p-10 shadow-2xl space-y-8">
-              {isFinalStep ? (
-                /* STEP 3: Student Identity (Contact & College details at the end) */
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="border-b border-slate-800 pb-4">
-                    <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                      <GraduationCap className="w-5 h-5 text-indigo-400" />
-                      <span>Where should we send your results?</span>
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-400 mt-1">
-                      Final step! Provide your contact info so we can deliver your personalized career
-                      roadmap and workshop invitations.
-                    </p>
+            {/* STEP 0: Goals & Learning Needs */}
+            {currentStep === 0 && (
+              <div className="space-y-4 animate-in fade-in duration-150">
+                {/* Question 1: Aiming for */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      🚀 What are you currently aiming for? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
                   </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    {/* Full Name */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
-                        Full Name <span className="text-rose-400">*</span>
-                      </label>
+                  <div className="space-y-2">
+                    {[
+                      '💻 Software Development / IT Career',
+                      '🤖 AI / Machine Learning Career',
+                      '📊 Data Science / Data Analytics',
+                      '🔐 Cybersecurity / Cloud / IT Infrastructure',
+                      '💼 Business / Entrepreneurship / Startup',
+                      '📈 Finance / Accounting / Commerce Career',
+                      '📣 Digital Marketing / Content Creation',
+                      '🎓 Higher Studies / Further Education',
+                    ].map((opt) => {
+                      const checked = (answers['aiming_for'] || []).includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          onClick={() => handleCheckboxToggle('aiming_for', opt)}
+                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {}}
+                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                          />
+                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                        </label>
+                      );
+                    })}
+                    {/* Other option */}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(otherInputs['aiming_for_other'])}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
                       <input
                         type="text"
-                        value={studentName}
-                        onChange={(e) => setStudentName(e.target.value)}
-                        placeholder="e.g. Priya Sharma"
-                        className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder:text-slate-600 text-sm transition-all"
-                      />
-                    </div>
-
-                    {/* WhatsApp / Mobile */}
-                    <div className="space-y-2">
-                      <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
-                        WhatsApp / Mobile Number <span className="text-rose-400">*</span>
-                      </label>
-                      <input
-                        type="tel"
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                        placeholder="e.g. 9816012345"
-                        maxLength={15}
-                        className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder:text-slate-600 text-sm font-mono transition-all"
+                        placeholder="Your answer"
+                        value={otherInputs['aiming_for_other'] || ''}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, aiming_for_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
                       />
                     </div>
                   </div>
+                </div>
 
-                  {/* College / Institution */}
+                {/* Question 2: Why learn new skills */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      💡 Why do you want to learn new skills? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
+                  </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
-                      What is your institution / college name? <span className="text-rose-400">*</span>
-                    </label>
-
-                    {!isCustomCollege ? (
-                      <div className="space-y-2">
-                        <select
-                          value={collegeName}
-                          onChange={(e) => {
-                            if (e.target.value === '__OTHER__') {
-                              setIsCustomCollege(true);
-                              setCollegeName('');
-                            } else {
-                              setCollegeName(e.target.value);
-                            }
-                          }}
-                          className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white text-sm transition-all cursor-pointer"
+                    {[
+                      'Improve job opportunities',
+                      'Prepare for internships',
+                      'Build real-world projects',
+                      'Freelancing / Earning',
+                      'Start a business / Startup',
+                      'Academic knowledge',
+                      'Explore a new field',
+                      'Keep up with emerging technology',
+                      'Personal interest',
+                    ].map((opt) => {
+                      const checked = (answers['why_learn'] || []).includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          onClick={() => handleCheckboxToggle('why_learn', opt)}
+                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
                         >
-                          <option value="">-- Select Your Institution --</option>
-                          {DEFAULT_COLLEGES.map((col) => (
-                            <option key={col} value={col}>
-                              {col}
-                            </option>
-                          ))}
-                          <option value="__OTHER__">+ Other Institution (Type Manually)</option>
-                        </select>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="flex gap-2">
                           <input
-                            type="text"
-                            value={customCollege}
-                            onChange={(e) => setCustomCollege(e.target.value)}
-                            placeholder="Type your complete college or university name..."
-                            className="flex-1 px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder:text-slate-600 text-sm transition-all"
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {}}
+                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
                           />
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIsCustomCollege(false);
-                              setCustomCollege('');
-                            }}
-                            className="px-4 py-3 text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl transition cursor-pointer"
-                          >
-                            Cancel
-                          </button>
-                        </div>
-                      </div>
-                    )}
+                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                        </label>
+                      );
+                    })}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(otherInputs['why_learn_other'])}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your answer"
+                        value={otherInputs['why_learn_other'] || ''}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, why_learn_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
                   </div>
+                </div>
 
-                  {/* Year of Study */}
+                {/* Question 3: Challenges */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      What challenges are you currently facing when trying to learn new skills? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
+                  </div>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center gap-1">
-                      Which year are you currently studying in? <span className="text-rose-400">*</span>
-                    </label>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                      {['1st Year', '2nd Year', '3rd Year', 'Final Year'].map((year) => {
-                        const isSelected = yearOfStudy === year;
+                    {[
+                      'Lack of time',
+                      'Course fees',
+                      "Don't know where to start",
+                      'Lack of proper guidance',
+                      'College workload',
+                      "Don't know which skills are useful for my career",
+                      'Lack of practical learning opportunities',
+                      'Lack of access to tools/resources',
+                      'Difficulty staying consistent',
+                    ].map((opt) => {
+                      const checked = (answers['challenges'] || []).includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          onClick={() => handleCheckboxToggle('challenges', opt)}
+                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {}}
+                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                          />
+                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                        </label>
+                      );
+                    })}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(otherInputs['challenges_other'])}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your answer"
+                        value={otherInputs['challenges_other'] || ''}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, challenges_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Question 4: Course factors */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      🤝 According to you, what factors make a course truly valuable? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Practical, hands-on learning',
+                      'Real-world projects',
+                      'Industry-relevant skills',
+                      'Internship opportunity',
+                      'Mentorship from professionals',
+                      'Portfolio / GitHub projects',
+                      'Certificate',
+                      'Flexible timings',
+                      'Affordable fees',
+                      'Access to AI tools & software',
+                      'Beginner-friendly teaching',
+                    ].map((opt) => {
+                      const checked = (answers['course_factors'] || []).includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          onClick={() => handleCheckboxToggle('course_factors', opt)}
+                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {}}
+                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                          />
+                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                        </label>
+                      );
+                    })}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(otherInputs['course_factors_other'])}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your answer"
+                        value={otherInputs['course_factors_other'] || ''}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, course_factors_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Question 5: Laptop access */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    Do you currently have access to a laptop or computer for learning? <span className="text-red-500">*</span>
+                  </h2>
+                  <div className="space-y-2">
+                    {[
+                      'Yes, I have my own laptop/computer',
+                      'Yes, but I share it with someone',
+                      "No, I don't currently have access to one",
+                      'I can access one when needed (college/lab/library, etc.)',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('laptop_access', opt)}
+                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="laptop_access"
+                          checked={answers['laptop_access'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* STEP 1: Stream & Degree Specific Skills */}
+            {currentStep === 1 && (
+              <div className="space-y-4 animate-in fade-in duration-150">
+                {/* Course / Stream Question */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    What is your course/stream? <span className="text-red-500">*</span>
+                  </h2>
+                  <div className="space-y-2">
+                    {[
+                      'BCA',
+                      'MCA',
+                      'B.Com',
+                      'B.Sc',
+                      'B.Sc. CS',
+                      'B.A.',
+                      'BBA / Management',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('stream', opt)}
+                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="stream"
+                          checked={answers['stream'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    {/* Other Stream */}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="stream"
+                        checked={answers['stream'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('stream', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your degree stream"
+                        value={otherInputs['stream_other'] || ''}
+                        onFocus={() => handleRadioSelect('stream', '__OTHER__')}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, stream_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Stream Tailored Courses (BCA) */}
+                {isStreamMatch('BCA') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — BCA</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        'Web Development — HTML, CSS & JavaScript',
+                        'Full-Stack Development',
+                        'Python Programming',
+                        'Java Programming',
+                        'App Development',
+                        'DSA & Problem Solving',
+                        'Artificial Intelligence & Machine Learning',
+                        'Generative AI & AI Tools',
+                        'Data Science',
+                        'Data Analytics & Visualization',
+                        'Cybersecurity & Ethical Hacking',
+                        'Cloud Computing & DevOps',
+                        'Database & SQL',
+                        'Software Testing & Automation',
+                      ].map((opt) => {
+                        const checked = (answers['skills_bca'] || []).includes(opt);
                         return (
-                          <button
-                            key={year}
-                            type="button"
-                            onClick={() => setYearOfStudy(year)}
-                            className={`p-3 rounded-xl border text-xs sm:text-sm font-semibold transition-all text-center cursor-pointer ${
-                              isSelected
-                                ? 'bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/30'
-                                : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-950'
-                            }`}
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_bca', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
                           >
-                            {year}
-                          </button>
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_bca_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_bca_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_bca_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (MCA) */}
+                {isStreamMatch('MCA') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — MCA</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        'Full-Stack Development',
+                        'Web Development — HTML, CSS & JavaScript',
+                        'Python Programming',
+                        'Java Programming',
+                        'DSA & Problem Solving',
+                        'Artificial Intelligence & Machine Learning',
+                        'Generative AI & AI Tools',
+                        'Data Science',
+                        'Data Analytics & Visualization',
+                        'Cloud Computing & DevOps',
+                        'Cybersecurity & Ethical Hacking',
+                        'Database & SQL',
+                        'App Development',
+                        'Git & GitHub / Version Control',
+                      ].map((opt) => {
+                        const checked = (answers['skills_mca'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_mca', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_mca_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_mca_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_mca_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (B.Com) */}
+                {isStreamMatch('B.Com') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Com</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        'Tally Prime & Accounting',
+                        'Excel & Advanced Excel',
+                        'Financial Analytics',
+                        'Data Analytics & Visualization',
+                        'AI for Business & Commerce',
+                        'Generative AI & AI Tools',
+                        'Digital Marketing',
+                        'AI Applications & Automation',
+                      ].map((opt) => {
+                        const checked = (answers['skills_bcom'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_bcom', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_bcom_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_bcom_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_bcom_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (B.Sc) */}
+                {isStreamMatch('B.Sc') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Sc</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        'Python Programming',
+                        'Artificial Intelligence & Machine Learning',
+                        'Data Science',
+                        'Data Analytics & Visualization',
+                        'Generative AI & AI Tools',
+                        'Database & SQL',
+                        'Web Development',
+                        'Cybersecurity & Ethical Hacking',
+                        'Cloud Computing & DevOps',
+                      ].map((opt) => {
+                        const checked = (answers['skills_bsc'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_bsc', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_bsc_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_bsc_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_bsc_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (B.Sc CS) */}
+                {isStreamMatch('B.Sc. CS') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Sc (CS)</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        'Web Development — HTML, CSS & JavaScript',
+                        'Full-Stack Development',
+                        'Python Programming',
+                        'Java Programming',
+                        'DSA & Problem Solving',
+                        'Artificial Intelligence & Machine Learning',
+                        'Generative AI & AI Tools',
+                        'Data Science',
+                        'Data Analytics & Visualization',
+                        'Cloud Computing & DevOps',
+                        'Cybersecurity & Ethical Hacking',
+                        'Database & SQL',
+                        'App Development',
+                      ].map((opt) => {
+                        const checked = (answers['skills_bsc_cs'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_bsc_cs', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_bsc_cs_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_bsc_cs_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_bsc_cs_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (B.A.) */}
+                {isStreamMatch('B.A.') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.A.</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        '🧠 AI for Psychology & Behavioural Sciences',
+                        '🐍 Python Programming for Beginners',
+                        '📚 AI for Education & Teaching',
+                        '⚖️ AI for Law & Legal Applications',
+                        '🎨 AI for Media, Design & Creative Work',
+                        '📱 Generative AI & AI Tools for Everyday Work',
+                        '📣 Digital Marketing & Social Media',
+                        '🎬 Video Editing & Content Creation',
+                        '🎨 Graphic Design',
+                        '🖥️ UI/UX Design',
+                        '📊 Data Analytics & Visualization',
+                        '📝 AI Tools for Research & Academic Work',
+                      ].map((opt) => {
+                        const checked = (answers['skills_ba'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_ba', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_ba_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_ba_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_ba_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stream Tailored Courses (BBA) */}
+                {isStreamMatch('BBA / Management') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — BBA / Management</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which of the following courses/skills would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        '🤖 AI for Business & Management',
+                        '📊 Data Analytics for Business',
+                        '📈 Business Intelligence & Dashboards',
+                        '📣 Digital Marketing & Social Media Strategy',
+                        '💰 Financial Analytics & Business Finance',
+                        '📊 Excel & Advanced Excel for Business',
+                        '🧠 Business Strategy & Decision Making',
+                        '🚀 Startup & Entrepreneurship',
+                        '🛒 E-Commerce & Digital Business',
+                        '📱 Generative AI & AI Tools for Business',
+                        '🧾 Tally Prime & Accounting',
+                      ].map((opt) => {
+                        const checked = (answers['skills_bba'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_bba', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
+                        );
+                      })}
+                      <div className="flex items-center gap-3.5 py-2 px-3">
+                        <input
+                          type="checkbox"
+                          checked={Boolean(otherInputs['skills_bba_other'])}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                        />
+                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                        <input
+                          type="text"
+                          placeholder="Your answer"
+                          value={otherInputs['skills_bba_other'] || ''}
+                          onChange={(e) =>
+                            setOtherInputs((prev) => ({ ...prev, skills_bba_other: e.target.value }))
+                          }
+                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Other stream skills */}
+                {(answers['stream'] === 'Other' || answers['stream'] === '__OTHER__') && (
+                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                    <div>
+                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — Other</div>
+                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                        ⭐ Which AI applications would you be interested in learning?
+                      </h2>
+                    </div>
+                    <div className="space-y-2">
+                      {[
+                        '🧠 AI for Psychology & Behavioural Sciences',
+                        '🧬 AI for Life Sciences & Biotechnology',
+                        '🏥 AI for Healthcare & Medical Applications',
+                        '📚 AI for Education & Teaching',
+                        '⚖️ AI for Law & Legal Applications',
+                        '🎨 AI for Media, Design & Creative Work',
+                        '📱 Generative AI & AI Tools for Everyday Work',
+                        '🔬 AI for Research & Academic Work',
+                      ].map((opt) => {
+                        const checked = (answers['skills_other'] || []).includes(opt);
+                        return (
+                          <label
+                            key={opt}
+                            onClick={() => handleCheckboxToggle('skills_other', opt)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                          </label>
                         );
                       })}
                     </div>
                   </div>
+                )}
 
-                  {/* Optional Email */}
+                {/* Missed skills free text */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    Is there any course or skill we missed that you would genuinely like to learn?
+                  </h2>
+                  <input
+                    type="text"
+                    value={answers['missed_skills'] || ''}
+                    onChange={(e) => handleTextChange('missed_skills', e.target.value)}
+                    placeholder="Your answer"
+                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* STEP 2: Student Identity & Campus Information */}
+            {currentStep === 2 && (
+              <div className="space-y-4 animate-in fade-in duration-150">
+                {/* Full Name */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    Full Name <span className="text-red-500">*</span>
+                  </h2>
+                  <input
+                    type="text"
+                    value={studentName}
+                    onChange={(e) => setStudentName(e.target.value)}
+                    placeholder="Your answer"
+                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
+                  />
+                </div>
+
+                {/* WhatsApp / Phone */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      WhatsApp / Mobile Number <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Where we can WhatsApp your personalized roadmap</p>
+                  </div>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="Your 10-digit mobile number"
+                    maxLength={15}
+                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent font-mono text-slate-900 dark:text-white"
+                  />
+                </div>
+
+                {/* Institution Name */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    what is your institution name ? <span className="text-red-500">*</span>
+                  </h2>
                   <div className="space-y-2">
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1">
-                      Email Address <span className="text-slate-600 font-normal">(Optional)</span>
-                    </label>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="e.g. priya@gmail.com"
-                      className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder:text-slate-600 text-sm transition-all"
-                    />
+                    {[
+                      'Rajkiya Kanya Mahavidyalaya, Shimla',
+                      'Centre of Excellence Government College, Sanjauli',
+                      'Rajiv Gandhi Government Degree College, Kotshera',
+                    ].map((col) => (
+                      <label
+                        key={col}
+                        onClick={() => setInstitution(col)}
+                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="institution"
+                          checked={institution === col}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{col}</span>
+                      </label>
+                    ))}
+                    {/* Other Institution */}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="institution"
+                        checked={institution === '__OTHER__'}
+                        onChange={() => setInstitution('__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your institution name"
+                        value={customInstitution}
+                        onFocus={() => setInstitution('__OTHER__')}
+                        onChange={(e) => setCustomInstitution(e.target.value)}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
                   </div>
                 </div>
-              ) : (
-                /* STEPS 1 & 2: Render Questions */
-                <div className="space-y-8 animate-in fade-in duration-200">
-                  {currentSection?.questions.map((q) => {
-                    if (!isQuestionVisible(q)) return null;
 
-                    return (
-                      <div key={q.id} className="space-y-3">
-                        <div>
-                          <h4 className="text-sm sm:text-base font-bold text-white flex items-center gap-2">
-                            <span>{q.title}</span>
-                            {q.required && <span className="text-rose-400 text-xs">*</span>}
-                          </h4>
-                          {q.subtitle && (
-                            <p className="text-xs text-slate-400 mt-0.5">{q.subtitle}</p>
-                          )}
-                        </div>
-
-                        {/* Multi-Select Pills */}
-                        {q.type === 'multi-select' && q.options && (
-                          <div className="space-y-2">
-                            <div className="flex flex-wrap gap-2 pt-1">
-                              {q.options.map((opt) => {
-                                const isSelected =
-                                  Array.isArray(answers[q.id]) && answers[q.id].includes(opt);
-                                return (
-                                  <button
-                                    key={opt}
-                                    type="button"
-                                    onClick={() => handleToggleMulti(q.id, opt)}
-                                    className={`px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm font-medium transition-all duration-150 flex items-center gap-2.5 text-left cursor-pointer ${
-                                      isSelected
-                                        ? 'bg-indigo-600 border-indigo-400 text-white shadow-md shadow-indigo-600/20'
-                                        : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-950'
-                                    }`}
-                                  >
-                                    <div
-                                      className={`w-4 h-4 rounded flex items-center justify-center border transition-all ${
-                                        isSelected
-                                          ? 'bg-white text-indigo-600 border-white'
-                                          : 'border-slate-600 bg-slate-900'
-                                      }`}
-                                    >
-                                      {isSelected && <Check className="w-3 h-3 stroke-[3]" />}
-                                    </div>
-                                    <span>{opt}</span>
-                                  </button>
-                                );
-                              })}
-                            </div>
-
-                            {/* Optional write-in for Other */}
-                            {q.hasOtherOption && (
-                              <div className="pt-2">
-                                <input
-                                  type="text"
-                                  placeholder="Other / Specific interest (Optional)..."
-                                  value={otherInputs[`${q.id}_other`] || ''}
-                                  onChange={(e) =>
-                                    setOtherInputs((prev) => ({
-                                      ...prev,
-                                      [`${q.id}_other`]: e.target.value,
-                                    }))
-                                  }
-                                  className="w-full px-3.5 py-2 text-xs rounded-xl bg-slate-950/70 border border-slate-800 text-slate-200 placeholder:text-slate-600 focus:border-indigo-500 focus:outline-hidden"
-                                />
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Single-Select Grid */}
-                        {q.type === 'single-select' && q.options && (
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
-                            {q.options.map((opt) => {
-                              const isSelected = answers[q.id] === opt;
-                              return (
-                                <button
-                                  key={opt}
-                                  type="button"
-                                  onClick={() => handleSelectSingle(q.id, opt)}
-                                  className={`p-3.5 rounded-xl border text-xs sm:text-sm font-medium transition-all duration-150 flex items-center justify-between text-left cursor-pointer ${
-                                    isSelected
-                                      ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-sm'
-                                      : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:border-slate-700 hover:bg-slate-950'
-                                  }`}
-                                >
-                                  <span>{opt}</span>
-                                  <div
-                                    className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
-                                      isSelected
-                                        ? 'border-indigo-400 bg-indigo-500'
-                                        : 'border-slate-600 bg-slate-900'
-                                    }`}
-                                  >
-                                    {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                                  </div>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        )}
-
-                        {/* Text Field */}
-                        {q.type === 'text' && (
-                          <input
-                            type="text"
-                            value={answers[q.id] || ''}
-                            onChange={(e) => handleTextChange(q.id, e.target.value)}
-                            placeholder={q.placeholder || 'Type your response here...'}
-                            className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 text-white placeholder:text-slate-600 text-sm transition-all"
-                          />
-                        )}
-                      </div>
-                    );
-                  })}
+                {/* Which year currently studying in */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    Which year are you currently studying in? <span className="text-red-500">*</span>
+                  </h2>
+                  <div className="space-y-2">
+                    {['1st Year', '2nd Year', '3rd Year', 'Final Year'].map((yr) => (
+                      <label
+                        key={yr}
+                        onClick={() => setYearOfStudy(yr)}
+                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="yearOfStudy"
+                          checked={yearOfStudy === yr}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{yr}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="yearOfStudy"
+                        checked={yearOfStudy === '__OTHER__'}
+                        onChange={() => setYearOfStudy('__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your year / Graduated"
+                        value={customYear}
+                        onFocus={() => setYearOfStudy('__OTHER__')}
+                        onChange={(e) => setCustomYear(e.target.value)}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
                 </div>
+
+                {/* Email Address (Optional) */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">Email Address</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Optional - to receive your PDF roadmap report</p>
+                  </div>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Your answer"
+                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Google Forms Style Navigation Buttons */}
+            <div className="flex items-center justify-between pt-3">
+              {currentStep > 0 ? (
+                <button
+                  type="button"
+                  onClick={handleBack}
+                  className="px-6 py-2.5 rounded-lg border border-slate-300 dark:border-zinc-700 bg-white dark:bg-zinc-800 hover:bg-slate-50 dark:hover:bg-zinc-700 text-slate-700 dark:text-slate-200 text-sm font-semibold transition cursor-pointer flex items-center gap-2"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                  <span>Back</span>
+                </button>
+              ) : (
+                <div />
               )}
 
-              {/* Navigation Controls */}
-              <div className="pt-6 border-t border-slate-800 flex items-center justify-between gap-4">
-                {currentStep > 0 ? (
-                  <button
-                    type="button"
-                    onClick={handleBack}
-                    className="px-5 py-3 rounded-xl border border-slate-800 hover:bg-slate-800 text-slate-300 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all cursor-pointer"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    <span>Back</span>
-                  </button>
-                ) : (
-                  <div />
-                )}
+              {currentStep < 2 ? (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="px-7 py-2.5 rounded-lg bg-[#5746e3] hover:bg-[#4a39d4] text-white text-sm font-semibold shadow-xs transition cursor-pointer flex items-center gap-2"
+                >
+                  <span>Next</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => handleSubmit()}
+                  disabled={submitting}
+                  className="px-8 py-2.5 rounded-lg bg-[#5746e3] hover:bg-[#4a39d4] text-white text-sm font-semibold shadow-xs transition cursor-pointer flex items-center gap-2 disabled:opacity-60"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span>Submitting...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Submit</span>
+                      <Send className="w-4 h-4" />
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
 
-                {isFinalStep ? (
-                  <button
-                    type="button"
-                    onClick={() => handleSubmit()}
-                    disabled={submitting}
-                    className="px-7 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/30 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
-                  >
-                    {submitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Submitting Your Survey...</span>
-                      </>
-                    ) : (
-                      <>
-                        <span>Submit Survey</span>
-                        <Send className="w-4 h-4" />
-                      </>
-                    )}
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={handleNext}
-                    className="px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs sm:text-sm font-bold shadow-lg shadow-indigo-600/25 flex items-center gap-2 transition-all cursor-pointer"
-                  >
-                    <span>Continue to Next Step</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
+            {/* Bottom Footer Note */}
+            <div className="text-center pt-6 text-xs text-slate-400 dark:text-slate-600">
+              Never submit passwords through this form. • Report Abuse • Terms of Service
             </div>
           </div>
         )}
-      </main>
-
-      {/* Clean Minimalist Footer */}
-      <footer className="w-full py-6 border-t border-slate-900 text-center text-xs text-slate-600">
-        <p>Unisole Skill AI Labs • Student Career Diagnostic System</p>
-      </footer>
+      </div>
     </div>
   );
 }
