@@ -27,6 +27,7 @@ const LiveSessionAttendancePage = lazy(() => import('./pages/live/LiveSessionAtt
 const WorkshopLandingPage = lazy(() => import('./pages/workshop/WorkshopLandingPage'));
 const WorkshopLoginPage = lazy(() => import('./pages/workshop/WorkshopLoginPage'));
 const WorkshopSuccessPage = lazy(() => import('./pages/workshop/WorkshopSuccessPage'));
+const StudentSurveyPage = lazy(() => import('./pages/survey/StudentSurveyPage'));
 
 function PageLoader() {
   return (
@@ -56,6 +57,12 @@ export default function App() {
       <main>
         <Suspense fallback={<PageLoader />}>
           <Routes>
+            {/* Student Survey & Skills Diagnostic Routes */}
+            <Route path="/survey" element={<StudentSurveyPage />} />
+            <Route path="/survey/:slug" element={<StudentSurveyPage />} />
+            <Route path="/skills-survey" element={<Navigate to="/survey" replace />} />
+            <Route path="/student-skills-survey" element={<Navigate to="/survey" replace />} />
+
             {/* AI Masterclass & Campaign Routes */}
             <Route path="/workshop" element={<WorkshopLandingPage />} />
             <Route path="/ai-workshop" element={<WorkshopLandingPage />} />
