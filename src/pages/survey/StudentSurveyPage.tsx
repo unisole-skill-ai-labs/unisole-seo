@@ -122,9 +122,9 @@ export default function StudentSurveyPage() {
         setErrorMsg('Please enter your full name.');
         return false;
       }
-      const cleanPhone = phone.replace(/[^0-9]/g, '');
-      if (cleanPhone.length < 10) {
-        setErrorMsg('Please enter a valid 10-digit mobile / WhatsApp number.');
+      const cleanPhone = phone.replace(/\D/g, '');
+      if (cleanPhone.length !== 10) {
+        setErrorMsg('Please enter a valid 10-digit mobile number (numbers only).');
         return false;
       }
       const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
@@ -1116,20 +1116,19 @@ export default function StudentSurveyPage() {
                   />
                 </div>
 
-                {/* WhatsApp / Phone */}
+                {/* Mobile Number */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      WhatsApp / Mobile Number <span className="text-red-500">*</span>
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-0.5">Where we can WhatsApp your personalized roadmap</p>
-                  </div>
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    Mobile Number <span className="text-red-500">*</span>
+                  </h2>
                   <input
                     type="tel"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                    placeholder="Your 10-digit mobile number"
-                    maxLength={15}
+                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    placeholder="10-digit mobile number"
+                    maxLength={10}
                     className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent font-mono text-slate-900 dark:text-white"
                   />
                 </div>
@@ -1137,7 +1136,7 @@ export default function StudentSurveyPage() {
                 {/* Institution Name */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    what is your institution name ? <span className="text-red-500">*</span>
+                    What is your institution name ? <span className="text-red-500">*</span>
                   </h2>
                   <div className="space-y-2">
                     {[
