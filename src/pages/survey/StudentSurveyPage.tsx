@@ -545,14 +545,14 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      1. Abhi aap kya kar rahe ho — job ki taiyari, koi course, ya kuch specific nahi? <span className="text-red-500">*</span>
+                      1. What are you currently focusing on alongside your college studies? <span className="text-red-500">*</span>
                     </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select the primary option that describes your current focus</p>
+                    <p className="text-xs text-slate-500 mt-1">Select the primary option that describes what you are doing right now</p>
                   </div>
                   <div className="space-y-2">
                     {[
-                      'Preparing for private / tech industry jobs & placements',
-                      'Preparing for government exams (Civil Services, Banking, Defense, etc.)',
+                      'Preparing for private / tech industry jobs & campus placements',
+                      'Preparing for government / competitive exams (UPSC, Banking, SSC, Defense, etc.)',
                       'Enrolled in an external skill course or certification',
                       'Working on personal projects, coding, or freelancing',
                       'Focusing strictly on regular college exams and syllabus',
@@ -576,11 +576,11 @@ export default function StudentSurveyPage() {
                   </div>
                   <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
                     <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
-                      Yeh khud ki choice thi ya kisi ne suggest kiya? (agar khud ki choice thi, toh kyun?)
+                      Was this your own choice or did someone suggest it? (If your own choice, why?)
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Khud ki choice thi because I love software, ya parents/friends ne suggest kiya"
+                      placeholder="e.g. My own choice because I love software, or suggested by parents/friends"
                       value={otherInputs['current_focus_reason'] || ''}
                       onChange={(e) => setOtherInputs((prev) => ({ ...prev, current_focus_reason: e.target.value }))}
                       className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1.5 bg-transparent text-slate-900 dark:text-white"
@@ -592,9 +592,9 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      2. Current ambition kya hai — job, higher study, business, ya govt exam? <span className="text-red-500">*</span>
+                      2. What is your primary career ambition right now? <span className="text-red-500">*</span>
                     </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select your primary career target</p>
+                    <p className="text-xs text-slate-500 mt-1">Select your ultimate target</p>
                   </div>
                   <div className="space-y-2">
                     {[
@@ -623,7 +623,7 @@ export default function StudentSurveyPage() {
                   </div>
                   <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
                     <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
-                      Uske liye abhi kya kar rahe ho? (What are you currently doing to prepare?)
+                      What are you currently doing to prepare for this ambition?
                     </label>
                     <input
                       type="text"
@@ -639,7 +639,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      3. College level pe sabse badi problem kya lagti hai? <span className="text-red-500">*</span>
+                      3. What feels like the biggest problem or bottleneck at the college level? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -690,7 +690,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      4. Poore education system mein sabse badi problem kya lagti hai? <span className="text-red-500">*</span>
+                      4. In your honest opinion, what is the biggest problem in the overall education system? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -741,7 +741,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      5. Pehle koi offline/online course kiya hai? <span className="text-red-500">*</span>
+                      5. Have you previously taken any offline or online courses? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -769,11 +769,11 @@ export default function StudentSurveyPage() {
                   </div>
                   <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
                     <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
-                      Kya achha tha, kya nahi? (What was good, and what was disappointing or missing?)
+                      If yes, what was good about it, and what was disappointing or missing?
                     </label>
                     <input
                       type="text"
-                      placeholder="e.g. Good theory but missed real projects, or mentor didn't reply to doubts"
+                      placeholder="e.g. Good theory but lacked real projects, or doubts were not answered"
                       value={otherInputs['past_course_feedback'] || ''}
                       onChange={(e) => setOtherInputs((prev) => ({ ...prev, past_course_feedback: e.target.value }))}
                       className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1.5 bg-transparent text-slate-900 dark:text-white"
@@ -785,14 +785,14 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      6. Course lene ka main reason kya hota hai — certification, job-skill, ya apni interest? <span className="text-red-500">*</span>
+                      6. What is your main reason for enrolling in a skill course? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
                     {[
-                      'To acquire practical, job-ready skills (Job-skill)',
-                      'To get a verified certificate for my resume (Certification)',
-                      'Genuine personal curiosity and interest in technology (Apni interest)',
+                      'To acquire practical, job-ready skills',
+                      'To get a verified certificate for my resume',
+                      'Genuine personal curiosity and interest in technology',
                       'College / internship mandatory requirement',
                       'To build real projects for my GitHub / portfolio',
                     ].map((opt) => (
@@ -836,7 +836,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      7. Seniors se sahi guidance milti hai, ya woh bhi confused hote hain? <span className="text-red-500">*</span>
+                      7. Do you get useful career guidance from college seniors, or do they seem just as confused? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -868,13 +868,13 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      8. Professors kis taraf push karte hain — higher study, govt job, ya private job? <span className="text-red-500">*</span>
+                      8. Which direction do college professors usually encourage or push students towards? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
                     {[
-                      'Higher studies (Master’s, MCA, M.Tech, MBA)',
-                      'Government jobs / Civil service exams',
+                      'Pursuing higher studies (Master’s, MCA, M.Tech, MBA)',
+                      'Preparing for government jobs / civil service exams',
                       'Private sector / IT / Corporate jobs',
                       'They mostly focus only on syllabus and exams, rarely discussing careers',
                     ].map((opt) => (
@@ -918,7 +918,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      9. Parents kya chahte hain, aur kya woh aapki apni pasand se match karta hai? <span className="text-red-500">*</span>
+                      9. What career path do your parents want for you, and does it match your own choice? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -968,7 +968,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      10. Private sector vs government sector — honest opinion? <span className="text-red-500">*</span>
+                      10. What is your honest opinion when comparing the Private Sector vs Government Sector? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1011,7 +1011,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      11. Skill program mein sabse zyada interest kis mein hoga? <span className="text-red-500">*</span>
+                      11. Which skill programs would you be most interested in taking? <span className="text-red-500">*</span>
                     </h2>
                     <p className="text-xs text-slate-500 mt-1">Select all fields you would like to explore</p>
                   </div>
@@ -1069,7 +1069,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      12. Offline, online, ya hybrid — kya prefer karoge? <span className="text-red-500">*</span>
+                      12. Which learning format do you prefer? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1100,7 +1100,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      13. Core degree aur skill training ko kitna weightage dena chahiye? <span className="text-red-500">*</span>
+                      13. How should time and importance be divided between your core degree and practical skill training? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1132,7 +1132,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      14. Agar yeh skill training aapki degree mein official academic credit ke roop mein count ho sake, toh kya woh zyada valuable lagega — ya ek separate certificate kaafi hai? <span className="text-red-500">*</span>
+                      14. If this skill training counts as official academic credits in your degree, would that make it more valuable? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1164,7 +1164,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      15. Ek genuinely accha 3-month skill program ke liye aap kitna realistically pay kar sakte ho — ya sirf tab lenge jab woh free/govt-subsidized ho? <span className="text-red-500">*</span>
+                      15. How much can you realistically afford to pay for a high-quality 3-month skill program? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1196,7 +1196,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      16. Weekly kitne ghante nikal sakte ho aisi training ke liye, apni regular padhai ke saath? <span className="text-red-500">*</span>
+                      16. How many hours per week can you realistically dedicate to skill training alongside college? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1228,7 +1228,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      17. laptop hai ?? <span className="text-red-500">*</span>
+                      17. Do you have a personal laptop or computer for hands-on practice? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <div className="space-y-2">
@@ -1260,7 +1260,7 @@ export default function StudentSurveyPage() {
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-5 h-5 text-[#5746e3] shrink-0" />
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      18. would you like to join the national AI network of unisole <span className="text-red-500">*</span>
+                      18. Would you like to join the National AI Network of Unisole? <span className="text-red-500">*</span>
                     </h2>
                   </div>
                   <p className="text-xs text-slate-500">Get access to exclusive AI workshops, peer community, hackathons, and early access to industry courses.</p>
