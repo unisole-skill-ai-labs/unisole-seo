@@ -20,4 +20,8 @@ export const API_ENDPOINTS = {
     me: `${API_BASE_URL}/api/auth/me`,
   },
   query: `${API_BASE_URL}/api/query`,
+  surveys: {
+    get: (slug: string) => `${API_BASE_URL}/api/surveys/${slug}`,
+    submit: (slug: string) => `${API_BASE_URL}/api/surveys/${slug}/responses`,
+  },
 };
