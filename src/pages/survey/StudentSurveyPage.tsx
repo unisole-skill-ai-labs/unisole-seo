@@ -38,15 +38,23 @@ const ENGINEERING_COLLEGES = [
   'University Institute of Information Technology (UIIT), HPU - Shimla',
 ];
 
-const STREAMS = [
+const DEGREE_STREAMS = [
   'BCA (Bachelor of Computer Applications)',
   'B.Sc Computer Science / IT',
-  'B.Tech / B.E. (Engineering)',
-  'MCA (Master of Computer Applications)',
   'B.Com (Commerce)',
   'BBA / Management',
-  'B.Sc (General Sciences)',
+  'B.Sc (General Sciences / Medical / Non-Medical)',
   'B.A. (Arts / Humanities)',
+];
+
+const ENGINEERING_STREAMS = [
+  'B.Tech - Computer Science & Engineering (CSE)',
+  'B.Tech - Information Technology (IT)',
+  'B.Tech - Artificial Intelligence & Data Science (AI & DS)',
+  'B.Tech - Electronics & Communication Engineering (ECE)',
+  'B.Tech - Electrical Engineering (EE)',
+  'B.Tech - Mechanical Engineering (ME)',
+  'B.Tech - Civil Engineering (CE)',
 ];
 
 const YEARS_OF_STUDY = ['1st Year', '2nd Year', '3rd Year', 'Final Year / 4th Year'];
@@ -428,6 +436,8 @@ export default function StudentSurveyPage() {
                         setCollegeType('degree');
                         setInstitution('');
                         setCustomInstitution('');
+                        setStream('');
+                        setCustomStream('');
                       }}
                       className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
                         collegeType === 'degree'
@@ -454,6 +464,8 @@ export default function StudentSurveyPage() {
                         setCollegeType('engineering');
                         setInstitution('');
                         setCustomInstitution('');
+                        setStream('');
+                        setCustomStream('');
                       }}
                       className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
                         collegeType === 'engineering'
@@ -463,7 +475,7 @@ export default function StudentSurveyPage() {
                     >
                       <div>
                         <div className="font-semibold text-sm text-slate-900 dark:text-white">Engineering College</div>
-                        <div className="text-xs text-slate-500 mt-0.5">B.Tech, BE, Technical Institutes</div>
+                        <div className="text-xs text-slate-500 mt-0.5">B.Tech (CSE, IT, ECE, AI, etc.)</div>
                       </div>
                       <input
                         type="radio"
@@ -526,10 +538,10 @@ export default function StudentSurveyPage() {
                 {/* Course / Stream */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    4. Current Course / Degree Stream <span className="text-red-500">*</span>
+                    4. {collegeType === 'engineering' ? 'B.Tech Branch / Engineering Stream' : 'Current Course / Degree Stream'} <span className="text-red-500">*</span>
                   </h2>
                   <div className="space-y-2">
-                    {STREAMS.map((s) => (
+                    {(collegeType === 'engineering' ? ENGINEERING_STREAMS : DEGREE_STREAMS).map((s) => (
                       <label
                         key={s}
                         onClick={() => setStream(s)}
@@ -553,10 +565,12 @@ export default function StudentSurveyPage() {
                         onChange={() => setStream('__OTHER__')}
                         className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
                       />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">
+                        {collegeType === 'engineering' ? 'Other Engineering Branch:' : 'Other Degree / Stream:'}
+                      </span>
                       <input
                         type="text"
-                        placeholder="Type your degree name"
+                        placeholder={collegeType === 'engineering' ? 'e.g. B.Tech Automobile / Chemical' : 'Type your degree / stream name'}
                         value={customStream}
                         onFocus={() => setStream('__OTHER__')}
                         onChange={(e) => setCustomStream(e.target.value)}
