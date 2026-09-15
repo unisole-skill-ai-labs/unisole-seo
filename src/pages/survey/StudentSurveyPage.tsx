@@ -7,25 +7,40 @@ import {
   Loader2,
   ArrowRight,
   ArrowLeft,
-  GraduationCap,
+  Building2,
+  BookOpen,
+  Sparkles,
 } from 'lucide-react';
 import { API_ENDPOINTS } from '../../config/api';
 import { setAuthSession } from '../../utils/auth';
 
-interface QuestionDef {
-  id: string;
-  title: string;
-  subtitle?: string;
-  type: 'single-select' | 'multi-select' | 'text';
-  required?: boolean;
-  hasOther?: boolean;
-  options?: string[];
-  placeholder?: string;
-  condition?: {
-    field: string;
-    value: string;
-  };
-}
+const HP_COLLEGES = [
+  'Rajkiya Kanya Mahavidyalaya (RKMV), Shimla',
+  'Centre of Excellence Government College, Sanjauli',
+  'Rajiv Gandhi Government Degree College, Kotshera',
+  'Government College, Dharamshala',
+  'Government College, Mandi',
+  'Government College, Solan',
+  'Government College, Hamirpur',
+  'Government College, Bilaspur',
+  'Government College, Kullu',
+  'Government College, Una',
+  'Government College, Chamba',
+  'Himachal Pradesh University (HPU), Shimla',
+];
+
+const STREAMS = [
+  'BCA (Bachelor of Computer Applications)',
+  'B.Sc Computer Science / IT',
+  'B.Tech / B.E. (Engineering)',
+  'MCA (Master of Computer Applications)',
+  'B.Com (Commerce)',
+  'BBA / Management',
+  'B.Sc (General Sciences)',
+  'B.A. (Arts / Humanities)',
+];
+
+const YEARS_OF_STUDY = ['1st Year', '2nd Year', '3rd Year', 'Final Year / 4th Year'];
 
 export default function StudentSurveyPage() {
   const { slug = 'student-skills-survey' } = useParams();
@@ -34,12 +49,14 @@ export default function StudentSurveyPage() {
   const [answers, setAnswers] = useState<Record<string, any>>({});
   const [otherInputs, setOtherInputs] = useState<Record<string, string>>({});
 
-  // Step 3 (Final Step) Identity State
+  // Step 0: Student Profile State
   const [studentName, setStudentName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [institution, setInstitution] = useState('');
   const [customInstitution, setCustomInstitution] = useState('');
+  const [stream, setStream] = useState('');
+  const [customStream, setCustomStream] = useState('');
   const [yearOfStudy, setYearOfStudy] = useState('');
   const [customYear, setCustomYear] = useState('');
 
@@ -47,7 +64,7 @@ export default function StudentSurveyPage() {
   const [errorMsg, setErrorMsg] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  // Background sync with backend if online
+  // Background ping with backend
   useEffect(() => {
     fetch(API_ENDPOINTS.surveys.get(slug)).catch(() => {});
   }, [slug]);
@@ -72,69 +89,108 @@ export default function StudentSurveyPage() {
     setAnswers((prev) => ({ ...prev, [questionId]: value }));
   };
 
-  // Visibility logic for stream-based branch
-  const isStreamMatch = (streamValue: string): boolean => {
-    const chosen = answers['stream'];
-    if (streamValue === 'BBA / Management') {
-      return chosen === 'BBA / Management' || chosen === 'BBA';
-    }
-    return chosen === streamValue;
-  };
-
-  // Validation
+  // Validation per step
   const validateStep = (): boolean => {
     setErrorMsg('');
 
+    // Step 0: Student Identity & Academic Profile
     if (currentStep === 0) {
-      if (!answers['aiming_for'] || answers['aiming_for'].length === 0) {
-        setErrorMsg('Please select at least one career track you are aiming for.');
-        return false;
-      }
-      if (!answers['why_learn'] || answers['why_learn'].length === 0) {
-        setErrorMsg('Please select why you want to learn new skills.');
-        return false;
-      }
-      if (!answers['challenges'] || answers['challenges'].length === 0) {
-        setErrorMsg('Please select the challenges you are facing.');
-        return false;
-      }
-      if (!answers['course_factors'] || answers['course_factors'].length === 0) {
-        setErrorMsg('Please select what factors make a course valuable.');
-        return false;
-      }
-      if (!answers['laptop_access']) {
-        setErrorMsg('Please answer whether you have access to a laptop or computer.');
-        return false;
-      }
-      return true;
-    }
-
-    if (currentStep === 1) {
-      if (!answers['stream']) {
-        setErrorMsg('Please select your current course/stream.');
-        return false;
-      }
-      return true;
-    }
-
-    if (currentStep === 2) {
       if (!studentName.trim()) {
         setErrorMsg('Please enter your full name.');
         return false;
       }
       const cleanPhone = phone.replace(/\D/g, '');
       if (cleanPhone.length !== 10) {
-        setErrorMsg('Please enter a valid 10-digit mobile number (numbers only).');
+        setErrorMsg('Please enter a valid 10-digit mobile number.');
         return false;
       }
       const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
       if (!finalInst) {
-        setErrorMsg('Please select or specify your institution name.');
+        setErrorMsg('Please select or specify your college / institution name.');
+        return false;
+      }
+      const finalStream = stream === '__OTHER__' ? customStream.trim() : stream;
+      if (!finalStream) {
+        setErrorMsg('Please select your current degree / course stream.');
         return false;
       }
       const finalYr = yearOfStudy === '__OTHER__' ? customYear.trim() : yearOfStudy;
       if (!finalYr) {
         setErrorMsg('Please select your current year of study.');
+        return false;
+      }
+      return true;
+    }
+
+    // Step 1: Education Realities & Career Perspective
+    if (currentStep === 1) {
+      if (!answers['current_focus']) {
+        setErrorMsg('Please answer Question 1: What are you currently focusing on?');
+        return false;
+      }
+      if (!answers['career_ambition']) {
+        setErrorMsg('Please answer Question 2: What is your primary career ambition?');
+        return false;
+      }
+      if (!answers['college_problem']) {
+        setErrorMsg('Please answer Question 3: What is the biggest problem at the college level?');
+        return false;
+      }
+      if (!answers['system_problem']) {
+        setErrorMsg('Please answer Question 4: What is the biggest problem in the education system?');
+        return false;
+      }
+      if (!answers['past_course_exp']) {
+        setErrorMsg('Please answer Question 5: Have you taken any offline or online courses?');
+        return false;
+      }
+      if (!answers['course_motivation']) {
+        setErrorMsg('Please answer Question 6: What is your main reason for taking a course?');
+        return false;
+      }
+      if (!answers['seniors_guidance']) {
+        setErrorMsg('Please answer Question 7: Do seniors provide useful guidance?');
+        return false;
+      }
+      if (!answers['professors_direction']) {
+        setErrorMsg('Please answer Question 8: Which direction do professors push you towards?');
+        return false;
+      }
+      if (!answers['parents_expectation']) {
+        setErrorMsg('Please answer Question 9: What career path do your parents expect?');
+        return false;
+      }
+      if (!answers['sector_preference']) {
+        setErrorMsg('Please answer Question 10: Private sector vs Government sector opinion.');
+        return false;
+      }
+      return true;
+    }
+
+    // Step 2: Skill Course Design & NEP
+    if (currentStep === 2) {
+      if (!answers['interested_skills'] || answers['interested_skills'].length === 0) {
+        setErrorMsg('Please select at least one skill program you are interested in.');
+        return false;
+      }
+      if (!answers['learning_mode']) {
+        setErrorMsg('Please select your preferred learning mode (Offline, Online, or Hybrid).');
+        return false;
+      }
+      if (!answers['degree_skill_weightage']) {
+        setErrorMsg('Please select how degree vs skill training weightage should be divided.');
+        return false;
+      }
+      if (!answers['credit_value']) {
+        setErrorMsg('Please answer whether official academic credits make the training more valuable.');
+        return false;
+      }
+      if (!answers['budget_preference']) {
+        setErrorMsg('Please select your realistic budget for a 3-month skill program.');
+        return false;
+      }
+      if (!answers['weekly_hours']) {
+        setErrorMsg('Please select how many weekly hours you can dedicate to training.');
         return false;
       }
       return true;
@@ -161,8 +217,8 @@ export default function StudentSurveyPage() {
     if (!validateStep()) return;
 
     const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
+    const finalStream = stream === '__OTHER__' ? customStream.trim() : stream;
     const finalYr = yearOfStudy === '__OTHER__' ? customYear.trim() : yearOfStudy;
-    const finalStream = answers['stream'] === '__OTHER__' ? otherInputs['stream_other'] || 'Other' : answers['stream'] || 'GENERAL';
 
     setSubmitting(true);
     setErrorMsg('');
@@ -172,7 +228,7 @@ export default function StudentSurveyPage() {
         ...answers,
         student_name: studentName.trim(),
         student_phone: phone.trim(),
-        student_email: email.trim(),
+        student_email: email.trim() || undefined,
         student_college: finalInst,
         student_stream: finalStream,
         student_year: finalYr,
@@ -208,7 +264,7 @@ export default function StudentSurveyPage() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       try {
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+        confetti({ particleCount: 110, spread: 70, origin: { y: 0.6 } });
       } catch (e) {}
     } catch (err: any) {
       setErrorMsg(err.message || 'An error occurred while submitting. Please try again.');
@@ -218,55 +274,69 @@ export default function StudentSurveyPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0ebf8] dark:bg-[#0f172a] text-slate-900 dark:text-slate-100 py-6 sm:py-10 px-3 sm:px-4 font-sans antialiased">
+    <div className="min-h-screen bg-[#f1f3f9] dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 py-6 sm:py-10 px-3 sm:px-4 font-sans antialiased">
       <div className="max-w-2xl mx-auto space-y-4">
-
-        {/* Brand Header Bar */}
-        <div className="flex items-center justify-between px-2 py-1 text-xs text-slate-500 dark:text-slate-400">
+        {/* Brand & Partner Header Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-2 px-2 py-1 text-xs text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
             <img
               src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-              alt="Unisole"
+              alt="Unisole Skill AI Labs"
               className="w-5 h-5 rounded object-contain"
             />
-            <span className="font-bold text-slate-700 dark:text-slate-300 tracking-tight">
+            <span className="font-bold text-slate-800 dark:text-slate-200 tracking-tight">
               Unisole Skill AI Labs
             </span>
           </div>
-          <span className="font-mono text-[11px]">Official Student Survey</span>
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#5746e3]/10 text-[#5746e3] dark:text-[#8b7ff5] font-semibold text-[11px]">
+            <Building2 className="w-3 h-3" />
+            Govt. of Himachal Pradesh &bull; NEP Survey Partner
+          </span>
         </div>
 
-        {/* Main Form Box / Success Box */}
+        {/* Main Survey Content Box */}
         {isSubmitted ? (
           <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 overflow-hidden text-center p-8 sm:p-12 space-y-5">
             <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto border border-emerald-200 dark:border-emerald-800">
               <CheckCircle2 className="w-9 h-9" />
             </div>
             <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
-              Your response has been recorded.
+              Thank You! Your Feedback Has Been Recorded.
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
               Thank you, <span className="font-semibold text-slate-800 dark:text-slate-200">{studentName}</span>! Your
-              skills diagnostic and career interests have been submitted successfully.
+              honest feedback will directly help shape upcoming credit-linked NEP industrial training courses across Himachal Pradesh.
             </p>
             <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 text-xs text-slate-400">
-              You can now safely close this tab.
+              You can now safely close this window.
             </div>
           </div>
         ) : (
           <div className="space-y-4">
-            {/* Top Google Forms Header Card */}
-            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 border-t-[10px] border-t-[#5746e3] p-6 sm:p-8 space-y-3">
-              <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight">
-                Student Skills &amp; Career Aspirations Survey 🎓
-              </h1>
-              <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                A quick snapshot of where you are, where you want to go, and what skills can help you get there.
-                Your responses will help us shape high-impact, industry-relevant learning opportunities tailored for you.
-              </p>
+            {/* Top Google Forms Style Header Card */}
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 border-t-[10px] border-t-[#5746e3] p-6 sm:p-8 space-y-4">
+              <div className="space-y-2">
+                <div className="inline-flex items-center gap-2 text-xs font-semibold text-[#5746e3] dark:text-[#8b7ff5] uppercase tracking-wider">
+                  <BookOpen className="w-3.5 h-3.5" />
+                  Himachal Pradesh Undergraduate Higher Education Initiative
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white tracking-tight leading-snug">
+                  Undergraduate Student Skills &amp; Career Survey 🎓
+                </h1>
+              </div>
+
+              <div className="text-sm text-slate-600 dark:text-slate-300 space-y-2.5 leading-relaxed bg-slate-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-slate-100 dark:border-zinc-800">
+                <p>
+                  <strong>Unisole Skill AI Labs</strong> is surveying college students across Himachal Pradesh in support of initiatives with the <strong>Government of Himachal Pradesh</strong> to implement the National Education Policy (NEP) and design meaningful, credit-linked industrial courses at the undergraduate level.
+                </p>
+                <p>
+                  This survey takes just <strong>5–7 minutes</strong>. There are no right or wrong answers — we simply want your authentic, honest input to build courses and career systems that genuinely help college students succeed.
+                </p>
+              </div>
+
               <div className="pt-2 border-t border-slate-100 dark:border-zinc-800 flex items-center justify-between text-xs">
                 <span className="text-red-500 font-medium">* Indicates required question</span>
-                <span className="text-slate-400 font-mono">Page {currentStep + 1} of 3</span>
+                <span className="text-slate-400 font-mono font-medium">Page {currentStep + 1} of 3</span>
               </div>
             </div>
 
@@ -278,849 +348,37 @@ export default function StudentSurveyPage() {
               </div>
             )}
 
-            {/* STEP 0: Goals & Learning Needs */}
+            {/* ========================================================
+                STEP 0: Student Profile & Academic Information
+            ======================================================== */}
             {currentStep === 0 && (
               <div className="space-y-4 animate-in fade-in duration-150">
-                {/* Question 1: Aiming for */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      🚀 What are you currently aiming for? <span className="text-red-500">*</span>
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      '💻 Software Development / IT Career',
-                      '🤖 AI / Machine Learning Career',
-                      '📊 Data Science / Data Analytics',
-                      '🔐 Cybersecurity / Cloud / IT Infrastructure',
-                      '💼 Business / Entrepreneurship / Startup',
-                      '📈 Finance / Accounting / Commerce Career',
-                      '📣 Digital Marketing / Content Creation',
-                      '🎓 Higher Studies / Further Education',
-                    ].map((opt) => {
-                      const checked = (answers['aiming_for'] || []).includes(opt);
-                      return (
-                        <label
-                          key={opt}
-                          onClick={() => handleCheckboxToggle('aiming_for', opt)}
-                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {}}
-                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                          />
-                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                        </label>
-                      );
-                    })}
-                    {/* Other option */}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(otherInputs['aiming_for_other'])}
-                        onChange={() => {}}
-                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                      />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                      <input
-                        type="text"
-                        placeholder="Your answer"
-                        value={otherInputs['aiming_for_other'] || ''}
-                        onChange={(e) =>
-                          setOtherInputs((prev) => ({ ...prev, aiming_for_other: e.target.value }))
-                        }
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
+                <div className="px-1 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Section 1 of 3: Your Academic Profile
                 </div>
 
-                {/* Question 2: Why learn new skills */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      💡 Why do you want to learn new skills? <span className="text-red-500">*</span>
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      'Improve job opportunities',
-                      'Prepare for internships',
-                      'Build real-world projects',
-                      'Freelancing / Earning',
-                      'Start a business / Startup',
-                      'Academic knowledge',
-                      'Explore a new field',
-                      'Keep up with emerging technology',
-                      'Personal interest',
-                    ].map((opt) => {
-                      const checked = (answers['why_learn'] || []).includes(opt);
-                      return (
-                        <label
-                          key={opt}
-                          onClick={() => handleCheckboxToggle('why_learn', opt)}
-                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {}}
-                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                          />
-                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                        </label>
-                      );
-                    })}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(otherInputs['why_learn_other'])}
-                        onChange={() => {}}
-                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                      />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                      <input
-                        type="text"
-                        placeholder="Your answer"
-                        value={otherInputs['why_learn_other'] || ''}
-                        onChange={(e) =>
-                          setOtherInputs((prev) => ({ ...prev, why_learn_other: e.target.value }))
-                        }
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Question 3: Challenges */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      What challenges are you currently facing when trying to learn new skills? <span className="text-red-500">*</span>
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      'Lack of time',
-                      'Course fees',
-                      "Don't know where to start",
-                      'Lack of proper guidance',
-                      'College workload',
-                      "Don't know which skills are useful for my career",
-                      'Lack of practical learning opportunities',
-                      'Lack of access to tools/resources',
-                      'Difficulty staying consistent',
-                    ].map((opt) => {
-                      const checked = (answers['challenges'] || []).includes(opt);
-                      return (
-                        <label
-                          key={opt}
-                          onClick={() => handleCheckboxToggle('challenges', opt)}
-                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {}}
-                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                          />
-                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                        </label>
-                      );
-                    })}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(otherInputs['challenges_other'])}
-                        onChange={() => {}}
-                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                      />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                      <input
-                        type="text"
-                        placeholder="Your answer"
-                        value={otherInputs['challenges_other'] || ''}
-                        onChange={(e) =>
-                          setOtherInputs((prev) => ({ ...prev, challenges_other: e.target.value }))
-                        }
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Question 4: Course factors */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      🤝 According to you, what factors make a course truly valuable? <span className="text-red-500">*</span>
-                    </h2>
-                    <p className="text-xs text-slate-500 mt-1">Select all that apply</p>
-                  </div>
-                  <div className="space-y-2">
-                    {[
-                      'Practical, hands-on learning',
-                      'Real-world projects',
-                      'Industry-relevant skills',
-                      'Internship opportunity',
-                      'Mentorship from professionals',
-                      'Portfolio / GitHub projects',
-                      'Certificate',
-                      'Flexible timings',
-                      'Affordable fees',
-                      'Access to AI tools & software',
-                      'Beginner-friendly teaching',
-                    ].map((opt) => {
-                      const checked = (answers['course_factors'] || []).includes(opt);
-                      return (
-                        <label
-                          key={opt}
-                          onClick={() => handleCheckboxToggle('course_factors', opt)}
-                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                        >
-                          <input
-                            type="checkbox"
-                            checked={checked}
-                            onChange={() => {}}
-                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                          />
-                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                        </label>
-                      );
-                    })}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
-                      <input
-                        type="checkbox"
-                        checked={Boolean(otherInputs['course_factors_other'])}
-                        onChange={() => {}}
-                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                      />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                      <input
-                        type="text"
-                        placeholder="Your answer"
-                        value={otherInputs['course_factors_other'] || ''}
-                        onChange={(e) =>
-                          setOtherInputs((prev) => ({ ...prev, course_factors_other: e.target.value }))
-                        }
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Question 5: Laptop access */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Do you currently have access to a laptop or computer for learning? <span className="text-red-500">*</span>
-                  </h2>
-                  <div className="space-y-2">
-                    {[
-                      'Yes, I have my own laptop/computer',
-                      'Yes, but I share it with someone',
-                      "No, I don't currently have access to one",
-                      'I can access one when needed (college/lab/library, etc.)',
-                    ].map((opt) => (
-                      <label
-                        key={opt}
-                        onClick={() => handleRadioSelect('laptop_access', opt)}
-                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                      >
-                        <input
-                          type="radio"
-                          name="laptop_access"
-                          checked={answers['laptop_access'] === opt}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                        />
-                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 1: Stream & Degree Specific Skills */}
-            {currentStep === 1 && (
-              <div className="space-y-4 animate-in fade-in duration-150">
-                {/* Course / Stream Question */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    What is your course/stream? <span className="text-red-500">*</span>
-                  </h2>
-                  <div className="space-y-2">
-                    {[
-                      'BCA',
-                      'MCA',
-                      'B.Com',
-                      'B.Sc',
-                      'B.Sc. CS',
-                      'B.A.',
-                      'BBA / Management',
-                    ].map((opt) => (
-                      <label
-                        key={opt}
-                        onClick={() => handleRadioSelect('stream', opt)}
-                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                      >
-                        <input
-                          type="radio"
-                          name="stream"
-                          checked={answers['stream'] === opt}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                        />
-                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                      </label>
-                    ))}
-                    {/* Other Stream */}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
-                      <input
-                        type="radio"
-                        name="stream"
-                        checked={answers['stream'] === '__OTHER__'}
-                        onChange={() => handleRadioSelect('stream', '__OTHER__')}
-                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
-                      />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                      <input
-                        type="text"
-                        placeholder="Your degree stream"
-                        value={otherInputs['stream_other'] || ''}
-                        onFocus={() => handleRadioSelect('stream', '__OTHER__')}
-                        onChange={(e) =>
-                          setOtherInputs((prev) => ({ ...prev, stream_other: e.target.value }))
-                        }
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Stream Tailored Courses (BCA) */}
-                {isStreamMatch('BCA') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — BCA</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        'Web Development — HTML, CSS & JavaScript',
-                        'Full-Stack Development',
-                        'Python Programming',
-                        'Java Programming',
-                        'App Development',
-                        'DSA & Problem Solving',
-                        'Artificial Intelligence & Machine Learning',
-                        'Generative AI & AI Tools',
-                        'Data Science',
-                        'Data Analytics & Visualization',
-                        'Cybersecurity & Ethical Hacking',
-                        'Cloud Computing & DevOps',
-                        'Database & SQL',
-                        'Software Testing & Automation',
-                      ].map((opt) => {
-                        const checked = (answers['skills_bca'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_bca', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_bca_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_bca_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_bca_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (MCA) */}
-                {isStreamMatch('MCA') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — MCA</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        'Full-Stack Development',
-                        'Web Development — HTML, CSS & JavaScript',
-                        'Python Programming',
-                        'Java Programming',
-                        'DSA & Problem Solving',
-                        'Artificial Intelligence & Machine Learning',
-                        'Generative AI & AI Tools',
-                        'Data Science',
-                        'Data Analytics & Visualization',
-                        'Cloud Computing & DevOps',
-                        'Cybersecurity & Ethical Hacking',
-                        'Database & SQL',
-                        'App Development',
-                        'Git & GitHub / Version Control',
-                      ].map((opt) => {
-                        const checked = (answers['skills_mca'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_mca', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_mca_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_mca_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_mca_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (B.Com) */}
-                {isStreamMatch('B.Com') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Com</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        'Tally Prime & Accounting',
-                        'Excel & Advanced Excel',
-                        'Financial Analytics',
-                        'Data Analytics & Visualization',
-                        'AI for Business & Commerce',
-                        'Generative AI & AI Tools',
-                        'Digital Marketing',
-                        'AI Applications & Automation',
-                      ].map((opt) => {
-                        const checked = (answers['skills_bcom'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_bcom', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_bcom_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_bcom_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_bcom_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (B.Sc) */}
-                {isStreamMatch('B.Sc') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Sc</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        'Python Programming',
-                        'Artificial Intelligence & Machine Learning',
-                        'Data Science',
-                        'Data Analytics & Visualization',
-                        'Generative AI & AI Tools',
-                        'Database & SQL',
-                        'Web Development',
-                        'Cybersecurity & Ethical Hacking',
-                        'Cloud Computing & DevOps',
-                      ].map((opt) => {
-                        const checked = (answers['skills_bsc'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_bsc', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_bsc_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_bsc_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_bsc_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (B.Sc CS) */}
-                {isStreamMatch('B.Sc. CS') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.Sc (CS)</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        'Web Development — HTML, CSS & JavaScript',
-                        'Full-Stack Development',
-                        'Python Programming',
-                        'Java Programming',
-                        'DSA & Problem Solving',
-                        'Artificial Intelligence & Machine Learning',
-                        'Generative AI & AI Tools',
-                        'Data Science',
-                        'Data Analytics & Visualization',
-                        'Cloud Computing & DevOps',
-                        'Cybersecurity & Ethical Hacking',
-                        'Database & SQL',
-                        'App Development',
-                      ].map((opt) => {
-                        const checked = (answers['skills_bsc_cs'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_bsc_cs', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_bsc_cs_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_bsc_cs_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_bsc_cs_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (B.A.) */}
-                {isStreamMatch('B.A.') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — B.A.</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        '🧠 AI for Psychology & Behavioural Sciences',
-                        '🐍 Python Programming for Beginners',
-                        '📚 AI for Education & Teaching',
-                        '⚖️ AI for Law & Legal Applications',
-                        '🎨 AI for Media, Design & Creative Work',
-                        '📱 Generative AI & AI Tools for Everyday Work',
-                        '📣 Digital Marketing & Social Media',
-                        '🎬 Video Editing & Content Creation',
-                        '🎨 Graphic Design',
-                        '🖥️ UI/UX Design',
-                        '📊 Data Analytics & Visualization',
-                        '📝 AI Tools for Research & Academic Work',
-                      ].map((opt) => {
-                        const checked = (answers['skills_ba'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_ba', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_ba_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_ba_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_ba_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stream Tailored Courses (BBA) */}
-                {isStreamMatch('BBA / Management') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — BBA / Management</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which of the following courses/skills would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        '🤖 AI for Business & Management',
-                        '📊 Data Analytics for Business',
-                        '📈 Business Intelligence & Dashboards',
-                        '📣 Digital Marketing & Social Media Strategy',
-                        '💰 Financial Analytics & Business Finance',
-                        '📊 Excel & Advanced Excel for Business',
-                        '🧠 Business Strategy & Decision Making',
-                        '🚀 Startup & Entrepreneurship',
-                        '🛒 E-Commerce & Digital Business',
-                        '📱 Generative AI & AI Tools for Business',
-                        '🧾 Tally Prime & Accounting',
-                      ].map((opt) => {
-                        const checked = (answers['skills_bba'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_bba', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                      <div className="flex items-center gap-3.5 py-2 px-3">
-                        <input
-                          type="checkbox"
-                          checked={Boolean(otherInputs['skills_bba_other'])}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                        />
-                        <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
-                        <input
-                          type="text"
-                          placeholder="Your answer"
-                          value={otherInputs['skills_bba_other'] || ''}
-                          onChange={(e) =>
-                            setOtherInputs((prev) => ({ ...prev, skills_bba_other: e.target.value }))
-                          }
-                          className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Other stream skills */}
-                {(answers['stream'] === 'Other' || answers['stream'] === '__OTHER__') && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                    <div>
-                      <div className="text-xs font-mono font-bold text-[#5746e3] uppercase mb-1">Explore Your Skills — Other</div>
-                      <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                        ⭐ Which AI applications would you be interested in learning?
-                      </h2>
-                    </div>
-                    <div className="space-y-2">
-                      {[
-                        '🧠 AI for Psychology & Behavioural Sciences',
-                        '🧬 AI for Life Sciences & Biotechnology',
-                        '🏥 AI for Healthcare & Medical Applications',
-                        '📚 AI for Education & Teaching',
-                        '⚖️ AI for Law & Legal Applications',
-                        '🎨 AI for Media, Design & Creative Work',
-                        '📱 Generative AI & AI Tools for Everyday Work',
-                        '🔬 AI for Research & Academic Work',
-                      ].map((opt) => {
-                        const checked = (answers['skills_other'] || []).includes(opt);
-                        return (
-                          <label
-                            key={opt}
-                            onClick={() => handleCheckboxToggle('skills_other', opt)}
-                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                          >
-                            <input
-                              type="checkbox"
-                              checked={checked}
-                              onChange={() => {}}
-                              className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
-                            />
-                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
-                          </label>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
-
-                {/* Missed skills free text */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Is there any course or skill we missed that you would genuinely like to learn?
-                  </h2>
-                  <input
-                    type="text"
-                    value={answers['missed_skills'] || ''}
-                    onChange={(e) => handleTextChange('missed_skills', e.target.value)}
-                    placeholder="Your answer"
-                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
-                  />
-                </div>
-              </div>
-            )}
-
-            {/* STEP 2: Student Identity & Campus Information */}
-            {currentStep === 2 && (
-              <div className="space-y-4 animate-in fade-in duration-150">
                 {/* Full Name */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Full Name <span className="text-red-500">*</span>
+                    1. Full Name <span className="text-red-500">*</span>
                   </h2>
                   <input
                     type="text"
                     value={studentName}
                     onChange={(e) => setStudentName(e.target.value)}
-                    placeholder="Your answer"
+                    placeholder="Enter your full name"
                     className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
                   />
                 </div>
 
                 {/* Mobile Number */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Mobile Number <span className="text-red-500">*</span>
-                  </h2>
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      2. Mobile Number (WhatsApp) <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Used to verify student identity and share feedback</p>
+                  </div>
                   <input
                     type="tel"
                     inputMode="numeric"
@@ -1133,21 +391,17 @@ export default function StudentSurveyPage() {
                   />
                 </div>
 
-                {/* Institution Name */}
+                {/* College Name */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    What is your institution name ? <span className="text-red-500">*</span>
+                    3. College / Institution Name <span className="text-red-500">*</span>
                   </h2>
                   <div className="space-y-2">
-                    {[
-                      'Rajkiya Kanya Mahavidyalaya, Shimla',
-                      'Centre of Excellence Government College, Sanjauli',
-                      'Rajiv Gandhi Government Degree College, Kotshera',
-                    ].map((col) => (
+                    {HP_COLLEGES.map((col) => (
                       <label
                         key={col}
                         onClick={() => setInstitution(col)}
-                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
                       >
                         <input
                           type="radio"
@@ -1159,7 +413,7 @@ export default function StudentSurveyPage() {
                         <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{col}</span>
                       </label>
                     ))}
-                    {/* Other Institution */}
+                    {/* Other College */}
                     <div className="flex items-center gap-3.5 py-2 px-3">
                       <input
                         type="radio"
@@ -1168,10 +422,10 @@ export default function StudentSurveyPage() {
                         onChange={() => setInstitution('__OTHER__')}
                         className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
                       />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other College:</span>
                       <input
                         type="text"
-                        placeholder="Your institution name"
+                        placeholder="Type your college name"
                         value={customInstitution}
                         onFocus={() => setInstitution('__OTHER__')}
                         onChange={(e) => setCustomInstitution(e.target.value)}
@@ -1181,17 +435,60 @@ export default function StudentSurveyPage() {
                   </div>
                 </div>
 
-                {/* Which year currently studying in */}
+                {/* Course / Stream */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
                   <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    Which year are you currently studying in? <span className="text-red-500">*</span>
+                    4. Current Course / Degree Stream <span className="text-red-500">*</span>
                   </h2>
                   <div className="space-y-2">
-                    {['1st Year', '2nd Year', '3rd Year', 'Final Year'].map((yr) => (
+                    {STREAMS.map((s) => (
+                      <label
+                        key={s}
+                        onClick={() => setStream(s)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="stream"
+                          checked={stream === s}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{s}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="stream"
+                        checked={stream === '__OTHER__'}
+                        onChange={() => setStream('__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Type your degree name"
+                        value={customStream}
+                        onFocus={() => setStream('__OTHER__')}
+                        onChange={(e) => setCustomStream(e.target.value)}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Year of Study */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                    5. Which year are you currently studying in? <span className="text-red-500">*</span>
+                  </h2>
+                  <div className="space-y-2">
+                    {YEARS_OF_STUDY.map((yr) => (
                       <label
                         key={yr}
                         onClick={() => setYearOfStudy(yr)}
-                        className="flex items-center gap-3.5 py-2.5 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
                       >
                         <input
                           type="radio"
@@ -1211,10 +508,10 @@ export default function StudentSurveyPage() {
                         onChange={() => setYearOfStudy('__OTHER__')}
                         className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
                       />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other / Graduated:</span>
                       <input
                         type="text"
-                        placeholder="Your year / Graduated"
+                        placeholder="e.g. Recently Graduated"
                         value={customYear}
                         onFocus={() => setYearOfStudy('__OTHER__')}
                         onChange={(e) => setCustomYear(e.target.value)}
@@ -1227,21 +524,714 @@ export default function StudentSurveyPage() {
                 {/* Email Address (Optional) */}
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
                   <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">Email Address</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">Optional - to receive your PDF roadmap report</p>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">6. Email Address</h2>
+                    <p className="text-xs text-slate-500 mt-0.5">Optional — to receive course updates and roadmaps</p>
                   </div>
                   <input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Your answer"
+                    placeholder="name@example.com"
                     className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
                   />
                 </div>
               </div>
             )}
 
-            {/* Google Forms Style Navigation Buttons */}
+            {/* ========================================================
+                STEP 1: College Experiences & Career Reality
+            ======================================================== */}
+            {currentStep === 1 && (
+              <div className="space-y-4 animate-in fade-in duration-150">
+                <div className="px-1 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Section 2 of 3: College Realities &amp; Career Perspective
+                </div>
+
+                {/* Q1: Current Focus & Decision */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      1. Right now, what are you mainly focusing on alongside your college studies? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select the primary option that describes your situation</p>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Preparing for private / tech industry jobs & placements',
+                      'Preparing for government exams (Civil Services, Banking, Defense, etc.)',
+                      'Enrolled in an external skill course or certification',
+                      'Working on personal projects, coding, or freelancing',
+                      'Focusing strictly on regular college exams and syllabus',
+                      'Nothing specific right now / still exploring options',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('current_focus', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="current_focus"
+                          checked={answers['current_focus'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
+                      Was this your own choice or did someone suggest it? (If your own choice, why?)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. My own choice because I love software, or suggested by parents/friends"
+                      value={otherInputs['current_focus_reason'] || ''}
+                      onChange={(e) => setOtherInputs((prev) => ({ ...prev, current_focus_reason: e.target.value }))}
+                      className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1.5 bg-transparent text-slate-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Q2: Current Ambition & Prep */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      2. What is your primary career ambition right now? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select your ultimate target</p>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Private sector job (Software / Tech / Corporate)',
+                      'Government job / Competitive exam',
+                      'Higher studies (Master’s, MCA, M.Tech, MBA, Ph.D.)',
+                      'Starting a business / Startup / Entrepreneurship',
+                      'Freelancing / Remote global client work',
+                      'Still undecided / Exploring different careers',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('career_ambition', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="career_ambition"
+                          checked={answers['career_ambition'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
+                      What are you currently doing to prepare for this ambition?
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Practicing coding daily, studying for exams, building projects, nothing yet"
+                      value={otherInputs['ambition_preparation'] || ''}
+                      onChange={(e) => setOtherInputs((prev) => ({ ...prev, ambition_preparation: e.target.value }))}
+                      className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1.5 bg-transparent text-slate-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Q3: Biggest College Level Problem */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      3. What feels like the biggest problem or bottleneck at the college level? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Outdated syllabus that does not match modern industry requirements',
+                      'Lack of hands-on computer labs, practical projects, and coding exposure',
+                      'Very few or no campus placement and internship opportunities',
+                      'Too much focus on memorization and exams instead of real skill building',
+                      'Lack of career mentorship from experienced industry professionals',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('college_problem', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="college_problem"
+                          checked={answers['college_problem'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="college_problem"
+                        checked={answers['college_problem'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('college_problem', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Describe your college challenge"
+                        value={otherInputs['college_problem_other'] || ''}
+                        onFocus={() => handleRadioSelect('college_problem', '__OTHER__')}
+                        onChange={(e) => setOtherInputs((prev) => ({ ...prev, college_problem_other: e.target.value }))}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q4: Biggest Education System Problem */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      4. In your honest opinion, what is the biggest problem in the overall education system? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'College degrees no longer guarantee jobs or practical capability',
+                      'Huge gap between theoretical classroom teaching and corporate hiring standards',
+                      'Students are taught for marks, not for critical thinking or problem solving',
+                      'Emerging fields (AI, Machine Learning, Data) are not integrated early enough',
+                      'Career guidance starts too late (usually only in final year)',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('system_problem', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="system_problem"
+                          checked={answers['system_problem'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="system_problem"
+                        checked={answers['system_problem'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('system_problem', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your thoughts on the system"
+                        value={otherInputs['system_problem_other'] || ''}
+                        onFocus={() => handleRadioSelect('system_problem', '__OTHER__')}
+                        onChange={(e) => setOtherInputs((prev) => ({ ...prev, system_problem_other: e.target.value }))}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q5: Past Course Experience */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      5. Have you previously taken any offline or online courses? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Yes, offline training / coaching institute',
+                      'Yes, online platforms (Udemy, Coursera, YouTube, etc.)',
+                      'Yes, both online and offline programs',
+                      'No, I have never taken an external course',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('past_course_exp', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="past_course_exp"
+                          checked={answers['past_course_exp'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                  <div className="pt-3 border-t border-slate-100 dark:border-zinc-800">
+                    <label className="text-xs font-medium text-slate-600 dark:text-slate-400 block mb-1">
+                      If yes, what was good about it, and what was disappointing or missing?
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Good theory but missed real projects, or mentor didn't reply to doubts"
+                      value={otherInputs['past_course_feedback'] || ''}
+                      onChange={(e) => setOtherInputs((prev) => ({ ...prev, past_course_feedback: e.target.value }))}
+                      className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1.5 bg-transparent text-slate-900 dark:text-white"
+                    />
+                  </div>
+                </div>
+
+                {/* Q6: Main Reason for Taking a Course */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      6. What is your main reason for enrolling in a skill course? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'To acquire practical, job-ready skills',
+                      'To get a verified certificate for my resume',
+                      'Genuine personal curiosity and interest in technology',
+                      'College / internship mandatory requirement',
+                      'To build real projects for my GitHub / portfolio',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('course_motivation', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="course_motivation"
+                          checked={answers['course_motivation'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="course_motivation"
+                        checked={answers['course_motivation'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('course_motivation', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your main motivation"
+                        value={otherInputs['course_motivation_other'] || ''}
+                        onFocus={() => handleRadioSelect('course_motivation', '__OTHER__')}
+                        onChange={(e) => setOtherInputs((prev) => ({ ...prev, course_motivation_other: e.target.value }))}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q7: Guidance from Seniors */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      7. Do you get useful career guidance from college seniors, or do they seem just as confused? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Yes, seniors provide clear, practical guidance on careers and skills',
+                      'Somewhat, but most seniors are equally confused about what to do next',
+                      'No, there is almost no interaction or guidance from seniors',
+                      'Seniors mostly only advise preparing for government exams',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('seniors_guidance', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="seniors_guidance"
+                          checked={answers['seniors_guidance'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q8: Professors' Direction */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      8. Which direction do college professors usually encourage or push students towards? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Preparing for government jobs / civil service exams',
+                      'Pursuing higher studies (Master’s, MCA, M.Tech, MBA)',
+                      'Private sector / IT / Corporate jobs',
+                      'They mostly focus only on syllabus and exams, rarely discussing careers',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('professors_direction', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="professors_direction"
+                          checked={answers['professors_direction'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="professors_direction"
+                        checked={answers['professors_direction'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('professors_direction', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your observation"
+                        value={otherInputs['professors_direction_other'] || ''}
+                        onFocus={() => handleRadioSelect('professors_direction', '__OTHER__')}
+                        onChange={(e) => setOtherInputs((prev) => ({ ...prev, professors_direction_other: e.target.value }))}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q9: Parents' Expectations vs Personal Interest */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      9. What career path do your parents want for you, and does it match your own choice? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Parents want a government job — and that matches my personal ambition',
+                      'Parents want a government job — but I prefer private sector / tech / business',
+                      'Parents want a private / tech career — and that matches my choice',
+                      'Parents fully support whatever career path I choose for myself',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('parents_expectation', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="parents_expectation"
+                          checked={answers['parents_expectation'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="radio"
+                        name="parents_expectation"
+                        checked={answers['parents_expectation'] === '__OTHER__'}
+                        onChange={() => handleRadioSelect('parents_expectation', '__OTHER__')}
+                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="Your situation"
+                        value={otherInputs['parents_expectation_other'] || ''}
+                        onFocus={() => handleRadioSelect('parents_expectation', '__OTHER__')}
+                        onChange={(e) => setOtherInputs((prev) => ({ ...prev, parents_expectation_other: e.target.value }))}
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q10: Private Sector vs Government Sector */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      10. What is your honest opinion when comparing the Private Sector vs Government Sector? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Prefer Private Sector (Faster career growth, merit-based, higher salary upside)',
+                      'Prefer Government Sector (Long-term job security, pension/benefits, work-life balance)',
+                      'Open to both — whichever offers a solid and genuine starting opportunity',
+                      'Prefer starting my own business / Entrepreneurship / Freelancing',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('sector_preference', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="sector_preference"
+                          checked={answers['sector_preference'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* ========================================================
+                STEP 2: Skill Course Design & NEP Academic Integration
+            ======================================================== */}
+            {currentStep === 2 && (
+              <div className="space-y-4 animate-in fade-in duration-150">
+                <div className="px-1 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+                  Section 3 of 3: Designing Your Ideal Skill Program (NEP)
+                </div>
+
+                {/* Q11: Skill Program Interest (Multi-select) */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      11. Which skill programs would you be most interested in taking? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select all fields you would like to explore</p>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Data Science',
+                      'Data Analytics',
+                      'Machine Learning',
+                      'Generative AI & AI Tools',
+                      'Full Stack Data Science',
+                      'Entrepreneurship & Startup Building',
+                      'Cyber Security & Ethical Hacking',
+                      'Data Engineering',
+                    ].map((opt) => {
+                      const checked = (answers['interested_skills'] || []).includes(opt);
+                      return (
+                        <label
+                          key={opt}
+                          onClick={() => handleCheckboxToggle('interested_skills', opt)}
+                          className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={checked}
+                            onChange={() => {}}
+                            className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                          />
+                          <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                        </label>
+                      );
+                    })}
+                    <div className="flex items-center gap-3.5 py-2 px-3">
+                      <input
+                        type="checkbox"
+                        checked={Boolean(otherInputs['interested_skills_other'])}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] rounded border-slate-300 dark:border-zinc-700"
+                      />
+                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other:</span>
+                      <input
+                        type="text"
+                        placeholder="e.g. Web Development, Cloud Computing, Mobile Apps"
+                        value={otherInputs['interested_skills_other'] || ''}
+                        onChange={(e) =>
+                          setOtherInputs((prev) => ({ ...prev, interested_skills_other: e.target.value }))
+                        }
+                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Q12: Preferred Learning Mode */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      12. Which learning format do you prefer? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Offline (In-person classes and hands-on computer labs)',
+                      'Online (Live online sessions + recorded learning materials)',
+                      'Hybrid (Online sessions + regular weekend in-person workshops)',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('learning_mode', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="learning_mode"
+                          checked={answers['learning_mode'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q13: Degree vs Skill Training Weightage */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      13. How should a student's time and effort ideally be divided between the college degree and practical skill training? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      '50% Degree + 50% Practical Skill Training (Equal balance)',
+                      '30% Degree + 70% Practical Skill Training (Heavy emphasis on practical skills)',
+                      '70% Degree + 30% Practical Skill Training (College degree as main priority)',
+                      '100% Practical Skill Training & Projects',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('degree_skill_weightage', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="degree_skill_weightage"
+                          checked={answers['degree_skill_weightage'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q14: Academic Credit Value (NEP) */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      14. If this skill training is officially counted towards your college degree as Academic Credits (under NEP), would that make it more valuable to you? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Yes! Official academic credits in my degree would make it significantly more valuable',
+                      'A separate recognized industry certificate is already enough for me',
+                      'Both official credits and industry certificates are equally important',
+                      'Not sure / Depends on course quality and university recognition',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('credit_value', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="credit_value"
+                          checked={answers['credit_value'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q15: Realistic Budget for 3-Month Skill Program */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      15. For a genuinely high-quality 3-month skill program with live mentorship and projects, what could you realistically afford to pay? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      'Only if it is 100% free or fully government-subsidized',
+                      '₹1,000 – ₹2,500 for the entire 3 months',
+                      '₹2,500 – ₹5,000 for the entire 3 months',
+                      '₹5,000+ if it directly includes assured internship or placement support',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('budget_preference', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="budget_preference"
+                          checked={answers['budget_preference'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Q16: Weekly Hours Commitment */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      16. Alongside your regular college studies, how many hours per week can you realistically dedicate to skill training? <span className="text-red-500">*</span>
+                    </h2>
+                  </div>
+                  <div className="space-y-2">
+                    {[
+                      '3–5 hours per week (around 30–45 minutes daily)',
+                      '6–10 hours per week (around 1–1.5 hours daily)',
+                      '10–15 hours per week (regular practice + weekends)',
+                      '15+ hours per week (intensive commitment)',
+                    ].map((opt) => (
+                      <label
+                        key={opt}
+                        onClick={() => handleRadioSelect('weekly_hours', opt)}
+                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                      >
+                        <input
+                          type="radio"
+                          name="weekly_hours"
+                          checked={answers['weekly_hours'] === opt}
+                          onChange={() => {}}
+                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                        />
+                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{opt}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
             <div className="flex items-center justify-between pt-3">
               {currentStep > 0 ? (
                 <button
@@ -1279,7 +1269,7 @@ export default function StudentSurveyPage() {
                     </>
                   ) : (
                     <>
-                      <span>Submit</span>
+                      <span>Submit Survey</span>
                       <Send className="w-4 h-4" />
                     </>
                   )}
@@ -1287,9 +1277,9 @@ export default function StudentSurveyPage() {
               )}
             </div>
 
-            {/* Bottom Footer Note */}
+            {/* Footer Note */}
             <div className="text-center pt-6 text-xs text-slate-400 dark:text-slate-600">
-              Never submit passwords through this form. • Report Abuse • Terms of Service
+              In initiative with Government of Himachal Pradesh &bull; Unisole Skill AI Labs NEP Survey
             </div>
           </div>
         )}
