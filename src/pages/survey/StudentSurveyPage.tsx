@@ -14,7 +14,7 @@ import {
 import { API_ENDPOINTS } from '../../config/api';
 import { setAuthSession } from '../../utils/auth';
 
-const HP_COLLEGES = [
+const DEGREE_COLLEGES = [
   'Rajkiya Kanya Mahavidyalaya (RKMV), Shimla',
   'Centre of Excellence Government College, Sanjauli',
   'Rajiv Gandhi Government Degree College, Kotshera',
@@ -27,6 +27,15 @@ const HP_COLLEGES = [
   'Government College, Una',
   'Government College, Chamba',
   'Himachal Pradesh University (HPU), Shimla',
+];
+
+const ENGINEERING_COLLEGES = [
+  'Jawaharlal Nehru Government Engineering College (JNGEC) - Sundernagar, Mandi',
+  'Rajiv Gandhi Government Engineering College (RGGEC) - Kangra',
+  'Atal Bihari Vajpayee Government Institute of Engineering and Technology (ABVGIET) - Pragatinagar, Shimla',
+  'Government Hydro Engineering College - Bandla, Bilaspur',
+  'Mahatma Gandhi Government Engineering College (MGGEC) - Jeori, Rampur, Shimla',
+  'University Institute of Information Technology (UIIT), HPU - Shimla',
 ];
 
 const STREAMS = [
@@ -53,6 +62,7 @@ export default function StudentSurveyPage() {
   const [studentName, setStudentName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [collegeType, setCollegeType] = useState<'degree' | 'engineering' | ''>('');
   const [institution, setInstitution] = useState('');
   const [customInstitution, setCustomInstitution] = useState('');
   const [stream, setStream] = useState('');
@@ -102,6 +112,10 @@ export default function StudentSurveyPage() {
       const cleanPhone = phone.replace(/\D/g, '');
       if (cleanPhone.length !== 10) {
         setErrorMsg('Please enter a valid 10-digit mobile number.');
+        return false;
+      }
+      if (!collegeType) {
+        setErrorMsg('Please select whether you are from a Degree College or an Engineering College.');
         return false;
       }
       const finalInst = institution === '__OTHER__' ? customInstitution.trim() : institution;
@@ -237,6 +251,7 @@ export default function StudentSurveyPage() {
         student_name: studentName.trim(),
         student_phone: phone.trim(),
         student_email: email.trim() || undefined,
+        student_college_type: collegeType,
         student_college: finalInst,
         student_stream: finalStream,
         student_year: finalYr,
@@ -248,6 +263,7 @@ export default function StudentSurveyPage() {
         phone: phone.trim(),
         email: email.trim() || undefined,
         collegeName: finalInst,
+        collegeType: collegeType,
         stream: finalStream,
         yearOfStudy: finalYr,
         answers: consolidatedAnswers,
@@ -333,12 +349,9 @@ export default function StudentSurveyPage() {
                 </h1>
               </div>
 
-              <div className="text-sm text-slate-600 dark:text-slate-300 space-y-2.5 leading-relaxed bg-slate-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-slate-100 dark:border-zinc-800">
+              <div className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed bg-slate-50 dark:bg-zinc-800/50 p-4 rounded-xl border border-slate-100 dark:border-zinc-800">
                 <p>
                   <strong>Unisole Skill AI Labs</strong> is surveying college students across Himachal Pradesh in support of initiatives with the <strong>Government of Himachal Pradesh</strong> to implement the National Education Policy (NEP) and design meaningful, credit-linked industrial courses at the undergraduate level.
-                </p>
-                <p>
-                  This survey takes just <strong>5–7 minutes</strong>. There are no right or wrong answers — we simply want your authentic, honest input to build courses and career systems that genuinely help college students succeed.
                 </p>
               </div>
 
@@ -399,48 +412,115 @@ export default function StudentSurveyPage() {
                   />
                 </div>
 
-                {/* College Name */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-4">
-                  <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                    3. College / Institution Name <span className="text-red-500">*</span>
-                  </h2>
-                  <div className="space-y-2">
-                    {HP_COLLEGES.map((col) => (
-                      <label
-                        key={col}
-                        onClick={() => setInstitution(col)}
-                        className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
-                      >
-                        <input
-                          type="radio"
-                          name="institution"
-                          checked={institution === col}
-                          onChange={() => {}}
-                          className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
-                        />
-                        <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{col}</span>
-                      </label>
-                    ))}
-                    {/* Other College */}
-                    <div className="flex items-center gap-3.5 py-2 px-3">
+                {/* College Type & Selection */}
+                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-5">
+                  <div>
+                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">
+                      3. Are you from a Degree College or an Engineering College? <span className="text-red-500">*</span>
+                    </h2>
+                    <p className="text-xs text-slate-500 mt-1">Select your institution category</p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCollegeType('degree');
+                        setInstitution('');
+                        setCustomInstitution('');
+                      }}
+                      className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
+                        collegeType === 'degree'
+                          ? 'border-[#5746e3] bg-[#5746e3]/5 dark:bg-[#5746e3]/10 ring-2 ring-[#5746e3]/30'
+                          : 'border-slate-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-zinc-600 bg-white dark:bg-zinc-900'
+                      }`}
+                    >
+                      <div>
+                        <div className="font-semibold text-sm text-slate-900 dark:text-white">Degree College</div>
+                        <div className="text-xs text-slate-500 mt-0.5">Arts, Science, Commerce, BCA, etc.</div>
+                      </div>
                       <input
                         type="radio"
-                        name="institution"
-                        checked={institution === '__OTHER__'}
-                        onChange={() => setInstitution('__OTHER__')}
-                        className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                        name="collegeTypeRadio"
+                        checked={collegeType === 'degree'}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] pointer-events-none"
                       />
-                      <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">Other College:</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setCollegeType('engineering');
+                        setInstitution('');
+                        setCustomInstitution('');
+                      }}
+                      className={`p-4 rounded-xl border text-left transition cursor-pointer flex items-center justify-between ${
+                        collegeType === 'engineering'
+                          ? 'border-[#5746e3] bg-[#5746e3]/5 dark:bg-[#5746e3]/10 ring-2 ring-[#5746e3]/30'
+                          : 'border-slate-200 dark:border-zinc-700 hover:border-slate-300 dark:hover:border-zinc-600 bg-white dark:bg-zinc-900'
+                      }`}
+                    >
+                      <div>
+                        <div className="font-semibold text-sm text-slate-900 dark:text-white">Engineering College</div>
+                        <div className="text-xs text-slate-500 mt-0.5">B.Tech, BE, Technical Institutes</div>
+                      </div>
                       <input
-                        type="text"
-                        placeholder="Type your college name"
-                        value={customInstitution}
-                        onFocus={() => setInstitution('__OTHER__')}
-                        onChange={(e) => setCustomInstitution(e.target.value)}
-                        className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                        type="radio"
+                        name="collegeTypeRadio"
+                        checked={collegeType === 'engineering'}
+                        onChange={() => {}}
+                        className="w-4 h-4 text-[#5746e3] pointer-events-none"
                       />
-                    </div>
+                    </button>
                   </div>
+
+                  {collegeType && (
+                    <div className="pt-4 border-t border-slate-100 dark:border-zinc-800 space-y-3 animate-in fade-in duration-150">
+                      <label className="text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-400 block">
+                        Select your {collegeType === 'degree' ? 'Degree College' : 'Engineering College'}: <span className="text-red-500">*</span>
+                      </label>
+                      <div className="space-y-2">
+                        {(collegeType === 'degree' ? DEGREE_COLLEGES : ENGINEERING_COLLEGES).map((col) => (
+                          <label
+                            key={col}
+                            onClick={() => setInstitution(col)}
+                            className="flex items-center gap-3.5 py-2 px-3 rounded-lg hover:bg-slate-50 dark:hover:bg-zinc-800/60 cursor-pointer transition select-none"
+                          >
+                            <input
+                              type="radio"
+                              name="institution"
+                              checked={institution === col}
+                              onChange={() => {}}
+                              className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700 focus:ring-[#5746e3]"
+                            />
+                            <span className="text-sm text-slate-800 dark:text-slate-200 leading-normal">{col}</span>
+                          </label>
+                        ))}
+                        {/* Other College */}
+                        <div className="flex items-center gap-3.5 py-2 px-3">
+                          <input
+                            type="radio"
+                            name="institution"
+                            checked={institution === '__OTHER__'}
+                            onChange={() => setInstitution('__OTHER__')}
+                            className="w-4 h-4 text-[#5746e3] border-slate-300 dark:border-zinc-700"
+                          />
+                          <span className="text-sm text-slate-700 dark:text-slate-300 shrink-0">
+                            Other {collegeType === 'degree' ? 'Degree' : 'Engineering'} College:
+                          </span>
+                          <input
+                            type="text"
+                            placeholder="Type your college name"
+                            value={customInstitution}
+                            onFocus={() => setInstitution('__OTHER__')}
+                            onChange={(e) => setCustomInstitution(e.target.value)}
+                            className="flex-1 border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-1 bg-transparent text-slate-900 dark:text-white"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Course / Stream */}
