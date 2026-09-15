@@ -375,7 +375,7 @@ export default function StudentSurveyPage() {
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
                   <div>
                     <h2 className="text-base font-semibold text-slate-900 dark:text-white">
-                      2. Mobile Number (WhatsApp) <span className="text-red-500">*</span>
+                      2. Mobile Number <span className="text-red-500">*</span>
                     </h2>
                     <p className="text-xs text-slate-500 mt-0.5">Used to verify student identity and share feedback</p>
                   </div>
@@ -521,20 +521,6 @@ export default function StudentSurveyPage() {
                   </div>
                 </div>
 
-                {/* Email Address (Optional) */}
-                <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-slate-200 dark:border-zinc-800 p-6 space-y-3">
-                  <div>
-                    <h2 className="text-base font-semibold text-slate-900 dark:text-white">6. Email Address</h2>
-                    <p className="text-xs text-slate-500 mt-0.5">Optional — to receive course updates and roadmaps</p>
-                  </div>
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="name@example.com"
-                    className="w-full border-b border-slate-300 dark:border-zinc-700 focus:border-[#5746e3] outline-none text-sm py-2 bg-transparent text-slate-900 dark:text-white"
-                  />
-                </div>
               </div>
             )}
 
