@@ -44,12 +44,122 @@ const GROUPS_DATA = [
     shortName: 'CS & IT',
     target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
     tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
-    careerRoles: ['Machine Learning Engineer', 'Full Stack AI Developer', 'MLOps Engineer', 'AI Solutions Architect'],
-    tools: ['Python', 'PyTorch', 'FastAPI', 'Docker', 'React', 'MongoDB', 'LangChain', 'DuckDB'],
+    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Full Stack AI Developer', 'MLOps Specialist'],
+    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM', 'React'],
     pathways: [
       {
-        id: 'cs-p1',
+        id: 'cs-genai',
         eyebrow: 'PATHWAY 01',
+        title: 'Generative AI & LLM Systems Engineering',
+        duration: '3 Months',
+        level: 'Intermediate to Advanced',
+        handsOn: '100% Practical Labs',
+        price: 2999,
+        mrp: 9999,
+        syllabusLink: '/syllabi/cs-genai.pdf',
+        description: 'Master enterprise-grade LLM architectures, production RAG pipelines, vector databases (Qdrant), PEFT/LoRA fine-tuning, and high-throughput vLLM serving.',
+        roles: ['Generative AI Engineer', 'LLMOps Specialist', 'AI Application Developer', 'Prompt Systems Architect'],
+        tools: ['Python', 'PyTorch', 'Hugging Face', 'LangChain', 'LlamaIndex', 'Qdrant', 'vLLM', 'LoRA / PEFT'],
+        modules: [
+          {
+            num: '01',
+            title: 'LLM Foundations & Advanced Prompt Engineering',
+            topics: ['Transformer decoder mechanics, self-attention & context windows', 'Tokenization, temperature, top-p & sampling parameters', 'Structured outputs, JSON mode & Chain-of-Thought (CoT) prompting'],
+            practical: 'Build a production prompt-testing harness with schema validation in Pydantic.',
+          },
+          {
+            num: '02',
+            title: 'Embeddings & Vector Database Pipelines',
+            topics: ['Dense vs sparse embeddings (BGE, text-embedding-3, Cohere)', 'Vector similarity metrics & indexing (HNSW, IVFFlat) in Qdrant', 'Multi-source document chunking strategies & semantic boundaries'],
+            pipeline: ['Document Parser', 'Semantic Chunker', 'Embedding Model', 'Qdrant Vector DB', 'Context Retriever'],
+          },
+          {
+            num: '03',
+            title: 'Production RAG Architectures & Evaluation',
+            topics: ['Hybrid search (BM25 + Dense vector) & cross-encoder rerankers', 'Query transformation, hypothetical document embeddings (HyDE) & sub-queries', 'Automated evaluation pipelines with RAGAS, TruLens & hallucination detection'],
+            practical: 'Construct and benchmark an enterprise Q&A engine with automated faithfulness scoring.',
+          },
+          {
+            num: '04',
+            title: 'Multimodal Vision & Audio Systems',
+            topics: ['Vision-Language Models (VLM) with GPT-4o, Claude 3.5 & open-source Qwen2-VL', 'Structured OCR document understanding & chart parsing', 'Whisper audio transcription & real-time streaming speech pipelines'],
+          },
+          {
+            num: '05',
+            title: 'LLM Fine-Tuning with PEFT & QLoRA',
+            topics: ['Instruction tuning dataset preparation, formatting & synthetic data generation', 'Parameter-Efficient Fine-Tuning (PEFT), LoRA & 4-bit QLoRA with Unsloth', 'Training loss evaluation, over-fitting prevention & Hugging Face Hub deployment'],
+            practical: 'Fine-tune an open-source LLM on custom technical documentation and publish adapters.',
+          },
+          {
+            num: '06',
+            title: 'High-Throughput Model Serving & LLMOps',
+            topics: ['Optimized inference with vLLM, PagedAttention & Ollama', 'Streaming FastAPI endpoints & token throughput benchmarking', 'Safety guardrails (NeMo Guardrails, Llama-Guard), latency monitoring & cost tracking'],
+          },
+        ],
+        capstone: {
+          title: 'Enterprise Multi-Tenant Knowledge RAG & Domain Fine-Tuned Copilot',
+          flow: ['Document Ingestion', 'Hybrid Vector Index', 'Fine-Tuned Llama Adapter', 'vLLM Streaming API', 'Guardrails & Benchmarks'],
+          outputs: ['Production GitHub repo with modular clean code', 'Deployed high-throughput streaming FastAPI endpoint', 'Benchmark report comparing baseline vs domain-adapted RAG'],
+        },
+      },
+      {
+        id: 'cs-agentic',
+        eyebrow: 'PATHWAY 02',
+        title: 'Agentic AI & Autonomous Multi-Agent Systems',
+        duration: '3 Months',
+        level: 'Intermediate to Advanced',
+        handsOn: '100% Practical Labs',
+        price: 2999,
+        mrp: 9999,
+        syllabusLink: '/syllabi/cs-agentic.pdf',
+        description: 'Design and deploy autonomous AI agents with reasoning loops, dynamic tool calling, stateful graphs in LangGraph, multi-agent swarms with CrewAI, and Model Context Protocol (MCP).',
+        roles: ['Agentic AI Engineer', 'Autonomous Systems Developer', 'AI Automation Architect', 'Multi-Agent Systems Engineer'],
+        tools: ['LangGraph', 'CrewAI', 'AutoGen', 'MCP', 'Docker Sandboxes', 'LiteLLM', 'Pydantic', 'Phoenix'],
+        modules: [
+          {
+            num: '01',
+            title: 'Agentic Architectures & Reasoning Loops',
+            topics: ['ReAct (Reason + Act) loop architectures & Plan-and-Solve patterns', 'Native function/tool calling with OpenAI, Claude & Ollama models', 'Type-safe tool definitions, schema validation & error handling in Pydantic'],
+            practical: 'Build an autonomous terminal agent capable of inspecting files, running commands and self-correcting errors.',
+          },
+          {
+            num: '02',
+            title: 'Environment Execution & Secure Sandboxing',
+            topics: ['REST API orchestration tools & dynamic OpenAPI spec calling', 'SQL database querying agents with strict read-only security guards', 'Browser automation with Playwright & containerized Docker sandbox execution'],
+            pipeline: ['User Goal', 'Planner Agent', 'Tool Dispatcher', 'Docker Sandbox Runtime', 'Synthesizer Agent'],
+          },
+          {
+            num: '03',
+            title: 'Stateful Graph Workflows with LangGraph',
+            topics: ['Graph state machines (nodes, edges, conditional transitions & cycles)', 'Checkpointers, persistent threads & time-travel debugging', 'Human-in-the-loop approval breakpoints & state modification'],
+            practical: 'Construct a stateful code-refactoring agent pipeline with human gate approval.',
+          },
+          {
+            num: '04',
+            title: 'Multi-Agent Collaboration with CrewAI & AutoGen',
+            topics: ['Hierarchical vs collaborative agent swarms & inter-agent delegation', 'Role-playing specialized agents (Researcher, Architect, Coder, QA Tester)', 'Shared memory contexts, conflict resolution & task dependency trees'],
+          },
+          {
+            num: '05',
+            title: 'Model Context Protocol (MCP) & Long-Term Memory',
+            topics: ['Anthropic Model Context Protocol (MCP) architecture & standard servers', 'Building custom MCP servers to expose internal business systems to LLMs', 'Episodic vs semantic long-term memory using Mem0 & vector graph storage'],
+            practical: 'Develop a custom MCP server connecting external SQLite/Postgres databases to Claude Desktop & LangGraph.',
+          },
+          {
+            num: '06',
+            title: 'Agent Observability, Reliability & Production Deployment',
+            topics: ['Observability & tracing with Arize Phoenix, LangSmith & OpenTelemetry', 'Infinite loop mitigation, timeout fallbacks & rate limit budgeting', 'Production deployment with Docker, background task queues & streaming event websockets'],
+          },
+        ],
+        capstone: {
+          title: 'Autonomous Software Engineering & Research Swarm',
+          flow: ['Feature Request', 'Project Manager Agent', 'Research Agent', 'Coding Agent in Sandbox', 'QA & Test Agent', 'Git Commit'],
+          outputs: ['Complete multi-agent codebase with LangGraph architecture', 'Live interactive dashboard with human-in-the-loop review', 'End-to-end trace telemetry logs demonstrating autonomous resolution'],
+        },
+      },
+      {
+        id: 'cs-p1',
+        eyebrow: 'PATHWAY 03',
         title: 'Machine Learning Engineering in Production',
         duration: '3 Months',
         level: 'Intermediate',
@@ -107,7 +217,7 @@ const GROUPS_DATA = [
       },
       {
         id: 'cs-p2',
-        eyebrow: 'PATHWAY 02',
+        eyebrow: 'PATHWAY 04',
         title: 'Full Stack Web Development (AI-Powered)',
         duration: '3 Months',
         level: 'Beginner to Intermediate',
@@ -158,7 +268,7 @@ const GROUPS_DATA = [
       },
       {
         id: 'cs-p3',
-        eyebrow: 'PATHWAY 03',
+        eyebrow: 'PATHWAY 05',
         title: 'Complete Machine Learning + Full Stack',
         duration: '6 Months',
         level: 'Dual-Track Mastery',
@@ -664,7 +774,7 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState('group-1');
-  const [expandedPathway, setExpandedPathway] = useState('cs-p1');
+  const [expandedPathway, setExpandedPathway] = useState('cs-genai');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
