@@ -43,9 +43,9 @@ const GROUPS_DATA = [
     title: 'Computer Science & IT',
     shortName: 'CS & IT',
     target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
-    tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
-    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Full Stack AI Developer', 'MLOps Specialist'],
-    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM', 'React'],
+    tagline: 'Production AI engineering, autonomous agent systems, and MLOps deployment.',
+    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Autonomous Systems Engineer', 'MLOps Specialist'],
+    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM'],
     pathways: [
       {
         id: 'cs-genai',
@@ -480,113 +480,6 @@ const GROUPS_DATA = [
             'Model registry with full lineage and live drift detection dashboard with alerting',
             'Automated retraining trigger with CI/CD validation gate deployed on cloud (AWS SageMaker/Azure/GCP)',
           ],
-        },
-      },
-      {
-        id: 'cs-p2',
-        eyebrow: 'PATHWAY 04',
-        title: 'Full Stack Web Development (AI-Powered)',
-        duration: '3 Months',
-        level: 'Beginner to Intermediate',
-        handsOn: '100% Practical Labs',
-        price: 1499,
-        mrp: 6999,
-        syllabusLink: '/syllabi/cs-p2.pdf',
-        description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
-        roles: ['Full Stack Developer', 'React / Node Engineer', 'AI Web Integrator'],
-        tools: ['React', 'Node.js', 'Express', 'MongoDB', 'Vite', 'REST APIs', 'LLM APIs'],
-        modules: [
-          {
-            num: '01',
-            title: 'Web Foundations & JavaScript',
-            topics: ['HTML5, modern CSS, Flexbox & CSS Grid', 'Modern JavaScript (ES6+), DOM & Async/Await', 'Fetch API & consuming RESTful APIs'],
-          },
-          {
-            num: '02',
-            title: 'Frontend with React & Vite',
-            topics: ['Component architecture, JSX & custom hooks', 'State management, forms & validation', 'Client-side routing with React Router'],
-          },
-          {
-            num: '03',
-            title: 'Backend with Node.js & Express',
-            topics: ['REST API design & Express server setup', 'JWT authentication & role-based access', 'Centralized error handling & middleware'],
-          },
-          {
-            num: '04',
-            title: 'Databases with MongoDB & Mongoose',
-            topics: ['Schema modeling, CRUD & indexing', 'Aggregation pipelines for analytics', 'Database connection pooling & security'],
-          },
-          {
-            num: '05',
-            title: 'DevOps, CI/CD & Deployment',
-            topics: ['Git collaboration & PR review workflows', 'Docker containerization fundamentals', 'Cloud deployment to Vercel/Render/AWS'],
-          },
-          {
-            num: '06',
-            title: 'AI-Powered Web Applications',
-            topics: ['Connecting LLM APIs (OpenAI, Gemini)', 'RAG-based document Q&A features', 'Intelligent AI chat assistants & dashboards'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Intelligent Web Application',
-          flow: ['React UI', 'Express Backend', 'MongoDB', 'AI Integration', 'Cloud Deployment'],
-          outputs: ['Live full-stack app with authentication', 'Integrated LLM features', 'Clean GitHub documentation'],
-        },
-      },
-      {
-        id: 'cs-p3',
-        eyebrow: 'PATHWAY 05',
-        title: 'Complete Machine Learning + Full Stack',
-        duration: '6 Months',
-        level: 'Dual-Track Mastery',
-        handsOn: '100% Practical Labs',
-        price: 3999,
-        mrp: 14999,
-        syllabusLink: '/syllabi/cs-p3.pdf',
-        description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
-        roles: ['Senior AI Engineer', 'Lead Full Stack Architect', 'AI Systems Specialist'],
-        tools: ['Python', 'PyTorch', 'FastAPI', 'React', 'Node.js', 'MongoDB', 'Docker', 'CI/CD'],
-        modules: [
-          {
-            num: '01',
-            title: 'Python for AI & Clean Engineering',
-            topics: ['Python fundamentals, OOP & testing', 'Data structures & modular architecture', 'Git version control workflows'],
-          },
-          {
-            num: '02',
-            title: 'Data Engineering & Scalable Storage',
-            topics: ['NumPy, Pandas & SQL databases', 'ETL pipelines & DuckDB analytics', 'Kafka streaming concepts'],
-          },
-          {
-            num: '03',
-            title: 'Machine Learning & Deep Learning',
-            topics: ['Supervised & unsupervised models', 'Neural networks, CNNs & Transformers', 'Model optimization & metrics'],
-          },
-          {
-            num: '04',
-            title: 'Frontend UI with React & Vite',
-            topics: ['React hooks, state & routing', 'Responsive UI & form workflows', 'Production bundle optimization'],
-          },
-          {
-            num: '05',
-            title: 'Backend Systems & MongoDB',
-            topics: ['Node.js/Express REST APIs', 'MongoDB data modeling & indexing', 'JWT authentication & security'],
-          },
-          {
-            num: '06',
-            title: 'Generative AI & RAG Systems',
-            topics: ['Vector databases & embeddings', 'Semantic search & RAG pipelines', 'AI evaluation & Agent workflows'],
-          },
-          {
-            num: '07',
-            title: 'MLOps, FastAPI & Cloud Serving',
-            topics: ['FastAPI model serving endpoints', 'Docker containerization & CI/CD', 'Cloud deployment & drift monitoring'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Production AI Platform',
-          flow: ['Data Pipeline', 'ML Model', 'FastAPI Backend', 'React UI', 'Cloud Deployment'],
-          outputs: ['End-to-end production AI app', 'Dual certification credential', 'Live API with Swagger docs'],
         },
       },
       {
@@ -1427,7 +1320,7 @@ export default function ProgramsPage() {
               {[
                 { id: 'ALL', label: 'All Tracks' },
                 { id: '3M', label: '3 Months' },
-                { id: '6M', label: '6 Months Dual' },
+                { id: '6M', label: '6 Months' },
                 { id: 'WEEKEND', label: 'Weekend Track' },
               ].map((pill) => (
                 <button
@@ -1615,7 +1508,7 @@ export default function ProgramsPage() {
               { num: '01', title: 'Foundational Baseline', desc: 'Core academic logic, environment setup, and clean code patterns.' },
               { num: '02', title: 'Applied AI Pipelines', desc: 'Working with production libraries, data ingestion, and cloud APIs.' },
               { num: '03', title: 'Cluster Container Labs', desc: 'Docker containerization, GPU inference testing, and local MLOps.' },
-              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end full stack system with documentation.' },
+              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end production AI system with documentation.' },
               { num: '05', title: 'Career & Referrals', desc: 'QR-verified dual certification, portfolio review, and hiring referrals.' },
             ].map((step, idx) => (
               <div key={step.num} className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 space-y-2">
