@@ -472,17 +472,6 @@ export default function Home() {
                   fetchPriority="high"
                   decoding="async"
                 />
-
-                {/* Floating Metrics Badge Overlay */}
-                <div className="absolute bottom-3 left-3 right-3 p-3 bg-zinc-950/85 backdrop-blur-xs rounded-xl border border-white/10 text-white flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block">Verified Deployments</span>
-                    <span className="text-xs font-bold">5,000+ Enrolled Students</span>
-                  </div>
-                  <div className="px-2 py-0.5 rounded bg-white/10 text-white text-[10px] font-mono">
-                    25+ Labs
-                  </div>
-                </div>
               </div>
             </div>
             
