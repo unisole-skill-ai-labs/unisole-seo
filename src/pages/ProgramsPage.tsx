@@ -1099,8 +1099,8 @@ export default function ProgramsPage() {
 
         return {
           ...p,
-          title: dbCourse.title || p.title,
-          description: dbCourse.shortDescription || p.description,
+          title: p.title || dbCourse.title,
+          description: p.description || dbCourse.shortDescription,
           price: dbPrice !== null ? dbPrice : p.price,
           mrp: dbMrp !== null ? dbMrp : p.mrp,
         };
