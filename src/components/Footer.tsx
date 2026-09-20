@@ -90,7 +90,7 @@ export default function Footer() {
           <h4 className="text-xs font-mono text-zinc-300 uppercase tracking-wider">Pathways</h4>
           <ul className="space-y-2 text-xs text-zinc-400">
             <li><Link to="/programs" className="hover:text-white transition-colors">ML Engineering & MLOps</Link></li>
-            <li><Link to="/programs" className="hover:text-white transition-colors">AI-Powered Full Stack</Link></li>
+            <li><Link to="/programs" className="hover:text-white transition-colors">AI Agent Engineering</Link></li>
             <li><Link to="/programs" className="hover:text-white transition-colors">Scientific Machine Learning</Link></li>
             <li><Link to="/programs" className="hover:text-white transition-colors">AI Business & Incubation</Link></li>
           </ul>

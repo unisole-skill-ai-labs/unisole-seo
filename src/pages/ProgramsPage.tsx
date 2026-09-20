@@ -43,9 +43,9 @@ const GROUPS_DATA = [
     title: 'Computer Science & IT',
     shortName: 'CS & IT',
     target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
-    tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
-    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Full Stack AI Developer', 'MLOps Specialist'],
-    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM', 'React'],
+    tagline: 'Production AI engineering, autonomous agent systems, and MLOps deployment.',
+    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Autonomous Systems Engineer', 'MLOps Specialist'],
+    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM'],
     pathways: [
       {
         id: 'cs-genai',
@@ -483,113 +483,6 @@ const GROUPS_DATA = [
         },
       },
       {
-        id: 'cs-p2',
-        eyebrow: 'PATHWAY 04',
-        title: 'Full Stack Web Development (AI-Powered)',
-        duration: '3 Months',
-        level: 'Beginner to Intermediate',
-        handsOn: '100% Practical Labs',
-        price: 1499,
-        mrp: 6999,
-        syllabusLink: '/syllabi/cs-p2.pdf',
-        description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
-        roles: ['Full Stack Developer', 'React / Node Engineer', 'AI Web Integrator'],
-        tools: ['React', 'Node.js', 'Express', 'MongoDB', 'Vite', 'REST APIs', 'LLM APIs'],
-        modules: [
-          {
-            num: '01',
-            title: 'Web Foundations & JavaScript',
-            topics: ['HTML5, modern CSS, Flexbox & CSS Grid', 'Modern JavaScript (ES6+), DOM & Async/Await', 'Fetch API & consuming RESTful APIs'],
-          },
-          {
-            num: '02',
-            title: 'Frontend with React & Vite',
-            topics: ['Component architecture, JSX & custom hooks', 'State management, forms & validation', 'Client-side routing with React Router'],
-          },
-          {
-            num: '03',
-            title: 'Backend with Node.js & Express',
-            topics: ['REST API design & Express server setup', 'JWT authentication & role-based access', 'Centralized error handling & middleware'],
-          },
-          {
-            num: '04',
-            title: 'Databases with MongoDB & Mongoose',
-            topics: ['Schema modeling, CRUD & indexing', 'Aggregation pipelines for analytics', 'Database connection pooling & security'],
-          },
-          {
-            num: '05',
-            title: 'DevOps, CI/CD & Deployment',
-            topics: ['Git collaboration & PR review workflows', 'Docker containerization fundamentals', 'Cloud deployment to Vercel/Render/AWS'],
-          },
-          {
-            num: '06',
-            title: 'AI-Powered Web Applications',
-            topics: ['Connecting LLM APIs (OpenAI, Gemini)', 'RAG-based document Q&A features', 'Intelligent AI chat assistants & dashboards'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Intelligent Web Application',
-          flow: ['React UI', 'Express Backend', 'MongoDB', 'AI Integration', 'Cloud Deployment'],
-          outputs: ['Live full-stack app with authentication', 'Integrated LLM features', 'Clean GitHub documentation'],
-        },
-      },
-      {
-        id: 'cs-p3',
-        eyebrow: 'PATHWAY 05',
-        title: 'Complete Machine Learning + Full Stack',
-        duration: '6 Months',
-        level: 'Dual-Track Mastery',
-        handsOn: '100% Practical Labs',
-        price: 3999,
-        mrp: 14999,
-        syllabusLink: '/syllabi/cs-p3.pdf',
-        description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
-        roles: ['Senior AI Engineer', 'Lead Full Stack Architect', 'AI Systems Specialist'],
-        tools: ['Python', 'PyTorch', 'FastAPI', 'React', 'Node.js', 'MongoDB', 'Docker', 'CI/CD'],
-        modules: [
-          {
-            num: '01',
-            title: 'Python for AI & Clean Engineering',
-            topics: ['Python fundamentals, OOP & testing', 'Data structures & modular architecture', 'Git version control workflows'],
-          },
-          {
-            num: '02',
-            title: 'Data Engineering & Scalable Storage',
-            topics: ['NumPy, Pandas & SQL databases', 'ETL pipelines & DuckDB analytics', 'Kafka streaming concepts'],
-          },
-          {
-            num: '03',
-            title: 'Machine Learning & Deep Learning',
-            topics: ['Supervised & unsupervised models', 'Neural networks, CNNs & Transformers', 'Model optimization & metrics'],
-          },
-          {
-            num: '04',
-            title: 'Frontend UI with React & Vite',
-            topics: ['React hooks, state & routing', 'Responsive UI & form workflows', 'Production bundle optimization'],
-          },
-          {
-            num: '05',
-            title: 'Backend Systems & MongoDB',
-            topics: ['Node.js/Express REST APIs', 'MongoDB data modeling & indexing', 'JWT authentication & security'],
-          },
-          {
-            num: '06',
-            title: 'Generative AI & RAG Systems',
-            topics: ['Vector databases & embeddings', 'Semantic search & RAG pipelines', 'AI evaluation & Agent workflows'],
-          },
-          {
-            num: '07',
-            title: 'MLOps, FastAPI & Cloud Serving',
-            topics: ['FastAPI model serving endpoints', 'Docker containerization & CI/CD', 'Cloud deployment & drift monitoring'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Production AI Platform',
-          flow: ['Data Pipeline', 'ML Model', 'FastAPI Backend', 'React UI', 'Cloud Deployment'],
-          outputs: ['End-to-end production AI app', 'Dual certification credential', 'Live API with Swagger docs'],
-        },
-      },
-      {
         id: 'cs-common',
         eyebrow: 'WEEKEND INCUBATOR TRACK',
         title: 'AI Entrepreneurship & Innovation',
@@ -738,7 +631,7 @@ const GROUPS_DATA = [
       {
         id: 'sci-p1',
         eyebrow: 'PATHWAY 01',
-        title: 'Scientific AI & Machine Learning Professional Program',
+        title: 'Scientific Machine Learning for Basic Sciences (BSc Physics | BSc Maths)',
         duration: '6 Months',
         level: 'Undergraduate → Early Professional',
         handsOn: '100% Practical Labs',
@@ -1182,7 +1075,6 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState('group-1');
-  const [expandedPathway, setExpandedPathway] = useState('cs-genai');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -1334,7 +1226,6 @@ export default function ProgramsPage() {
                   }`}
                   onClick={() => {
                     setActiveGroup(g.id);
-                    setExpandedPathway(g.pathways[0].id);
                   }}
                 >
                   <div className="flex items-center justify-between w-full mb-2">
@@ -1429,7 +1320,7 @@ export default function ProgramsPage() {
               {[
                 { id: 'ALL', label: 'All Tracks' },
                 { id: '3M', label: '3 Months' },
-                { id: '6M', label: '6 Months Dual' },
+                { id: '6M', label: '6 Months' },
                 { id: 'WEEKEND', label: 'Weekend Track' },
               ].map((pill) => (
                 <button
@@ -1447,211 +1338,97 @@ export default function ProgramsPage() {
             </div>
           </div>
 
-          {/* ================= PATHWAY CARDS ACCORDION ================= */}
+          {/* ================= PATHWAY CARDS ================= */}
           <div className="space-y-4">
             {filteredPathways.length > 0 ? (
-              filteredPathways.map((pathway) => {
-                const isOpen = expandedPathway === pathway.id;
-                return (
-                  <article
-                    key={pathway.id}
-                    className={`minimal-card overflow-hidden transition-all duration-150 ${
-                      isOpen ? 'border-zinc-400 dark:border-zinc-600' : ''
-                    }`}
-                    id={pathway.id}
-                  >
-                    {/* Card Header Header Bar */}
-                    <header
-                      className="p-5 sm:p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
-                      onClick={() => setExpandedPathway(isOpen ? '' : pathway.id)}
-                      tabIndex={0}
-                      role="button"
-                      aria-expanded={isOpen}
-                    >
-                      <div className="space-y-2 flex-grow">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="mono-tag text-zinc-900 dark:text-white font-bold">
-                            {pathway.eyebrow}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <Clock className="w-3 h-3 text-zinc-400" />
-                            {pathway.duration}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <TrendingUp className="w-3 h-3 text-zinc-400" />
-                            {pathway.level}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
-                            <Zap className="w-3 h-3" />
-                            {pathway.handsOn}
-                          </span>
-                          {pathway.price && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
-                              <span>₹{pathway.price.toLocaleString('en-IN')}</span>
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white leading-tight">
-                          {pathway.title}
-                        </h3>
-
-                        <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
-                          {pathway.description}
-                        </p>
-
-                        {/* Tool tags preview */}
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          {pathway.tools.map((t) => (
-                            <span key={t} className="px-1.5 py-0.5 text-[9px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+              filteredPathways.map((pathway) => (
+                <article
+                  key={pathway.id}
+                  className="minimal-card p-5 sm:p-6 overflow-hidden transition-all duration-150 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs"
+                  id={pathway.id}
+                >
+                  <div className="space-y-4">
+                    {/* Meta tags */}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="mono-tag text-zinc-900 dark:text-white font-bold">
+                          {pathway.eyebrow}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <Clock className="w-3 h-3 text-zinc-400" />
+                          {pathway.duration}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <TrendingUp className="w-3 h-3 text-zinc-400" />
+                          {pathway.level}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                          <Zap className="w-3 h-3" />
+                          {pathway.handsOn}
+                        </span>
                       </div>
 
-                      {/* Right Action Cluster: Enroll Button + Chevron */}
-                      <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+                      {pathway.price && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
+                          <span>₹{pathway.price.toLocaleString('en-IN')}</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="space-y-1.5">
+                      <h3 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white leading-tight">
+                        {pathway.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+                        {pathway.description}
+                      </p>
+                    </div>
+
+                    {/* Tool tags preview */}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {pathway.tools.map((t) => (
+                        <span key={t} className="px-2 py-0.5 text-[10px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Action Bar: View Full Syllabus + Direct Download + Enroll */}
+                    <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEnrollClick(pathway);
-                          }}
+                          className="inline-flex items-center justify-center font-semibold px-4 py-2 rounded-xl border border-zinc-200 hover:border-zinc-300 bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs transition-all duration-150 active:scale-[0.98] gap-2 min-h-[38px] cursor-pointer shadow-2xs"
+                          onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
                         >
-                          <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <BookOpen className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
+                          <span>View Full Syllabus ({pathway.duration || '12 Weeks'})</span>
                         </button>
 
-                        <div className={`p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white' : ''}`}>
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
+                        <a
+                          href={`/syllabi/${pathway.id}.pdf`}
+                          download={`Unisole_${pathway.title.replace(/[^a-zA-Z0-9]/g, '_')}_Syllabus.pdf`}
+                          className="inline-flex items-center justify-center font-medium px-3 py-2 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 text-xs transition-colors gap-1.5 min-h-[38px]"
+                          title="Direct PDF Download"
+                        >
+                          <Download className="w-3.5 h-3.5 text-zinc-400" />
+                          <span className="hidden sm:inline">Download PDF</span>
+                        </a>
                       </div>
-                    </header>
 
-                    {/* Expanded Curriculum & Capstone Body */}
-                    {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-6 animate-in fade-in duration-150">
-                        
-                        {/* Modules Breakdown Grid */}
-                        <div className="space-y-3 pt-2">
-                          <h4 className="text-xs font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                            <BookOpen className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>Curriculum Breakdown ({pathway.modules.length} Modules)</span>
-                          </h4>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {pathway.modules.map((mod) => (
-                              <div key={mod.num} className="border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-4 space-y-2.5">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono font-bold text-zinc-700 bg-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 w-5 h-5 rounded flex items-center justify-center">
-                                    {mod.num}
-                                  </span>
-                                  <h5 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white leading-tight">
-                                    {mod.title}
-                                  </h5>
-                                </div>
-                                
-                                <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-                                  {mod.topics.map((t, idx) => (
-                                    <li key={idx} className="flex items-start gap-1.5">
-                                      <Check className="w-3 h-3 text-zinc-900 dark:text-zinc-100 mt-0.5 flex-shrink-0" />
-                                      <span className="leading-normal">{t}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-
-                                {mod.practical && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Lab Task:</span>
-                                    <span className="text-zinc-500 dark:text-zinc-400 mt-0.5 block italic text-[11px]">{mod.practical}</span>
-                                  </div>
-                                )}
-
-                                {mod.pipeline && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Architecture Pipeline:</span>
-                                    <div className="flex flex-wrap items-center gap-1 mt-1">
-                                      {mod.pipeline.map((step, sIdx) => (
-                                        <span key={sIdx} className="px-1.5 py-0.2 text-[9px] font-mono bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">
-                                          {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Capstone Project Deliverable Section */}
-                        {pathway.capstone && (
-                          <div className="border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-5 space-y-3">
-                            <div className="flex flex-wrap items-center justify-between border-b border-zinc-200/80 dark:border-zinc-800 pb-2.5 gap-2">
-                              <span className="px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 rounded">
-                                Capstone Defense
-                              </span>
-                              <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white">
-                                {pathway.capstone.title}
-                              </h4>
-                            </div>
-
-                            {pathway.capstone.flow && (
-                              <div className="space-y-1.5">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Execution Pipeline:</span>
-                                <div className="flex flex-wrap items-center gap-2">
-                                  {pathway.capstone.flow.map((st, i) => (
-                                    <div key={st} className="flex items-center gap-1.5 text-xs">
-                                      <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-zinc-200 dark:bg-zinc-800 font-mono text-[9px] font-bold text-zinc-700 dark:text-zinc-300">
-                                        {i + 1}
-                                      </span>
-                                      <span className="font-medium text-zinc-700 dark:text-zinc-300">{st}</span>
-                                      {i < pathway.capstone.flow.length - 1 && <span className="text-zinc-400">→</span>}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {pathway.capstone.outputs && (
-                              <div className="space-y-1.5 pt-1">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Employer-Ready Deliverables:</span>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                  {pathway.capstone.outputs.map((out, oIdx) => (
-                                    <div key={oIdx} className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                                      <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 flex-shrink-0" />
-                                      <span className="font-medium">{out}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Action buttons & Razorpay link */}
-                        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-                          <button
-                            type="button"
-                            className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer shadow-2xs hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                            onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
-                          >
-                            <Download className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>View Syllabus & Curriculum</span>
-                          </button>
-
-                          <span className="text-[11px] text-zinc-400 font-mono">
-                            Instant Razorpay Confirmation • Limited Batch Size
-                          </span>
-                        </div>
-
-                      </div>
-                    )}
-                  </article>
-                );
-              })
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
+                        onClick={() => handleEnrollClick(pathway)}
+                      >
+                        <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
             ) : (
               <div className="minimal-card p-10 text-center space-y-2">
                 <Search className="w-6 h-6 text-zinc-400 mx-auto" />
@@ -1731,7 +1508,7 @@ export default function ProgramsPage() {
               { num: '01', title: 'Foundational Baseline', desc: 'Core academic logic, environment setup, and clean code patterns.' },
               { num: '02', title: 'Applied AI Pipelines', desc: 'Working with production libraries, data ingestion, and cloud APIs.' },
               { num: '03', title: 'Cluster Container Labs', desc: 'Docker containerization, GPU inference testing, and local MLOps.' },
-              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end full stack system with documentation.' },
+              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end production AI system with documentation.' },
               { num: '05', title: 'Career & Referrals', desc: 'QR-verified dual certification, portfolio review, and hiring referrals.' },
             ].map((step, idx) => (
               <div key={step.num} className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 space-y-2">
