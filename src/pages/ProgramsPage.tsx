@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SyllabusDrawer from '../components/SyllabusDrawer';
 import PathwayEnrollModal from '../components/PathwayEnrollModal';
+import PathwayCurriculumSection from '../components/PathwayCurriculumSection';
 import { useAuthModal } from '../context/AuthModalContext';
 import { isAuthenticated } from '../utils/auth';
 import { useGetPublicCoursesQuery } from '../store/apiSlice';
@@ -1534,102 +1535,10 @@ export default function ProgramsPage() {
                     {isOpen && (
                       <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-6 animate-in fade-in duration-150">
                         
-                        {/* Modules Breakdown Grid */}
-                        <div className="space-y-3 pt-2">
-                          <h4 className="text-xs font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                            <BookOpen className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>Curriculum Breakdown ({pathway.modules.length} Modules)</span>
-                          </h4>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {pathway.modules.map((mod) => (
-                              <div key={mod.num} className="border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-4 space-y-2.5">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono font-bold text-zinc-700 bg-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 w-5 h-5 rounded flex items-center justify-center">
-                                    {mod.num}
-                                  </span>
-                                  <h5 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white leading-tight">
-                                    {mod.title}
-                                  </h5>
-                                </div>
-                                
-                                <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-                                  {mod.topics.map((t, idx) => (
-                                    <li key={idx} className="flex items-start gap-1.5">
-                                      <Check className="w-3 h-3 text-zinc-900 dark:text-zinc-100 mt-0.5 flex-shrink-0" />
-                                      <span className="leading-normal">{t}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-
-                                {mod.practical && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Lab Task:</span>
-                                    <span className="text-zinc-500 dark:text-zinc-400 mt-0.5 block italic text-[11px]">{mod.practical}</span>
-                                  </div>
-                                )}
-
-                                {mod.pipeline && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Architecture Pipeline:</span>
-                                    <div className="flex flex-wrap items-center gap-1 mt-1">
-                                      {mod.pipeline.map((step, sIdx) => (
-                                        <span key={sIdx} className="px-1.5 py-0.2 text-[9px] font-mono bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">
-                                          {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Capstone Project Deliverable Section */}
-                        {pathway.capstone && (
-                          <div className="border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-5 space-y-3">
-                            <div className="flex flex-wrap items-center justify-between border-b border-zinc-200/80 dark:border-zinc-800 pb-2.5 gap-2">
-                              <span className="px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 rounded">
-                                Capstone Defense
-                              </span>
-                              <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white">
-                                {pathway.capstone.title}
-                              </h4>
-                            </div>
-
-                            {pathway.capstone.flow && (
-                              <div className="space-y-1.5">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Execution Pipeline:</span>
-                                <div className="flex flex-wrap items-center gap-2">
-                                  {pathway.capstone.flow.map((st, i) => (
-                                    <div key={st} className="flex items-center gap-1.5 text-xs">
-                                      <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-zinc-200 dark:bg-zinc-800 font-mono text-[9px] font-bold text-zinc-700 dark:text-zinc-300">
-                                        {i + 1}
-                                      </span>
-                                      <span className="font-medium text-zinc-700 dark:text-zinc-300">{st}</span>
-                                      {i < pathway.capstone.flow.length - 1 && <span className="text-zinc-400">→</span>}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {pathway.capstone.outputs && (
-                              <div className="space-y-1.5 pt-1">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Employer-Ready Deliverables:</span>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                  {pathway.capstone.outputs.map((out, oIdx) => (
-                                    <div key={oIdx} className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                                      <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 flex-shrink-0" />
-                                      <span className="font-medium">{out}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                        <PathwayCurriculumSection
+                          pathway={pathway}
+                          onSyllabusClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
+                        />
 
                         {/* Action buttons & Razorpay link */}
                         <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
