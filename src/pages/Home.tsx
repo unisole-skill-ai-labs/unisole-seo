@@ -472,6 +472,12 @@ export default function Home() {
                   fetchPriority="high"
                   decoding="async"
                 />
+
+                {/* Floating Enrolled Students Badge */}
+                <div className="absolute bottom-3 left-3 right-3 p-2.5 sm:p-3 bg-zinc-950/85 backdrop-blur-xs rounded-xl border border-white/10 text-white flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                  <span className="text-xs font-bold tracking-tight">5,000+ Enrolled Students</span>
+                </div>
               </div>
             </div>
             
