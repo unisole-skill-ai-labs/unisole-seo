@@ -3,7 +3,6 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import SyllabusDrawer from '../components/SyllabusDrawer';
 import PathwayEnrollModal from '../components/PathwayEnrollModal';
-import PathwayCurriculumSection from '../components/PathwayCurriculumSection';
 import { useAuthModal } from '../context/AuthModalContext';
 import { isAuthenticated } from '../utils/auth';
 import { useGetPublicCoursesQuery } from '../store/apiSlice';
@@ -1183,7 +1182,6 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState('group-1');
-  const [expandedPathway, setExpandedPathway] = useState('cs-genai');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -1335,7 +1333,6 @@ export default function ProgramsPage() {
                   }`}
                   onClick={() => {
                     setActiveGroup(g.id);
-                    setExpandedPathway(g.pathways[0].id);
                   }}
                 >
                   <div className="flex items-center justify-between w-full mb-2">
@@ -1448,119 +1445,97 @@ export default function ProgramsPage() {
             </div>
           </div>
 
-          {/* ================= PATHWAY CARDS ACCORDION ================= */}
+          {/* ================= PATHWAY CARDS ================= */}
           <div className="space-y-4">
             {filteredPathways.length > 0 ? (
-              filteredPathways.map((pathway) => {
-                const isOpen = expandedPathway === pathway.id;
-                return (
-                  <article
-                    key={pathway.id}
-                    className={`minimal-card overflow-hidden transition-all duration-150 ${
-                      isOpen ? 'border-zinc-400 dark:border-zinc-600' : ''
-                    }`}
-                    id={pathway.id}
-                  >
-                    {/* Card Header Header Bar */}
-                    <header
-                      className="p-5 sm:p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
-                      onClick={() => setExpandedPathway(isOpen ? '' : pathway.id)}
-                      tabIndex={0}
-                      role="button"
-                      aria-expanded={isOpen}
-                    >
-                      <div className="space-y-2 flex-grow">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="mono-tag text-zinc-900 dark:text-white font-bold">
-                            {pathway.eyebrow}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <Clock className="w-3 h-3 text-zinc-400" />
-                            {pathway.duration}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <TrendingUp className="w-3 h-3 text-zinc-400" />
-                            {pathway.level}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
-                            <Zap className="w-3 h-3" />
-                            {pathway.handsOn}
-                          </span>
-                          {pathway.price && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
-                              <span>₹{pathway.price.toLocaleString('en-IN')}</span>
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white leading-tight">
-                          {pathway.title}
-                        </h3>
-
-                        <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
-                          {pathway.description}
-                        </p>
-
-                        {/* Tool tags preview */}
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          {pathway.tools.map((t) => (
-                            <span key={t} className="px-1.5 py-0.5 text-[9px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+              filteredPathways.map((pathway) => (
+                <article
+                  key={pathway.id}
+                  className="minimal-card p-5 sm:p-6 overflow-hidden transition-all duration-150 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs"
+                  id={pathway.id}
+                >
+                  <div className="space-y-4">
+                    {/* Meta tags */}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="mono-tag text-zinc-900 dark:text-white font-bold">
+                          {pathway.eyebrow}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <Clock className="w-3 h-3 text-zinc-400" />
+                          {pathway.duration}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <TrendingUp className="w-3 h-3 text-zinc-400" />
+                          {pathway.level}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                          <Zap className="w-3 h-3" />
+                          {pathway.handsOn}
+                        </span>
                       </div>
 
-                      {/* Right Action Cluster: Enroll Button + Chevron */}
-                      <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+                      {pathway.price && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
+                          <span>₹{pathway.price.toLocaleString('en-IN')}</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="space-y-1.5">
+                      <h3 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white leading-tight">
+                        {pathway.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+                        {pathway.description}
+                      </p>
+                    </div>
+
+                    {/* Tool tags preview */}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {pathway.tools.map((t) => (
+                        <span key={t} className="px-2 py-0.5 text-[10px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Action Bar: View Full Syllabus + Direct Download + Enroll */}
+                    <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEnrollClick(pathway);
-                          }}
+                          className="inline-flex items-center justify-center font-semibold px-4 py-2 rounded-xl border border-zinc-200 hover:border-zinc-300 bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs transition-all duration-150 active:scale-[0.98] gap-2 min-h-[38px] cursor-pointer shadow-2xs"
+                          onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
                         >
-                          <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <BookOpen className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
+                          <span>View Full Syllabus ({pathway.duration || '12 Weeks'})</span>
                         </button>
 
-                        <div className={`p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white' : ''}`}>
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
+                        <a
+                          href={`/syllabi/${pathway.id}.pdf`}
+                          download={`Unisole_${pathway.title.replace(/[^a-zA-Z0-9]/g, '_')}_Syllabus.pdf`}
+                          className="inline-flex items-center justify-center font-medium px-3 py-2 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 text-xs transition-colors gap-1.5 min-h-[38px]"
+                          title="Direct PDF Download"
+                        >
+                          <Download className="w-3.5 h-3.5 text-zinc-400" />
+                          <span className="hidden sm:inline">Download PDF</span>
+                        </a>
                       </div>
-                    </header>
 
-                    {/* Expanded Curriculum & Capstone Body */}
-                    {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-6 animate-in fade-in duration-150">
-                        
-                        <PathwayCurriculumSection
-                          pathway={pathway}
-                          onSyllabusClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
-                        />
-
-                        {/* Action buttons & Razorpay link */}
-                        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-                          <button
-                            type="button"
-                            className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer shadow-2xs hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                            onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
-                          >
-                            <Download className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>View Syllabus & Curriculum</span>
-                          </button>
-
-                          <span className="text-[11px] text-zinc-400 font-mono">
-                            Instant Razorpay Confirmation • Limited Batch Size
-                          </span>
-                        </div>
-
-                      </div>
-                    )}
-                  </article>
-                );
-              })
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
+                        onClick={() => handleEnrollClick(pathway)}
+                      >
+                        <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
             ) : (
               <div className="minimal-card p-10 text-center space-y-2">
                 <Search className="w-6 h-6 text-zinc-400 mx-auto" />
