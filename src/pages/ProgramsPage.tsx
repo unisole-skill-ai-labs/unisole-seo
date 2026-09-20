@@ -631,7 +631,7 @@ const GROUPS_DATA = [
       {
         id: 'sci-p1',
         eyebrow: 'PATHWAY 01',
-        title: 'Scientific AI & Machine Learning Professional Program',
+        title: 'Scientific Machine Learning for Basic Sciences (BSc Physics | BSc Maths)',
         duration: '6 Months',
         level: 'Undergraduate → Early Professional',
         handsOn: '100% Practical Labs',
