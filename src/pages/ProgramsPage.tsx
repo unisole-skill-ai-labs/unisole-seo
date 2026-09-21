@@ -32,8 +32,7 @@ import {
   Zap,
   HelpCircle,
   PhoneCall,
-  X,
-  Briefcase
+  X
 } from 'lucide-react';
 
 const GROUPS_DATA = [
@@ -1312,22 +1311,33 @@ export default function ProgramsPage() {
           ) : (
             /* STAGE 2: Group is selected - show switcher tabs, group overview, filters, and pathway cards */
             <div className="space-y-6">
-              {/* Back navigation & Group Switcher Tabs */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setActiveGroup(null);
-                    setSearchQuery('');
-                    setSelectedDuration('ALL');
-                    const el = document.getElementById('stream-catalog');
-                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                  className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs font-semibold transition-colors cursor-pointer w-fit shadow-2xs"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" />
-                  <span>All Disciplines</span>
-                </button>
+              {/* Top Navigation & Selected Discipline Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200/80 dark:border-zinc-800/80 pb-4">
+                <div className="flex flex-wrap items-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveGroup(null);
+                      setSearchQuery('');
+                      setSelectedDuration('ALL');
+                      const el = document.getElementById('stream-catalog');
+                      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800 text-xs font-semibold transition-colors cursor-pointer shadow-2xs"
+                  >
+                    <ArrowLeft className="w-3.5 h-3.5" />
+                    <span>All Disciplines</span>
+                  </button>
+
+                  <div className="h-4 w-[1px] bg-zinc-200 dark:bg-zinc-800 hidden sm:block" />
+
+                  <h2 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white">
+                    {currentGroupData.title}
+                  </h2>
+                  <span className="text-xs font-mono text-zinc-500">
+                    ({filteredPathways.length} {filteredPathways.length === 1 ? 'Pathway' : 'Pathways'})
+                  </span>
+                </div>
 
                 <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
                   {mergedGroupsData.map((g) => {
@@ -1349,54 +1359,6 @@ export default function ProgramsPage() {
                       </button>
                     );
                   })}
-                </div>
-              </div>
-
-              {/* Stream Overview Card */}
-              <div className="minimal-card p-6 sm:p-8 space-y-4">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-zinc-100 dark:border-zinc-800 pb-4">
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="mono-tag text-zinc-700 dark:text-zinc-300">
-                        {currentGroupData.badge}
-                      </span>
-                      <span className="text-xs text-zinc-500 font-medium">
-                        <strong>Audience:</strong> {currentGroupData.target}
-                      </span>
-                    </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white tracking-tight">
-                      {currentGroupData.title}
-                    </h2>
-                    <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 max-w-2xl leading-relaxed mt-1">
-                      {currentGroupData.tagline}
-                    </p>
-                  </div>
-
-                  {/* Tools Mastered Chips */}
-                  <div className="space-y-1.5 md:text-right">
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Core Tech Stack:</span>
-                    <div className="flex flex-wrap md:justify-end gap-1.5">
-                      {currentGroupData.tools.map((tool) => (
-                        <span key={tool} className="px-2 py-0.5 rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-mono text-[10px]">
-                          {tool}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Prospective Career Roles */}
-                <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
-                  <span className="text-zinc-400 font-mono text-[10px] uppercase tracking-wider flex items-center gap-1">
-                    <Briefcase className="w-3 h-3" />
-                    Career Roles:
-                  </span>
-                  {currentGroupData.careerRoles.map((role) => (
-                    <span key={role} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium">
-                      <Check className="w-2.5 h-2.5 text-zinc-400" />
-                      {role}
-                    </span>
-                  ))}
                 </div>
               </div>
 
