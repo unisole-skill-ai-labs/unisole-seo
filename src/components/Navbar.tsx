@@ -120,11 +120,15 @@ export default function Navbar() {
                 setMenuOpen(false);
               }}
             >
-              <div className="w-7 h-7 rounded-lg bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 flex items-center justify-center font-black text-xs shadow-xs group-hover:scale-105 transition-transform">
-                U
+              <div className="w-8 h-8 rounded-lg bg-black border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
+                <img
+                  src="/images/unisole-logo.png"
+                  alt="Unisole Skill AI Labs"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <span className="font-extrabold tracking-tight">
-                Unisole <span className="text-zinc-500 dark:text-zinc-400 font-medium">AI Labs</span>
+                Unisole <span className="text-zinc-500 dark:text-zinc-400 font-medium">Skill AI Labs</span>
               </span>
             </Link>
 
@@ -328,10 +332,14 @@ export default function Navbar() {
               {/* Header Close */}
               <div className="flex items-center justify-between pb-3 border-b border-zinc-100 dark:border-zinc-800">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-950 flex items-center justify-center font-bold text-xs">
-                    U
+                  <div className="w-7 h-7 rounded-md bg-black border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-center justify-center shrink-0">
+                    <img
+                      src="/images/unisole-logo.png"
+                      alt="Unisole Skill AI Labs"
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <span className="font-bold text-xs text-zinc-900 dark:text-white">Navigation</span>
+                  <span className="font-bold text-xs text-zinc-900 dark:text-white">Unisole Skill AI Labs</span>
                 </div>
                 <button
                   onClick={() => setMenuOpen(false)}
@@ -432,7 +440,7 @@ export default function Navbar() {
             </div>
 
             <div className="text-[10px] text-zinc-400 text-center pt-4">
-              © 2026 Unisole AI Labs
+              © 2026 Unisole Skill AI Labs
             </div>
           </div>
         </div>

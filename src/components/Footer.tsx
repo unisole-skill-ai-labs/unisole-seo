@@ -73,11 +73,15 @@ export default function Footer() {
         {/* Col 1: Brand & Bio */}
         <div className="col-span-2 md:col-span-1 space-y-3">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-md bg-white text-zinc-950 flex items-center justify-center font-bold text-xs">
-              U
+            <div className="w-8 h-8 rounded-lg bg-black border border-zinc-800 overflow-hidden flex items-center justify-center shrink-0">
+              <img
+                src="/images/unisole-logo.png"
+                alt="Unisole Skill AI Labs"
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="font-bold text-sm text-white tracking-tight">
-              Unisole <span className="text-zinc-400 font-normal">AI Labs</span>
+              Unisole <span className="text-zinc-400 font-normal">Skill AI Labs</span>
             </span>
           </div>
           <p className="text-xs text-zinc-400 leading-relaxed">

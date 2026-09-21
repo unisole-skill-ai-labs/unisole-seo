@@ -1453,7 +1453,7 @@ export default function ProgramsPage() {
               Value Proposition
             </span>
             <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900 dark:text-white">
-              Why Unisole AI Labs Outperforms Traditional Courses
+              Why Unisole Skill AI Labs Outperforms Traditional Courses
             </h2>
             <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
               Compare our production-focused laboratory approach against standard university slide lectures and passive video recordings.
