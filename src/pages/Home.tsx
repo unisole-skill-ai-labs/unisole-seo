@@ -20,7 +20,6 @@ import {
   ShieldCheck, 
   Cpu, 
   Layers, 
-  CheckCircle2,
   Building2,
   Compass,
   ArrowUpRight
@@ -433,22 +432,6 @@ export default function Home() {
                     <span>Campus Events</span>
                   </button>
                 </Link>
-              </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-3 flex flex-wrap items-center gap-5 text-xs text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800/80 w-full font-medium">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>IIT & NIT Mentored</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>Production MLOps</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>Campus Lab Setup</span>
-                </div>
               </div>
             </div>
 
