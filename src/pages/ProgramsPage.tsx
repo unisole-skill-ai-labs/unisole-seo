@@ -30,8 +30,7 @@ import {
   Sparkles,
   ShieldCheck,
   Zap,
-  HelpCircle,
-  PhoneCall
+  HelpCircle
 } from 'lucide-react';
 
 const GROUPS_DATA = [
@@ -1559,27 +1558,6 @@ export default function ProgramsPage() {
 
 
       </main>
-
-      {/* ================= MOBILE STICKY BOTTOM ACTION BAR ================= */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 p-3 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md border-t border-zinc-200 dark:border-zinc-800 flex items-center gap-2">
-        <button
-          onClick={() => {
-            const catalogEl = document.getElementById('stream-catalog');
-            if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
-          }}
-          className="flex-grow py-2.5 px-4 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:text-zinc-900 font-bold text-xs flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98]"
-        >
-          <span>Explore Pathways</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
-        <a
-          href="tel:+918219691201"
-          className="py-2.5 px-3 rounded-lg border border-zinc-200 dark:border-zinc-800 text-zinc-700 dark:text-zinc-200 font-semibold text-xs flex items-center justify-center gap-1 active:scale-[0.98]"
-        >
-          <PhoneCall className="w-3.5 h-3.5" />
-          <span>Call</span>
-        </a>
-      </div>
 
       {/* Interactive Curriculum & Syllabus Drawer */}
       <SyllabusDrawer
