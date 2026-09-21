@@ -86,8 +86,8 @@ export default function Navbar() {
 
   const searchItems = [
     { title: "Machine Learning & Production MLOps", category: "Programs", link: "/programs", desc: "FastAPI, Docker, RAG & PyTorch Pipelines" },
-    { title: "Full Stack Web Development (AI-Powered)", category: "Programs", link: "/programs", desc: "React, Node.js, Express & LLM integration" },
-    { title: "Complete ML + Full Stack Dual-Track", category: "Programs", link: "/programs", desc: "Dual credential engineering track" },
+    { title: "AI Agent Engineering", category: "Programs", link: "/programs", desc: "LangGraph, Multi-Agent Systems & MCP Sandboxing" },
+    { title: "Generative AI & LLM Systems Engineering", category: "Programs", link: "/programs", desc: "RAG architectures, vector DBs & production LLMOps" },
     { title: "Applied AI Research & Technical Blogs", category: "Blogs", link: "/blogs", desc: "Deep dive articles by IIT & NIT mentors" },
     { title: "Community Meetups & AI Seminars", category: "Events", link: "/events", desc: "Upcoming campus showcases & sessions" },
   ];

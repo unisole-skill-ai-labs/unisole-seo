@@ -43,209 +43,576 @@ const GROUPS_DATA = [
     title: 'Computer Science & IT',
     shortName: 'CS & IT',
     target: 'BCA • MCA • B.Sc CS/IT • B.Tech CSE/IT',
-    tagline: 'Production AI engineering, full stack web systems, and MLOps deployment.',
-    careerRoles: ['Machine Learning Engineer', 'Full Stack AI Developer', 'MLOps Engineer', 'AI Solutions Architect'],
-    tools: ['Python', 'PyTorch', 'FastAPI', 'Docker', 'React', 'MongoDB', 'LangChain', 'DuckDB'],
+    tagline: 'Production AI engineering, autonomous agent systems, and MLOps deployment.',
+    careerRoles: ['Generative AI Engineer', 'Agentic AI Architect', 'Machine Learning Engineer', 'Autonomous Systems Engineer', 'MLOps Specialist'],
+    tools: ['Python', 'PyTorch', 'LangGraph', 'CrewAI', 'FastAPI', 'Docker', 'Hugging Face', 'Qdrant', 'vLLM'],
     pathways: [
       {
-        id: 'cs-p1',
+        id: 'cs-genai',
         eyebrow: 'PATHWAY 01',
-        title: 'Machine Learning Engineering in Production',
-        duration: '3 Months',
-        level: 'Intermediate',
-        handsOn: '100% Practical Labs',
+        title: 'Generative AI Engineering',
+        duration: '12 Weeks (132 Hours)',
+        level: 'Foundations to Agentic AI',
+        handsOn: 'Theory + Hands-on Labs + Capstone',
+        price: 2999,
+        mrp: 9999,
+        syllabusLink: '/syllabi/cs-genai.pdf',
+        description: 'From data handling and backend engineering through classical NLP, sequence models, Transformers, and RAG into LLMOps and Agentic AI systems.',
+        roles: ['Generative AI Engineer', 'LLMOps Specialist', 'AI Application Developer', 'Agentic Systems Engineer'],
+        tools: ['FastAPI', 'Docker', 'PostgreSQL', 'Redis', 'NLTK', 'PyTorch', 'Transformers (BERT)', 'FAISS', 'Chroma', 'LangChain', 'LangGraph', 'AWS/Azure'],
+        modules: [
+          {
+            num: '01',
+            title: 'Week 1 — Data Engineering for AI',
+            topics: [
+              'Handling large/messy datasets, EDA strategy & data quality issues',
+              'Git workflows, branching models & PR reviews in team AI projects',
+              'Linux CLI drills & environment management for production AI',
+            ],
+            practical: 'Clean and profile a large real dataset with Pandas/NumPy; Git branching + PR workflow; Linux CLI drills.',
+          },
+          {
+            num: '02',
+            title: 'Week 2 — AI Backend Engineering I',
+            topics: [
+              'REST API design principles for ML/LLM model serving',
+              'FastAPI vs Flask architectural trade-offs & async performance',
+              'Request/response serialization, typing & error handling in Pydantic',
+            ],
+            practical: 'Build a FastAPI service that serves a model endpoint; add request validation and error handling.',
+          },
+          {
+            num: '03',
+            title: 'Week 3 — AI Backend Engineering II',
+            topics: [
+              'PostgreSQL fundamentals & relational schemas for AI applications',
+              'Redis caching architectures for LLM inference & response caching',
+              'Docker containerization, rate limiting, and structured logging/monitoring',
+            ],
+            practical: 'Dockerized AI backend with Postgres + Redis + rate limiter (the industry-readiness gate before NLP/LLMs).',
+          },
+          {
+            num: '04',
+            title: 'Week 4 — NLP Foundations: Text Representation',
+            topics: [
+              'Core NLP challenges, tokenization, stemming & lemmatization',
+              'One-Hot Encoding, Bag of Words (BoW) & TF-IDF vectorization',
+              'Sparse vector space models and lexical matching constraints',
+            ],
+            practical: 'Build text-cleaning pipeline with NLTK; implement BoW and TF-IDF from scratch and with scikit-learn.',
+          },
+          {
+            num: '05',
+            title: 'Week 5 — Word Embeddings & Sequence Models',
+            topics: [
+              'Word2Vec (CBOW / Skip-gram), Average Word2Vec & dense embeddings',
+              'Feedforward ANN vs recurrent RNN architectures and memory retention',
+              'Sequence classification: comparative benchmarking of LSTM vs GRU vs BiRNN',
+            ],
+            practical: 'Train Word2Vec on custom corpus; build RNN & LSTM classifiers; benchmark LSTM vs GRU vs BiRNN on same task.',
+          },
+          {
+            num: '06',
+            title: 'Week 6 — Seq2Seq & Attention',
+            topics: [
+              'Encoder-Decoder architecture & Seq2Seq modeling mechanics',
+              'The fixed-context-vector bottleneck in sequence transduction',
+              'The Attention mechanism (Bahdanau additive vs Luong multiplicative)',
+            ],
+            practical: 'Build toy Encoder-Decoder Seq2Seq model; implement Attention layer on top and benchmark improvement.',
+          },
+          {
+            num: '07',
+            title: 'Week 7 — Transformers',
+            topics: [
+              'Self-attention, scaled dot-product & multi-head attention mechanics',
+              'Positional encodings and feedforward sublayers in Transformers',
+              'Why Transformers replaced recurrent models & BERT fine-tuning',
+            ],
+            practical: 'Fine-tune pretrained Transformer (BERT); complete evolution benchmark: BoW → Word2Vec → LSTM → Attention → Transformer.',
+          },
+          {
+            num: '08',
+            title: 'Week 8 — Embeddings, Vector Databases & Retrieval',
+            topics: [
+              'Dense embedding spaces & similarity indexing (cosine, dot product)',
+              'Vector database internals: FAISS & Chroma indexing mechanics',
+              'Sparse lexical (BM25) vs dense semantic retrieval & hybrid search reranking',
+            ],
+            practical: 'Build embedding pipelines with FAISS and Chroma; implement hybrid BM25 + dense retrieval and compare recall.',
+          },
+          {
+            num: '09',
+            title: 'Week 9 — RAG, Prompt Engineering & LLM APIs',
+            topics: [
+              'Retrieval-Augmented Generation (RAG) architecture & chunking strategies',
+              'Few-shot, Chain-of-Thought & eval-driven prompt engineering',
+              'Evaluation metrics: faithfulness, answer relevance, latency, and token cost',
+            ],
+            practical: 'Build full end-to-end RAG pipeline; build evaluation dashboard tracking faithfulness, relevance, latency & cost.',
+          },
+          {
+            num: '10',
+            title: 'Week 10 — LangChain/LangGraph & LLMOps',
+            topics: [
+              'LangChain and LangGraph stateful graph workflow orchestration',
+              'Prompt/dataset versioning, experiment tracking & LLM observability',
+              'Security guardrails (input/output filters) and CI/CD eval-regression checks',
+            ],
+            practical: 'Rebuild RAG pipeline in LangGraph; instrument with versioning, observability, guardrails & CI/CD eval check.',
+          },
+          {
+            num: '11',
+            title: 'Week 11 — Agentic AI & Cloud Deployment',
+            topics: [
+              'Multi-step reasoning loops, dynamic tool calling, memory & planning agents',
+              'AWS / Azure cloud infrastructure basics and Kubernetes fundamentals',
+              'High-throughput model serving, streaming APIs & horizontal autoscaling',
+            ],
+            practical: 'Build tool-calling agent with persistent memory using LangGraph; deploy system to cloud infrastructure with autoscaling.',
+          },
+          {
+            num: '12',
+            title: 'Week 12 — Capstone',
+            topics: [
+              'Research methodology: problem framing, evaluation design & technical reporting',
+              'Domain application: legal document assistant, medical Q&A, or knowledge bot',
+              'End-to-end lifecycle: Design → Build → Evaluate → Deploy → Report',
+            ],
+            practical: 'Capstone Project: Student-chosen domain AI application deployed and defended before an evaluation panel.',
+          },
+        ],
+        capstone: {
+          title: 'Production Agentic RAG Application with LLMOps & Cloud Deployment',
+          flow: ['Document Ingestion', 'Hybrid Retrieval Index', 'LangGraph Agent with Memory', 'Guardrails & Telemetry', 'Cloud Deployment'],
+          outputs: [
+            'Agent/RAG system combining retrieval, dynamic tools, and persistent memory',
+            'Evaluation framework with logged metrics (accuracy, cost, latency, safety)',
+            'Containerized cloud deployment with documented V1→V2 improvement cycle',
+          ],
+        },
+      },
+      {
+        id: 'cs-agentic',
+        eyebrow: 'PATHWAY 02',
+        title: 'AI Agent Engineering',
+        duration: '12 Weeks (132 Hours)',
+        level: 'Fundamentals to Production',
+        handsOn: 'Theory + Hands-on Labs + Capstone',
+        price: 2999,
+        mrp: 9999,
+        syllabusLink: '/syllabi/cs-agentic.pdf',
+        description: 'From fundamentals of AI agents to designing, building, evaluating, and deploying a production-grade multi-agent system through a single progressive build.',
+        roles: ['AI Agent Engineer', 'Autonomous Systems Developer', 'Agentic Systems Architect', 'Multi-Agent Systems Engineer'],
+        tools: ['LangGraph', 'Model Context Protocol (MCP)', 'CrewAI', 'AutoGen', 'Docker Sandboxes', 'LiteLLM', 'Pydantic', 'Arize Phoenix', 'RAG & Vector DBs'],
+        modules: [
+          {
+            num: '01',
+            title: 'Week 1 — What is an AI Agent?',
+            topics: [
+              'Agent loop, LLM vs Agent, and ReAct (Think → Act → Observe) loop',
+              'Workflow vs agent patterns & modern agent architectures',
+              'Heuristics & decision frameworks: when not to use an agent',
+            ],
+            practical: 'Build progressively from a simple LLM app to a tool-using ReAct agent. Mini Project: your first functional AI agent.',
+          },
+          {
+            num: '02',
+            title: 'Week 2 — Context Engineering I',
+            topics: [
+              'Messages, system/user/tool roles, and context window mechanics',
+              'Tokenization constraints, prompt architecture & dynamic context injection',
+              'Static vs dynamic context management in runtime loops',
+            ],
+            practical: 'Build a context-aware agent and a context builder pipeline; observe how context changes model output.',
+          },
+          {
+            num: '03',
+            title: 'Week 3 — Context Engineering II',
+            topics: [
+              'Production prompt engineering & semantic tool descriptions',
+              'Prompt injection vulnerabilities & defensive system prompting',
+              'Context compression techniques for long-running conversational threads',
+            ],
+            practical: 'Project: a production-style customer support agent with business rules and injection defenses — then attack and fix it.',
+          },
+          {
+            num: '04',
+            title: 'Week 4 — Memory Engineering',
+            topics: [
+              'Short-term vs long-term memory architectures in agentic runtimes',
+              'Episodic vs semantic memory, extraction, and indexing lifecycles',
+              'Memory retrieval policies, conflict resolution & state hydration',
+            ],
+            practical: 'Build a personal AI assistant with persistent memory across conversations.',
+          },
+          {
+            num: '05',
+            title: 'Week 5 — RAG Engineering',
+            topics: [
+              'Document chunking strategies, embeddings & vector databases',
+              'Hybrid search (dense vector + sparse BM25), reranking & metadata filtering',
+              'Identifying and debugging retrieval failure modes in production',
+            ],
+            practical: 'Build a full retrieval-augmented generation pipeline and compare chunking and retrieval strategies.',
+          },
+          {
+            num: '06',
+            title: 'Week 6 — Tool Engineering',
+            topics: [
+              'Tool schemas, function calling specifications & JSON Schema validation',
+              'Tool selection accuracy, retry reliability & deterministic error handling',
+              'Granular tool permissions, credential segregation & security boundaries',
+            ],
+            practical: 'Build multiple tools (search, calculator, database, API) and a tool-using research agent.',
+          },
+          {
+            num: '07',
+            title: 'Week 7 — MCP & Production Tooling',
+            topics: [
+              'Anthropic Model Context Protocol (MCP) concepts, servers and clients',
+              'MCP resources, prompts, tools, authentication & runtime discovery',
+              'Enterprise integration patterns: connecting private backends via MCP',
+            ],
+            practical: 'Connect and register multiple MCP tools with permission controls. Milestone: a personal AI work agent.',
+          },
+          {
+            num: '08',
+            title: 'Week 8 — Coding Agents',
+            topics: [
+              'Coding agent architecture, AST parsing & repository understanding',
+              'Code generation, containerized Docker sandboxing & test execution',
+              'Autonomous agentic coding loop: inspect → edit → test → repair',
+            ],
+            practical: 'Project: a coding agent that inspects a real repository, edits files, runs tests, and fixes errors.',
+          },
+          {
+            num: '09',
+            title: 'Week 9 — Async, Event-Driven & Computer Use',
+            topics: [
+              'Synchronous vs asynchronous agent execution models',
+              'Event-driven architectures, webhooks & human-in-the-loop approvals',
+              'Browser automation basics with Playwright & computer-use runtimes',
+            ],
+            practical: 'Build an event-driven agent triggered by an incoming event, plus a controlled browser-automation mini-lab.',
+          },
+          {
+            num: '10',
+            title: 'Week 10 — Agent Evaluation',
+            topics: [
+              'Why demos aren’t evaluation: benchmarks vs real-world reliability',
+              'Trajectory evaluation, LLM-as-a-judge & rubric design',
+              'Benchmarking agent reliability, latency, token cost & safety boundaries',
+            ],
+            practical: 'Build an evaluation framework for your own agent and use it to find and log failure patterns.',
+          },
+          {
+            num: '11',
+            title: 'Week 11 — Agent Improvement',
+            topics: [
+              'Diagnostic triage: when to improve prompt, context, tools, or model',
+              'A/B test comparisons, versioned regression testing & continuous evolution',
+              'Hardening agent graphs against edge cases and failure modes',
+            ],
+            practical: 'Take your Week 10 agent, diagnose failures, and ship an improved Version 2 — then compare results.',
+          },
+          {
+            num: '12',
+            title: 'Week 12 — Multi-Agent Systems & Capstone',
+            topics: [
+              'Manager-worker, hierarchical, and peer-to-peer collaboration patterns',
+              'Shared vs independent context, delegation protocols & consensus',
+              'Coordination failure handling, deadlocks & swarm convergence',
+            ],
+            practical: 'Capstone: a multi-agent research system (manager, researcher, analyst, critic, synthesizer) — presented and defended.',
+          },
+        ],
+        capstone: {
+          title: 'Production Multi-Agent Research & Execution System',
+          flow: ['Agent Router', 'Context & Memory Engine', 'RAG & MCP Integrations', 'Coding & Sandboxing', 'Evaluation & V1→V2 Loop'],
+          outputs: [
+            'Complete multi-agent system (Manager, Researcher, Analyst, Critic, Synthesizer)',
+            'Evaluation framework with logged metrics (accuracy, cost, latency, safety)',
+            'Documented improvement cycle from Version 1 to Version 2 portfolio repository',
+          ],
+        },
+      },
+      {
+        id: 'cs-p1',
+        eyebrow: 'PATHWAY 03',
+        title: 'Machine Learning in Production: MLOps Engineering',
+        duration: '12 Weeks (132 Hours)',
+        level: 'Industry-Ready MLOps',
+        handsOn: 'Theory + Hands-on Labs + Capstone',
         price: 2999,
         mrp: 9999,
         syllabusLink: '/syllabi/cs-p1.pdf',
-        description: 'End-to-end ML engineering: data pipelines, deep learning, FastAPI model serving, Docker MLOps, and Generative AI/RAG architectures.',
-        roles: ['ML Engineer', 'AI Backend Developer', 'MLOps Specialist'],
-        tools: ['Python', 'NumPy', 'Pandas', 'PyTorch', 'FastAPI', 'Docker', 'RAG'],
+        description: 'From data engineering fundamentals through experiment tracking, deployment, monitoring, and automated retraining into managed cloud ML platforms through a progressive build.',
+        roles: ['MLOps Engineer', 'Machine Learning Engineer', 'Data & ML Platform Engineer', 'Production AI Specialist'],
+        tools: ['DuckDB', 'Airflow', 'Kafka', 'Great Expectations', 'DVC', 'MLflow', 'FastAPI', 'Docker', 'Evidently AI', 'AWS SageMaker'],
         modules: [
           {
             num: '01',
-            title: 'Python for AI Engineering',
-            topics: ['Python fundamentals, OOP & modular architecture', 'Virtual environments, unit testing & Git workflows', 'Handling structured data & packages'],
-            practical: 'Build modular Python app with CI checks on GitHub.',
+            title: 'Week 1 — Python & Engineering Practices for ML',
+            topics: [
+              'Writing production-grade Python (packaging, testing, typing)',
+              'Why notebook prototype code fails in production & reproducibility basics',
+              'Configuration management & CI-ready project structures',
+            ],
+            practical: 'Convert a notebook prototype into a packaged, tested Python module with a CI-ready project structure.',
           },
           {
             num: '02',
-            title: 'Data Engineering & Pipelines',
-            topics: ['NumPy, Pandas & exploratory data analysis', 'SQL relational databases & DuckDB analytics', 'ETL pipelines & Kafka streaming fundamentals'],
-            pipeline: ['Data Source', 'ETL Pipeline', 'Parquet Storage', 'DuckDB Engine', 'ML Models'],
+            title: 'Week 2 — Data Engineering Fundamentals: OLTP vs OLAP',
+            topics: [
+              'OLTP vs OLAP workloads and why production ML requires both',
+              'Data warehouse vs data lake & columnar storage mechanics',
+              'Embedded analytics & analytical queries with DuckDB',
+            ],
+            practical: 'Model a transactional (OLTP) dataset and rebuild it as an analytical (OLAP) schema; run benchmarked analytical queries in DuckDB.',
           },
           {
             num: '03',
-            title: 'Machine Learning Fundamentals',
-            topics: ['Supervised & unsupervised learning algorithms', 'Feature engineering, validation & K-fold CV', 'Model evaluation metrics, ROC-AUC & tuning'],
+            title: 'Week 3 — ETL Pipelines & Orchestration',
+            topics: [
+              'ETL vs ELT trade-offs and resilient pipeline design patterns',
+              'Scheduling, idempotency, backfills & partition tracking',
+              'Orchestration concepts and Directed Acyclic Graphs (DAGs)',
+            ],
+            practical: 'Build a scheduled, idempotent ETL pipeline (extract → transform → load) orchestrated with Airflow/Prefect.',
           },
           {
             num: '04',
-            title: 'Deep Learning & Transformers',
-            topics: ['Neural network architectures & optimization', 'CNNs for computer vision & sequence models', 'Transfer learning, embeddings & LLM foundations'],
+            title: 'Week 4 — Streaming Data with Kafka',
+            topics: [
+              'Batch vs streaming architectures in machine learning',
+              'Kafka internals: producers, consumers, topics, and partitions',
+              'Identifying when ML systems require real-time streaming ingestion',
+            ],
+            practical: 'Build a Kafka producer/consumer pair simulating real-time events feeding a feature pipeline.',
           },
           {
             num: '05',
-            title: 'Building AI APIs with FastAPI',
-            topics: ['High-performance REST APIs with FastAPI & Pydantic', 'Model inference, latency optimization & auth', 'Connecting ML backends to web applications'],
+            title: 'Week 5 — Data Labelling & Data Quality',
+            topics: [
+              'Labelling strategies: manual, weak supervision & active learning',
+              'Labelling tooling: Label Studio, CVAT, and Prodigy workflows',
+              'Inter-annotator agreement & schema/drift validation at ingestion',
+            ],
+            practical: 'Set up a labelling workflow in Label Studio; add automated data-quality checks (Great Expectations) into the Week 3 pipeline.',
           },
           {
             num: '06',
-            title: 'MLOps, Docker & Cloud Deployment',
-            topics: ['Docker containerization for model inference', 'CI/CD automated deployment pipelines', 'Model monitoring, data drift & automated retraining'],
+            title: 'Week 6 — Data Versioning & Feature Stores',
+            topics: [
+              'Data lineage auditing: verifying exactly which data trained a model',
+              'Data version control with DVC and lakeFS concepts',
+              'Feature stores and mitigating train/serve feature skew',
+            ],
+            practical: 'Version pipeline datasets with DVC; build a feature store serving consistent features for training and inference.',
           },
           {
             num: '07',
-            title: 'Generative AI & RAG Systems',
-            topics: ['LLM architecture, prompting & guardrails', 'Vector databases (Pinecone / Chroma / pgvector)', 'Retrieval-Augmented Generation (RAG) pipelines'],
+            title: 'Week 7 — ML Algorithms for Production',
+            topics: [
+              'Selecting algorithms for production constraints (latency, interpretability, retraining cost)',
+              'Linear models, gradient-boosted trees (XGBoost) and ensembles',
+              'Engineering decision heuristics: when not to use deep learning',
+            ],
+            practical: 'Build a production-style training pipeline (scikit-learn/XGBoost) with reusable feature engineering, trained on the Week 6 feature store.',
+          },
+          {
+            num: '08',
+            title: 'Week 8 — Experiment Tracking & Model Versioning',
+            topics: [
+              'Experiment tracking and metric logging with MLflow and W&B',
+              'Model registries, semantic model versioning & lineage graphs',
+              'Reproducible training runs, parameter logging & artifacts',
+            ],
+            practical: 'Instrument the Week 7 pipeline with MLflow tracking; register the best model with full lineage back to its data version.',
+          },
+          {
+            num: '09',
+            title: 'Week 9 — Model Deployment',
+            topics: [
+              'Batch vs real-time model serving trade-offs & gRPC/REST APIs',
+              'Docker containerization for machine learning workloads',
+              'Production rollout patterns: shadow and canary deployments',
+            ],
+            practical: 'Containerize the registered model behind a FastAPI serving endpoint; deploy with a canary rollout strategy.',
+          },
+          {
+            num: '10',
+            title: 'Week 10 — Monitoring in Production',
+            topics: [
+              'Data drift vs concept drift & model performance decay patterns',
+              'Production observability metrics (latency, throughput, prediction distribution)',
+              'Automated alerts and ML observability dashboards',
+            ],
+            practical: 'Instrument the Week 9 service with drift detection (Evidently AI) and an automated alerting dashboard.',
+          },
+          {
+            num: '11',
+            title: 'Week 11 — Retraining Pipelines & CI/CD/CT',
+            topics: [
+              'Continuous Training (CT) triggers & automated retraining pipelines',
+              'CI/CD for ML: testing data integrity and models alongside code',
+              'Automated rollback strategies and promotion gates',
+            ],
+            practical: 'Build an automated retraining pipeline triggered by Week 10 drift alerts, with a CI/CD gate validating the new model before promotion.',
+          },
+          {
+            num: '12',
+            title: 'Week 12 — Cloud ML Services & Capstone',
+            topics: [
+              'Managed cloud ML platforms: AWS SageMaker, Azure ML, and GCP Vertex AI',
+              'Evaluating managed cloud vs self-hosted MLOps infrastructure',
+              'Cost, latency, and operational trade-off comparisons across platforms',
+            ],
+            practical: 'Deploy the full pipeline on a managed cloud platform. Capstone: integrate Weeks 1–11 into one deployed, monitored, auto-retraining system — presented and defended.',
           },
         ],
         capstone: {
-          title: 'End-to-End Production AI System',
-          flow: ['Data Ingestion', 'Feature Store', 'ML / AI Model', 'FastAPI Backend', 'Docker & Cloud'],
-          outputs: ['Production GitHub repo with clean docs', 'Deployed live FastAPI REST API', 'Trained model benchmark report'],
-        },
-      },
-      {
-        id: 'cs-p2',
-        eyebrow: 'PATHWAY 02',
-        title: 'Full Stack Web Development (AI-Powered)',
-        duration: '3 Months',
-        level: 'Beginner to Intermediate',
-        handsOn: '100% Practical Labs',
-        price: 1499,
-        mrp: 6999,
-        syllabusLink: '/syllabi/cs-p2.pdf',
-        description: 'Modern full stack engineering with React, Node.js, Express, MongoDB, and integrated AI capabilities like document Q&A and chatbots.',
-        roles: ['Full Stack Developer', 'React / Node Engineer', 'AI Web Integrator'],
-        tools: ['React', 'Node.js', 'Express', 'MongoDB', 'Vite', 'REST APIs', 'LLM APIs'],
-        modules: [
-          {
-            num: '01',
-            title: 'Web Foundations & JavaScript',
-            topics: ['HTML5, modern CSS, Flexbox & CSS Grid', 'Modern JavaScript (ES6+), DOM & Async/Await', 'Fetch API & consuming RESTful APIs'],
-          },
-          {
-            num: '02',
-            title: 'Frontend with React & Vite',
-            topics: ['Component architecture, JSX & custom hooks', 'State management, forms & validation', 'Client-side routing with React Router'],
-          },
-          {
-            num: '03',
-            title: 'Backend with Node.js & Express',
-            topics: ['REST API design & Express server setup', 'JWT authentication & role-based access', 'Centralized error handling & middleware'],
-          },
-          {
-            num: '04',
-            title: 'Databases with MongoDB & Mongoose',
-            topics: ['Schema modeling, CRUD & indexing', 'Aggregation pipelines for analytics', 'Database connection pooling & security'],
-          },
-          {
-            num: '05',
-            title: 'DevOps, CI/CD & Deployment',
-            topics: ['Git collaboration & PR review workflows', 'Docker containerization fundamentals', 'Cloud deployment to Vercel/Render/AWS'],
-          },
-          {
-            num: '06',
-            title: 'AI-Powered Web Applications',
-            topics: ['Connecting LLM APIs (OpenAI, Gemini)', 'RAG-based document Q&A features', 'Intelligent AI chat assistants & dashboards'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Intelligent Web Application',
-          flow: ['React UI', 'Express Backend', 'MongoDB', 'AI Integration', 'Cloud Deployment'],
-          outputs: ['Live full-stack app with authentication', 'Integrated LLM features', 'Clean GitHub documentation'],
-        },
-      },
-      {
-        id: 'cs-p3',
-        eyebrow: 'PATHWAY 03',
-        title: 'Complete Machine Learning + Full Stack',
-        duration: '6 Months',
-        level: 'Dual-Track Mastery',
-        handsOn: '100% Practical Labs',
-        price: 3999,
-        mrp: 14999,
-        syllabusLink: '/syllabi/cs-p3.pdf',
-        description: 'Comprehensive dual curriculum merging Machine Learning, Deep Learning, and MLOps with full-stack React, Node.js, and cloud systems.',
-        roles: ['Senior AI Engineer', 'Lead Full Stack Architect', 'AI Systems Specialist'],
-        tools: ['Python', 'PyTorch', 'FastAPI', 'React', 'Node.js', 'MongoDB', 'Docker', 'CI/CD'],
-        modules: [
-          {
-            num: '01',
-            title: 'Python for AI & Clean Engineering',
-            topics: ['Python fundamentals, OOP & testing', 'Data structures & modular architecture', 'Git version control workflows'],
-          },
-          {
-            num: '02',
-            title: 'Data Engineering & Scalable Storage',
-            topics: ['NumPy, Pandas & SQL databases', 'ETL pipelines & DuckDB analytics', 'Kafka streaming concepts'],
-          },
-          {
-            num: '03',
-            title: 'Machine Learning & Deep Learning',
-            topics: ['Supervised & unsupervised models', 'Neural networks, CNNs & Transformers', 'Model optimization & metrics'],
-          },
-          {
-            num: '04',
-            title: 'Frontend UI with React & Vite',
-            topics: ['React hooks, state & routing', 'Responsive UI & form workflows', 'Production bundle optimization'],
-          },
-          {
-            num: '05',
-            title: 'Backend Systems & MongoDB',
-            topics: ['Node.js/Express REST APIs', 'MongoDB data modeling & indexing', 'JWT authentication & security'],
-          },
-          {
-            num: '06',
-            title: 'Generative AI & RAG Systems',
-            topics: ['Vector databases & embeddings', 'Semantic search & RAG pipelines', 'AI evaluation & Agent workflows'],
-          },
-          {
-            num: '07',
-            title: 'MLOps, FastAPI & Cloud Serving',
-            topics: ['FastAPI model serving endpoints', 'Docker containerization & CI/CD', 'Cloud deployment & drift monitoring'],
-          },
-        ],
-        capstone: {
-          title: 'Full-Stack Production AI Platform',
-          flow: ['Data Pipeline', 'ML Model', 'FastAPI Backend', 'React UI', 'Cloud Deployment'],
-          outputs: ['End-to-end production AI app', 'Dual certification credential', 'Live API with Swagger docs'],
+          title: 'Autonomous Self-Retraining Production MLOps System',
+          flow: ['Data & Kafka Ingestion', 'Great Expectations & DVC', 'MLflow Registry', 'FastAPI & Canary Rollout', 'Evidently Drift & Auto-Retraining'],
+          outputs: [
+            'End-to-end pipeline: raw data → ETL/streaming → validated → versioned → trained → deployed',
+            'Model registry with full lineage and live drift detection dashboard with alerting',
+            'Automated retraining trigger with CI/CD validation gate deployed on cloud (AWS SageMaker/Azure/GCP)',
+          ],
         },
       },
       {
         id: 'cs-common',
-        eyebrow: 'WEEKEND TRACK',
+        eyebrow: 'WEEKEND INCUBATOR TRACK',
         title: 'AI Entrepreneurship & Innovation',
-        duration: 'Weekend Track',
-        level: 'All Students',
-        handsOn: 'Incubator Labs',
+        duration: '3 Months (12 Weekends)',
+        level: 'All Students (Weekend Track)',
+        handsOn: 'Incubator Labs (Sat & Sun only)',
         price: 599,
         mrp: 2999,
         syllabusLink: '/syllabi/cs-common.pdf',
-        description: 'Structured incubator track teaching students how to convert AI technical capability into validated commercial products and startups.',
-        roles: ['AI Product Manager', 'Startup Founder', 'Innovation Lead'],
-        tools: ['MVP Prototyping', 'Business Model Canvas', 'Pitch Decks', 'Unit Economics'],
+        description: 'Structured incubator track teaching students how to convert AI technical capability into a validated commercial product and startup. Classes run only on Saturdays and Sundays.',
+        roles: ['AI Startup Founder', 'AI Product Manager', 'Venture Builder', 'Innovation Lead'],
+        tools: ['MVP Prototyping', 'Business Model Canvas', 'Pitch Decks', 'Unit Economics', 'Low-Code & AI Build Tools'],
         modules: [
           {
             num: '01',
-            title: 'Problem & Market Discovery',
-            topics: ['Design thinking & identifying pain points', 'Customer discovery interviews', 'Competitor matrix & market sizing'],
+            title: 'Weekend 1 — Design Thinking & Pain Points (Mod 1)',
+            topics: [
+              'Saturday: Introduction to design thinking; empathy mapping; identifying real user pain points',
+              'Sunday: Hands-on: map 3 candidate pain points from your own experience or target community; peer critique',
+            ],
+            practical: 'Milestone: Map 3 candidate pain points and initiate validated Problem Statement.',
           },
           {
             num: '02',
-            title: 'AI Opportunity & Rapid MVP',
-            topics: ['Where AI creates 10x value vs automation', 'Rapid prototyping with low-code & AI tools', 'Validating MVP with early users'],
+            title: 'Weekend 2 — Customer Discovery Interviews (Mod 1)',
+            topics: [
+              'Saturday: Interview design: writing unbiased questions, avoiding leading the witness, structuring a discovery call',
+              'Sunday: Conduct 3–5 mock customer discovery interviews; synthesize findings into a problem brief',
+            ],
+            practical: 'Conduct customer discovery interviews and synthesize findings into a problem brief.',
           },
           {
             num: '03',
-            title: 'Business Model & Pitching',
-            topics: ['Business Model Canvas (BMC) & revenue models', 'Go-To-Market strategies', 'High-impact 10-slide investor pitch deck'],
+            title: 'Weekend 3 — Competitor Matrix & Market Sizing (Mod 1)',
+            topics: [
+              'Saturday: Competitive analysis frameworks; direct vs indirect competitors; positioning maps',
+              'Sunday: Workshop: build a competitor matrix and a TAM/SAM/SOM market-sizing estimate for your idea',
+            ],
+            practical: 'Build competitor matrix and TAM/SAM/SOM market-sizing estimate.',
+          },
+          {
+            num: '04',
+            title: 'Weekend 4 — Problem Statement Lock-In (Mod 1)',
+            topics: [
+              'Saturday: Peer review of problem briefs, market sizing, and competitor matrices; instructor feedback',
+              'Sunday: Finalize and present a validated Problem Statement to the cohort',
+            ],
+            practical: 'Milestone Lock-In: Present and defend validated Problem Statement to cohort.',
+          },
+          {
+            num: '05',
+            title: 'Weekend 5 — Where AI Creates 10x Value (Mod 2)',
+            topics: [
+              'Saturday: Framework for spotting AI opportunities vs plain automation; case studies of 10x value creation',
+              'Sunday: Opportunity-mapping exercise: apply the framework to your own validated problem',
+            ],
+            practical: 'Opportunity-mapping: isolate where generative/agentic AI delivers 10x value.',
+          },
+          {
+            num: '06',
+            title: 'Weekend 6 — Rapid Prototyping Toolkit (Mod 2)',
+            topics: [
+              'Saturday: Tour of low-code and AI-assisted build tools for fast prototyping',
+              'Sunday: Build the first clickable/functional version of your prototype',
+            ],
+            practical: 'Milestone Kickoff: Build first clickable/functional version of MVP prototype.',
+          },
+          {
+            num: '07',
+            title: 'Weekend 7 — MVP Build Sprint (Mod 2)',
+            topics: [
+              'Saturday: Iterate on the prototype; add the core AI-driven feature',
+              'Sunday: Continue the build sprint; instructor office hours for debugging and scoping',
+            ],
+            practical: 'Intensive MVP build sprint with integrated AI feature and live debugging.',
+          },
+          {
+            num: '08',
+            title: 'Weekend 8 — Validating the MVP (Mod 2)',
+            topics: [
+              'Saturday: Methods for testing an MVP with early users; structuring a feedback session',
+              'Sunday: Run live validation sessions with early users; collect and log feedback on your Functional MVP',
+            ],
+            practical: 'Milestone Lock-In: Run live validation sessions with early users; collect feedback on Functional MVP.',
+          },
+          {
+            num: '09',
+            title: 'Weekend 9 — Business Model Canvas (Mod 3)',
+            topics: [
+              'Saturday: Business Model Canvas (BMC) fundamentals; revenue model options for AI products',
+              'Sunday: Build a complete BMC and revenue model for your validated MVP',
+            ],
+            practical: 'Build complete Business Model Canvas and revenue model for validated MVP.',
+          },
+          {
+            num: '10',
+            title: 'Weekend 10 — Go-To-Market Strategy (Mod 3)',
+            topics: [
+              'Saturday: GTM frameworks: channels, positioning, early-adopter acquisition',
+              'Sunday: Build a GTM plan; finalize the Business Model',
+            ],
+            practical: 'Milestone Lock-In: Finalize GTM early-adopter acquisition plan and business model.',
+          },
+          {
+            num: '11',
+            title: 'Weekend 11 — Investor Pitch Deck (Mod 3)',
+            topics: [
+              'Saturday: Pitch deck structure and storytelling for investors; anatomy of a 10-slide deck',
+              'Sunday: Build a draft pitch deck; peer review and iterate',
+            ],
+            practical: 'Build draft 10-slide pitch deck; peer review and iterate.',
+          },
+          {
+            num: '12',
+            title: 'Weekend 12 — Startup Validation & Pitch Deck (Capstone)',
+            topics: [
+              'Saturday: Pitch rehearsal; feedback session with instructors and mentors',
+              'Sunday: Final Pitch — capstone defense in front of an investor-style panel',
+            ],
+            practical: 'Milestone Defense: Final Pitch presentation and defense in front of investor panel.',
           },
         ],
         capstone: {
-          title: 'Startup Validation & Pitch Deck',
+          title: 'Startup Validation & Investor-Ready Pitch Deck',
           flow: ['Problem Statement', 'Functional MVP', 'Business Model', 'Final Pitch'],
-          outputs: ['Working MVP prototype', 'Validated Business Model Canvas', '10-slide investor pitch deck'],
+          outputs: [
+            'Working functional MVP prototype',
+            'Validated Business Model Canvas and GTM acquisition plan',
+            '10-slide investor pitch deck defended before investor panel',
+          ],
         },
       },
     ],
@@ -256,60 +623,104 @@ const GROUPS_DATA = [
     icon: Microscope,
     title: 'Science & Mathematics',
     shortName: 'Science & Math',
-    target: 'Physics • Mathematics • Chemistry • Biology • Applied Science',
-    tagline: 'Scientific computing, physics-informed neural networks, and computational research.',
-    careerRoles: ['Scientific Computing Specialist', 'Computational Data Scientist', 'SciML Researcher', 'Quantitative Analyst'],
-    tools: ['Python', 'SciPy', 'NumPy', 'PINNs', 'Differential Equations', 'SymPy', 'Matplotlib'],
+    target: 'Physics • Mathematics • Statistics • Chemistry • Engineering • Quantitative Science',
+    tagline: 'Scientific computing, differential equations, physics-informed neural networks (PINNs), and neural operators.',
+    careerRoles: ['Scientific AI Researcher', 'Computational Data Scientist', 'SciML / PINNs Engineer', 'Simulation & Modeling Specialist', 'Quantitative Analyst'],
+    tools: ['Python', 'PyTorch', 'SciPy', 'NumPy', 'PINNs', 'Autograd', 'ODEs/PDEs', 'DeepONet', 'FNO', 'Jupyter'],
     pathways: [
       {
         id: 'sci-p1',
         eyebrow: 'PATHWAY 01',
-        title: 'Scientific Machine Learning & AI for Science',
-        duration: '3 Months',
-        level: 'Undergraduate / Postgraduate',
+        title: 'Scientific Machine Learning for Basic Sciences (BSc Physics | BSc Maths)',
+        duration: '6 Months',
+        level: 'Undergraduate → Early Professional',
         handsOn: '100% Practical Labs',
-        price: 2000,
-        mrp: 6999,
+        price: 2999,
+        mrp: 8999,
         syllabusLink: '/syllabi/sci-p1.pdf',
-        description: 'Combines mathematical principles with modern scientific computing, differential equations, and Physics-Informed Neural Networks (PINNs).',
-        roles: ['SciML Researcher', 'Computational Physicist', 'Data Modeler'],
-        tools: ['Python', 'NumPy', 'SciPy', 'PINNs', 'ODEs', 'Jupyter'],
+        description: 'Core progression: Mathematics → Python → Scientific Computing → Machine Learning → Deep Learning → Scientific AI → Capstone. Formulate differential equations as learning constraints, implement PINNs via PyTorch autograd, and solve forward/inverse problems.',
+        roles: ['Scientific AI Researcher', 'Computational Data Scientist', 'SciML / PINNs Engineer', 'Simulation & Modeling Specialist', 'Quantitative Analyst'],
+        tools: ['Python', 'NumPy', 'SciPy', 'Pandas', 'PyTorch', 'PINNs', 'Autograd', 'ODEs/PDEs', 'DeepONet/FNO'],
         modules: [
           {
             num: '01',
-            title: 'Mathematical Foundations for AI',
-            topics: ['Linear algebra & matrix decompositions', 'Multivariable calculus & optimization', 'Probability & statistical hypothesis testing'],
+            title: 'Mathematical & Computational Foundations for Scientific AI',
+            topics: [
+              'Python fundamentals, data structures, scientific workflows & Git/GitHub',
+              'Linear algebra for AI: vectors, matrices, norms, eigenvalues & eigenvectors',
+              'Calculus for AI: partial derivatives, gradients, chain rule, Jacobian & Hessian intuition',
+              'Probability, statistics, uncertainty, numerical error & loss functions',
+            ],
+            practical: 'Simulate a noisy scientific dataset, fit a mathematical model, quantify error, and publish a reproducible Python notebook.',
+            pipeline: ['Math Formulation', 'Python / Colab', 'Gradient Descent', 'Reproducible Notebook'],
           },
           {
             num: '02',
-            title: 'Scientific Computing in Python',
-            topics: ['NumPy & SciPy numerical computing', 'Publication-quality data visualization', 'Solving differential equations (ODEs)'],
+            title: 'Scientific Computing, Numerical Methods & Differential Equations',
+            topics: [
+              'NumPy, SciPy & Pandas: vectorization, scientific data pipelines & visualization',
+              'Numerical errors, stability, convergence, root finding, interpolation & differentiation',
+              'Numerical integration & ODEs: Euler, Runge–Kutta methods & dynamical systems',
+              'PDE fundamentals: diffusion, heat & Poisson equations with finite-difference methods',
+            ],
+            practical: 'Implement a 1D heat-equation solver, generate reference simulation datasets, and compare numerical solutions across grid resolutions.',
+            pipeline: ['NumPy/SciPy', 'ODE Solvers', 'Finite Differences', 'Reference Simulation'],
           },
           {
             num: '03',
-            title: 'ML for Empirical & Lab Data',
-            topics: ['ML workflows for experimental data', 'Regression for physical parameter estimation', 'Signal feature extraction & validation'],
+            title: 'Machine Learning for Scientific & Engineering Applications',
+            topics: [
+              'Scientific ML workflows: linear & polynomial regression, loss functions & regularization',
+              'Classification algorithms: logistic regression, decision trees & Random Forest',
+              'Model evaluation: bias-variance trade-off, cross-validation & hyperparameter tuning',
+              'Clustering, PCA, feature scaling, model interpretability & scientific baselines',
+            ],
+            practical: 'Complete an end-to-end scientific ML pipeline with data cleaning, training, evaluation, error analysis, and GitHub documentation.',
+            pipeline: ['Lab Data Ingestion', 'Feature Scaling', 'ML Regressor/Classifier', 'Scientific Baseline Report'],
           },
           {
             num: '04',
-            title: 'Deep Learning & Scientific Models',
-            topics: ['Neural network architectures & loss functions', 'CNNs for scientific imaging & spectroscopy', 'Model interpretability in science'],
+            title: 'Deep Learning, PyTorch & Differentiable Computing',
+            topics: [
+              'Neural network fundamentals: perceptrons, activation functions, forward propagation & computational graphs',
+              'Backpropagation & PyTorch autograd: loss functions, SGD, Adam & learning-rate schedules',
+              'CNNs for spatial/scientific image data & sequence models intro',
+              'Automatic differentiation, higher-order derivatives, tensor ops & GPU workflows',
+            ],
+            practical: 'Train a neural network to approximate a known analytical function and compute its derivatives using PyTorch autograd.',
+            pipeline: ['PyTorch Model', 'Autograd Engine', 'Higher-Order Derivatives', 'Differentiable Graphs'],
           },
           {
             num: '05',
-            title: 'Physics-Informed AI (PINNs)',
-            topics: ['Embedding physical laws into loss functions', 'Boundary & initial condition constraints', 'Validating models against physical laws'],
+            title: 'Scientific Machine Learning & Physics-Informed Neural Networks (PINNs)',
+            topics: [
+              'Scientific ML paradigm: data-driven vs physics-based models & hybrid modelling',
+              'PINN mathematical formulation: PDE residuals, boundary/initial conditions & collocation points',
+              'PINNs for ODEs & forward problems: automatic differentiation & convergence challenges',
+              'PINNs for nonlinear PDEs (1D Burgers equation), loss balancing & sampling strategies',
+              'Inverse PINNs: parameter estimation, noisy observations, scientific validation & neural operators intro',
+            ],
+            practical: 'Solve forward and inverse scientific problems using a PINN, benchmark against a classical numerical solver, and submit a technical report.',
+            pipeline: ['PDE Residual Formulation', 'Collocation Sampling', 'Composite Loss Optimization', 'Physical Law Validation'],
           },
           {
             num: '06',
-            title: 'Research Computing & Publication',
-            topics: ['Reproducible research workflows & GitHub', 'Benchmark dataset curation', 'Technical paper formatting & presentation'],
+            title: 'Advanced Scientific AI, Research Engineering & Industry Capstone',
+            topics: [
+              'Advanced PINN training: adaptive sampling, loss balancing & optimization strategies',
+              'Neural operators (DeepONet / FNO concepts), hybrid physics-ML & model selection',
+              'Research computing: experiment tracking, Git branching, modular code & configuration',
+              'Benchmarking, ablation studies, uncertainty/error analysis & computational cost',
+              'Technical communication, scientific paper/report preparation, portfolio development & viva defence',
+            ],
+            practical: 'Final Capstone Project: End-to-end scientific AI deliverable with GitHub repo, benchmark report, presentation, and technical project defence.',
+            pipeline: ['Neural Operators (FNO/DeepONet)', 'Ablation & Benchmarking', 'Research Engineering', 'Capstone Defense'],
           },
         ],
         capstone: {
-          title: 'Computational Science & SciML Project',
-          flow: ['Scientific Hypothesis', 'Lab Dataset', 'SciML / PINN Model', 'Research Report'],
-          outputs: ['Jupyter research notebook', 'PINN simulation model', 'Formatted technical research paper'],
+          title: 'Scientific AI Research & Industry Capstone Project',
+          flow: ['Problem Formulation', 'Numerical Baseline & Dataset', 'PINN / SciML Model', 'Benchmarking & Ablation', 'Technical Report & Defence'],
+          outputs: ['Reproducible GitHub research repo', 'Physics-Informed Neural Network (PINN) model', 'Benchmark vs numerical solver report', 'Capstone defense presentation'],
         },
       },
       {
@@ -664,7 +1075,6 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState('group-1');
-  const [expandedPathway, setExpandedPathway] = useState('cs-p1');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
@@ -689,8 +1099,8 @@ export default function ProgramsPage() {
 
         return {
           ...p,
-          title: dbCourse.title || p.title,
-          description: dbCourse.shortDescription || p.description,
+          title: p.title || dbCourse.title,
+          description: p.description || dbCourse.shortDescription,
           price: dbPrice !== null ? dbPrice : p.price,
           mrp: dbMrp !== null ? dbMrp : p.mrp,
         };
@@ -816,7 +1226,6 @@ export default function ProgramsPage() {
                   }`}
                   onClick={() => {
                     setActiveGroup(g.id);
-                    setExpandedPathway(g.pathways[0].id);
                   }}
                 >
                   <div className="flex items-center justify-between w-full mb-2">
@@ -911,7 +1320,7 @@ export default function ProgramsPage() {
               {[
                 { id: 'ALL', label: 'All Tracks' },
                 { id: '3M', label: '3 Months' },
-                { id: '6M', label: '6 Months Dual' },
+                { id: '6M', label: '6 Months' },
                 { id: 'WEEKEND', label: 'Weekend Track' },
               ].map((pill) => (
                 <button
@@ -929,211 +1338,97 @@ export default function ProgramsPage() {
             </div>
           </div>
 
-          {/* ================= PATHWAY CARDS ACCORDION ================= */}
+          {/* ================= PATHWAY CARDS ================= */}
           <div className="space-y-4">
             {filteredPathways.length > 0 ? (
-              filteredPathways.map((pathway) => {
-                const isOpen = expandedPathway === pathway.id;
-                return (
-                  <article
-                    key={pathway.id}
-                    className={`minimal-card overflow-hidden transition-all duration-150 ${
-                      isOpen ? 'border-zinc-400 dark:border-zinc-600' : ''
-                    }`}
-                    id={pathway.id}
-                  >
-                    {/* Card Header Header Bar */}
-                    <header
-                      className="p-5 sm:p-6 cursor-pointer flex flex-col md:flex-row justify-between gap-4 md:items-start select-none"
-                      onClick={() => setExpandedPathway(isOpen ? '' : pathway.id)}
-                      tabIndex={0}
-                      role="button"
-                      aria-expanded={isOpen}
-                    >
-                      <div className="space-y-2 flex-grow">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <span className="mono-tag text-zinc-900 dark:text-white font-bold">
-                            {pathway.eyebrow}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <Clock className="w-3 h-3 text-zinc-400" />
-                            {pathway.duration}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
-                            <TrendingUp className="w-3 h-3 text-zinc-400" />
-                            {pathway.level}
-                          </span>
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
-                            <Zap className="w-3 h-3" />
-                            {pathway.handsOn}
-                          </span>
-                          {pathway.price && (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
-                              <span>₹{pathway.price.toLocaleString('en-IN')}</span>
-                            </span>
-                          )}
-                        </div>
-
-                        <h3 className="text-base sm:text-lg font-bold text-zinc-900 dark:text-white leading-tight">
-                          {pathway.title}
-                        </h3>
-
-                        <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
-                          {pathway.description}
-                        </p>
-
-                        {/* Tool tags preview */}
-                        <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                          {pathway.tools.map((t) => (
-                            <span key={t} className="px-1.5 py-0.5 text-[9px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
-                              {t}
-                            </span>
-                          ))}
-                        </div>
+              filteredPathways.map((pathway) => (
+                <article
+                  key={pathway.id}
+                  className="minimal-card p-5 sm:p-6 overflow-hidden transition-all duration-150 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs"
+                  id={pathway.id}
+                >
+                  <div className="space-y-4">
+                    {/* Meta tags */}
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="mono-tag text-zinc-900 dark:text-white font-bold">
+                          {pathway.eyebrow}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <Clock className="w-3 h-3 text-zinc-400" />
+                          {pathway.duration}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-zinc-600 dark:text-zinc-300 bg-zinc-100 dark:bg-zinc-800">
+                          <TrendingUp className="w-3 h-3 text-zinc-400" />
+                          {pathway.level}
+                        </span>
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border border-emerald-500/20">
+                          <Zap className="w-3 h-3" />
+                          {pathway.handsOn}
+                        </span>
                       </div>
 
-                      {/* Right Action Cluster: Enroll Button + Chevron */}
-                      <div className="flex items-center gap-2.5 self-start md:self-center shrink-0">
+                      {pathway.price && (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-xs font-mono font-bold text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800">
+                          <span>₹{pathway.price.toLocaleString('en-IN')}</span>
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Title & Description */}
+                    <div className="space-y-1.5">
+                      <h3 className="text-lg sm:text-xl font-bold text-zinc-900 dark:text-white leading-tight">
+                        {pathway.title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-4xl">
+                        {pathway.description}
+                      </p>
+                    </div>
+
+                    {/* Tool tags preview */}
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      {pathway.tools.map((t) => (
+                        <span key={t} className="px-2 py-0.5 text-[10px] font-mono rounded bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Action Bar: View Full Syllabus + Direct Download + Enroll */}
+                    <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800/80 flex flex-wrap items-center justify-between gap-3">
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          className="inline-flex items-center justify-center font-bold px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-1.5 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            handleEnrollClick(pathway);
-                          }}
+                          className="inline-flex items-center justify-center font-semibold px-4 py-2 rounded-xl border border-zinc-200 hover:border-zinc-300 bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-900 dark:hover:bg-zinc-800 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs transition-all duration-150 active:scale-[0.98] gap-2 min-h-[38px] cursor-pointer shadow-2xs"
+                          onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
                         >
-                          <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
+                          <BookOpen className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
+                          <span>View Full Syllabus ({pathway.duration || '12 Weeks'})</span>
                         </button>
 
-                        <div className={`p-2 rounded-xl border border-zinc-200 dark:border-zinc-800 text-zinc-400 transition-transform duration-200 ${isOpen ? 'rotate-180 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white' : ''}`}>
-                          <ChevronDown className="w-4 h-4" />
-                        </div>
+                        <a
+                          href={`/syllabi/${pathway.id}.pdf`}
+                          download={`Unisole_${pathway.title.replace(/[^a-zA-Z0-9]/g, '_')}_Syllabus.pdf`}
+                          className="inline-flex items-center justify-center font-medium px-3 py-2 rounded-xl text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200 text-xs transition-colors gap-1.5 min-h-[38px]"
+                          title="Direct PDF Download"
+                        >
+                          <Download className="w-3.5 h-3.5 text-zinc-400" />
+                          <span className="hidden sm:inline">Download PDF</span>
+                        </a>
                       </div>
-                    </header>
 
-                    {/* Expanded Curriculum & Capstone Body */}
-                    {isOpen && (
-                      <div className="px-5 sm:px-6 pb-6 pt-2 border-t border-zinc-100 dark:border-zinc-800 space-y-6 animate-in fade-in duration-150">
-                        
-                        {/* Modules Breakdown Grid */}
-                        <div className="space-y-3 pt-2">
-                          <h4 className="text-xs font-mono uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-                            <BookOpen className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>Curriculum Breakdown ({pathway.modules.length} Modules)</span>
-                          </h4>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            {pathway.modules.map((mod) => (
-                              <div key={mod.num} className="border border-zinc-200/80 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-4 space-y-2.5">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono font-bold text-zinc-700 bg-zinc-200/80 dark:bg-zinc-800 dark:text-zinc-300 w-5 h-5 rounded flex items-center justify-center">
-                                    {mod.num}
-                                  </span>
-                                  <h5 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white leading-tight">
-                                    {mod.title}
-                                  </h5>
-                                </div>
-                                
-                                <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-                                  {mod.topics.map((t, idx) => (
-                                    <li key={idx} className="flex items-start gap-1.5">
-                                      <Check className="w-3 h-3 text-zinc-900 dark:text-zinc-100 mt-0.5 flex-shrink-0" />
-                                      <span className="leading-normal">{t}</span>
-                                    </li>
-                                  ))}
-                                </ul>
-
-                                {mod.practical && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Lab Task:</span>
-                                    <span className="text-zinc-500 dark:text-zinc-400 mt-0.5 block italic text-[11px]">{mod.practical}</span>
-                                  </div>
-                                )}
-
-                                {mod.pipeline && (
-                                  <div className="mt-2 pt-2 border-t border-zinc-200/60 dark:border-zinc-800 text-xs">
-                                    <span className="font-semibold text-zinc-700 dark:text-zinc-300 block text-[10px] uppercase font-mono tracking-wider">Architecture Pipeline:</span>
-                                    <div className="flex flex-wrap items-center gap-1 mt-1">
-                                      {mod.pipeline.map((step, sIdx) => (
-                                        <span key={sIdx} className="px-1.5 py-0.2 text-[9px] font-mono bg-zinc-200/60 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 rounded">
-                                          {step} {sIdx < mod.pipeline.length - 1 ? '→' : ''}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  </div>
-                                )}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        {/* Capstone Project Deliverable Section */}
-                        {pathway.capstone && (
-                          <div className="border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950/40 rounded-xl p-5 space-y-3">
-                            <div className="flex flex-wrap items-center justify-between border-b border-zinc-200/80 dark:border-zinc-800 pb-2.5 gap-2">
-                              <span className="px-2 py-0.5 text-[9px] font-mono uppercase tracking-wider bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 rounded">
-                                Capstone Defense
-                              </span>
-                              <h4 className="text-xs sm:text-sm font-bold text-zinc-900 dark:text-white">
-                                {pathway.capstone.title}
-                              </h4>
-                            </div>
-
-                            {pathway.capstone.flow && (
-                              <div className="space-y-1.5">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Execution Pipeline:</span>
-                                <div className="flex flex-wrap items-center gap-2">
-                                  {pathway.capstone.flow.map((st, i) => (
-                                    <div key={st} className="flex items-center gap-1.5 text-xs">
-                                      <span className="inline-flex items-center justify-center w-4 h-4 rounded bg-zinc-200 dark:bg-zinc-800 font-mono text-[9px] font-bold text-zinc-700 dark:text-zinc-300">
-                                        {i + 1}
-                                      </span>
-                                      <span className="font-medium text-zinc-700 dark:text-zinc-300">{st}</span>
-                                      {i < pathway.capstone.flow.length - 1 && <span className="text-zinc-400">→</span>}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-
-                            {pathway.capstone.outputs && (
-                              <div className="space-y-1.5 pt-1">
-                                <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 block">Employer-Ready Deliverables:</span>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                                  {pathway.capstone.outputs.map((out, oIdx) => (
-                                    <div key={oIdx} className="flex items-center gap-2 text-xs text-zinc-700 dark:text-zinc-300 bg-white dark:bg-zinc-900 p-2.5 rounded-lg border border-zinc-200 dark:border-zinc-800">
-                                      <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100 flex-shrink-0" />
-                                      <span className="font-medium">{out}</span>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-
-                        {/* Action buttons & Razorpay link */}
-                        <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
-                          <button
-                            type="button"
-                            className="inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-700 dark:text-zinc-300 text-xs transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer shadow-2xs hover:bg-zinc-50 dark:hover:bg-zinc-800"
-                            onClick={() => handleSyllabusClick(pathway, currentGroupData?.title)}
-                          >
-                            <Download className="w-3.5 h-3.5 text-zinc-400" />
-                            <span>View Syllabus & Curriculum</span>
-                          </button>
-
-                          <span className="text-[11px] text-zinc-400 font-mono">
-                            Instant Razorpay Confirmation • Limited Batch Size
-                          </span>
-                        </div>
-
-                      </div>
-                    )}
-                  </article>
-                );
-              })
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center font-bold px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-400 text-white transition-all duration-150 active:scale-[0.98] gap-2 text-xs min-h-[38px] cursor-pointer shadow-md shadow-indigo-500/20"
+                        onClick={() => handleEnrollClick(pathway)}
+                      >
+                        <span>Enroll (₹{pathway.price?.toLocaleString('en-IN') || 2999})</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))
             ) : (
               <div className="minimal-card p-10 text-center space-y-2">
                 <Search className="w-6 h-6 text-zinc-400 mx-auto" />
@@ -1213,7 +1508,7 @@ export default function ProgramsPage() {
               { num: '01', title: 'Foundational Baseline', desc: 'Core academic logic, environment setup, and clean code patterns.' },
               { num: '02', title: 'Applied AI Pipelines', desc: 'Working with production libraries, data ingestion, and cloud APIs.' },
               { num: '03', title: 'Cluster Container Labs', desc: 'Docker containerization, GPU inference testing, and local MLOps.' },
-              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end full stack system with documentation.' },
+              { num: '04', title: 'Capstone Defense', desc: 'Building and presenting an end-to-end production AI system with documentation.' },
               { num: '05', title: 'Career & Referrals', desc: 'QR-verified dual certification, portfolio review, and hiring referrals.' },
             ].map((step, idx) => (
               <div key={step.num} className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-900/40 space-y-2">
