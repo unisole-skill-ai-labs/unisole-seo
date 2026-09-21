@@ -31,8 +31,7 @@ import {
   ShieldCheck,
   Zap,
   HelpCircle,
-  PhoneCall,
-  X
+  PhoneCall
 } from 'lucide-react';
 
 const GROUPS_DATA = [
@@ -1075,8 +1074,6 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedDuration, setSelectedDuration] = useState('ALL');
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const mergedGroupsData = useMemo(() => {
@@ -1117,25 +1114,6 @@ export default function ProgramsPage() {
     if (!activeGroup) return null;
     return mergedGroupsData.find((g) => g.id === activeGroup) || null;
   }, [activeGroup, mergedGroupsData]);
-
-  const filteredPathways = useMemo(() => {
-    if (!currentGroupData) return [];
-    return currentGroupData.pathways.filter((pathway) => {
-      const matchesSearch =
-        searchQuery.trim() === '' ||
-        pathway.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pathway.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        pathway.tools.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase()));
-
-      const matchesDuration =
-        selectedDuration === 'ALL' ||
-        (selectedDuration === '3M' && pathway.duration.includes('3 Months')) ||
-        (selectedDuration === '6M' && pathway.duration.includes('6 Months')) ||
-        (selectedDuration === 'WEEKEND' && pathway.duration.toLowerCase().includes('weekend'));
-
-      return matchesSearch && matchesDuration;
-    });
-  }, [currentGroupData, searchQuery, selectedDuration]);
 
   const [selectedSyllabusPathway, setSelectedSyllabusPathway] = useState<any>(null);
   const [selectedSyllabusGroup, setSelectedSyllabusGroup] = useState<string>('');
@@ -1318,8 +1296,6 @@ export default function ProgramsPage() {
                     type="button"
                     onClick={() => {
                       setActiveGroup(null);
-                      setSearchQuery('');
-                      setSelectedDuration('ALL');
                       const el = document.getElementById('stream-catalog');
                       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }}
@@ -1335,7 +1311,7 @@ export default function ProgramsPage() {
                     {currentGroupData.title}
                   </h2>
                   <span className="text-xs font-mono text-zinc-500">
-                    ({filteredPathways.length} {filteredPathways.length === 1 ? 'Pathway' : 'Pathways'})
+                    ({currentGroupData.pathways.length} {currentGroupData.pathways.length === 1 ? 'Pathway' : 'Pathways'})
                   </span>
                 </div>
 
@@ -1347,7 +1323,6 @@ export default function ProgramsPage() {
                         key={g.id}
                         onClick={() => {
                           setActiveGroup(g.id);
-                          setSearchQuery('');
                         }}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
                           isActive
@@ -1362,55 +1337,9 @@ export default function ProgramsPage() {
                 </div>
               </div>
 
-              {/* Search & Duration Filter Bar */}
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
-                {/* Search Input */}
-                <div className="relative w-full sm:w-72">
-                  <Search className="w-3.5 h-3.5 text-zinc-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-                  <input
-                    type="text"
-                    placeholder="Search modules, skills, or tools..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full text-xs pl-9 pr-3 py-2 rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 focus:outline-none focus:border-zinc-400 text-zinc-900 dark:text-white placeholder:text-zinc-400"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery('')}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-700"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  )}
-                </div>
-
-                {/* Duration Pills */}
-                <div className="flex items-center gap-1 w-full sm:w-auto overflow-x-auto no-scrollbar">
-                  {[
-                    { id: 'ALL', label: 'All Tracks' },
-                    { id: '3M', label: '3 Months' },
-                    { id: '6M', label: '6 Months' },
-                    { id: 'WEEKEND', label: 'Weekend Track' },
-                  ].map((pill) => (
-                    <button
-                      key={pill.id}
-                      onClick={() => setSelectedDuration(pill.id)}
-                      className={`px-3 py-1.5 rounded-md text-xs font-semibold whitespace-nowrap transition-colors cursor-pointer ${
-                        selectedDuration === pill.id
-                          ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 font-bold'
-                          : 'border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-850'
-                      }`}
-                    >
-                      {pill.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
               {/* Pathway Cards */}
-              <div className="space-y-4">
-                {filteredPathways.length > 0 ? (
-                  filteredPathways.map((pathway) => (
+              <div className="space-y-4 pt-1">
+                {currentGroupData.pathways.map((pathway) => (
                     <article
                       key={pathway.id}
                       className="minimal-card p-5 sm:p-6 overflow-hidden transition-all duration-150 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-xs"
@@ -1497,20 +1426,7 @@ export default function ProgramsPage() {
                         </div>
                       </div>
                     </article>
-                  ))
-                ) : (
-                  <div className="minimal-card p-10 text-center space-y-2">
-                    <Search className="w-6 h-6 text-zinc-400 mx-auto" />
-                    <h4 className="text-sm font-bold text-zinc-900 dark:text-white">No matching pathways found</h4>
-                    <p className="text-xs text-zinc-500">Try adjusting your search keywords or duration filter.</p>
-                    <button
-                      onClick={() => { setSearchQuery(''); setSelectedDuration('ALL'); }}
-                      className="mt-2 text-xs font-semibold text-zinc-900 dark:text-white underline cursor-pointer"
-                    >
-                      Clear Filters
-                    </button>
-                  </div>
-                )}
+                ))}
               </div>
 
               {/* Bottom Back Button */}
@@ -1519,8 +1435,6 @@ export default function ProgramsPage() {
                   type="button"
                   onClick={() => {
                     setActiveGroup(null);
-                    setSearchQuery('');
-                    setSelectedDuration('ALL');
                     const el = document.getElementById('stream-catalog');
                     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
