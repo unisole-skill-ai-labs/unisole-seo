@@ -106,12 +106,12 @@ export default function Footer() {
         </div>
 
         {/* Col 4: Contact & Social */}
-        <div className="space-y-3">
+        <div className="col-span-2 sm:col-span-1 space-y-3">
           <h4 className="text-xs font-mono text-zinc-300 uppercase tracking-wider">Contact</h4>
           <div className="flex flex-col gap-2 text-xs text-zinc-400">
             <a href="mailto:unisole.empower@gmail.com" className="hover:text-white transition-colors flex items-center gap-2">
               <Mail className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
-              <span className="truncate">unisole.empower@gmail.com</span>
+              <span className="break-all sm:break-normal">unisole.empower@gmail.com</span>
             </a>
             <a href="tel:+918219691201" className="hover:text-white transition-colors flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
