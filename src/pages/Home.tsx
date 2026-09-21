@@ -131,17 +131,17 @@ function OfferCarousel() {
         <div className="lg:col-span-7 flex flex-col">
           <div className="h-full min-h-[440px] flex flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 text-white border border-zinc-800 shadow-minimal relative">
             {/* Top Visual Image with Gradient Layer */}
-            <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-zinc-950">
+            <div className="relative aspect-[16/10] sm:h-80 w-full overflow-hidden bg-zinc-950">
               <img
                 src={getOptimizedImageUrl(currentCard.img, { width: 800 })}
                 alt={currentCard.title}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
+                className="w-full h-full object-cover object-top transition-transform duration-700 ease-out hover:scale-105"
                 width="800"
-                height="360"
+                height="450"
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/20 to-transparent" />
               
               {/* Domain Tag Pill */}
               <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
@@ -203,17 +203,17 @@ function OfferCarousel() {
             </button>
 
             {/* Modal Header */}
-            <div className="relative h-44 sm:h-52 w-full flex-shrink-0 overflow-hidden bg-zinc-950">
+            <div className="relative h-60 sm:h-72 w-full flex-shrink-0 overflow-hidden bg-zinc-950">
               <img
                 src={getOptimizedImageUrl(modalCard.img, { width: 900 })}
                 alt={modalCard.title}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover object-top"
                 width="900"
-                height="280"
+                height="450"
                 loading="lazy"
                 decoding="async"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/60 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/30 to-transparent" />
               
               <div className="absolute bottom-4 left-5 right-5">
                 <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">Domain Focus</span>
