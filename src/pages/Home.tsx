@@ -36,17 +36,6 @@ const expertiseTags = [
   '08 · Venture Incubation',
 ];
 
-const domainHighlights: Record<number, string[]> = {
-  1: ['NEP 2020 Aligned', 'Dual Certification', 'Live API Capstone', 'FastAPI & Docker'],
-  2: ['K-12 Visual Coding', 'Maker Innovation Labs', 'AI-Ready Certification', 'Robotics & Vision'],
-  3: ['Faculty Enablement', 'Pedagogy Lesson Plans', 'UGC/AICTE FDP Alignment', 'Year-round Mentoring'],
-  4: ['Campus Lab Setup', 'Credit-Linked Modules', 'Containerized Workstations', 'GPU Cluster Integration'],
-  5: ['Peer-Reviewed Research', 'NLP & Computer Vision', 'Dataset Governance', 'IIT/NIT Co-authorship'],
-  6: ['Real-World Client SOWs', 'Production MLOps', 'Verifiable QR Portfolio', 'Direct Placement Prep'],
-  7: ['State-Level Initiatives', 'District Scale Rollouts', 'Govt of HP NEP Framework', 'Institutional MoUs'],
-  8: ['MVP Prototyping in 6 Wks', 'Customer Discovery & BMC', 'Grant Application Support', 'Angel Demo Day'],
-};
-
 function OfferCarousel() {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -75,7 +64,6 @@ function OfferCarousel() {
 
   const currentCard = offerCards[selectedIndex] || offerCards[0];
   const currentDomainTag = expertiseTags[selectedIndex] || `DOMAIN 0${selectedIndex + 1}`;
-  const currentHighlights = domainHighlights[currentCard.id] || ['NEP 2020 Aligned', 'Industry Mentorship'];
 
   return (
     <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
@@ -88,7 +76,7 @@ function OfferCarousel() {
           Core Institutional Expertise
         </h2>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Select any domain below to inspect specialized academic infrastructure, curriculum frameworks, and campus laboratory models.
+          Select any domain below to inspect specialized academic infrastructure, implementation frameworks, and campus laboratory models.
         </p>
       </div>
 
@@ -143,13 +131,13 @@ function OfferCarousel() {
         <div className="lg:col-span-7 flex flex-col">
           <div className="h-full min-h-[440px] flex flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 text-white border border-zinc-800 shadow-minimal relative">
             {/* Top Visual Image with Gradient Layer */}
-            <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-zinc-950">
+            <div className="relative h-60 sm:h-72 w-full overflow-hidden bg-zinc-950">
               <img
                 src={getOptimizedImageUrl(currentCard.img, { width: 800 })}
                 alt={currentCard.title}
                 className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
                 width="800"
-                height="320"
+                height="360"
                 loading="lazy"
                 decoding="async"
               />
@@ -175,36 +163,18 @@ function OfferCarousel() {
                 <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-xl">
                   {currentCard.desc}
                 </p>
-
-                {/* Deliverable Highlights */}
-                <div className="pt-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold block mb-2">
-                    Key Deliverables & Specifications
-                  </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {currentHighlights.map((hl) => (
-                      <div key={hl} className="flex items-center gap-2 p-2 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                        <span className="truncate">{hl}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
               </div>
 
               {/* Action Button */}
-              <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+              <div className="pt-5 border-t border-white/10 flex items-center justify-start">
                 <button
                   onClick={() => openModal(currentCard)}
                   type="button"
                   className="inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-100 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 cursor-pointer shadow-sm"
                 >
                   <Maximize2 className="w-4 h-4" />
-                  <span>View Full Framework & Deliverables</span>
+                  <span>View Full Framework</span>
                 </button>
-                <span className="text-[11px] font-mono text-zinc-400 text-center sm:text-right">
-                  Interactive Syllabus & Modules
-                </span>
               </div>
             </div>
           </div>
@@ -257,15 +227,6 @@ function OfferCarousel() {
                 dangerouslySetInnerHTML={{ __html: modalCard.fullContent || `<p>${modalCard.desc}</p>` }} 
                 className="prose dark:prose-invert max-w-none prose-h3:text-sm prose-h3:font-bold prose-h3:mt-4 prose-h3:mb-2 prose-p:my-2 prose-ul:list-disc prose-ul:pl-5 prose-li:my-1 text-xs sm:text-sm"
               />
-
-              <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 flex justify-end gap-2">
-                <Link to="/programs" onClick={closeModal}>
-                  <button className="px-4 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs font-semibold transition-all inline-flex items-center gap-1.5 cursor-pointer">
-                    <span>View Curriculum</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </Link>
-              </div>
             </div>
           </div>
         </div>
