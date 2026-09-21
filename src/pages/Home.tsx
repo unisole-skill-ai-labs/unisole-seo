@@ -403,9 +403,9 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 sm:gap-14">
             
             {/* Left Content */}
-            <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
+            <div className="lg:col-span-5 flex flex-col items-start text-left space-y-4 sm:space-y-5">
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-zinc-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-zinc-900 dark:text-white">
                 Applied Artificial Intelligence <br />
                 <span className="text-zinc-500 dark:text-zinc-400">
                   for Higher Education.
@@ -413,30 +413,30 @@ export default function Home() {
               </h1>
               
               {/* Subheading */}
-              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-md">
                 Bridging institutional classrooms and production machine learning engineering. Verified curricula, containerized local laboratories, and hands-on faculty mentoring.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-1 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-2.5 pt-1 w-full sm:w-auto">
                 <Link to="/programs" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 min-h-[44px] cursor-pointer">
+                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer">
                     <span>Explore 4 Pathways</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </Link>
 
                 <Link to="/events" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 min-h-[44px] cursor-pointer">
-                    <Calendar className="w-4 h-4 text-zinc-500" />
+                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer">
+                    <Calendar className="w-3.5 h-3.5 text-zinc-500" />
                     <span>Campus Events</span>
                   </button>
                 </Link>
               </div>
             </div>
 
-            {/* Right Visual Card */}
-            <div className="lg:col-span-5 relative w-full aspect-[3/2] max-w-[560px] mx-auto lg:max-w-none">
+            {/* Right Visual Card (Big Poster) */}
+            <div className="lg:col-span-7 relative w-full aspect-[3/2] mx-auto">
               <div className="relative h-full w-full overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow-minimal">
                 <img
                   src="/images/unisole-ai-campus-program.webp"
