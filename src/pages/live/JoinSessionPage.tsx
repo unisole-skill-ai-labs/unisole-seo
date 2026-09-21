@@ -24,12 +24,12 @@ export default function JoinSessionPage() {
       <div className="flex items-center justify-between z-10 pt-2">
         <div className="flex items-center gap-2.5">
           <img
-            src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-            alt="Unisole"
+            src="/images/unisole-logo.png"
+            alt="Unisole Skill AI Labs"
             className="w-7 h-7 rounded-lg object-contain"
           />
           <span className="font-extrabold text-sm tracking-tight text-zinc-100">
-            Unisole <span className="text-indigo-400">Live</span>
+            Unisole Skill AI Labs <span className="text-indigo-400">Live</span>
           </span>
         </div>
       </div>

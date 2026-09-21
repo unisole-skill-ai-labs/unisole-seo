@@ -104,8 +104,15 @@ export default function AuthModal() {
         {/* Header Ribbon */}
         <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-zinc-100 dark:border-zinc-800">
           <div className="flex items-center gap-2">
-            <span className="w-6 h-6 rounded-md bg-zinc-900 dark:bg-white text-white dark:text-zinc-900 font-bold text-xs flex items-center justify-center">
-              U
+            <div className="w-7 h-7 rounded-md bg-black border border-zinc-200 dark:border-zinc-800 overflow-hidden flex items-center justify-center shrink-0">
+              <img
+                src="/images/unisole-logo.png"
+                alt="Unisole Skill AI Labs"
+                className="w-full h-full object-cover"
+              />
+            </div>
+            <span className="font-extrabold text-xs text-zinc-900 dark:text-white">
+              Unisole <span className="text-zinc-500 font-medium">Skill AI Labs</span>
             </span>
           </div>
 
