@@ -1,71 +1,13 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, Phone, ArrowUp, Send, CheckCircle2, Shield, Heart } from 'lucide-react';
+import { Mail, Phone, ArrowUp, Heart } from 'lucide-react';
 
 export default function Footer() {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || !email.includes('@')) return;
-    setSubscribed(true);
-    setTimeout(() => {
-      setEmail('');
-      setSubscribed(false);
-    }, 4000);
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
     <footer className="w-full bg-zinc-950 text-zinc-300 border-t border-zinc-900 relative overflow-hidden">
-      {/* Top Banner / Inquiry Card */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-10 border-b border-zinc-900">
-        <div className="bg-zinc-900/60 border border-zinc-800 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="space-y-1 text-center md:text-left">
-            <span className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-zinc-400">
-              <Shield className="w-3 h-3 text-zinc-400" />
-              Institutional Partnerships
-            </span>
-            <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight">
-              Ready to setup an AI Lab at your campus?
-            </h3>
-            <p className="text-xs text-zinc-400 max-w-lg">
-              Get in touch with our IIT & NIT mentors to evaluate academic pathways and student training modules.
-            </p>
-          </div>
-
-          <form onSubmit={handleSubscribe} className="w-full md:w-auto flex items-center gap-2 max-w-md">
-            {subscribed ? (
-              <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-200 text-xs font-medium w-full justify-center">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                <span>Thank you! We will reach out shortly.</span>
-              </div>
-            ) : (
-              <div className="flex items-center w-full bg-zinc-950 border border-zinc-800 rounded-lg p-1">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your institutional email..."
-                  required
-                  className="bg-transparent text-xs text-white px-3 py-1.5 outline-none w-full placeholder:text-zinc-500"
-                />
-                <button
-                  type="submit"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-white hover:bg-zinc-100 text-zinc-900 font-semibold text-xs transition-all flex-shrink-0 cursor-pointer"
-                >
-                  <span>Connect</span>
-                  <Send className="w-3 h-3" />
-                </button>
-              </div>
-            )}
-          </form>
-        </div>
-      </div>
 
       {/* Navigation Links Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-2 md:grid-cols-4 gap-8 sm:gap-10">
