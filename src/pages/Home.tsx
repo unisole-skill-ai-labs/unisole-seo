@@ -480,37 +480,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- INSTITUTE ABOUT SECTION & 3 PILLARS ---------- */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-12 space-y-2">
-            <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-              Pedagogy
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-              Learn · Build · Research · Innovate
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              We guide academic strategy and deliver practical skill frameworks for institutions across India.
-            </p>
-          </div>
-
-          {/* Core Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-left">
-            {[
-              { num: "01", title: "Curriculum Alignment", desc: "Syllabi mapped directly to modern industry requirements and university standards." },
-              { num: "02", title: "Hands-on MLOps Labs", desc: "Students build, containerize, and deploy real models with FastAPI and Docker." },
-              { num: "03", title: "Faculty & Student Mentorship", desc: "Live guidance by IIT and NIT alumni on applied research and open source projects." }
-            ].map((p, idx) => (
-              <div key={idx} className="minimal-card p-6 space-y-3">
-                <span className="text-xs font-mono text-zinc-400 font-bold block">{p.num}</span>
-                <h4 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white">{p.title}</h4>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ---------- EXPERTISE / CAROUSEL ---------- */}
       <section className="bg-zinc-50/50 dark:bg-zinc-900/30 border-t border-zinc-200/80 dark:border-zinc-800/80">
