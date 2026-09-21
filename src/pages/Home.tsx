@@ -405,13 +405,6 @@ export default function Home() {
             
             {/* Left Content */}
             <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-              
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Academic AI Framework 2026</span>
-              </div>
-              
               {/* Main Headline */}
               <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-zinc-900 dark:text-white">
                 Applied Artificial Intelligence <br />
