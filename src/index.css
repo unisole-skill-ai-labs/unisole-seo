@@ -218,3 +218,14 @@
 .animate-ticker:hover {
   animation-play-state: paused;
 }
+
+.animate-team-marquee {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: ticker 36s linear infinite;
+}
+
+.animate-team-marquee:hover {
+  animation-play-state: paused;
+}

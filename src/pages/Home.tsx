@@ -326,7 +326,6 @@ const teamMembers = [
   { name: 'Peeyush', role: 'Lead Researcher', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785408576/IMG-20260616-WA0002.jpg_qe7akr.jpg', tag: 'NIT Hamirpur' },
   { name: 'Sargam', role: 'Pilot Project Manager', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260616-WA0005.jpg_uiuqbo.jpg' },
   { name: 'Rahul Chauhan', role: 'Implementation Associate', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1786260818/rahul_x7n0ag.jpg' },
-  { name: 'Anshu Roy', role: 'Software Developer', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785477270/196225806_ufrfe9.jpg', tag: 'NIT Hamirpur' },
   { name: 'Divyank', role: 'Tech Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785404022/WhatsApp_Image_2026-07-30_at_3.03.01_PM_rheqln.jpg' },
   { name: 'Kushal', role: 'Academic Head', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403940/IMG-20250311-WA0007.jpg_vvfqnl.jpg', tag: 'IIT Patna' },
   { name: 'Aditya Kaudhal', role: 'AI & Technology Lead', img: 'https://res.cloudinary.com/hehmsemf/image/upload/v1785403939/IMG-20260720-WA0003.jpg_bjlrkr.jpg', tag: 'IIT Delhi' },
@@ -334,59 +333,78 @@ const teamMembers = [
 ];
 
 function TeamSection() {
+  const marqueeList = [...teamMembers, ...teamMembers];
+
   return (
-    <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 border-t border-zinc-200 dark:border-zinc-800">
-      <div className="max-w-2xl mb-10 space-y-2">
-        <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-          Advisory & Faculty
-        </span>
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-          Leadership Team
-        </h2>
-        <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Engineers and faculty advisors from premier institutions (IIT Delhi, NIT Hamirpur, IIT Patna) designing curriculum frameworks.
-        </p>
+    <section className="w-full py-12 sm:py-16 border-t border-zinc-200 dark:border-zinc-800 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="space-y-1.5 max-w-xl">
+            <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
+              Advisory & Faculty
+            </span>
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
+              Leadership Team
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Engineers and faculty advisors from premier institutions (IIT Delhi, NIT Hamirpur, IIT Patna) designing curriculum frameworks.
+            </p>
+          </div>
+          <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 hidden sm:block">
+            Auto-scrolling • Hover to pause
+          </span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
-        {teamMembers.map((member) => (
-          <div
-            className="minimal-card flex flex-col p-3 group"
-            key={member.name}
-          >
-            {/* Avatar */}
-            <div className="relative aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950 rounded-lg mb-2.5">
-              <img
-                src={getOptimizedImageUrl(member.img, { width: 300 })}
-                alt={member.name}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-102"
-                width="300"
-                height="300"
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            
-            {/* Details */}
-            <div className="flex-grow flex flex-col justify-between">
-              <div>
-                <div className="flex flex-wrap items-center gap-1">
-                  <h3 className="text-xs font-bold text-zinc-900 dark:text-white leading-tight">
-                    {member.name}
-                  </h3>
-                  {member.tag && (
-                    <span className="px-1 py-0.2 text-[8px] font-mono text-zinc-600 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-300 rounded">
-                      {member.tag}
-                    </span>
-                  )}
+      {/* Infinite Auto-Moving Carousel with Gradient Edge Masks */}
+      <div className="relative w-full overflow-hidden">
+        {/* Left Fade Mask */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent z-10" />
+
+        {/* Right Fade Mask */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent z-10" />
+
+        {/* Marquee Track */}
+        <div className="animate-team-marquee flex items-stretch gap-3.5 sm:gap-4 px-4 py-2">
+          {marqueeList.map((member, index) => (
+            <div
+              key={`${member.name}-${index}`}
+              className="w-[200px] sm:w-[220px] shrink-0 p-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 rounded-xl shadow-minimal hover:shadow-minimal-hover transition-all flex flex-col justify-between group cursor-default"
+            >
+              {/* Avatar */}
+              <div className="relative aspect-square w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950 rounded-lg mb-2.5">
+                <img
+                  src={getOptimizedImageUrl(member.img, { width: 300 })}
+                  alt={member.name}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  width="300"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </div>
+
+              {/* Details */}
+              <div className="flex flex-col justify-between flex-grow">
+                <div>
+                  <div className="flex flex-wrap items-center gap-1">
+                    <h3 className="text-xs font-bold text-zinc-900 dark:text-white leading-tight">
+                      {member.name}
+                    </h3>
+                    {member.tag && (
+                      <span className="px-1 py-0.2 text-[8px] font-mono text-zinc-600 bg-zinc-100 dark:bg-zinc-800 dark:text-zinc-300 rounded">
+                        {member.tag}
+                      </span>
+                    )}
+                  </div>
+                  <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block mt-0.5 line-clamp-2">
+                    {member.role}
+                  </span>
                 </div>
-                <span className="text-[11px] text-zinc-500 dark:text-zinc-400 block mt-0.5">
-                  {member.role}
-                </span>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
