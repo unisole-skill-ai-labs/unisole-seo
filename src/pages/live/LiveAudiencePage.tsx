@@ -1111,12 +1111,12 @@ export default function LiveAudiencePage() {
         <div className="flex items-center justify-between z-10 pt-2">
           <div className="flex items-center gap-2.5">
             <img
-              src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-              alt="Unisole"
+              src="/images/unisole-logo.png"
+              alt="Unisole Skill AI Labs"
               className="w-7 h-7 rounded-lg object-contain"
             />
             <span className="font-extrabold text-sm tracking-tight text-zinc-100">
-              Unisole <span className="text-indigo-400">Live</span>
+              Unisole Skill AI Labs <span className="text-indigo-400">Live</span>
             </span>
           </div>
           <span className="px-3 py-1 rounded-full bg-white/10 text-[11px] font-mono font-bold text-indigo-300">
@@ -1354,8 +1354,8 @@ export default function LiveAudiencePage() {
         <header className="flex items-center justify-between z-10 pt-2 pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
             <img
-              src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-              alt="Unisole"
+              src="/images/unisole-logo.png"
+              alt="Unisole Skill AI Labs"
               className="w-7 h-7 rounded-lg object-contain"
             />
             <div className="flex flex-col">
@@ -1641,8 +1641,8 @@ export default function LiveAudiencePage() {
         <header className="flex items-center justify-between z-10 pt-2 pb-4 border-b border-white/10">
           <div className="flex items-center gap-2.5">
             <img
-              src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-              alt="Unisole"
+              src="/images/unisole-logo.png"
+              alt="Unisole Skill AI Labs"
               className="w-7 h-7 rounded-lg object-contain"
             />
             <span className="font-black text-sm tracking-tight text-zinc-100">
