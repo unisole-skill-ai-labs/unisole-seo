@@ -164,13 +164,13 @@ export default function LiveSessionAttendancePage() {
       <header className="max-w-xl w-full mx-auto flex items-center justify-between z-10 pt-2 pb-4">
         <div className="flex items-center gap-3">
           <img
-            src="https://res.cloudinary.com/hehmsemf/image/upload/f_auto,q_auto,w_64/v1785299421/Unisole_logo_new_mhqbma.png"
-            alt="Unisole Logo"
+            src="/images/unisole-logo.png"
+            alt="Unisole Skill AI Labs"
             className="w-8 h-8 rounded-xl object-contain shadow-md"
           />
           <div className="flex flex-col">
             <span className="font-black text-base tracking-tight text-white">
-              Unisole <span className="text-indigo-400">Live</span>
+              Unisole Skill AI Labs <span className="text-indigo-400">Live</span>
             </span>
             <span className="text-[10px] text-zinc-400 font-medium">
               Campus Roadshow & Attendance Desk
