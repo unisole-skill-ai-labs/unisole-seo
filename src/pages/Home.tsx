@@ -464,11 +464,10 @@ export default function Home() {
       {/* ---------- STATS SECTION ---------- */}
       <section className="bg-zinc-50 dark:bg-zinc-900/40 border-y border-zinc-200/80 dark:border-zinc-800/80 py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left">
             {[
               { value: '4', label: 'Academic Pathways', desc: 'CS, Science, Commerce, Design' },
               { value: '5,000+', label: 'Active Learners', desc: 'Across universities and colleges' },
-              { value: '25+', label: 'Campus Labs', desc: 'Local air-gapped lab nodes' },
               { value: '2+', label: 'Years Building', desc: 'Continuous curriculum updates' }
             ].map((s) => (
               <div className="minimal-card p-4 sm:p-5" key={s.label}>
