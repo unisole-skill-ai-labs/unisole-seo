@@ -8,6 +8,7 @@ import {
   ArrowRight, 
   ChevronLeft, 
   ChevronRight, 
+  CheckCircle2,
   Maximize2, 
   X, 
   Star, 
@@ -25,17 +26,6 @@ import {
   ArrowUpRight
 } from 'lucide-react';
 
-const expertiseTags = [
-  '01 · Academic Pathways',
-  '02 · School AI Labs',
-  '03 · Faculty Development',
-  '04 · Higher Education',
-  '05 · Applied AI Research',
-  '06 · Live Internships',
-  '07 · Public Partnerships',
-  '08 · Venture Incubation',
-];
-
 const domainHighlights: Record<number, string[]> = {
   1: ['NEP 2020 Aligned', 'Dual Certification', 'Live API Capstone', 'FastAPI & Docker'],
   2: ['K-12 Visual Coding', 'Maker Innovation Labs', 'AI-Ready Certification', 'Robotics & Vision'],
@@ -48,7 +38,6 @@ const domainHighlights: Record<number, string[]> = {
 };
 
 function OfferCarousel() {
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalCard, setModalCard] = useState<any>(null);
 
@@ -73,13 +62,9 @@ function OfferCarousel() {
     setModalCard(null);
   };
 
-  const currentCard = offerCards[selectedIndex] || offerCards[0];
-  const currentDomainTag = expertiseTags[selectedIndex] || `DOMAIN 0${selectedIndex + 1}`;
-  const currentHighlights = domainHighlights[currentCard.id] || ['NEP 2020 Aligned', 'Industry Mentorship'];
-
   return (
     <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
-      {/* Header */}
+      {/* Section Header */}
       <div className="max-w-2xl mb-10 sm:mb-12 space-y-2">
         <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
           Institutional Capabilities
@@ -88,128 +73,76 @@ function OfferCarousel() {
           Core Institutional Expertise
         </h2>
         <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-          Select any domain below to inspect specialized academic infrastructure, curriculum frameworks, and campus laboratory models.
+          Specialized academic frameworks, physical lab architectures, and credit-aligned deployment models designed for universities, schools, and research institutions.
         </p>
       </div>
 
-      {/* Split Feature Explorer */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-stretch">
-        
-        {/* Left Side: Domain Selector List (lg:col-span-5) */}
-        <div className="lg:col-span-5 flex flex-col gap-2">
-          {offerCards.map((card, idx) => {
-            const isSelected = idx === selectedIndex;
-            const domainNumber = String(idx + 1).padStart(2, '0');
+      {/* Option 3: Clean Multi-Column Capability Grid (8 Cards in 4-col on lg, 2-col on sm) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+        {offerCards.map((card, idx) => {
+          const domainNumber = String(idx + 1).padStart(2, '0');
+          const deliverables = domainHighlights[card.id] || ['NEP 2020 Aligned', 'Dual Certification', 'Faculty Mentoring'];
 
-            return (
-              <button
-                key={card.id}
-                onClick={() => setSelectedIndex(idx)}
-                type="button"
-                className={`w-full text-left p-3 sm:p-3.5 rounded-xl transition-all duration-200 border flex items-center justify-between group cursor-pointer ${
-                  isSelected
-                    ? 'bg-zinc-900 text-white border-zinc-800 dark:bg-white dark:text-zinc-950 dark:border-white shadow-sm ring-1 ring-zinc-900/10 dark:ring-white/20'
-                    : 'bg-zinc-50/70 hover:bg-zinc-100 dark:bg-zinc-900/50 dark:hover:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border-zinc-200/70 dark:border-zinc-800/80'
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <span className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded transition-colors ${
-                    isSelected
-                      ? 'bg-white/15 text-white dark:bg-zinc-950/15 dark:text-zinc-950'
-                      : 'bg-zinc-200/70 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400'
-                  }`}>
-                    {domainNumber}
+          return (
+            <div
+              key={card.id}
+              onClick={() => openModal(card)}
+              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-minimal hover:shadow-minimal-hover hover:border-zinc-300 dark:hover:border-zinc-700 transition-all duration-300 cursor-pointer"
+            >
+              {/* Aspect Visual Image */}
+              <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-950">
+                <img
+                  src={getOptimizedImageUrl(card.img, { width: 480 })}
+                  alt={card.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  width="480"
+                  height="300"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+                
+                {/* Monospace Domain Index Pill */}
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                  <span className="px-2.5 py-0.5 text-[10px] font-mono font-bold text-white bg-zinc-950/80 backdrop-blur-xs rounded tracking-wider uppercase border border-white/10">
+                    DOMAIN {domainNumber}
                   </span>
-                  <div>
-                    <h3 className={`text-xs sm:text-sm font-bold leading-tight ${
-                      isSelected ? 'text-white dark:text-zinc-950' : 'text-zinc-900 dark:text-white'
-                    }`}>
-                      {card.title}
-                    </h3>
-                  </div>
-                </div>
-
-                <ChevronRight className={`w-4 h-4 transition-transform shrink-0 ${
-                  isSelected
-                    ? 'translate-x-0.5 text-white dark:text-zinc-950'
-                    : 'text-zinc-400 group-hover:translate-x-0.5 group-hover:text-zinc-600 dark:group-hover:text-zinc-200'
-                }`} />
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Right Side: Dynamic Showcase Display (lg:col-span-7) */}
-        <div className="lg:col-span-7 flex flex-col">
-          <div className="h-full min-h-[440px] flex flex-col justify-between overflow-hidden rounded-2xl bg-zinc-900 text-white border border-zinc-800 shadow-minimal relative">
-            {/* Top Visual Image with Gradient Layer */}
-            <div className="relative h-56 sm:h-64 w-full overflow-hidden bg-zinc-950">
-              <img
-                src={getOptimizedImageUrl(currentCard.img, { width: 800 })}
-                alt={currentCard.title}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out hover:scale-105"
-                width="800"
-                height="320"
-                loading="lazy"
-                decoding="async"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-zinc-900/40 to-transparent" />
-              
-              {/* Domain Tag Pill */}
-              <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
-                <span className="px-3 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-zinc-950/80 text-white backdrop-blur-xs rounded-full border border-white/10">
-                  {currentDomainTag}
-                </span>
-                <span className="text-[11px] font-mono text-zinc-400 bg-zinc-950/80 px-2.5 py-1 rounded-full border border-white/10">
-                  {String(selectedIndex + 1).padStart(2, '0')} / {String(offerCards.length).padStart(2, '0')}
-                </span>
-              </div>
-            </div>
-
-            {/* Showcase Details */}
-            <div className="p-6 sm:p-7 flex flex-col justify-between flex-grow space-y-6">
-              <div className="space-y-3">
-                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white">
-                  {currentCard.title}
-                </h3>
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed max-w-xl">
-                  {currentCard.desc}
-                </p>
-
-                {/* Deliverable Highlights */}
-                <div className="pt-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold block mb-2">
-                    Key Deliverables & Specifications
+                  <span className="p-1 rounded bg-zinc-950/60 text-white/80 group-hover:text-white group-hover:bg-zinc-900 transition-colors">
+                    <Maximize2 className="w-3.5 h-3.5" />
                   </span>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                    {currentHighlights.map((hl) => (
-                      <div key={hl} className="flex items-center gap-2 p-2 rounded-lg bg-white/5 border border-white/10 text-xs text-zinc-200">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-                        <span className="truncate">{hl}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
               </div>
 
-              {/* Action Button */}
-              <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                <button
-                  onClick={() => openModal(currentCard)}
-                  type="button"
-                  className="inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-100 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 cursor-pointer shadow-sm"
-                >
-                  <Maximize2 className="w-4 h-4" />
-                  <span>View Full Framework & Deliverables</span>
-                </button>
-                <span className="text-[11px] font-mono text-zinc-400 text-center sm:text-right">
-                  Interactive Syllabus & Modules
-                </span>
+              {/* Card Body */}
+              <div className="p-5 flex flex-col justify-between flex-grow space-y-4">
+                <div className="space-y-1.5">
+                  <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
+                    {card.desc}
+                  </p>
+                </div>
+
+                {/* Deliverable Badges Checklist */}
+                <div className="space-y-1.5 pt-2 border-t border-zinc-100 dark:border-zinc-800/80">
+                  {deliverables.slice(0, 3).map((item) => (
+                    <div key={item} className="flex items-center gap-2 text-[11px] text-zinc-600 dark:text-zinc-300">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                      <span className="truncate">{item}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom Action Trigger */}
+                <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-900 dark:text-white">
+                  <span>Inspect Framework</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-
+          );
+        })}
       </div>
 
       {/* Detail Modal */}
