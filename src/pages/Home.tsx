@@ -20,7 +20,6 @@ import {
   ShieldCheck, 
   Cpu, 
   Layers, 
-  CheckCircle2,
   Building2,
   Compass,
   ArrowUpRight
@@ -404,16 +403,9 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-10 sm:gap-14">
             
             {/* Left Content */}
-            <div className="lg:col-span-7 flex flex-col items-start text-left space-y-6">
-              
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 text-xs font-mono">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-                <span>Academic AI Framework 2026</span>
-              </div>
-              
+            <div className="lg:col-span-5 flex flex-col items-start text-left space-y-4 sm:space-y-5">
               {/* Main Headline */}
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.08] text-zinc-900 dark:text-white">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight leading-tight text-zinc-900 dark:text-white">
                 Applied Artificial Intelligence <br />
                 <span className="text-zinc-500 dark:text-zinc-400">
                   for Higher Education.
@@ -421,68 +413,41 @@ export default function Home() {
               </h1>
               
               {/* Subheading */}
-              <p className="text-sm sm:text-base text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-lg">
+              <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed max-w-md">
                 Bridging institutional classrooms and production machine learning engineering. Verified curricula, containerized local laboratories, and hands-on faculty mentoring.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-1 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-2.5 pt-1 w-full sm:w-auto">
                 <Link to="/programs" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 min-h-[44px] cursor-pointer">
+                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 dark:text-zinc-900 text-white text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer">
                     <span>Explore 4 Pathways</span>
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </Link>
 
                 <Link to="/events" className="w-full sm:w-auto">
-                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-5 py-3 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-2 min-h-[44px] cursor-pointer">
-                    <Calendar className="w-4 h-4 text-zinc-500" />
+                  <button className="w-full sm:w-auto inline-flex items-center justify-center font-semibold px-4 py-2.5 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:bg-zinc-900 dark:border-zinc-800 text-zinc-800 dark:text-zinc-200 text-xs sm:text-sm transition-all duration-150 active:scale-[0.98] gap-1.5 min-h-[40px] cursor-pointer">
+                    <Calendar className="w-3.5 h-3.5 text-zinc-500" />
                     <span>Campus Events</span>
                   </button>
                 </Link>
               </div>
-
-              {/* Trust Indicators */}
-              <div className="pt-3 flex flex-wrap items-center gap-5 text-xs text-zinc-500 dark:text-zinc-400 border-t border-zinc-100 dark:border-zinc-800/80 w-full font-medium">
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>IIT & NIT Mentored</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>Production MLOps</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3.5 h-3.5 text-zinc-900 dark:text-zinc-100" />
-                  <span>Campus Lab Setup</span>
-                </div>
-              </div>
             </div>
 
-            {/* Right Visual Card */}
-            <div className="lg:col-span-5 relative w-full aspect-square max-w-[440px] mx-auto lg:max-w-none">
+            {/* Right Visual Card (Big Poster) */}
+            <div className="lg:col-span-7 relative w-full aspect-[3/2] mx-auto">
               <div className="relative h-full w-full overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow-minimal">
                 <img
-                  src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 600 })}
-                  alt="Student learning with Unisole Skill AI Labs"
+                  src="/images/unisole-ai-campus-program.webp"
+                  alt="Unisole AI Campus Program - Industrial Training & Internship Opportunity Program for Himachal Students"
                   className="h-full w-full object-cover"
-                  width="600"
-                  height="600"
+                  width="1024"
+                  height="682"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
                 />
-
-                {/* Floating Metrics Badge Overlay */}
-                <div className="absolute bottom-3 left-3 right-3 p-3 bg-zinc-950/85 backdrop-blur-xs rounded-xl border border-white/10 text-white flex items-center justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block">Verified Deployments</span>
-                    <span className="text-xs font-bold">5,000+ Enrolled Students</span>
-                  </div>
-                  <div className="px-2 py-0.5 rounded bg-white/10 text-white text-[10px] font-mono">
-                    25+ Labs
-                  </div>
-                </div>
               </div>
             </div>
             
@@ -493,11 +458,10 @@ export default function Home() {
       {/* ---------- STATS SECTION ---------- */}
       <section className="bg-zinc-50 dark:bg-zinc-900/40 border-y border-zinc-200/80 dark:border-zinc-800/80 py-8 sm:py-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 text-left">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 text-left">
             {[
               { value: '4', label: 'Academic Pathways', desc: 'CS, Science, Commerce, Design' },
               { value: '5,000+', label: 'Active Learners', desc: 'Across universities and colleges' },
-              { value: '25+', label: 'Campus Labs', desc: 'Local air-gapped lab nodes' },
               { value: '2+', label: 'Years Building', desc: 'Continuous curriculum updates' }
             ].map((s) => (
               <div className="minimal-card p-4 sm:p-5" key={s.label}>
@@ -510,37 +474,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ---------- INSTITUTE ABOUT SECTION & 3 PILLARS ---------- */}
-      <section className="py-16 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-2xl mb-12 space-y-2">
-            <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-              Pedagogy
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-              Learn · Build · Research · Innovate
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              We guide academic strategy and deliver practical skill frameworks for institutions across India.
-            </p>
-          </div>
-
-          {/* Core Pillars */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 text-left">
-            {[
-              { num: "01", title: "Curriculum Alignment", desc: "Syllabi mapped directly to modern industry requirements and university standards." },
-              { num: "02", title: "Hands-on MLOps Labs", desc: "Students build, containerize, and deploy real models with FastAPI and Docker." },
-              { num: "03", title: "Faculty & Student Mentorship", desc: "Live guidance by IIT and NIT alumni on applied research and open source projects." }
-            ].map((p, idx) => (
-              <div key={idx} className="minimal-card p-6 space-y-3">
-                <span className="text-xs font-mono text-zinc-400 font-bold block">{p.num}</span>
-                <h4 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white">{p.title}</h4>
-                <p className="text-xs text-zinc-600 dark:text-zinc-400 leading-relaxed">{p.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ---------- EXPERTISE / CAROUSEL ---------- */}
       <section className="bg-zinc-50/50 dark:bg-zinc-900/30 border-t border-zinc-200/80 dark:border-zinc-800/80">
@@ -549,62 +482,6 @@ export default function Home() {
 
       {/* ---------- TEAM SECTION ---------- */}
       <TeamSection />
-
-      {/* ---------- TESTIMONIALS SECTION ---------- */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 border-t border-zinc-200/80 dark:border-zinc-800/80">
-        <div className="max-w-2xl mb-10 space-y-2">
-          <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-            Feedback
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            Community Testimonials
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            {
-              text: "Unisole Empower is a promising platform for anyone interested in AI, Data Science, and Analytics. The mix of live and recorded lectures gives flexibility.",
-              author: "Mehul Atri",
-              role: "Student Member"
-            },
-            {
-              text: "unisole is the best platform where you get mentors who not just taught you but how to approach companies for a job or how to get internships.",
-              author: "Ravi Kumar Saini",
-              role: "Student Member"
-            },
-            {
-              text: "Great platform for learning AI! The lessons are structured cleanly and cover high-production engineering topics like APIs and Docker containers.",
-              author: "Piyush Sharma",
-              role: "Student Member"
-            },
-            {
-              text: "A valuable collaboration that brought meaningful AI exposure to our school. The teachers felt empowered and the students built interesting projects.",
-              author: "Deepak Katoch",
-              role: "School Teacher"
-            }
-          ].map((t, i) => (
-            <div 
-              className="minimal-card flex flex-col justify-between p-5"
-              key={i}
-            >
-              <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                &ldquo;{t.text}&rdquo;
-              </p>
-
-              <div className="flex items-center gap-2.5 mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="w-7 h-7 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center font-bold text-xs">
-                  {t.author.charAt(0)}
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white block leading-tight">{t.author}</span>
-                  <span className="text-[10px] text-zinc-400 block">{t.role}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <Footer />
     </div>
