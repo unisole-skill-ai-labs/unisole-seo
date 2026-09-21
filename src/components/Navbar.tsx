@@ -127,12 +127,6 @@ export default function Navbar() {
                 Unisole <span className="text-zinc-500 dark:text-zinc-400 font-medium">AI Labs</span>
               </span>
             </Link>
-
-            {/* AI Status Badge */}
-            <div className="hidden lg:flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 border border-zinc-200 dark:border-zinc-800 text-[10px] font-mono uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              Core Ready
-            </div>
           </div>
 
           {/* Desktop Navigation Links */}
