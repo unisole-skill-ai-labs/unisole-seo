@@ -61,93 +61,191 @@ function OfferCarousel() {
     setModalCard(null);
   };
 
-  const marqueeCards = [...offerCards, ...offerCards];
+  const featuredCard1 = offerCards[0];
+  const featuredCard2 = offerCards[1];
+  const secondaryCards = offerCards.slice(2);
 
   return (
-    <div className="relative w-full py-14 sm:py-20 overflow-hidden">
+    <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-          <div className="max-w-xl space-y-2">
-            <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-              Focus Areas
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-              Core Institutional Expertise
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-              Practical AI education frameworks, faculty training, and specialized local campus laboratories.
-            </p>
-          </div>
-          <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 hidden sm:block">
-            Auto-scrolling • Hover to pause
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10 sm:mb-12">
+        <div className="max-w-xl space-y-2">
+          <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
+            Institutional Capabilities
           </span>
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+            Core Institutional Expertise
+          </h2>
+          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+            Scalable academic infrastructure, NEP 2020 curriculum frameworks, faculty capacity building, and containerized campus laboratories.
+          </p>
         </div>
+        <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 hidden sm:block">
+          Click any card to inspect deliverables
+        </span>
       </div>
 
-      {/* Carousel Track with Gradient Edge Masks */}
-      <div className="relative w-full overflow-hidden">
-        {/* Left Fade Mask */}
-        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent z-10" />
+      {/* Bento Grid Layout */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-4 sm:gap-5">
+        
+        {/* Bento Hero 1: Wide Featured Card (lg:col-span-8) */}
+        {featuredCard1 && (
+          <div
+            onClick={() => openModal(featuredCard1)}
+            className="lg:col-span-8 group relative overflow-hidden rounded-2xl bg-zinc-900 text-white border border-zinc-800 shadow-minimal hover:shadow-minimal-hover transition-all duration-300 cursor-pointer flex flex-col justify-between min-h-[320px] sm:min-h-[360px]"
+          >
+            {/* Background Image with Dark Gradient Overlay */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src={getOptimizedImageUrl(featuredCard1.img, { width: 900 })}
+                alt={featuredCard1.title}
+                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 opacity-35 group-hover:opacity-45"
+                width="900"
+                height="450"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/75 to-zinc-950/30" />
+            </div>
 
-        {/* Right Fade Mask */}
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent z-10" />
+            {/* Top Bar with Badge */}
+            <div className="relative z-10 p-5 sm:p-6 flex items-center justify-between">
+              <span className="px-2.5 py-1 text-[10px] font-mono font-bold uppercase tracking-wider bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">
+                FLAGSHIP ECOSYSTEM • DOMAIN 01
+              </span>
+              <span className="p-1.5 rounded-lg bg-white/10 text-white backdrop-blur-xs group-hover:bg-white/20 transition-colors">
+                <Maximize2 className="w-3.5 h-3.5" />
+              </span>
+            </div>
 
-        {/* Moving Marquee */}
-        <div className="animate-team-marquee flex items-stretch gap-4 sm:gap-5 px-4 py-2">
-          {marqueeCards.map((card, i) => {
-            const domainIndex = i % offerCards.length;
-            return (
-              <div
-                key={`${card.id}-${i}`}
-                className="w-[280px] sm:w-[320px] shrink-0 minimal-card flex flex-col justify-between overflow-hidden cursor-pointer group hover:shadow-minimal-hover transition-all"
-                onClick={() => openModal(card)}
-              >
-                {/* Visual Image */}
-                <div className="relative aspect-video w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950">
-                  <img
-                    src={getOptimizedImageUrl(card.img, { width: 500 })}
-                    alt={card.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    width="500"
-                    height="280"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/70 via-transparent to-transparent" />
-                  
-                  {/* Card top badges */}
-                  <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-                    <span className="px-2 py-0.5 text-[9px] font-mono text-white bg-zinc-950/80 backdrop-blur-xs rounded tracking-wider uppercase border border-white/10">
-                      {expertiseTags[domainIndex] || `DOMAIN 0${domainIndex + 1}`}
-                    </span>
-                    <span className="p-1 rounded bg-zinc-950/60 text-white">
-                      <Maximize2 className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
+            {/* Bottom Content */}
+            <div className="relative z-10 p-5 sm:p-6 space-y-4">
+              <div className="space-y-2 max-w-xl">
+                <h3 className="text-xl sm:text-2xl font-black tracking-tight text-white group-hover:text-indigo-300 transition-colors">
+                  {featuredCard1.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed line-clamp-2 sm:line-clamp-none">
+                  {featuredCard1.desc}
+                </p>
+              </div>
 
-                {/* Content */}
-                <div className="flex flex-col flex-grow p-4 sm:p-5 justify-between space-y-3">
-                  <div>
-                    <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
-                      {card.title}
-                    </h3>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1.5 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                      {card.desc}
-                    </p>
-                  </div>
-                  
-                  {/* Action Link */}
-                  <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-900 dark:text-white group-hover:translate-x-0.5 transition-transform">
-                    <span>Explore Pathway</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white" />
-                  </div>
+              {/* Highlights Chips */}
+              <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] font-mono text-zinc-300">
+                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  NEP 2020 Aligned
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                  Dual Certification
+                </span>
+                <span className="px-2.5 py-1 rounded-md bg-white/5 border border-white/10 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-violet-400" />
+                  Live API Capstone
+                </span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Bento Hero 2: Tall Accent Card (lg:col-span-4) */}
+        {featuredCard2 && (
+          <div
+            onClick={() => openModal(featuredCard2)}
+            className="lg:col-span-4 group relative overflow-hidden rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-minimal hover:shadow-minimal-hover transition-all duration-300 cursor-pointer flex flex-col justify-between"
+          >
+            {/* Top Visual Image */}
+            <div className="relative aspect-[16/10] w-full overflow-hidden bg-zinc-950">
+              <img
+                src={getOptimizedImageUrl(featuredCard2.img, { width: 500 })}
+                alt={featuredCard2.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                width="500"
+                height="300"
+                loading="lazy"
+                decoding="async"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                <span className="px-2 py-0.5 text-[9px] font-mono text-white bg-zinc-950/80 backdrop-blur-xs rounded tracking-wider uppercase border border-white/10">
+                  DOMAIN 02 • K-12
+                </span>
+                <span className="p-1 rounded bg-zinc-950/60 text-white">
+                  <Maximize2 className="w-3 h-3" />
+                </span>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="p-5 flex flex-col flex-grow justify-between space-y-3">
+              <div className="space-y-1.5">
+                <h3 className="text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                  {featuredCard2.title}
+                </h3>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-3">
+                  {featuredCard2.desc}
+                </p>
+              </div>
+
+              <div className="pt-2 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-900 dark:text-white">
+                <span>Explore Lab Model</span>
+                <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Secondary Supporting Bento Cards (6 cards in 3-col grid on lg) */}
+        {secondaryCards.map((card, idx) => {
+          const domainNumber = String(idx + 3).padStart(2, '0');
+          return (
+            <div
+              key={card.id}
+              onClick={() => openModal(card)}
+              className="lg:col-span-4 group relative overflow-hidden rounded-2xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-minimal hover:shadow-minimal-hover transition-all duration-300 cursor-pointer flex flex-col justify-between"
+            >
+              {/* Aspect Image */}
+              <div className="relative aspect-[16/9] w-full overflow-hidden bg-zinc-950">
+                <img
+                  src={getOptimizedImageUrl(card.img, { width: 450 })}
+                  alt={card.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  width="450"
+                  height="250"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/75 via-transparent to-transparent" />
+                <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                  <span className="px-2 py-0.5 text-[9px] font-mono text-white bg-zinc-950/80 backdrop-blur-xs rounded tracking-wider uppercase border border-white/10">
+                    DOMAIN {domainNumber}
+                  </span>
+                  <span className="p-1 rounded bg-zinc-950/60 text-white">
+                    <Maximize2 className="w-3 h-3" />
+                  </span>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              {/* Content */}
+              <div className="p-5 flex flex-col flex-grow justify-between space-y-3">
+                <div className="space-y-1.5">
+                  <h3 className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
+                    {card.title}
+                  </h3>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed line-clamp-2">
+                    {card.desc}
+                  </p>
+                </div>
+
+                <div className="pt-2.5 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-xs font-semibold text-zinc-900 dark:text-white">
+                  <span>Explore Pathway</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+
       </div>
 
       {/* Detail Modal */}
