@@ -38,43 +38,8 @@ const expertiseTags = [
 ];
 
 function OfferCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalCard, setModalCard] = useState<any>(null);
-  const [cardWidth, setCardWidth] = useState(340);
-  const [gap, setGap] = useState(16);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const touchStartX = useRef(0);
-  const touchDeltaX = useRef(0);
-  const len = offerCards.length;
-
-  const updateDimensions = () => {
-    const vp = viewportRef.current;
-    if (!vp) return;
-    const isMobile = window.innerWidth < 640;
-    const isTablet = window.innerWidth < 1024;
-    const g = isMobile ? 12 : 16;
-    setGap(g);
-
-    const visibleCards = isMobile ? 1.15 : isTablet ? 2.15 : 3;
-    const totalGap = (Math.floor(visibleCards) - 1) * g;
-    const w = (vp.offsetWidth - totalGap) / visibleCards;
-    setCardWidth(Math.max(w, 280));
-  };
-
-  useEffect(() => {
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
-  }, []);
-
-  useEffect(() => {
-    if (isModalOpen) return;
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % len);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [len, isModalOpen]);
 
   useEffect(() => {
     if (isModalOpen) {
@@ -87,31 +52,6 @@ function OfferCarousel() {
     };
   }, [isModalOpen]);
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % len);
-  };
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + len) % len);
-  };
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchDeltaX.current = 0;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchDeltaX.current = e.touches[0].clientX - touchStartX.current;
-  };
-
-  const handleTouchEnd = () => {
-    if (touchDeltaX.current > 40) {
-      handlePrev();
-    } else if (touchDeltaX.current < -40) {
-      handleNext();
-    }
-  };
-
   const openModal = (card: any) => {
     setModalCard(card);
     setIsModalOpen(true);
@@ -122,78 +62,46 @@ function OfferCarousel() {
     setModalCard(null);
   };
 
-  const xOffset = activeIndex * (cardWidth + gap);
+  const marqueeCards = [...offerCards, ...offerCards];
 
   return (
-    <div className="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+    <div className="relative w-full py-14 sm:py-20 overflow-hidden">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-12">
-        <div className="max-w-xl space-y-2">
-          <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-            Focus Areas
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="max-w-xl space-y-2">
+            <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
+              Focus Areas
+            </span>
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
+              Core Institutional Expertise
+            </h2>
+            <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+              Practical AI education frameworks, faculty training, and specialized local campus laboratories.
+            </p>
+          </div>
+          <span className="text-[11px] font-mono text-zinc-400 dark:text-zinc-500 shrink-0 hidden sm:block">
+            Auto-scrolling • Hover to pause
           </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            Core Institutional Expertise
-          </h2>
-          <p className="text-xs sm:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-            Practical AI education frameworks, faculty training, and specialized local campus laboratories.
-          </p>
-        </div>
-
-        {/* Carousel controls */}
-        <div className="flex items-center justify-between md:justify-end gap-3">
-          <div className="text-xs font-mono text-zinc-400">
-            <span className="text-zinc-900 dark:text-white font-bold">{String(activeIndex + 1).padStart(2, '0')}</span>
-            <span className="mx-1 opacity-40">/</span>
-            <span>{String(len).padStart(2, '0')}</span>
-          </div>
-          <div className="flex gap-1.5">
-            <button
-              className="p-2 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:border-zinc-800 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all cursor-pointer"
-              onClick={handlePrev}
-              type="button"
-              aria-label="Previous slide"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </button>
-            <button
-              className="p-2 rounded-lg border border-zinc-200 hover:border-zinc-300 bg-white dark:border-zinc-800 dark:bg-zinc-900 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-all cursor-pointer"
-              onClick={handleNext}
-              type="button"
-              aria-label="Next slide"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </button>
-          </div>
         </div>
       </div>
 
-      {/* Carousel Track */}
-      <div
-        className="w-full overflow-hidden select-none cursor-grab active:cursor-grabbing"
-        ref={viewportRef}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <div
-          className="flex transition-transform duration-300 ease-out"
-          style={{
-            transform: `translateX(-${xOffset}px)`,
-            gap: `${gap}px`,
-          }}
-        >
-          {offerCards.map((card, i) => {
-            const isActive = i === activeIndex;
+      {/* Carousel Track with Gradient Edge Masks */}
+      <div className="relative w-full overflow-hidden">
+        {/* Left Fade Mask */}
+        <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent z-10" />
+
+        {/* Right Fade Mask */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-12 sm:w-28 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent z-10" />
+
+        {/* Moving Marquee */}
+        <div className="animate-team-marquee flex items-stretch gap-4 sm:gap-5 px-4 py-2">
+          {marqueeCards.map((card, i) => {
+            const domainIndex = i % offerCards.length;
             return (
               <div
-                key={card.id}
-                className={`minimal-card flex flex-col justify-between overflow-hidden cursor-pointer group ${
-                  isActive
-                    ? 'border-zinc-400 dark:border-zinc-600'
-                    : ''
-                }`}
-                style={{ width: `${cardWidth}px`, flex: `0 0 ${cardWidth}px` }}
+                key={`${card.id}-${i}`}
+                className="w-[280px] sm:w-[320px] shrink-0 minimal-card flex flex-col justify-between overflow-hidden cursor-pointer group hover:shadow-minimal-hover transition-all"
                 onClick={() => openModal(card)}
               >
                 {/* Visual Image */}
@@ -212,7 +120,7 @@ function OfferCarousel() {
                   {/* Card top badges */}
                   <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
                     <span className="px-2 py-0.5 text-[9px] font-mono text-white bg-zinc-950/80 backdrop-blur-xs rounded tracking-wider uppercase border border-white/10">
-                      {expertiseTags[i] || `DOMAIN 0${i + 1}`}
+                      {expertiseTags[domainIndex] || `DOMAIN 0${domainIndex + 1}`}
                     </span>
                     <span className="p-1 rounded bg-zinc-950/60 text-white">
                       <Maximize2 className="w-3 h-3" />
@@ -221,12 +129,12 @@ function OfferCarousel() {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-col flex-grow p-5 justify-between space-y-4">
+                <div className="flex flex-col flex-grow p-4 sm:p-5 justify-between space-y-3">
                   <div>
                     <h3 className="text-sm sm:text-base font-bold text-zinc-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors leading-snug">
                       {card.title}
                     </h3>
-                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-2 line-clamp-3 leading-relaxed">
+                    <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1.5 line-clamp-2 sm:line-clamp-3 leading-relaxed">
                       {card.desc}
                     </p>
                   </div>
@@ -241,21 +149,6 @@ function OfferCarousel() {
             );
           })}
         </div>
-      </div>
-
-      {/* Slide Indicators */}
-      <div className="flex justify-center gap-1.5 mt-6">
-        {offerCards.map((_, i) => (
-          <button
-            key={i}
-            className={`h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
-              i === activeIndex ? 'w-6 bg-zinc-900 dark:bg-white' : 'w-1.5 bg-zinc-300 dark:bg-zinc-700'
-            }`}
-            onClick={() => setActiveIndex(i)}
-            aria-label={`Go to slide ${i + 1}`}
-            type="button"
-          />
-        ))}
       </div>
 
       {/* Detail Modal */}
