@@ -436,24 +436,18 @@ export default function Home() {
             </div>
 
             {/* Right Visual Card */}
-            <div className="lg:col-span-5 relative w-full aspect-square max-w-[440px] mx-auto lg:max-w-none">
+            <div className="lg:col-span-5 relative w-full aspect-[3/2] max-w-[560px] mx-auto lg:max-w-none">
               <div className="relative h-full w-full overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow-minimal">
                 <img
-                  src={getOptimizedImageUrl("https://res.cloudinary.com/da3sqradg/image/upload/v1783159721/ajay_mokta_millionare_cr33xx.png", { width: 600 })}
-                  alt="Student learning with Unisole Skill AI Labs"
+                  src="/images/unisole-ai-campus-program.webp"
+                  alt="Unisole AI Campus Program - Industrial Training & Internship Opportunity Program for Himachal Students"
                   className="h-full w-full object-cover"
-                  width="600"
-                  height="600"
+                  width="1024"
+                  height="682"
                   loading="eager"
                   fetchPriority="high"
                   decoding="async"
                 />
-
-                {/* Floating Enrolled Students Badge */}
-                <div className="absolute bottom-3 left-3 right-3 p-2.5 sm:p-3 bg-zinc-950/85 backdrop-blur-xs rounded-xl border border-white/10 text-white flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
-                  <span className="text-xs font-bold tracking-tight">5,000+ Enrolled Students</span>
-                </div>
               </div>
             </div>
             
