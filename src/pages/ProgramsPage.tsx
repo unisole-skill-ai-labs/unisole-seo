@@ -1154,15 +1154,6 @@ export default function ProgramsPage() {
         
         {/* ================= HERO SECTION (VALUE PROPOSITION + TRUST) ================= */}
         <section className="space-y-6 max-w-4xl">
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="mono-tag text-zinc-700 dark:text-zinc-300">
-              Academic Framework 2026
-            </span>
-            <span className="mono-tag border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5">
-              Spring 2026 Admissions Open
-            </span>
-          </div>
-
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-zinc-900 dark:text-white">
             Industry-Grade AI Pathways Built for <br className="hidden sm:inline" />
             <span className="text-zinc-400 dark:text-zinc-500">Real-World Careers</span>
