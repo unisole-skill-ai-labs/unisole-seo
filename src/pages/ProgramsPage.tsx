@@ -1563,37 +1563,6 @@ export default function ProgramsPage() {
           </div>
         </section>
 
-        {/* ================= HIGH-CONVERSION FINAL CTA BANNER ================= */}
-        <section className="minimal-card p-8 sm:p-12 text-center space-y-6 bg-zinc-950 text-white dark:bg-zinc-900 dark:text-white border-zinc-800">
-          <div className="max-w-xl mx-auto space-y-3">
-            <span className="mono-tag text-zinc-300 border-zinc-700 bg-zinc-900">
-              Limited Batch Capacity
-            </span>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-white">
-              Ready to Accelerate Your AI Engineering Career?
-            </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 leading-relaxed">
-              Next batch orientation commences soon. Secure your lab seat and start building verified production portfolios today.
-            </p>
-          </div>
-
-          <div className="flex items-center justify-center pt-2">
-            <button
-              onClick={() => {
-                const catalogEl = document.getElementById('stream-catalog');
-                if (catalogEl) catalogEl.scrollIntoView({ behavior: 'smooth' });
-              }}
-              className="w-full sm:w-auto inline-flex items-center justify-center font-bold px-6 py-3 rounded-lg bg-white text-zinc-950 hover:bg-zinc-100 text-xs transition-all cursor-pointer"
-            >
-              <span>Explore All Pathways</span>
-              <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-            </button>
-          </div>
-
-          <p className="text-[11px] font-mono text-zinc-500">
-            Helpline: +91 8219691201 • unisole.empower@gmail.com
-          </p>
-        </section>
 
       </main>
 
