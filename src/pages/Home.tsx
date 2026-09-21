@@ -545,62 +545,6 @@ export default function Home() {
       {/* ---------- TEAM SECTION ---------- */}
       <TeamSection />
 
-      {/* ---------- TESTIMONIALS SECTION ---------- */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 border-t border-zinc-200/80 dark:border-zinc-800/80">
-        <div className="max-w-2xl mb-10 space-y-2">
-          <span className="mono-tag text-zinc-500 dark:text-zinc-400 block">
-            Feedback
-          </span>
-          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-zinc-900 dark:text-white">
-            Community Testimonials
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {[
-            {
-              text: "Unisole Empower is a promising platform for anyone interested in AI, Data Science, and Analytics. The mix of live and recorded lectures gives flexibility.",
-              author: "Mehul Atri",
-              role: "Student Member"
-            },
-            {
-              text: "unisole is the best platform where you get mentors who not just taught you but how to approach companies for a job or how to get internships.",
-              author: "Ravi Kumar Saini",
-              role: "Student Member"
-            },
-            {
-              text: "Great platform for learning AI! The lessons are structured cleanly and cover high-production engineering topics like APIs and Docker containers.",
-              author: "Piyush Sharma",
-              role: "Student Member"
-            },
-            {
-              text: "A valuable collaboration that brought meaningful AI exposure to our school. The teachers felt empowered and the students built interesting projects.",
-              author: "Deepak Katoch",
-              role: "School Teacher"
-            }
-          ].map((t, i) => (
-            <div 
-              className="minimal-card flex flex-col justify-between p-5"
-              key={i}
-            >
-              <p className="text-xs text-zinc-600 dark:text-zinc-300 leading-relaxed">
-                &ldquo;{t.text}&rdquo;
-              </p>
-
-              <div className="flex items-center gap-2.5 mt-5 pt-3 border-t border-zinc-100 dark:border-zinc-800">
-                <div className="w-7 h-7 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 flex items-center justify-center font-bold text-xs">
-                  {t.author.charAt(0)}
-                </div>
-                <div>
-                  <span className="text-xs font-bold text-zinc-900 dark:text-white block leading-tight">{t.author}</span>
-                  <span className="text-[10px] text-zinc-400 block">{t.role}</span>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <Footer />
     </div>
   );
