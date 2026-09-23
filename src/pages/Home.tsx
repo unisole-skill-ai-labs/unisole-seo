@@ -372,16 +372,19 @@ export default function Home() {
             {/* Right Visual Card (Big Poster) */}
             <div className="lg:col-span-7 relative w-full aspect-[3/2] mx-auto">
               <div className="relative h-full w-full overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow-minimal">
-                <img
-                  src="/images/unisole-ai-campus-program.webp"
-                  alt="Unisole AI Campus Program - Industrial Training & Internship Opportunity Program for Himachal Students"
-                  className="h-full w-full object-cover"
-                  width="1024"
-                  height="682"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
+                <picture>
+                  <source media="(max-width: 640px)" srcSet="/images/unisole-ai-campus-program-mobile.webp" />
+                  <img
+                    src="/images/unisole-ai-campus-program.webp"
+                    alt="Unisole AI Campus Program - Industrial Training & Internship Opportunity Program for Himachal Students"
+                    className="h-full w-full object-cover"
+                    width="1024"
+                    height="682"
+                    loading="eager"
+                    fetchPriority="high"
+                    decoding="async"
+                  />
+                </picture>
               </div>
             </div>
             
