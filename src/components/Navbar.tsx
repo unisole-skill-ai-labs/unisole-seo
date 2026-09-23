@@ -104,41 +104,6 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full z-40"
         id="navbar"
       >
-        {/* Breaking News Marquee Ticker */}
-        <div className="bg-zinc-950 text-white border-b border-zinc-800 text-xs py-1.5 overflow-hidden select-none relative z-50">
-          <div className="flex items-center">
-            {/* Fixed Left Badge */}
-            <div className="flex-shrink-0 z-10 bg-zinc-950 pr-3 pl-3 sm:pl-6 flex items-center gap-2 border-r border-zinc-800 shadow-[4px_0_12px_rgba(0,0,0,0.6)]">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-              </span>
-              <span className="font-mono text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-red-400 bg-red-950/70 px-1.5 py-0.5 rounded border border-red-800/40">
-                NOTICE
-              </span>
-            </div>
-
-            {/* Moving Marquee Content */}
-            <Link 
-              to="/programs" 
-              className="flex-1 overflow-hidden flex items-center group cursor-pointer"
-            >
-              <div className="animate-ticker flex items-center gap-8 text-[11px] sm:text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
-                {[...Array(4)].map((_, i) => (
-                  <span key={i} className="inline-flex items-center gap-3 whitespace-nowrap">
-                    <span>Last date to enroll in Industrial Training cum Internship Opportunity Program for Shimla region: <strong className="text-white font-bold">22 Sep, 10:00 PM</strong></span>
-                    <span className="text-zinc-600 font-bold">•</span>
-                    <span className="text-indigo-400 font-semibold inline-flex items-center gap-0.5 underline underline-offset-2">
-                      Enroll Now <ChevronRight className="w-3 h-3" />
-                    </span>
-                    <span className="text-zinc-600 font-bold">•</span>
-                  </span>
-                ))}
-              </div>
-            </Link>
-          </div>
-        </div>
-
         {/* Main Navbar */}
         <div className={`transition-all duration-200 ${
           scrolled 
