@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { offerCards } from '../data/offerContent';
 import { getOptimizedImageUrl } from '../utils/image';
+import { CampusProgramPoster } from '../components/home/CampusProgramPoster';
 import { 
   ArrowRight, 
   ChevronLeft, 
@@ -369,20 +370,9 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Right Visual Card (Big Poster) */}
+            {/* Right Visual Card (HD Vector Campus Program Poster) */}
             <div className="lg:col-span-7 relative w-full aspect-[3/2] mx-auto">
-              <div className="relative h-full w-full overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-2xl bg-zinc-50 dark:bg-zinc-900 shadow-minimal">
-                <img
-                  src="/images/unisole-ai-campus-program.webp"
-                  alt="Unisole AI Campus Program - Industrial Training & Internship Opportunity Program for Himachal Students"
-                  className="h-full w-full object-cover"
-                  width="1024"
-                  height="682"
-                  loading="eager"
-                  fetchPriority="high"
-                  decoding="async"
-                />
-              </div>
+              <CampusProgramPoster />
             </div>
             
           </div>
