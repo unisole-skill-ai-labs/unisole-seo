@@ -5,7 +5,7 @@ import SyllabusDrawer from '../components/SyllabusDrawer';
 import PathwayEnrollModal from '../components/PathwayEnrollModal';
 import { useAuthModal } from '../context/AuthModalContext';
 import { isAuthenticated } from '../utils/auth';
-import { useGetPublicCoursesQuery, useGetPublicPricingQuery } from '../store/apiSlice';
+import { useGetPublicCoursesQuery, useGetPublicPricingQuery, useGetPublicProgramsQuery } from '../store/apiSlice';
 import { 
   Laptop, 
   Microscope, 
@@ -974,7 +974,9 @@ const FAQS_DATA = [
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
   const { data: pricingResponse } = useGetPublicPricingQuery();
+  const { data: programsResponse } = useGetPublicProgramsQuery();
   const pricingOfferings = pricingResponse?.items || [];
+  const dbProgramsGroups = programsResponse?.groups || [];
 
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [expandedPathwayId, setExpandedPathwayId] = useState<string | null>(null);
@@ -982,6 +984,9 @@ export default function ProgramsPage() {
 
   const mergedGroupsData = useMemo(() => {
     return GROUPS_DATA.map((group) => {
+      // Find matching group from live database endpoint
+      const dbGroup = dbProgramsGroups.find((g: any) => g.id === group.id);
+
       const updatedPathways = group.pathways
         .map((p) => {
           // 1. First check dynamic offerings_pricing from Commercial & Pricing Suite
@@ -991,7 +996,12 @@ export default function ProgramsPage() {
               item.slug?.toLowerCase() === p.id.toLowerCase()
           );
 
-          // 2. Fallback check dbCourses
+          // 2. Check live DB pathway from /api/public/programs
+          const dbPathway = dbGroup?.pathways?.find(
+            (dp: any) => dp.id?.toLowerCase() === p.id.toLowerCase()
+          );
+
+          // 3. Fallback check dbCourses
           const dbCourse = dbCourses.find(
             (c: any) =>
               c.id === p.id ||
@@ -1009,12 +1019,22 @@ export default function ProgramsPage() {
           let dynamicMrp = p.mrp;
           let dynamicTitle = p.title;
           let dynamicDescription = p.description;
+          let dynamicModules = p.modules;
+
+          if (dbPathway) {
+            if (dbPathway.price) dynamicPrice = dbPathway.price;
+            if (dbPathway.mrp) dynamicMrp = dbPathway.mrp;
+            if (dbPathway.title) dynamicTitle = dbPathway.title;
+            if (dbPathway.description) dynamicDescription = dbPathway.description;
+            if (dbPathway.modules && dbPathway.modules.length > 0) dynamicModules = dbPathway.modules;
+          }
 
           if (pricingOffering) {
             dynamicPrice = Math.round((Number(pricingOffering.pricePaise) || 0) / 100);
             dynamicMrp = Math.round((Number(pricingOffering.mrpPaise) || 0) / 100);
             if (pricingOffering.title) dynamicTitle = pricingOffering.title;
             if (pricingOffering.description) dynamicDescription = pricingOffering.description;
+            if (pricingOffering.metadata?.modules?.length > 0) dynamicModules = pricingOffering.metadata.modules;
           } else if (dbCourse) {
             if (dbCourse.pricePaise) dynamicPrice = Math.round(dbCourse.pricePaise / 100);
             if (dbCourse.mrpPaise) dynamicMrp = Math.round(dbCourse.mrpPaise / 100);
@@ -1028,6 +1048,7 @@ export default function ProgramsPage() {
             description: dynamicDescription,
             price: dynamicPrice,
             mrp: dynamicMrp,
+            modules: dynamicModules,
           };
         })
         .filter(Boolean); // Remove deactivated / deleted pathways
@@ -1037,7 +1058,7 @@ export default function ProgramsPage() {
         pathways: updatedPathways as any[],
       };
     }).filter((g) => g.pathways.length > 0);
-  }, [dbCourses, pricingOfferings]);
+  }, [dbCourses, pricingOfferings, dbProgramsGroups]);
 
   const currentGroupData = useMemo(() => {
     if (!activeGroup) return null;

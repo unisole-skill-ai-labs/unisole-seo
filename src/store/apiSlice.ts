@@ -210,6 +210,12 @@ export const apiSlice = createApi({
         body,
       }),
     }),
+    getPublicPrograms: builder.query<{ success: boolean; groups: any[] }, void>({
+      query: () => '/api/public/programs',
+    }),
+    getPublicPathways: builder.query<any[], void>({
+      query: () => '/api/public/pathways',
+    }),
   }),
 });
 
@@ -225,6 +231,8 @@ export const {
   useGetPublicCoursesQuery,
   useGetPublicPricingQuery,
   useGetPublicCourseBySlugQuery,
+  useGetPublicProgramsQuery,
+  useGetPublicPathwaysQuery,
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
   useRegisterWorkshopMutation,
