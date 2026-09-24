@@ -1701,14 +1701,19 @@ export default function LiveAudiencePage() {
   const renderInstantPollOverlay = () => {
     if (!instantPollState.isActive || !instantPollState.pollId) return null;
 
-    const yes = instantPollState.counts[0] || 0;
-    const no = instantPollState.counts[1] || 0;
-    const total = yes + no;
-    const yesPct = total > 0 ? Math.round((yes / total) * 100) : 50;
-    const noPct = total > 0 ? Math.round((no / total) * 100) : 50;
+    const options =
+      instantPollState.options && instantPollState.options.length >= 2
+        ? instantPollState.options
+        : ["YES", "NO"];
+    const isBinaryYesNo =
+      options.length === 2 &&
+      options[0].toUpperCase() === "YES" &&
+      options[1].toUpperCase() === "NO";
+
+    const totalVotes = instantPollState.totalVotes || 0;
 
     return (
-      <div className="fixed inset-x-3 sm:inset-x-auto sm:right-6 bottom-20 z-50 max-w-md w-full mx-auto animate-scale-in">
+      <div className="fixed inset-x-3 sm:inset-x-auto sm:right-6 bottom-20 z-50 max-w-lg w-full mx-auto animate-scale-in">
         <div className="p-4 sm:p-5 rounded-3xl bg-zinc-950/95 border-2 border-amber-500/60 shadow-2xl backdrop-blur-2xl text-white space-y-3">
           {/* Header */}
           <div className="flex items-center justify-between">
@@ -1716,7 +1721,7 @@ export default function LiveAudiencePage() {
               <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
               <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/30 text-amber-300 text-xs font-bold font-mono">
                 <Zap className="w-3.5 h-3.5 fill-current text-amber-400" />
-                <span>LIVE 20s PULSE POLL</span>
+                <span>LIVE {instantPollState.remainingTime !== null ? `${instantPollState.remainingTime}s` : "20s"} PULSE POLL</span>
               </div>
             </div>
 
@@ -1734,27 +1739,62 @@ export default function LiveAudiencePage() {
           {!instantPollState.isSubmitted && instantPollState.isActive ? (
             /* Voting Buttons */
             <div className="space-y-2 pt-1">
-              <div className="grid grid-cols-2 gap-3">
-                <button
-                  type="button"
-                  onClick={() => handleSubmitInstantPollVote(0)}
-                  className="py-4 px-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-black text-base sm:text-lg shadow-xl shadow-emerald-600/30 transition-all flex flex-col items-center justify-center gap-1 cursor-pointer border border-emerald-400/40"
-                >
-                  <span className="text-2xl">👍</span>
-                  <span>YES</span>
-                </button>
+              {isBinaryYesNo ? (
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSubmitInstantPollVote(0)}
+                    className="py-4 px-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white font-black text-base sm:text-lg shadow-xl shadow-emerald-600/30 transition-all flex flex-col items-center justify-center gap-1 cursor-pointer border border-emerald-400/40"
+                  >
+                    <span className="text-2xl">👍</span>
+                    <span>YES</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => handleSubmitInstantPollVote(1)}
-                  className="py-4 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 active:scale-95 text-white font-black text-base sm:text-lg shadow-xl shadow-rose-600/30 transition-all flex flex-col items-center justify-center gap-1 cursor-pointer border border-rose-400/40"
-                >
-                  <span className="text-2xl">👎</span>
-                  <span>NO</span>
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => handleSubmitInstantPollVote(1)}
+                    className="py-4 px-3 rounded-2xl bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-500 hover:to-pink-500 active:scale-95 text-white font-black text-base sm:text-lg shadow-xl shadow-rose-600/30 transition-all flex flex-col items-center justify-center gap-1 cursor-pointer border border-rose-400/40"
+                  >
+                    <span className="text-2xl">👎</span>
+                    <span>NO</span>
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  {options.map((opt: string, idx: number) => {
+                    const letters = ["A", "B", "C", "D"];
+                    const styles = [
+                      "from-indigo-600/40 to-blue-600/30 border-indigo-400/40 hover:border-indigo-400 active:scale-95",
+                      "from-amber-600/40 to-orange-600/30 border-amber-400/40 hover:border-amber-400 active:scale-95",
+                      "from-emerald-600/40 to-teal-600/30 border-emerald-400/40 hover:border-emerald-400 active:scale-95",
+                      "from-cyan-600/40 to-sky-600/30 border-cyan-400/40 hover:border-cyan-400 active:scale-95",
+                    ];
+                    const letterBgs = [
+                      "bg-indigo-500 text-white",
+                      "bg-amber-500 text-black",
+                      "bg-emerald-500 text-white",
+                      "bg-cyan-500 text-black",
+                    ];
+                    return (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => handleSubmitInstantPollVote(idx)}
+                        className={`p-3 rounded-2xl bg-gradient-to-br border-2 text-left flex items-center gap-2.5 transition-all shadow-lg cursor-pointer ${styles[idx % 4]}`}
+                      >
+                        <span className={`w-7 h-7 rounded-xl flex items-center justify-center font-mono font-black text-xs shrink-0 shadow ${letterBgs[idx % 4]}`}>
+                          {letters[idx] || String.fromCharCode(65 + idx)}
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-white leading-snug line-clamp-2">
+                          {opt}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
               <p className="text-[11px] text-zinc-400 text-center font-medium">
-                Tap your choice before the 20s timer expires!
+                Tap your choice before the timer expires!
               </p>
             </div>
           ) : (
@@ -1765,46 +1805,93 @@ export default function LiveAudiencePage() {
                   <Check className="w-3.5 h-3.5 text-emerald-400" />
                   <span>
                     Your vote recorded:{" "}
-                    <strong className="uppercase underline">
-                      {instantPollState.myVote === 0 ? "YES 👍" : "NO 👎"}
+                    <strong className="underline">
+                      {instantPollState.myVote !== null && options[instantPollState.myVote]
+                        ? `${String.fromCharCode(65 + instantPollState.myVote)}. ${options[instantPollState.myVote]}`
+                        : "VOTED"}
                     </strong>
                   </span>
                 </div>
               )}
 
-              <div className="grid grid-cols-2 gap-2 text-center">
-                <div className="p-2 rounded-xl bg-emerald-950/50 border border-emerald-500/30">
-                  <span className="text-[10px] text-emerald-400 uppercase font-bold block">
-                    YES 👍
-                  </span>
-                  <span className="text-lg font-black text-white">
-                    {yes} ({total > 0 ? yesPct : 0}%)
-                  </span>
+              {/* Multi-Option or Binary Results */}
+              {isBinaryYesNo ? (
+                <>
+                  <div className="grid grid-cols-2 gap-2 text-center">
+                    <div className="p-2 rounded-xl bg-emerald-950/50 border border-emerald-500/30">
+                      <span className="text-[10px] text-emerald-400 uppercase font-bold block">
+                        YES 👍
+                      </span>
+                      <span className="text-lg font-black text-white">
+                        {instantPollState.counts[0] || 0} (
+                        {totalVotes > 0 ? Math.round(((instantPollState.counts[0] || 0) / totalVotes) * 100) : 0}%)
+                      </span>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-rose-950/50 border border-rose-500/30">
+                      <span className="text-[10px] text-rose-400 uppercase font-bold block">
+                        NO 👎
+                      </span>
+                      <span className="text-lg font-black text-white">
+                        {instantPollState.counts[1] || 0} (
+                        {totalVotes > 0 ? Math.round(((instantPollState.counts[1] || 0) / totalVotes) * 100) : 0}%)
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="h-3 rounded-full bg-zinc-800 overflow-hidden flex shadow-inner">
+                    <div
+                      className="bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
+                      style={{
+                        width: `${totalVotes > 0 ? Math.round(((instantPollState.counts[0] || 0) / totalVotes) * 100) : 50}%`,
+                      }}
+                    />
+                    <div
+                      className="bg-gradient-to-r from-rose-500 to-pink-500 transition-all duration-300"
+                      style={{
+                        width: `${totalVotes > 0 ? Math.round(((instantPollState.counts[1] || 0) / totalVotes) * 100) : 50}%`,
+                      }}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="space-y-2">
+                  {options.map((opt: string, idx: number) => {
+                    const voteCount = instantPollState.counts[idx] || 0;
+                    const pct = totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0;
+                    const barGradients = [
+                      "from-indigo-500 to-blue-400",
+                      "from-amber-500 to-orange-400",
+                      "from-emerald-500 to-teal-400",
+                      "from-cyan-500 to-sky-400",
+                    ];
+                    const letters = ["A", "B", "C", "D"];
+                    return (
+                      <div key={idx} className="space-y-1">
+                        <div className="flex items-center justify-between text-xs font-medium px-1">
+                          <span className="text-zinc-200 truncate max-w-[200px] sm:max-w-[280px]">
+                            <strong className="text-amber-300 font-mono mr-1">
+                              {letters[idx] || String.fromCharCode(65 + idx)}:
+                            </strong>
+                            {opt}
+                          </span>
+                          <span className="font-mono text-zinc-300 shrink-0">
+                            {voteCount} ({pct}%)
+                          </span>
+                        </div>
+                        <div className="h-2 rounded-full bg-zinc-800 overflow-hidden shadow-inner">
+                          <div
+                            className={`h-full bg-gradient-to-r ${barGradients[idx % 4]} transition-all duration-300`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
+              )}
 
-                <div className="p-2 rounded-xl bg-rose-950/50 border border-rose-500/30">
-                  <span className="text-[10px] text-rose-400 uppercase font-bold block">
-                    NO 👎
-                  </span>
-                  <span className="text-lg font-black text-white">
-                    {no} ({total > 0 ? noPct : 0}%)
-                  </span>
-                </div>
-              </div>
-
-              {/* Live Animated Split Bar */}
-              <div className="h-3 rounded-full bg-zinc-800 overflow-hidden flex shadow-inner">
-                <div
-                  className="bg-gradient-to-r from-emerald-500 to-teal-400 transition-all duration-300"
-                  style={{ width: `${total > 0 ? yesPct : 0}%` }}
-                />
-                <div
-                  className="bg-gradient-to-r from-rose-500 to-pink-500 transition-all duration-300"
-                  style={{ width: `${total > 0 ? noPct : 0}%` }}
-                />
-              </div>
-
-              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 px-1">
+              <div className="flex items-center justify-between text-[10px] font-mono text-zinc-400 px-1 pt-1">
                 <span>{instantPollState.totalVotes} total votes</span>
                 <span>Real-time live sync</span>
               </div>
