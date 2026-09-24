@@ -107,6 +107,9 @@ export const apiSlice = createApi({
     getPublicCourses: builder.query<any[], void>({
       query: () => '/api/public/courses',
     }),
+    getPublicPricing: builder.query<{ success: boolean; items: any[] }, void>({
+      query: () => '/api/public/pricing',
+    }),
     getPublicCourseBySlug: builder.query<any, string>({
       query: (slug) => `/api/public/courses/${slug}`,
     }),
@@ -220,6 +223,7 @@ export const {
   useGetPublicCollegesQuery,
   useGetPublicBranchesQuery,
   useGetPublicCoursesQuery,
+  useGetPublicPricingQuery,
   useGetPublicCourseBySlugQuery,
   useRegisterNainMutation,
   useGetMyNainRegistrationQuery,
