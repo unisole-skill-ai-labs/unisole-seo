@@ -5,7 +5,7 @@ import SyllabusDrawer from '../components/SyllabusDrawer';
 import PathwayEnrollModal from '../components/PathwayEnrollModal';
 import { useAuthModal } from '../context/AuthModalContext';
 import { isAuthenticated } from '../utils/auth';
-import { useGetPublicCoursesQuery } from '../store/apiSlice';
+import { useGetPublicCoursesQuery, useGetPublicPricingQuery } from '../store/apiSlice';
 import { 
   Laptop, 
   Microscope, 
@@ -1071,43 +1071,71 @@ const FAQS_DATA = [
 
 export default function ProgramsPage() {
   const { data: dbCourses = [] } = useGetPublicCoursesQuery();
+  const { data: pricingResponse } = useGetPublicPricingQuery();
+  const pricingOfferings = pricingResponse?.items || [];
+
   const [activeGroup, setActiveGroup] = useState<string | null>(null);
   const [expandedPathwayId, setExpandedPathwayId] = useState<string | null>(null);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
 
   const mergedGroupsData = useMemo(() => {
-    if (!dbCourses || dbCourses.length === 0) return GROUPS_DATA;
-
     return GROUPS_DATA.map((group) => {
-      const updatedPathways = group.pathways.map((p) => {
-        const dbCourse = dbCourses.find(
-          (c: any) =>
-            c.id === p.id ||
-            c.slug === p.id ||
-            c.metadata?.pathwayId === p.id ||
-            c.metadata?.id === p.id
-        );
+      const updatedPathways = group.pathways
+        .map((p) => {
+          // 1. First check dynamic offerings_pricing from Commercial & Pricing Suite
+          const pricingOffering = pricingOfferings.find(
+            (item: any) =>
+              item.itemId?.toLowerCase() === p.id.toLowerCase() ||
+              item.slug?.toLowerCase() === p.id.toLowerCase()
+          );
 
-        if (!dbCourse) return p;
+          // 2. Fallback check dbCourses
+          const dbCourse = dbCourses.find(
+            (c: any) =>
+              c.id === p.id ||
+              c.slug === p.id ||
+              c.metadata?.pathwayId === p.id ||
+              c.metadata?.id === p.id
+          );
 
-        const dbPrice = dbCourse.pricePaise ? Math.round(dbCourse.pricePaise / 100) : null;
-        const dbMrp = dbCourse.mrpPaise ? Math.round(dbCourse.mrpPaise / 100) : null;
+          // If dynamically deactivated or soft-deleted in Admin Pricing Suite
+          if (pricingOffering && pricingOffering.isActive === false) {
+            return null;
+          }
 
-        return {
-          ...p,
-          title: p.title || dbCourse.title,
-          description: p.description || dbCourse.shortDescription,
-          price: dbPrice !== null ? dbPrice : p.price,
-          mrp: dbMrp !== null ? dbMrp : p.mrp,
-        };
-      });
+          let dynamicPrice = p.price;
+          let dynamicMrp = p.mrp;
+          let dynamicTitle = p.title;
+          let dynamicDescription = p.description;
+
+          if (pricingOffering) {
+            dynamicPrice = Math.round((Number(pricingOffering.pricePaise) || 0) / 100);
+            dynamicMrp = Math.round((Number(pricingOffering.mrpPaise) || 0) / 100);
+            if (pricingOffering.title) dynamicTitle = pricingOffering.title;
+            if (pricingOffering.description) dynamicDescription = pricingOffering.description;
+          } else if (dbCourse) {
+            if (dbCourse.pricePaise) dynamicPrice = Math.round(dbCourse.pricePaise / 100);
+            if (dbCourse.mrpPaise) dynamicMrp = Math.round(dbCourse.mrpPaise / 100);
+            if (dbCourse.title) dynamicTitle = dbCourse.title;
+            if (dbCourse.shortDescription) dynamicDescription = dbCourse.shortDescription;
+          }
+
+          return {
+            ...p,
+            title: dynamicTitle,
+            description: dynamicDescription,
+            price: dynamicPrice,
+            mrp: dynamicMrp,
+          };
+        })
+        .filter(Boolean); // Remove deactivated / deleted pathways
 
       return {
         ...group,
-        pathways: updatedPathways,
+        pathways: updatedPathways as any[],
       };
-    });
-  }, [dbCourses]);
+    }).filter((g) => g.pathways.length > 0);
+  }, [dbCourses, pricingOfferings]);
 
   const currentGroupData = useMemo(() => {
     if (!activeGroup) return null;
