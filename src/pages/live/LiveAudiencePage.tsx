@@ -338,6 +338,10 @@ export default function LiveAudiencePage() {
           setPresentation(data.data.presentation);
           setCurrentSlideIndex(data.data.session.currentSlideIndex || 0);
 
+          if (data.data.session?.status === "ENDED") {
+            setIsSessionEnded(true);
+          }
+
           // Check if previously joined from localStorage
           const savedLead = localStorage.getItem(`unisole_lead_${code}`);
           if (savedLead) {
@@ -685,6 +689,11 @@ export default function LiveAudiencePage() {
         spread: 90,
         origin: { y: 0.5 },
       });
+      try {
+        socket.disconnect();
+      } catch (e) {
+        console.error(e);
+      }
     });
 
     socket.on("reaction_pulse", ({ emoji, id }) => {
@@ -1095,6 +1104,63 @@ export default function LiveAudiencePage() {
             Enter Another Code
           </Link>
         </div>
+      </div>
+    );
+  }
+
+  // ==================== STAGE 1.8: SESSION COMPLETED / SHOW FINISHED ====================
+  if (isSessionEnded) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-between p-4 sm:p-6 relative overflow-hidden font-sans select-none">
+        <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
+
+        <header className="flex items-center justify-between z-10 pt-2 pb-4 border-b border-white/10">
+          <div className="flex items-center gap-2.5">
+            <img
+              src="/images/unisole-logo.png"
+              alt="Unisole Skill AI Labs"
+              className="w-7 h-7 rounded-lg object-contain"
+            />
+            <span className="font-black text-sm tracking-tight text-zinc-100">
+              {session?.collegeName || "Unisole Presentation"}
+            </span>
+          </div>
+          <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold">
+            SHOW FINISHED
+          </span>
+        </header>
+
+        <main className="my-auto max-w-md w-full mx-auto space-y-6 z-10 py-6 text-center">
+          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-500 mx-auto flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 animate-bounce">
+            <Sparkles className="w-8 h-8" />
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-300">
+              Thank You For Attending!
+            </h1>
+            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto leading-relaxed">
+              Great job participating, {lead?.name || "Student"}! Explore all AI career pathways, live industrial training programs, and project portfolios on Unisole.
+            </p>
+          </div>
+
+          <div className="p-4 rounded-3xl bg-zinc-900/90 border border-white/10 space-y-3 shadow-2xl">
+            <button
+              type="button"
+              onClick={handleExitShow}
+              className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 hover:from-indigo-500 hover:via-purple-500 hover:to-violet-500 text-white font-extrabold text-sm shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Exit Show → Explore AI Pathways</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </main>
+
+        <footer className="text-center text-[11px] text-zinc-500 z-10 pb-2">
+          Unisole Skill AI Labs • unisole.org
+        </footer>
       </div>
     );
   }
@@ -1626,63 +1692,6 @@ export default function LiveAudiencePage() {
         {/* Footer */}
         <footer className="text-center text-[11px] text-zinc-500 z-10 pt-2">
           Unisole Live Presentation Arena • Synchronizing in real-time
-        </footer>
-      </div>
-    );
-  }
-
-  // ==================== STAGE 1.8: SESSION COMPLETED / SHOW FINISHED ====================
-  if (isSessionEnded) {
-    return (
-      <div className="min-h-screen bg-zinc-950 text-white flex flex-col justify-between p-4 sm:p-6 relative overflow-hidden font-sans select-none">
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-violet-600/20 rounded-full blur-3xl pointer-events-none" />
-
-        <header className="flex items-center justify-between z-10 pt-2 pb-4 border-b border-white/10">
-          <div className="flex items-center gap-2.5">
-            <img
-              src="/images/unisole-logo.png"
-              alt="Unisole Skill AI Labs"
-              className="w-7 h-7 rounded-lg object-contain"
-            />
-            <span className="font-black text-sm tracking-tight text-zinc-100">
-              {session?.collegeName || "Unisole Presentation"}
-            </span>
-          </div>
-          <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-mono font-bold">
-            SHOW FINISHED
-          </span>
-        </header>
-
-        <main className="my-auto max-w-md w-full mx-auto space-y-6 z-10 py-6 text-center">
-          <div className="w-16 h-16 rounded-3xl bg-gradient-to-tr from-emerald-500 to-teal-500 mx-auto flex items-center justify-center text-white shadow-xl shadow-emerald-500/20 animate-bounce">
-            <Sparkles className="w-8 h-8" />
-          </div>
-
-          <div className="space-y-2">
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-zinc-100 to-zinc-300">
-              Thank You For Attending!
-            </h1>
-            <p className="text-xs sm:text-sm text-zinc-400 max-w-sm mx-auto leading-relaxed">
-              Great job participating, {lead?.name || "Student"}! Explore all AI career pathways, live industrial training programs, and project portfolios on Unisole.
-            </p>
-          </div>
-
-          <div className="p-4 rounded-3xl bg-zinc-900/90 border border-white/10 space-y-3 shadow-2xl">
-            <button
-              type="button"
-              onClick={handleExitShow}
-              className="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-violet-600 hover:from-indigo-500 hover:via-purple-500 hover:to-violet-500 text-white font-extrabold text-sm shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <LogOut className="w-4 h-4" />
-              <span>Exit Show → Explore AI Pathways</span>
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </div>
-        </main>
-
-        <footer className="text-center text-[11px] text-zinc-500 z-10 pb-2">
-          Unisole Skill AI Labs • unisole.org
         </footer>
       </div>
     );
