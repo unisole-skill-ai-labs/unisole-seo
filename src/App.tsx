@@ -6,10 +6,13 @@ import { AuthModalProvider } from './context/AuthModalContext';
 import AuthModal from './components/AuthModal';
 import './App.css';
 
-// Route Code-Splitting for Optimal Page Load Performance
-const Home = lazy(() => import('./pages/Home'));
-const ProgramsPage = lazy(() => import('./pages/ProgramsPage'));
-const EventsPage = lazy(() => import('./pages/EventsPage'));
+// Core Website Pages Eagerly Loaded for Instant Zero-Stutter Navigation
+import Home from './pages/Home';
+import ProgramsPage from './pages/ProgramsPage';
+import EventsPage from './pages/EventsPage';
+import BlogsPage from './pages/BlogsPage';
+
+// Other Sub-portals & Specialized Modules Code-Split
 const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
 const ProfilePage = lazy(() => import('./pages/ProfilePage'));
 const Login = lazy(() => import('./pages/Login'));
@@ -18,7 +21,6 @@ const IaptLoginPage = lazy(() => import('./pages/IaptLoginPage'));
 const IaptPage = lazy(() => import('./pages/IaptPage'));
 const IaptNainPage = lazy(() => import('./pages/iapt/IaptNainPage'));
 const IaptWorkshopPage = lazy(() => import('./pages/iapt/IaptWorkshopPage'));
-const BlogsPage = lazy(() => import('./pages/BlogsPage'));
 const LiveAudiencePage = lazy(() => import('./pages/live/LiveAudiencePage'));
 const JoinSessionPage = lazy(() => import('./pages/live/JoinSessionPage'));
 const LiveSessionAttendancePage = lazy(() => import('./pages/live/LiveSessionAttendancePage'));
