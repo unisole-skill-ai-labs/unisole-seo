@@ -44,11 +44,24 @@ interface SlotOption {
   title: 'Slot 1' | 'Slot 2';
   time: string;
   tz: string;
+  whatsappLink: string;
 }
 
 const SLOTS: SlotOption[] = [
-  { id: 'slot-1', title: 'Slot 1', time: '7–8 PM', tz: 'IST' },
-  { id: 'slot-2', title: 'Slot 2', time: '9–10 PM', tz: 'IST' },
+  {
+    id: 'slot-1',
+    title: 'Slot 1',
+    time: '7–8 PM',
+    tz: 'IST',
+    whatsappLink: 'https://chat.whatsapp.com/JcK2WkrfCewJmJ0JoRw2uy',
+  },
+  {
+    id: 'slot-2',
+    title: 'Slot 2',
+    time: '9–10 PM',
+    tz: 'IST',
+    whatsappLink: 'https://chat.whatsapp.com/BpHQwU8qLms6ElIJQTxiu1',
+  },
 ];
 
 export default function WorkshopJevPage() {
@@ -275,6 +288,24 @@ export default function WorkshopJevPage() {
     'Free online session on JEV - The Future of Decision-Making AI by UNISOLE Skill AI Labs.\nSession Date: Tuesday, 29 September 2026\nWebsite: https://www.unisole.org\nContact: 8219691201'
   )}&location=${encodeURIComponent('Online / Live on UNISOLE')}`;
 
+  const getWhatsappLink = (slotNameOrId?: string) => {
+    if (!slotNameOrId) {
+      return selectedSlot.whatsappLink;
+    }
+    const lower = slotNameOrId.toLowerCase();
+    if (
+      lower.includes('slot-2') ||
+      lower.includes('slot 2') ||
+      lower.includes('9–10') ||
+      lower.includes('9-10') ||
+      lower.includes('9 pm') ||
+      lower.includes('9:00')
+    ) {
+      return 'https://chat.whatsapp.com/BpHQwU8qLms6ElIJQTxiu1';
+    }
+    return 'https://chat.whatsapp.com/JcK2WkrfCewJmJ0JoRw2uy';
+  };
+
   const curriculumModules = [
     {
       icon: BrainCircuit,
@@ -386,20 +417,33 @@ export default function WorkshopJevPage() {
           {/* Primary Action Button */}
           <div className="pt-3 flex flex-col sm:flex-row items-center justify-center gap-4">
             {confirmedSlot ? (
-              <div className="w-full sm:w-auto p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center gap-3">
-                <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-                <div className="text-left">
-                  <p className="text-xs font-semibold text-emerald-300">You are Registered!</p>
-                  <p className="text-sm font-bold text-white">Your Time: {confirmedSlot}</p>
+              <div className="w-full sm:w-auto p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/30 flex flex-col sm:flex-row items-center justify-center gap-3">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+                  <div className="text-left">
+                    <p className="text-xs font-semibold text-emerald-300">You are Registered!</p>
+                    <p className="text-sm font-bold text-white">Your Time: {confirmedSlot}</p>
+                  </div>
                 </div>
-                <a
-                  href={calendarUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="ml-2 text-xs px-3 py-1.5 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400"
-                >
-                  Add to Calendar
-                </a>
+                <div className="flex items-center gap-2 mt-2 sm:mt-0">
+                  <a
+                    href={getWhatsappLink(confirmedSlot || currentUser?.metadata?.slotId)}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs px-3.5 py-1.5 rounded-lg bg-[#25D366] text-black font-bold hover:bg-[#20ba5a] flex items-center gap-1.5 transition-all shadow-md shadow-[#25D366]/20"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>Join WhatsApp Group</span>
+                  </a>
+                  <a
+                    href={calendarUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-xs px-3 py-1.5 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-semibold hover:bg-emerald-500/30 transition-colors"
+                  >
+                    Add to Calendar
+                  </a>
+                </div>
               </div>
             ) : (
               <button
@@ -881,23 +925,25 @@ export default function WorkshopJevPage() {
                 {/* Actions */}
                 <div className="space-y-2.5">
                   <a
-                    href={calendarUrl}
+                    href={getWhatsappLink(confirmedSlot || selectedSlot.id)}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-3 rounded-xl font-bold text-xs sm:text-sm bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2"
+                    className="w-full py-3.5 rounded-xl font-bold text-xs sm:text-sm bg-[#25D366] hover:bg-[#20ba5a] text-black shadow-lg shadow-[#25D366]/20 flex items-center justify-center gap-2 transition-all active:scale-95"
                   >
-                    <Calendar className="w-4 h-4" />
-                    <span>Add to Google Calendar</span>
+                    <MessageCircle className="w-4 h-4 fill-black text-black" />
+                    <span>
+                      Join WhatsApp Group ({confirmedSlot ? (confirmedSlot.includes('9') ? '9–10 PM IST' : '7–8 PM IST') : `${selectedSlot.time} IST`})
+                    </span>
                   </a>
 
                   <a
-                    href="https://chat.whatsapp.com/invite"
+                    href={calendarUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="w-full py-3 rounded-xl font-semibold text-xs sm:text-sm bg-[#16171b] hover:bg-zinc-800 text-zinc-200 border border-zinc-700/60 flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-xl font-semibold text-xs sm:text-sm bg-[#16171b] hover:bg-zinc-800 text-zinc-200 border border-zinc-700/60 flex items-center justify-center gap-2 transition-colors"
                   >
-                    <MessageCircle className="w-4 h-4 text-emerald-400" />
-                    <span>Join WhatsApp Updates Community</span>
+                    <Calendar className="w-4 h-4 text-emerald-400" />
+                    <span>Add to Google Calendar</span>
                   </a>
                 </div>
 
