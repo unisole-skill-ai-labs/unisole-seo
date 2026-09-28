@@ -363,12 +363,6 @@ export default function WorkshopJevPage() {
       {/* Hero Section */}
       <main className="relative z-10 max-w-6xl mx-auto px-4 pt-10 pb-20">
         <div className="text-center max-w-3xl mx-auto space-y-6">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-semibold tracking-wider uppercase bg-emerald-950/60 text-emerald-400 border border-emerald-800/60">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            FREE · ONLINE · LIVE
-          </div>
-
           {/* Title */}
           <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold tracking-tight text-white leading-tight">
             Free Online Session:{' '}
