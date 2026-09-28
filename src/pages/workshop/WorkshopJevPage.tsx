@@ -581,7 +581,7 @@ export default function WorkshopJevPage() {
                     Step 1 of 3 · Verification
                   </div>
                   <h3 className="text-xl sm:text-2xl font-extrabold text-white mt-2">
-                    Enter your WhatsApp Number
+                    Enter your Number
                   </h3>
                   <p className="text-xs text-zinc-400 mt-1">
                     We send an instant 4-digit verification code directly to your WhatsApp to confirm your seat.
