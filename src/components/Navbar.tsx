@@ -126,7 +126,7 @@ export default function Navbar() {
               <div className="animate-ticker flex items-center gap-8 text-[11px] sm:text-xs font-medium text-zinc-300 group-hover:text-white transition-colors">
                 {[...Array(4)].map((_, i) => (
                   <span key={i} className="inline-flex items-center gap-3 whitespace-nowrap">
-                    <span>Last date to enroll in Industrial Training cum Internship Opportunity Program for Shimla region: <strong className="text-white font-bold">29 September 2026, 10 PM</strong></span>
+                    <span>Last date to enroll in Industrial Training cum Internship Opportunity Program for Sunni College: <strong className="text-white font-bold">29 September 2026, 10 PM</strong></span>
                     <span className="text-zinc-600 font-bold">•</span>
                     <span className="text-indigo-400 font-semibold inline-flex items-center gap-0.5 underline underline-offset-2">
                       Enroll Now <ChevronRight className="w-3 h-3" />
