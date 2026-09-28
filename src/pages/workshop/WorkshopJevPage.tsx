@@ -460,39 +460,6 @@ export default function WorkshopJevPage() {
           </div>
         </section>
 
-        {/* Why JEV Callout Banner */}
-        <section className="mt-20 rounded-2xl bg-gradient-to-br from-zinc-900 via-[#101216] to-[#0c0d11] border border-zinc-800 p-8 sm:p-10 relative overflow-hidden">
-          <div className="relative z-10 max-w-3xl space-y-4">
-            <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Beyond Text Generation</span>
-            <h3 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Why Fast, Structured AI Decision-Making Matters
-            </h3>
-            <p className="text-sm sm:text-base text-zinc-300 leading-relaxed">
-              Traditional LLMs take seconds to generate paragraphs of text when all your application needs is a rapid,
-              deterministic decision — a probability score, a classification, or a discrete action. JEV solves this by
-              introducing low-latency cognitive primitives built specifically for autonomous workflows.
-            </p>
-
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <button
-                onClick={() => handleOpenRegistration()}
-                className="px-6 py-3 rounded-xl font-bold text-sm bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/20 transition-all"
-              >
-                Claim Your Free Seat
-              </button>
-              <a
-                href="https://www.unisole.org"
-                target="_blank"
-                rel="noreferrer"
-                className="px-5 py-3 rounded-xl font-medium text-sm text-zinc-300 hover:text-white bg-zinc-800/80 hover:bg-zinc-800 border border-zinc-700/60 transition-all flex items-center gap-2"
-              >
-                <span>Learn about UNISOLE</span>
-                <Globe className="w-4 h-4 text-zinc-400" />
-              </a>
-            </div>
-          </div>
-        </section>
-
         {/* Footer & Organization Section */}
         <footer className="mt-20 border-t border-zinc-800/80 pt-10 text-center sm:text-left">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pb-8 border-b border-zinc-800/60">
