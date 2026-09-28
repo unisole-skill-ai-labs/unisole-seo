@@ -135,6 +135,11 @@ export const apiSlice = createApi({
         branch?: string;
         occupation?: string;
         yearOfStudy?: string;
+        workshopSlug?: string;
+        workshopName?: string;
+        slot?: string;
+        slotId?: string;
+        sessionDate?: string;
       }) => ({
         url: '/api/workshop/register',
         method: 'POST',

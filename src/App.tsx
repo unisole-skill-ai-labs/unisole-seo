@@ -27,6 +27,7 @@ const LiveSessionAttendancePage = lazy(() => import('./pages/live/LiveSessionAtt
 const WorkshopLandingPage = lazy(() => import('./pages/workshop/WorkshopLandingPage'));
 const WorkshopLoginPage = lazy(() => import('./pages/workshop/WorkshopLoginPage'));
 const WorkshopSuccessPage = lazy(() => import('./pages/workshop/WorkshopSuccessPage'));
+const WorkshopJevPage = lazy(() => import('./pages/workshop/WorkshopJevPage'));
 const StudentSurveyPage = lazy(() => import('./pages/survey/StudentSurveyPage'));
 
 function PageLoader() {
@@ -72,6 +73,8 @@ export default function App() {
             <Route path="/ai-workshop/login" element={<WorkshopLoginPage />} />
             <Route path="/workshop/register" element={<WorkshopLoginPage />} />
             <Route path="/workshop/success" element={<WorkshopSuccessPage />} />
+            <Route path="/workshop-jew" element={<WorkshopJevPage />} />
+            <Route path="/workshop-jev" element={<WorkshopJevPage />} />
 
             <Route path="/iapt" element={<IaptPage />} />
             <Route path="/iapt/nain" element={<IaptNainPage />} />
