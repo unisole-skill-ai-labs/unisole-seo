@@ -73,8 +73,8 @@ export default function App() {
             <Route path="/ai-workshop/login" element={<WorkshopLoginPage />} />
             <Route path="/workshop/register" element={<WorkshopLoginPage />} />
             <Route path="/workshop/success" element={<WorkshopSuccessPage />} />
-            <Route path="/workshop-jew" element={<WorkshopJevPage />} />
             <Route path="/workshop-jev" element={<WorkshopJevPage />} />
+            <Route path="/workshop-jew" element={<Navigate to="/workshop-jev" replace />} />
 
             <Route path="/iapt" element={<IaptPage />} />
             <Route path="/iapt/nain" element={<IaptNainPage />} />
