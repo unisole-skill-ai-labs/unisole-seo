@@ -282,11 +282,39 @@ export default function WorkshopJevPage() {
     }
   };
 
-  const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-    'UNISOLE Free Live Session: Discover JEV — Decision-Making AI'
-  )}&dates=20260929T133000Z/20260929T163000Z&details=${encodeURIComponent(
-    'Free online session on JEV - The Future of Decision-Making AI by UNISOLE Skill AI Labs.\nSession Date: Tuesday, 29 September 2026\nWebsite: https://www.unisole.org\nContact: 8219691201'
-  )}&location=${encodeURIComponent('Online / Live on UNISOLE')}`;
+  const getCalendarUrl = (slotNameOrId?: string) => {
+    const target = (slotNameOrId || confirmedSlot || selectedSlot.id).toLowerCase();
+    const isSlot2 =
+      target.includes('slot-2') ||
+      target.includes('slot 2') ||
+      target.includes('9–10') ||
+      target.includes('9-10') ||
+      target.includes('9 pm') ||
+      target.includes('9:00');
+
+    const slotTitle = isSlot2 ? 'Slot 2 (9–10 PM IST)' : 'Slot 1 (7–8 PM IST)';
+    // 7:00 PM IST = 13:30 UTC; 9:00 PM IST = 15:30 UTC
+    const dates = isSlot2 ? '20260929T153000Z/20260929T163000Z' : '20260929T133000Z/20260929T143000Z';
+    const meetUrl = 'https://meet.google.com/gke-ugqi-jrt';
+
+    const title = `UNISOLE Live Session: Discover JEV — Decision-Making AI [${slotTitle}]`;
+    const details = [
+      'Free online live session on JEV: The Future of Decision-Making AI by UNISOLE Skill AI Labs.',
+      '',
+      `Session Time: ${slotTitle}`,
+      'Date: Tuesday, 29 September 2026',
+      `Google Meet Link: ${meetUrl}`,
+      '',
+      'Website: https://www.unisole.org',
+      'Contact: 8219691201 (unisole.ai.labs@gmail.com)',
+    ].join('\n');
+
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
+      title
+    )}&dates=${dates}&details=${encodeURIComponent(details)}&location=${encodeURIComponent(meetUrl)}`;
+  };
+
+  const calendarUrl = getCalendarUrl(confirmedSlot || selectedSlot.id);
 
   const getWhatsappLink = (slotNameOrId?: string) => {
     if (!slotNameOrId) {
