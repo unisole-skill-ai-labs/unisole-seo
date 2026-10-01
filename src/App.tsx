@@ -31,6 +31,7 @@ const WorkshopLoginPage = lazy(() => import('./pages/workshop/WorkshopLoginPage'
 const WorkshopSuccessPage = lazy(() => import('./pages/workshop/WorkshopSuccessPage'));
 const WorkshopJevPage = lazy(() => import('./pages/workshop/WorkshopJevPage'));
 const StudentSurveyPage = lazy(() => import('./pages/survey/StudentSurveyPage'));
+const NotFoundPage = lazy(() => import('./pages/NotFoundPage'));
 
 function PageLoader() {
   return (
@@ -67,7 +68,7 @@ export default function App() {
             <Route path="/student-skills-survey" element={<Navigate to="/survey" replace />} />
 
             {/* AI Masterclass & Campaign Routes */}
-            <Route path="/workshop" element={<WorkshopLandingPage />} />
+            <Route path="/workshop" element={<NotFoundPage />} />
             <Route path="/ai-workshop" element={<WorkshopLandingPage />} />
             <Route path="/masterclass" element={<WorkshopLandingPage />} />
             <Route path="/ai-masterclass" element={<WorkshopLandingPage />} />
@@ -115,6 +116,7 @@ export default function App() {
             } />
             <Route path="/courses" element={<Navigate to="/programs" replace />} />
             <Route path="/courses/*" element={<Navigate to="/programs" replace />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </Suspense>
       </main>
