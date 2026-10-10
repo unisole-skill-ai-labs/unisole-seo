@@ -29,10 +29,7 @@ import {
   Search,
   Sparkles,
   ShieldCheck,
-  HelpCircle,
-  Building2,
-  Calendar,
-  AlertCircle
+  HelpCircle
 } from 'lucide-react';
 
 const GROUPS_DATA = [
@@ -1129,40 +1126,6 @@ export default function ProgramsPage() {
                 <span className="text-xs font-bold text-zinc-900 dark:text-white mt-0.5 block">{stat.value}</span>
               </div>
             ))}
-          </div>
-
-          {/* Campus Roadshow Cohort Registration Notice Banner */}
-          <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-zinc-900 via-indigo-950/70 to-zinc-900 border border-indigo-500/40 text-white shadow-xl relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
-              <div className="space-y-1.5 max-w-3xl">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-300 font-mono text-[10px] sm:text-xs font-bold uppercase tracking-wider">
-                    <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-ping" />
-                    Important Campus Notice
-                  </span>
-                  <span className="text-[11px] font-mono text-zinc-400">
-                    Cohort 2026 Registration
-                  </span>
-                </div>
-                <h2 className="text-base sm:text-lg font-extrabold text-white tracking-tight">
-                  Last Date for Registration: <span className="text-amber-300 underline decoration-amber-400/50 underline-offset-4">14th October</span> for Govt College Seema (Rohru) & M.L.S.M. College Sundernagar
-                </h2>
-                <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
-                  Students from <strong className="text-white">Govt College Seema (Rohru)</strong> and <strong className="text-white">M.L.S.M. College Sundernagar</strong> are requested to complete their industrial training cum internship enrollment before 14th October to confirm batch allocation and offline campus lab project implementation.
-                </p>
-              </div>
-
-              <div className="shrink-0 flex items-center gap-3">
-                <a
-                  href="#stream-catalog"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all active:scale-95 cursor-pointer"
-                >
-                  <span>Select Pathway & Enroll</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </a>
-              </div>
-            </div>
           </div>
         </section>
 
