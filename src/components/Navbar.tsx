@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ProfileDropdown from './ProfileDropdown';
+import AnnouncementBanner from './AnnouncementBanner';
 import { isAuthenticated, getUserName, logout } from '../utils/auth';
 import { useAuthModal } from '../context/AuthModalContext';
 import { 
@@ -103,6 +104,8 @@ export default function Navbar() {
         className="fixed top-0 left-0 w-full z-40"
         id="navbar"
       >
+        {/* Global Announcement Notice Banner */}
+        <AnnouncementBanner />
 
         {/* Main Navbar */}
         <div className={`transition-all duration-200 ${
