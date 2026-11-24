@@ -39,7 +39,7 @@ export default function Navbar() {
     }
 
     setLmsHandoffLoading(true);
-    const result = await openLmsWithSso('/enrolled');
+    const result = await openLmsWithSso('/dashboard');
     if (!result.success) {
       window.location.assign(result.fallbackUrl);
     }

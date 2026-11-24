@@ -26,7 +26,7 @@ export const getLmsUrl = (): string => {
   ).replace(/\/+$/, '');
 };
 
-export async function openLmsWithSso(nextPath: string = '/enrolled'): Promise<{
+export async function openLmsWithSso(nextPath: string = '/dashboard'): Promise<{
   success: boolean;
   fallbackUrl: string;
   error?: string;
