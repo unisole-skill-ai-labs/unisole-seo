@@ -14,7 +14,16 @@ export const getApiBaseUrl = (): string => {
 };
 
 export const getLmsUrl = (): string => {
-  return (import.meta.env.VITE_LMS_URL || '').replace(/\/+$/, '');
+  return (
+    import.meta.env.VITE_LMS_URL ||
+    (typeof window !== 'undefined'
+      ? window.location.hostname.includes('stg')
+        ? 'https://stg.lms.unisole.org'
+        : window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+        ? 'https://lms.unisole.org'
+        : 'http://localhost:5174'
+      : 'http://localhost:5174')
+  ).replace(/\/+$/, '');
 };
 
 export async function openLmsWithSso(nextPath: string = '/enrolled'): Promise<{
