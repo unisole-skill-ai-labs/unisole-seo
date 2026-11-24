@@ -233,7 +233,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center gap-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-900"
               aria-label="Search labs"
             >
               <Search className="w-4 h-4" />
@@ -242,7 +242,7 @@ export default function Navbar() {
             {loggedIn && !menuOpen && (
               <Link
                 to="/profile"
-                className="w-8 h-8 rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center shadow-xs"
+                className="w-11 h-11 min-w-[44px] min-h-[44px] rounded-xl bg-indigo-600 text-white font-black text-xs flex items-center justify-center shadow-xs"
                 aria-label="Profile"
               >
                 {userName.charAt(0).toUpperCase() || 'U'}
@@ -250,7 +250,7 @@ export default function Navbar() {
             )}
 
             <button
-              className="p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 cursor-pointer"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 cursor-pointer"
               onClick={() => setMenuOpen((prev) => !prev)}
               aria-label="Toggle navigation menu"
             >
@@ -364,10 +364,10 @@ export default function Navbar() {
                 </div>
                 <button
                   onClick={() => setMenuOpen(false)}
-                  className="p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-white"
+                  className="min-h-[44px] min-w-[44px] flex items-center justify-center p-1 text-zinc-400 hover:text-zinc-600 dark:hover:text-white"
                   aria-label="Close menu"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
@@ -385,7 +385,7 @@ export default function Navbar() {
                     <Link
                       key={item.path}
                       to={item.path}
-                      className={`flex items-center justify-between p-2.5 rounded-xl transition-colors ${
+                      className={`flex items-center justify-between min-h-[44px] p-2.5 rounded-xl transition-colors ${
                         isActive
                           ? 'bg-zinc-100 text-zinc-950 dark:bg-zinc-800 dark:text-white font-bold'
                           : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800'
@@ -413,7 +413,7 @@ export default function Navbar() {
                     setMenuOpen(false);
                     handleMyLearningHandoff();
                   }}
-                  className="w-full flex items-center justify-between p-2.5 rounded-xl transition-colors text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-left disabled:opacity-50"
+                  className="w-full flex items-center justify-between min-h-[44px] p-2.5 rounded-xl transition-colors text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-left disabled:opacity-50"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
@@ -472,7 +472,7 @@ export default function Navbar() {
                       setMenuOpen(false);
                       openAuthModal({ mode: 'login', source: 'NON_PAMPHLET' });
                     }}
-                    className="flex justify-center w-full font-semibold py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-colors cursor-pointer"
+                    className="flex justify-center items-center w-full min-h-[44px] font-semibold py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:text-zinc-900 text-white text-xs transition-colors cursor-pointer"
                   >
                     Login / Register
                   </button>
