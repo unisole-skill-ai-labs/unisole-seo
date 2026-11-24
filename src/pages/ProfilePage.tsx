@@ -201,7 +201,7 @@ export default function ProfilePage() {
                           type="button"
                           disabled={ssoLoadingId === (order.id || idx)}
                           onClick={async () => {
-                            const pathwayId =
+                            const rawPathwayId =
                               primaryItem?.itemId ||
                               primaryItem?.item_id ||
                               primaryItem?.pathwayId ||
@@ -213,6 +213,7 @@ export default function ProfilePage() {
                               order.metadata?.pathwayId ||
                               order.metadata?.pathway_id ||
                               'cs-agentic';
+                            const pathwayId = rawPathwayId === 'course1' ? 'cs-agentic' : rawPathwayId;
                             setSsoLoadingId(order.id || idx);
                             setToastMessage(null);
                             const result = await openLmsWithSso(`/learn/${pathwayId}`);
