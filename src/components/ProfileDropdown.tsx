@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout, getUserName } from '../utils/auth';
-import { User, LogOut, BookOpen, ChevronRight, ShieldCheck } from 'lucide-react';
+import { User, LogOut, BookOpen, ChevronRight, ShieldCheck, GraduationCap } from 'lucide-react';
+import { openLmsWithSso } from '../utils/sso';
 
 export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
@@ -58,6 +59,24 @@ export default function ProfileDropdown({ onClose }: { onClose: () => void }) {
           </div>
           <ChevronRight className="w-3 h-3 text-zinc-400" />
         </Link>
+
+        <button
+          type="button"
+          className="w-full flex items-center justify-between px-2.5 py-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-200 transition-colors text-left cursor-pointer"
+          onClick={async () => {
+            onClose();
+            const res = await openLmsWithSso('/enrolled');
+            if (!res.success) {
+              window.location.assign(res.fallbackUrl);
+            }
+          }}
+        >
+          <div className="flex items-center gap-2">
+            <GraduationCap className="w-3.5 h-3.5 text-indigo-500" />
+            <span>My Learning</span>
+          </div>
+          <ChevronRight className="w-3 h-3 text-zinc-400" />
+        </button>
 
         <Link
           to="/programs"

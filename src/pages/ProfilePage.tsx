@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { logout, isAuthenticated, getToken } from '../utils/auth';
+import { openLmsWithSso } from '../utils/sso';
 import { useGetMeQuery, useGetOrdersQuery } from '../store/apiSlice';
 import { User, Phone, Mail, Shield, LogOut, ArrowRight, BookOpen, Clock, CheckCircle2, ChevronRight, GraduationCap } from 'lucide-react';
 
@@ -23,6 +24,8 @@ export default function ProfilePage() {
   const [userBranch, setUserBranch] = useState(storedUser?.branch || '');
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ssoLoadingId, setSsoLoadingId] = useState<string | number | null>(null);
+  const [toastMessage, setToastMessage] = useState<{ message: string; type: 'error' | 'info'; fallbackLink?: string } | null>(null);
   const { data: meData, refetch: refetchMe } = useGetMeQuery(undefined, { skip: !isAuth });
   const { data: ordersData, refetch: refetchOrders } = useGetOrdersQuery(undefined, { skip: !isAuth });
 
@@ -193,6 +196,54 @@ export default function ProfilePage() {
                           ₹{amount.toLocaleString('en-IN')}
                         </span>
                       )}
+                      {isPaid && (
+                        <button
+                          type="button"
+                          disabled={ssoLoadingId === (order.id || idx)}
+                          onClick={async () => {
+                            const rawPathwayId =
+                              primaryItem?.itemId ||
+                              primaryItem?.item_id ||
+                              primaryItem?.pathwayId ||
+                              primaryItem?.pathway_id ||
+                              order.pathwayId ||
+                              order.pathway_id ||
+                              order.itemId ||
+                              order.item_id ||
+                              order.metadata?.pathwayId ||
+                              order.metadata?.pathway_id ||
+                              'cs-agentic';
+                            const pathwayId = rawPathwayId === 'course1' ? 'cs-agentic' : rawPathwayId;
+                            setSsoLoadingId(order.id || idx);
+                            setToastMessage(null);
+                            const result = await openLmsWithSso(`/learn/${pathwayId}`);
+                            if (!result.success) {
+                              setToastMessage({
+                                message: result.error || 'Failed to start learning session. Redirecting to login...',
+                                type: 'error',
+                                fallbackLink: result.fallbackUrl,
+                              });
+                              setTimeout(() => {
+                                window.location.assign(result.fallbackUrl);
+                              }, 2000);
+                            }
+                          }}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white text-xs font-semibold shadow-xs transition-all cursor-pointer"
+                        >
+                          {ssoLoadingId === (order.id || idx) ? (
+                            <>
+                              <div className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                              <span>Opening LMS...</span>
+                            </>
+                          ) : (
+                            <>
+                              <GraduationCap className="w-3.5 h-3.5" />
+                              <span>Go to learning</span>
+                              <ArrowRight className="w-3 h-3 ml-0.5" />
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                   </li>
                 );
@@ -215,6 +266,27 @@ export default function ProfilePage() {
         </div>
 
       </main>
+
+      {toastMessage && (
+        <div className="fixed bottom-6 right-6 z-50 max-w-md p-4 rounded-xl bg-zinc-900 text-white dark:bg-white dark:text-zinc-900 shadow-2xl border border-zinc-700 dark:border-zinc-200 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="flex items-start gap-3">
+            <div className="p-1 rounded-md bg-rose-500/20 text-rose-400">
+              <Shield className="w-4 h-4" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-xs font-semibold">{toastMessage.message}</p>
+              {toastMessage.fallbackLink && (
+                <a
+                  href={toastMessage.fallbackLink}
+                  className="text-[11px] underline text-indigo-400 dark:text-indigo-600 block font-medium"
+                >
+                  Click here to log in directly →
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <Footer />
     </div>
