@@ -13,10 +13,8 @@ import {
   BookOpen, 
   Calendar, 
   FileText, 
-  Activity,
-  GraduationCap
+  Activity
 } from 'lucide-react';
-import { openLmsWithSso, getLmsUrl } from '../utils/sso';
 
 export default function Navbar() {
   const location = useLocation();
@@ -29,22 +27,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [lmsHandoffLoading, setLmsHandoffLoading] = useState(false);
-
-  const handleMyLearningHandoff = async () => {
-    const lmsUrl = getLmsUrl();
-    if (!loggedIn) {
-      window.location.assign(`${lmsUrl}/login`);
-      return;
-    }
-
-    setLmsHandoffLoading(true);
-    const result = await openLmsWithSso('/dashboard');
-    if (!result.success) {
-      window.location.assign(result.fallbackUrl);
-    }
-    setLmsHandoffLoading(false);
-  };
 
   useEffect(() => {
     const refresh = () => {
@@ -174,16 +156,6 @@ export default function Navbar() {
                 </Link>
               );
             })}
-
-            <button
-              type="button"
-              disabled={lmsHandoffLoading}
-              onClick={handleMyLearningHandoff}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold tracking-normal transition-all flex items-center gap-1.5 text-zinc-600 dark:text-zinc-400 hover:text-zinc-950 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-900 cursor-pointer disabled:opacity-50"
-            >
-              <GraduationCap className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400" />
-              <span>{lmsHandoffLoading ? 'Opening...' : 'My Learning'}</span>
-            </button>
           </div>
 
           {/* Search Bar & Auth CTAs */}
@@ -405,27 +377,6 @@ export default function Navbar() {
                     </Link>
                   );
                 })}
-
-                <button
-                  type="button"
-                  disabled={lmsHandoffLoading}
-                  onClick={() => {
-                    setMenuOpen(false);
-                    handleMyLearningHandoff();
-                  }}
-                  className="w-full flex items-center justify-between min-h-[44px] p-2.5 rounded-xl transition-colors text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800 text-left disabled:opacity-50"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400">
-                      <GraduationCap className="w-3.5 h-3.5" />
-                    </div>
-                    <div>
-                      <span className="text-xs font-semibold block">My Learning</span>
-                      <span className="text-[10px] text-zinc-400 block">LMS Coursework & Lab</span>
-                    </div>
-                  </div>
-                  <ChevronRight className="w-3 h-3 text-zinc-400" />
-                </button>
               </div>
 
               {/* Account Section */}
